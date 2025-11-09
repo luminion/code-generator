@@ -39,7 +39,7 @@ MyBatis-Plus 代码生成器，提供了比官方代码生成器更丰富的功�
 
 ## 快速开始
 
-使用 [FastGenerator](src/main/java/io/github/luminion/mybatisplus/generator/FastGenerator.java) 可以快速生成代码：
+使用 [FastGenerator](src/main/java/io/github/luminion/generator/FastGenerator.java) 可以快速生成代码：
 
 ```java
 public static void main(String[] args) {
