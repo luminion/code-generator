@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.luminion</groupId>
-    <artifactId>mybatis-plus-generator</artifactId>
+    <artifactId>codd-generator</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -29,9 +29,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/luminion/mybatis-plus-generator.git</connection>
-        <developerConnection>scm:git:ssh://github.com:luminion/mybatis-plus-generator.git</developerConnection>
-        <url>https://github.com/luminion/mybatis-plus-generator/tree/master</url>
+        <connection>scm:git:git://github.com/luminion/codd-generator.git</connection>
+        <developerConnection>scm:git:ssh://github.com:luminion/codd-generator.git</developerConnection>
+        <url>https://github.com/luminion/codd-generator/tree/master</url>
     </scm>
     
     <properties>
