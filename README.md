@@ -1,7 +1,9 @@
-# mybatis-plus-generator
+# code-generator
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/mybatis-plus-generator)](https://mvnrepository.com/artifact/io.github.luminion/mybatis-plus-generator)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+
+## ~~当前迭代中, 文档内容为旧版生成器,  暂不可用~~
 
 
 MyBatis-Plus 代码生成器，提供了比官方代码生成器更丰富的功能和可配置项，旨在提升开发效率，减少重复代码编写。
