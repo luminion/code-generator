@@ -16,8 +16,8 @@
 package io.github.luminion.generator.engine;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.config.enums.TemplateLoadWay;
+import io.github.luminion.generator.configold.Configurer;
+import io.github.luminion.generator.configold.enums.TemplateLoadWay;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;

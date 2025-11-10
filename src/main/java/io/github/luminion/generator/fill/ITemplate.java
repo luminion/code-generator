@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.fill;
 
-import io.github.luminion.generator.config.po.TableInfo;
+import io.github.luminion.generator.configold.po.TableInfo;
 import lombok.SneakyThrows;
 
 

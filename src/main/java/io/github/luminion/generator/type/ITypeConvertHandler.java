@@ -15,9 +15,9 @@
  */
 package io.github.luminion.generator.type;
 
-import io.github.luminion.generator.config.support.GlobalConfig;
-import io.github.luminion.generator.config.po.TableField;
-import io.github.luminion.generator.config.rules.IColumnType;
+import io.github.luminion.generator.configold.support.GlobalConfig;
+import io.github.luminion.generator.configold.po.TableField;
+import io.github.luminion.generator.configold.rules.IColumnType;
 
 
 /**

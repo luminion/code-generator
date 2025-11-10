@@ -15,11 +15,11 @@
  */
 package io.github.luminion.generator.type;
 
-import io.github.luminion.generator.config.support.GlobalConfig;
-import io.github.luminion.generator.config.po.TableField;
-import io.github.luminion.generator.config.rules.DateType;
-import io.github.luminion.generator.config.rules.DbColumnType;
-import io.github.luminion.generator.config.rules.IColumnType;
+import io.github.luminion.generator.configold.support.GlobalConfig;
+import io.github.luminion.generator.configold.po.TableField;
+import io.github.luminion.generator.configold.rules.DateType;
+import io.github.luminion.generator.configold.rules.DbColumnType;
+import io.github.luminion.generator.configold.rules.IColumnType;
 
 import java.sql.Types;
 import java.util.HashMap;

@@ -16,11 +16,11 @@
 package io.github.luminion.generator.query;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.config.support.DataSourceConfig;
-import io.github.luminion.generator.config.support.GlobalConfig;
-import io.github.luminion.generator.config.support.StrategyConfig;
-import io.github.luminion.generator.config.po.TableInfo;
+import io.github.luminion.generator.configold.Configurer;
+import io.github.luminion.generator.configold.support.DataSourceConfig;
+import io.github.luminion.generator.configold.support.GlobalConfig;
+import io.github.luminion.generator.configold.support.StrategyConfig;
+import io.github.luminion.generator.configold.po.TableInfo;
 
 import lombok.Getter;
 import org.slf4j.Logger;

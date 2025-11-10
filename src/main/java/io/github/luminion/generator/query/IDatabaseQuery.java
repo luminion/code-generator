@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.query;
 
-import io.github.luminion.generator.config.po.TableInfo;
+import io.github.luminion.generator.configold.po.TableInfo;
 
 
 import java.util.List;
