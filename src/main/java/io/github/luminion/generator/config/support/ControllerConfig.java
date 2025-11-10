@@ -49,7 +49,7 @@ public class ControllerConfig implements ITemplate {
     /**
      * 生成 <code>@RestController</code> 控制器
      * <pre>
-     *      <code>@ControllerConfig</code>
+     *      <code>@ControllerConfigurer</code>
      *      ->
      *      <code>@RestController</code>
      * </pre>

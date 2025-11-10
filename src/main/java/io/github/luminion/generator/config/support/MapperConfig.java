@@ -169,7 +169,7 @@ public class MapperConfig implements ITemplate {
         }
 
         /**
-         * 标记 MapperConfig 注解
+         * 标记 MapperConfigurer 注解
          *
          * @param annotationClass 注解Class
          * @return this

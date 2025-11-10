@@ -1,23 +1,24 @@
 package io.github.luminion.generator.config2;
 
-import io.github.luminion.generator.config.support.DataSourceConfig;
 
 /**
+ * 扩展
  * @author luminion
  * @since 1.0.0
  */
-public interface Switcher {
+public interface Switcher<C extends Switcher<C>> {
     
-    ControllerConfig switchController();
+    ControllerConfigurer<C> switchController();
     
-    ServiceConfig switchService();
+    ServiceConfigurer<C> switchService();
     
-    MapperConfig switchMapper();
+    MapperConfigurer<C> switchMapper();
 
-    EntityConfig switchEntity();
+    EntityConfigurer<C> switchEntity();
 
-    DtoConfig switchDto();
+    DtoConfigurer<C> switchDto();
     
-    GlobalConfig switchGlobal();
+    GlobalConfigurer<C> switchGlobal();
     
+    C switchSpecial();
 }
