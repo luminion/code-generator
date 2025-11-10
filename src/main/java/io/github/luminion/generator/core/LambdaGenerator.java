@@ -1,12 +1,12 @@
 package io.github.luminion.generator.core;
 
 
-import io.github.luminion.generator.config.Switcher;
+import io.github.luminion.generator.config.Switchable;
 
 /**
  * @author luminion
  */
-public interface LambdaGenerator<C extends Switcher<C>> extends Switcher<C> {
+public interface LambdaGenerator<C extends Switchable<C>> extends Switchable<C> {
     
     
     

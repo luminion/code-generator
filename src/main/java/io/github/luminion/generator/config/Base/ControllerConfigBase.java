@@ -1,30 +1,17 @@
-/*
- * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package io.github.luminion.generator.configold.support;
+package io.github.luminion.generator.config.Base;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import io.github.luminion.generator.config.ConfigSwitcher;
+import io.github.luminion.generator.config.ControllerConfig;
+import io.github.luminion.generator.config.Switchable;
 import io.github.luminion.generator.configold.enums.OutputFile;
-import io.github.luminion.generator.configold.po.ClassPayload;
 import io.github.luminion.generator.configold.po.MethodPayload;
 import io.github.luminion.generator.configold.po.TableField;
 import io.github.luminion.generator.configold.po.TableInfo;
+import io.github.luminion.generator.configold.support.GlobalConfig;
+import io.github.luminion.generator.configold.support.OutputConfig;
 import io.github.luminion.generator.fill.ITemplate;
-import io.github.luminion.generator.util.ReflectUtil;
 import io.github.luminion.generator.util.ClassUtils;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.Map;
@@ -33,13 +20,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * 控制器属性配置
- *
- * @author nieqiurong 2020/10/11.
- * @since 3.5.0
+ * @author luminion
+ * @since 1.0.0
  */
-@Slf4j
-public class ControllerConfig implements ITemplate {
+public abstract class ControllerConfigBase<C extends Switchable<C>> extends AbstractSwitchableConfig<C> implements ITemplate , ControllerConfig<C> {
 
     /**
      * 自定义继承的Controller类全称，带包名
@@ -48,11 +32,6 @@ public class ControllerConfig implements ITemplate {
 
     /**
      * 生成 <code>@RestController</code> 控制器
-     * <pre>
-     *      <code>@ControllerConfig</code>
-     *      ->
-     *      <code>@RestController</code>
-     * </pre>
      */
     protected boolean restController = true;
 
@@ -108,12 +87,11 @@ public class ControllerConfig implements ITemplate {
      * 分页结果方法
      */
     protected MethodPayload pageMethod = new MethodPayload();
-
-    /**
-     * 指定查询的参数
-     */
-    @Deprecated
-    protected ClassPayload queryParam = new ClassPayload();
+    
+    
+    public ControllerConfigBase(ConfigSwitcher<C> configSwitcher) {
+        super(configSwitcher);
+    }
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
@@ -270,175 +248,5 @@ public class ControllerConfig implements ITemplate {
         data.put("controllerImportPackages4Framework", frameworkPackages);
 
         return data;
-    }
-
-    public Adapter adapter() {
-        return new Adapter(this);
-    }
-
-    public static class Adapter {
-        private final ControllerConfig config;
-
-        public Adapter(ControllerConfig config) {
-            this.config = config;
-        }
-
-        /**
-         * 父类控制器
-         *
-         * @param clazz 父类控制器
-         * @return this
-         */
-        public Adapter superClass(Class<?> clazz) {
-            return superClass(clazz.getName());
-        }
-
-        /**
-         * 父类控制器
-         *
-         * @param superClass 父类控制器类名
-         * @return this
-         */
-        public Adapter superClass(String superClass) {
-            this.config.superClass = superClass;
-            return this;
-        }
-
-        /**
-         * 关闭@RestController控制器
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter disableRestController() {
-            this.config.restController = false;
-            return this;
-        }
-
-        /**
-         * 关闭驼峰转连字符
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter disableHyphenStyle() {
-            this.config.hyphenStyle = false;
-            return this;
-        }
-
-        /**
-         * controller请求前缀
-         *
-         * @param url url
-         * @return this
-         */
-        public Adapter baseUrl(String url) {
-            if (url == null || url.isEmpty()) {
-                this.config.baseUrl = null;
-                return this;
-            }
-            if (!url.startsWith("/")) {
-                url = "/" + url;
-            }
-            if (url.endsWith("/")) {
-                url = url.substring(0, url.length() - 1);
-            }
-            this.config.baseUrl = url;
-            return this;
-        }
-
-        /**
-         * 跨域注解
-         *
-         * @return this
-         */
-        public Adapter enableCrossOrigin() {
-            this.config.crossOrigin = true;
-            return this;
-        }
-
-        /**
-         * 禁止批量数据查询使用post请求
-         *
-         * @return this
-         */
-        public Adapter disableBatchQueryPost() {
-            this.config.batchQueryPost = false;
-            return this;
-        }
-
-        /**
-         * 批量查询body参数是否必填
-         *
-         * @return this
-         */
-        public Adapter disableBatchQueryRequiredBody() {
-            this.config.batchQueryRequiredBody = false;
-            return this;
-        }
-
-        /**
-         * 增删查改使用restful风格
-         *
-         * @return this
-         */
-        public Adapter enableRestful() {
-            this.config.restful = true;
-            return this;
-        }
-
-        /**
-         * 禁用路径变量
-         *
-         * @return this
-         */
-        public Adapter disablePathVariable() {
-            this.config.pathVariable = false;
-            return this;
-        }
-
-        /**
-         * 禁用消息体接收数据
-         *
-         * @return this
-         */
-        public Adapter disableRequestBody() {
-            this.config.requestBody = false;
-            return this;
-        }
-
-        /**
-         * 指定controller的返回结果包装类及方法
-         *
-         * @param methodReference 方法引用
-         * @return this
-         */
-        public <R> Adapter returnMethod(com.baomidou.mybatisplus.core.toolkit.support.SFunction<Object, R> methodReference) {
-            this.config.returnMethod = ReflectUtil.lambdaMethodInfo(methodReference, Object.class);
-            return this;
-        }
-
-        /**
-         * 指定controller返回的分页包装类及方法
-         *
-         * @param methodReference 方法参考
-         * @return this
-         */
-        public <O, R> Adapter pageMethod(com.baomidou.mybatisplus.core.toolkit.support.SFunction<com.baomidou.mybatisplus.core.metadata.IPage<O>, R> methodReference) {
-            this.config.pageMethod = ReflectUtil.lambdaMethodInfo(methodReference, com.baomidou.mybatisplus.core.metadata.IPage.class);
-            return this;
-        }
-
-        /**
-         * 指定用于查询的类
-         *
-         * @return this
-         * @deprecated 已弃用的方法
-         */
-        @Deprecated
-        public Adapter queryParam(Class<?> queryDTO) {
-//            this.config.queryParam = new io.github.luminion.mybatisplus.generator.config.po.ClassPayload(queryDTO);
-            return this;
-        }
     }
 }

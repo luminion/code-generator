@@ -1,6 +1,7 @@
 package io.github.luminion.generator.util;
 
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import io.github.luminion.generator.SFunc;
 import io.github.luminion.generator.configold.po.MethodPayload;
 
 import java.lang.invoke.SerializedLambda;
@@ -13,6 +14,7 @@ import java.util.Map;
 
 /**
  * 反射器
+ *
  * @author luminion
  */
 public class ReflectUtil {
@@ -24,7 +26,7 @@ public class ReflectUtil {
      * @param parameterClass  参数类型
      * @return {@link MethodPayload }
      */
-    public static MethodPayload lambdaMethodInfo(SFunction<?, ?> methodReference, Class<?> parameterClass) {
+    public static MethodPayload lambdaMethodInfo(SFunc<?, ?> methodReference, Class<?> parameterClass) {
         String methodName = "", className = "";
         try {
             Method lambdaMethod = methodReference.getClass().getDeclaredMethod("writeReplace");
@@ -78,7 +80,7 @@ public class ReflectUtil {
                 || Modifier.isTransient(modifiers)
                 ;
     }
-    
+
     /**
      * 获取指定类的字段映射
      *
@@ -103,7 +105,7 @@ public class ReflectUtil {
         }
         return map;
     }
-    
-    
+
+
 }
 
