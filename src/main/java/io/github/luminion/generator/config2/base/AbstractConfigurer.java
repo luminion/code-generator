@@ -30,8 +30,8 @@ public abstract class AbstractConfigurer<C extends Switcher<C>> implements Switc
     }
 
     @Override
-    public EntityConfigurer<C> switchEntity() {
-        return basicSwitcher.getEntityConfigurer();
+    public ModelConfigurer<C> switchEntity() {
+        return basicSwitcher.getModelConfigurer();
     }
 
     @Override

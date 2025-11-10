@@ -12,7 +12,7 @@ public class BasicSwitcher<C extends Switcher<C>> implements Switcher<C> {
     protected ControllerConfigurer<C> controllerConfigurer;
     protected ServiceConfigurer<C> serviceConfigurer;
     protected MapperConfigurer<C> mapperConfigurer;
-    protected EntityConfigurer<C> entityConfigurer;
+    protected ModelConfigurer<C> modelConfigurer;
     protected DtoConfigurer<C> dtoConfigurer;
     protected GlobalConfigurer<C> globalConfigurer;
     protected C specialConfigurer;
@@ -33,8 +33,8 @@ public class BasicSwitcher<C extends Switcher<C>> implements Switcher<C> {
     }
 
     @Override
-    public EntityConfigurer<C> switchEntity() {
-        return this.getEntityConfigurer();
+    public ModelConfigurer<C> switchEntity() {
+        return this.getModelConfigurer();
     }
 
     @Override

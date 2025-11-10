@@ -14,7 +14,7 @@ public interface Switcher<C extends Switcher<C>> {
     
     MapperConfigurer<C> switchMapper();
 
-    EntityConfigurer<C> switchEntity();
+    ModelConfigurer<C> switchEntity();
 
     DtoConfigurer<C> switchDto();
     
