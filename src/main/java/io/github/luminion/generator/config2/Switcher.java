@@ -2,7 +2,7 @@ package io.github.luminion.generator.config2;
 
 
 /**
- * 扩展
+ * 切换器
  * @author luminion
  * @since 1.0.0
  */

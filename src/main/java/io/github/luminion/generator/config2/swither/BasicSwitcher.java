@@ -1,51 +1,55 @@
-package io.github.luminion.generator.config2;
+package io.github.luminion.generator.config2.swither;
+
+import io.github.luminion.generator.config2.*;
+import lombok.Data;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
-public class BaseSwitcher<C extends Switcher<C>> implements Switcher<C>{
+@Data
+public class BasicSwitcher<C extends Switcher<C>> implements Switcher<C> {
     protected ControllerConfigurer<C> controllerConfigurer;
     protected ServiceConfigurer<C> serviceConfigurer;
     protected MapperConfigurer<C> mapperConfigurer;
     protected EntityConfigurer<C> entityConfigurer;
     protected DtoConfigurer<C> dtoConfigurer;
     protected GlobalConfigurer<C> globalConfigurer;
-    protected C special;
-
+    protected C specialConfigurer;
 
     @Override
     public ControllerConfigurer<C> switchController() {
-        return controllerConfigurer;
+        return this.getControllerConfigurer();
     }
 
     @Override
     public ServiceConfigurer<C> switchService() {
-        return serviceConfigurer;
+        return this.getServiceConfigurer();
     }
 
     @Override
     public MapperConfigurer<C> switchMapper() {
-        return mapperConfigurer;
+        return this.getMapperConfigurer();
     }
 
     @Override
     public EntityConfigurer<C> switchEntity() {
-        return entityConfigurer;
+        return this.getEntityConfigurer();
     }
 
     @Override
     public DtoConfigurer<C> switchDto() {
-        return dtoConfigurer;
+        return this.getDtoConfigurer();
     }
 
     @Override
     public GlobalConfigurer<C> switchGlobal() {
-        return globalConfigurer;
+        return this.getGlobalConfigurer();
     }
 
     @Override
     public C switchSpecial() {
-        return special;
+        return this.getSpecialConfigurer();
     }
+
 }

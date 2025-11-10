@@ -13,7 +13,7 @@ public interface EntityConfigurer<C extends Switcher<C>> extends Switcher<C> {
      * @return {@link EntityConfigurer }
      * @since 1.0.0
      */
-    EntityConfigurer logicDeleteColumnName(String logicDeleteColumnName);
+    EntityConfigurer<C> logicDeleteColumnName(String logicDeleteColumnName);
 
 
     /**
@@ -22,7 +22,7 @@ public interface EntityConfigurer<C extends Switcher<C>> extends Switcher<C> {
      * @return {@link EntityConfigurer }
      * @since 1.0.0
      */
-    EntityConfigurer disableUnderlineToCamel();
+    EntityConfigurer<C>  disableUnderlineToCamel();
     
     
     
