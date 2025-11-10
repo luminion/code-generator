@@ -123,8 +123,8 @@ public class MapperConfig implements ITemplate {
         Map<String, String> classCanonicalNameMap = tableInfo.getConfigurer().getOutputConfig().getOutputClassCanonicalNameMap(tableInfo);
         importPackages.add(classCanonicalNameMap.get(OutputFile.entity.name()));
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
-        if (globalConfig.isEnhancer()){
-            importPackages.add("io.github.luminion.mybatisplus.enhancer.EnhancedMapper");
+        if (globalConfig.isSqlBooster()){
+            importPackages.add("io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpMapper");
             importPackages.add(classCanonicalNameMap.get(OutputFile.queryVO.name()));
         }
         if (globalConfig.isGenerateQuery()){

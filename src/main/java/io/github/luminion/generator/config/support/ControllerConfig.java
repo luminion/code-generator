@@ -240,9 +240,9 @@ public class ControllerConfig implements ITemplate {
             importPackages.add("java.util.List");
             importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.queryDTO.name()));
             importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.queryVO.name()));
-            if (globalConfig.isEnhancer()){
+            if (globalConfig.isSqlBooster()){
                 importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.entity.name()));
-                importPackages.add("io.github.luminion.mybatisplus.enhancer.query.helper.SqlHelper");
+                importPackages.add("io.github.luminion.sqlbooster.model.sql.helper.SqlHelper");
             }
             if (pageMethod.isMethodReady()) {
                 importPackages.add(pageMethod.getClassCanonicalName());

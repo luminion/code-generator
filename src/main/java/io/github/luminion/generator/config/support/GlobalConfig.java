@@ -164,10 +164,10 @@ public class GlobalConfig implements ITemplate {
     protected boolean validated = true;
 
     /**
-     * 结合mybatis-plus-enhancer使用
+     * 结合sql-booster使用
      */
     @Getter
-    protected boolean enhancer;
+    protected boolean sqlBooster;
 
     /**
      * 解析jakarta类规范名称
@@ -214,7 +214,7 @@ public class GlobalConfig implements ITemplate {
 
         data.put("swagger", this.isSwagger());
         data.put("springdoc", this.springdoc);
-        data.put("enhancer", this.enhancer);
+        data.put("sqlBooster", this.sqlBooster);
         data.put("javaApiPackagePrefix", this.jakartaApiPackagePrefix);
         data.put("excelApiPackagePrefix", this.excelApiPackagePrefix);
         data.put("excelApiClass", this.excelApiClass);
@@ -390,8 +390,8 @@ public class GlobalConfig implements ITemplate {
          *
          * @return this
          */
-        public Adapter enableMybatisPlusEnhancer() {
-            this.config.enhancer = true;
+        public Adapter enableSqlBooster() {
+            this.config.sqlBooster = true;
             return this;
         }
 

@@ -24,23 +24,23 @@ import ${pkg};
 #if(${mapperAnnotationClass})
 @${mapperAnnotationClass.simpleName}
 #end
-#if(${enhancer})
+#if(${sqlBooster})
 public interface ${mapper} extends ${superMapperClass}<${entity}>, EnhancedMapper<${queryVO}> {
 #else
 public interface ${mapper} extends ${superMapperClass}<${entity}> {
 #end
 #if(${generateQuery})
 
-    #if(${enhancer})
+    #if(${sqlBooster})
     @Override
     #end
     List<${queryVO}> voQueryByXml(Object queryDTO, IPage<${queryVO}> page);
 
-    #if(${enhancer})
+    #if(${sqlBooster})
     @Override
     #end
     default List<${queryVO}> voQuery(Object queryDTO, IPage<${queryVO}> page) {
-        #if(${enhancer})
+        #if(${sqlBooster})
         return EnhancedMapper.super.voQuery(queryDTO, page);
         #else
         return this.voQueryByXml(queryDTO, page);      

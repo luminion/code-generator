@@ -54,7 +54,7 @@ public class ServiceConfig implements ITemplate {
         data.put("superServiceImplClass", ClassUtils.getSimpleName(this.superServiceImplClass));
         Configurer configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        if (globalConfig.isEnhancer()) {
+        if (globalConfig.isSqlBooster()) {
             OutputConfig outputConfig = tableInfo.getConfigurer().getOutputConfig();
             data.put("enhanceMethod", outputConfig.getService().isGenerate() ? outputConfig.getService().convertFormatName(tableInfo) + ".super" : "EnhancedService.super");
         }
@@ -82,7 +82,7 @@ public class ServiceConfig implements ITemplate {
         Map<String, String> outputClassCanonicalNameMap = outputConfig.getOutputClassCanonicalNameMap(tableInfo);
         importPackages.add(outputClassCanonicalNameMap.get(OutputFile.entity.name()));
         importPackages.add(this.superServiceClass);
-        if (globalConfig.isEnhancer()) {
+        if (globalConfig.isSqlBooster()) {
             importPackages.add("io.github.luminion.mybatisplus.enhancer.EnhancedService");
             importPackages.add(outputClassCanonicalNameMap.get(OutputFile.queryVO.name()));
         } else {
@@ -137,7 +137,7 @@ public class ServiceConfig implements ITemplate {
             importPackages.add("java.io.Serializable");
         }
         // enhancer
-        if (globalConfig.isEnhancer()) {
+        if (globalConfig.isSqlBooster()) {
             if (!outputConfig.getService().isGenerate()){
                 importPackages.add("io.github.luminion.mybatisplus.enhancer.EnhancedService");
                 importPackages.add(outputClassCanonicalNameMap.get(OutputFile.queryVO.name()));

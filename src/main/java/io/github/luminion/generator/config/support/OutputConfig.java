@@ -260,7 +260,7 @@ public class OutputConfig implements ITemplate {
         }
         if (!globalConfig.isGenerateQuery()){
             this.queryDTO.adapter().disable();
-            if (!globalConfig.isEnhancer()){
+            if (!globalConfig.isSqlBooster()){
                 this.queryVO.adapter().disable();
             }
         }

@@ -176,7 +176,7 @@ public class ${controller} {
     public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} selectList($!{optionalBodyStr}${queryDTO} queryDTO) {
         return ${returnMethod.invokeMethodStr("baseService.voList(queryDTO)")};
     }
-#if(${enhancer})
+#if(${sqlBooster})
 
     #if(${springdoc})
     @Operation(summary = "列表查询-动态条件")
@@ -221,7 +221,7 @@ public class ${controller} {
     public ${returnMethod.returnGenericTypeStr(${pageReturnType})} selectPage($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
     }
-#if(${enhancer})
+#if(${sqlBooster})
 
     #if(${springdoc})
     @Operation(summary = "分页查询-动态条件")
@@ -308,7 +308,7 @@ public class ${controller} {
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
         baseService.excelExport(queryDTO, response.getOutputStream(), ${queryVO}.class, current, size);
     }
-#if(${enhancer})
+#if(${sqlBooster})
     
     #if(${springdoc})
     @Operation(summary = "excel文件导出-动态条件")

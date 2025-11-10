@@ -107,8 +107,8 @@
         FROM
         ${schemaName}${table.name} a
         <where>
-        #if(${enhancer})
-            <include refid="io.github.luminion.mybatisplus.enhancer.EnhancedMapper.queryFragment"/>
+        #if(${sqlBooster})
+            <include refid="io.github.luminion.mybatisplus.sqlBooster.EnhancedMapper.queryFragment"/>
         #else
             <include refid="queryFragment"/>
         #end
@@ -124,7 +124,7 @@
             #end
         </where>
         <trim prefix="ORDER BY" prefixOverrides=",">
-        #if(${enhancer})
+        #if(${sqlBooster})
             <include refid="io.github.luminion.mybatisplus.enhancer.EnhancedMapper.sortFragment"/>
         #end
             #if(${orderBySql})
