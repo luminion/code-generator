@@ -18,11 +18,9 @@ package io.github.luminion.generator.config.support;
 import io.github.luminion.generator.config.common.IDbQuery;
 import io.github.luminion.generator.config.common.IKeyWordsHandler;
 import io.github.luminion.generator.config.common.ITypeConvert;
-import io.github.luminion.generator.config.converts.MySqlTypeConvert;
 import io.github.luminion.generator.config.converts.TypeConverts;
 import io.github.luminion.generator.config.enums.DbType;
 import io.github.luminion.generator.config.querys.DbQueryRegistry;
-import io.github.luminion.generator.config.rules.NamingStrategy;
 import io.github.luminion.generator.query.AbstractDatabaseQuery;
 import io.github.luminion.generator.query.DefaultQuery;
 import io.github.luminion.generator.type.ITypeConvertHandler;
@@ -37,7 +35,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -71,7 +68,7 @@ public class DataSourceConfig {
     /**
      * 数据库信息查询
      */
-    protected final IDbQuery dbQuery;
+    protected IDbQuery dbQuery;
     /**
      * 查询方式
      */
@@ -110,7 +107,7 @@ public class DataSourceConfig {
      * 数据库连接属性
      */
     protected final Map<String, String> connectionProperties = new HashMap<>();
-    
+
     /**
      * 驱动全类名
      *
