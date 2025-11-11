@@ -18,6 +18,7 @@ package io.github.luminion.generator.config.support;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.rules.DateType;
 import io.github.luminion.generator.fill.ITemplate;
+import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +35,7 @@ import java.util.function.Supplier;
  * @since 2016-12-02
  */
 @Slf4j
+@Data
 public class GlobalConfig implements ITemplate {
 
     /**
@@ -44,7 +46,6 @@ public class GlobalConfig implements ITemplate {
     /**
      * 时间类型对应策略
      */
-    @Getter
     protected DateType dateType = DateType.TIME_PACK;
 
     /**
@@ -52,16 +53,12 @@ public class GlobalConfig implements ITemplate {
      *
      * @since 3.5.0
      */
-    protected Supplier<String> commentDate = () -> new SimpleDateFormat("yyyy-MM-dd" ).format(new Date());
-    public String getCommentDate() {
-        return commentDate.get();
-    }
+    protected String commentDate = new SimpleDateFormat("yyyy-MM-dd" ).format(new Date());
 
     /**
      * 【实体】是否为lombok模型（默认 false）<br>
      * <a href="https://projectlombok.org/">document</a>
      */
-    @Getter
     protected boolean lombok;
 
     /**
@@ -69,7 +66,6 @@ public class GlobalConfig implements ITemplate {
      *
      * @since 3.3.2
      */
-    @Getter
     protected boolean chainModel;
 
     /**
@@ -84,7 +80,6 @@ public class GlobalConfig implements ITemplate {
     /**
      * 开启 springdoc 模式（默认 false 与 swagger 不可同时使用）
      */
-    @Getter
     protected boolean springdoc;
 
     /**
@@ -98,7 +93,6 @@ public class GlobalConfig implements ITemplate {
      * 该属性在{@link TableInfo#setComment(String)} 时自动使用
      * </p>
      */
-    @Getter
     protected boolean commentUUID;
 
     /**
@@ -116,37 +110,31 @@ public class GlobalConfig implements ITemplate {
     /**
      * excel类
      */
-    @Getter
     protected String excelApiClass = "FastExcel";
 
     /**
      * 生成查询相关方法及配套类
      */
-    @Getter
     protected boolean generateQuery = true;
 
     /**
      * 生成新增方法及配套类
      */
-    @Getter
     protected boolean generateInsert = true;
 
     /**
      * 生成更新方法及配套类
      */
-    @Getter
     protected boolean generateUpdate = true;
 
     /**
      * 生成删除方法及配套类
      */
-    @Getter
     protected boolean generateDelete = true;
 
     /**
      * 生成导入方法及配套类(需允许新增)
      */
-    @Getter
     protected boolean generateImport = true;
 
     /**
@@ -160,14 +148,8 @@ public class GlobalConfig implements ITemplate {
     /**
      * 参数校验
      */
-    @Getter
     protected boolean validated = true;
 
-    /**
-     * 结合sql-booster使用
-     */
-    @Getter
-    protected boolean sqlBooster;
 
     /**
      * 解析jakarta类规范名称
@@ -214,7 +196,9 @@ public class GlobalConfig implements ITemplate {
 
         data.put("swagger", this.isSwagger());
         data.put("springdoc", this.springdoc);
-        data.put("sqlBooster", this.sqlBooster);
+        //  todo sqlBooster
+//        data.put("sqlBooster", this.sqlBooster);
+        
         data.put("javaApiPackagePrefix", this.jakartaApiPackagePrefix);
         data.put("excelApiPackagePrefix", this.excelApiPackagePrefix);
         data.put("excelApiClass", this.excelApiClass);
@@ -228,232 +212,5 @@ public class GlobalConfig implements ITemplate {
         data.put("generateExport", this.generateExport);
 
         return data;
-    }
-
-    public Adapter adapter() {
-        return new Adapter(this);
-    }
-
-    public static class Adapter {
-        private final GlobalConfig config;
-
-        public Adapter(GlobalConfig globalConfig) {
-            this.config = globalConfig;
-        }
-
-        /**
-         * 作者
-         */
-        public Adapter author(String author) {
-            this.config.author = author;
-            return this;
-        }
-
-        /**
-         * 时间类型对应策略
-         */
-        public Adapter dateType(DateType dateType) {
-            this.config.dateType = dateType;
-            return this;
-        }
-
-        /**
-         * 指定注释日期格式化
-         *
-         * @param pattern 格式
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter commentDate(String pattern) {
-            this.config.commentDate = () -> new SimpleDateFormat(pattern).format(new Date());
-            return this;
-        }
-
-        /**
-         * 开启lombok模型
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter enableLombok() {
-            this.config.lombok = true;
-            return this;
-        }
-
-        /**
-         * 禁用lombok模型
-         *
-         * @return this
-         * @deprecated 默认值,无需设置
-         */
-        @Deprecated
-        public Adapter disableLombok() {
-            this.config.lombok = true;
-            return this;
-        }
-
-        /**
-         * 开启链式getter和setter
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter enableChainModel() {
-            this.config.chainModel = true;
-            return this;
-        }
-
-        /**
-         * 文档注释添加相关类链接
-         *
-         * @return this
-         */
-        public Adapter enableCommentLink() {
-            this.config.commentLink = true;
-            return this;
-        }
-        
-        /**
-         * 禁用文档注释添加相关类链接
-         *
-         * @return this
-         * @deprecated 默认值,无需设置
-         */
-        @Deprecated
-        public Adapter disableCommentLink() {
-            this.config.commentLink = false;
-            return this;
-        }
-
-        /**
-         * 启用类注释随机UUID
-         *
-         * @return this
-         */
-        public Adapter enableCommentUUID() {
-            this.config.commentUUID = true;
-            return this;
-        }
-
-        /**
-         * 禁用新增和修改的入参校验
-         *
-         * @return this
-         */
-        public Adapter disableValidated() {
-            this.config.validated = false;
-            return this;
-        }
-
-        /**
-         * 使用swagger文档
-         */
-        public Adapter enableSwagger() {
-            this.config.swagger = true;
-            return this;
-        }
-
-        /**
-         * 使用springdoc文档
-         */
-        public Adapter enableSpringdoc() {
-            this.config.springdoc = true;
-            return this;
-        }
-
-        /**
-         * 使用javax包作为javaEE api
-         * <p>springboot2.x使用javax, springboot3.x使用jakarta</p>
-         * 默认使用jakarta
-         *
-         * @return this
-         */
-        public Adapter enableJavaxApi() {
-            this.config.jakartaApiPackagePrefix = "javax";
-            return this;
-        }
-
-        /**
-         * 使用EasyExcel
-         * <p>默认使用FastExcel</p>
-         *
-         * @return this
-         */
-        public Adapter enableEasyExcel() {
-            this.config.excelApiPackagePrefix = "com.alibaba.excel";
-            this.config.excelApiClass = "EasyExcel";
-            return this;
-        }
-
-        /**
-         * 使用mybatis-plus-enhancer
-         *
-         * @return this
-         */
-        public Adapter enableSqlBooster() {
-            this.config.sqlBooster = true;
-            return this;
-        }
-
-        /**
-         * 不生成查询方法
-         *
-         * @return this
-         */
-        public Adapter disableQuery() {
-            this.config.generateQuery = false;
-            return this;
-        }
-
-        /**
-         * 不生成新增方法
-         *
-         * @return this
-         */
-        public Adapter disableInsert() {
-            this.config.generateInsert = false;
-            return this;
-        }
-
-        /**
-         * 不生成更新方法
-         *
-         * @return this
-         */
-        public Adapter disableUpdate() {
-            this.config.generateUpdate = false;
-            return this;
-        }
-
-        /**
-         * 不生成删除方法
-         *
-         * @return this
-         */
-        public Adapter disableDelete() {
-            this.config.generateDelete = false;
-            return this;
-        }
-
-        /**
-         * 不生成导入方法
-         *
-         * @return this
-         */
-        public Adapter disableImport() {
-            this.config.generateImport = false;
-            return this;
-        }
-
-        /**
-         * 不生成导出方法
-         *
-         * @return this
-         */
-        public Adapter disableExport() {
-            this.config.generateExport = false;
-            return this;
-        }
-
     }
 }
