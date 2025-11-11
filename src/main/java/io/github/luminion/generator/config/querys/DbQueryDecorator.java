@@ -15,28 +15,20 @@
  */
 package io.github.luminion.generator.config.querys;
 
-// todo 移除mybatis-plus
-import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.common.IDbQuery;
+import io.github.luminion.generator.config.enums.DbType;
+import io.github.luminion.generator.config.po.LikeTable;
 import io.github.luminion.generator.config.support.DataSourceConfig;
 import io.github.luminion.generator.config.support.StrategyConfig;
-import io.github.luminion.generator.config.po.LikeTable;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -47,6 +39,7 @@ import java.util.stream.Collectors;
  * @author hubin
  * @since 3.5.0
  */
+@Slf4j
 public class DbQueryDecorator extends AbstractDbQuery {
     private final IDbQuery dbQuery;
     @Getter
@@ -54,7 +47,6 @@ public class DbQueryDecorator extends AbstractDbQuery {
     private final DbType dbType;
     private final StrategyConfig strategyConfig;
     private final String schema;
-    private final Logger logger;
 
     public DbQueryDecorator(DataSourceConfig dataSourceConfig, StrategyConfig strategyConfig) {
         this.dbQuery = dataSourceConfig.getDbQuery();
@@ -62,14 +54,12 @@ public class DbQueryDecorator extends AbstractDbQuery {
         this.dbType = dataSourceConfig.getDbType();
         this.strategyConfig = strategyConfig;
         this.schema = dataSourceConfig.getSchemaName();
-        this.logger = LoggerFactory.getLogger(dbQuery.getClass());
     }
 
     @Override
     public String tablesSql() {
         String tablesSql = dbQuery.tablesSql();
-        if (DbType.POSTGRE_SQL == dbType || DbType.KINGBASE_ES == dbType
-            || DbType.DB2 == dbType || DbType.ORACLE == dbType || DbType.DM == dbType) {
+        if (DbType.POSTGRE_SQL == dbType || DbType.KINGBASE_ES == dbType || DbType.DB2 == dbType || DbType.ORACLE == dbType || DbType.DM == dbType) {
             tablesSql = String.format(tablesSql, this.schema);
         }
         if (strategyConfig.isEnableSqlFilter()) {
@@ -82,11 +72,9 @@ public class DbQueryDecorator extends AbstractDbQuery {
                 sql.append(" AND ").append(dbQuery.tableName()).append(" NOT LIKE '").append(table.getValue()).append("'");
             }
             if (!(tables = strategyConfig.getInclude()).isEmpty()) {
-                sql.append(" AND ").append(dbQuery.tableName()).append(" IN (")
-                    .append(tables.stream().map(tb -> "'" + tb + "'").collect(Collectors.joining(","))).append(")");
+                sql.append(" AND ").append(dbQuery.tableName()).append(" IN (").append(tables.stream().map(tb -> "'" + tb + "'").collect(Collectors.joining(","))).append(")");
             } else if (!(tables = strategyConfig.getExclude()).isEmpty()) {
-                sql.append(" AND ").append(dbQuery.tableName()).append(" NOT IN (")
-                    .append(tables.stream().map(tb -> "'" + tb + "'").collect(Collectors.joining(","))).append(")");
+                sql.append(" AND ").append(dbQuery.tableName()).append(" NOT IN (").append(tables.stream().map(tb -> "'" + tb + "'").collect(Collectors.joining(","))).append(")");
             }
             return sql.toString();
         }
@@ -114,7 +102,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
             tableName = tableName.toUpperCase();
             tableFieldsSql = String.format(tableFieldsSql, this.schema, tableName);
         } else if (DbType.POSTGRE_SQL == dbType) {
-            tableFieldsSql = String.format(tableFieldsSql, tableName, tableName, tableName,this.schema);
+            tableFieldsSql = String.format(tableFieldsSql, tableName, tableName, tableName, this.schema);
         } else {
             tableFieldsSql = String.format(tableFieldsSql, tableName);
         }
@@ -156,7 +144,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
         try {
             return dbQuery.isKeyIdentity(results);
         } catch (SQLException e) {
-            logger.warn("判断主键自增错误:{}", e.getMessage());
+            log.warn("判断主键自增错误:{}", e.getMessage());
             // ignore 这个看到在查H2的时候出了异常，先忽略这个异常了.
         }
         return false;
@@ -175,7 +163,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
     public Map<String, Object> getCustomFields(ResultSet resultSet) {
         String[] fcs = this.fieldCustom();
         if (null != fcs) {
-            Map<String, Object> customMap = CollectionUtils.newHashMapWithExpectedSize(fcs.length);
+            Map<String, Object> customMap = new HashMap<>(fcs.length);
             for (String fc : fcs) {
                 try {
                     customMap.put(fc, resultSet.getObject(fc));
@@ -195,17 +183,16 @@ public class DbQueryDecorator extends AbstractDbQuery {
      * @param consumer 结果处理
      */
     public void execute(String sql, Consumer<ResultSetWrapper> consumer) throws SQLException {
-        logger.debug("执行SQL:{}", sql);
+        log.debug("执行SQL:{}", sql);
         int count = 0;
         long start = System.nanoTime();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
                 consumer.accept(new ResultSetWrapper(resultSet, this, this.dbType));
                 count++;
             }
             long end = System.nanoTime();
-            logger.debug("返回记录数:{},耗时(ms):{}", count, (end - start) / 1000000);
+            log.debug("返回记录数:{},耗时(ms):{}", count, (end - start) / 1000000);
         }
     }
 
@@ -256,7 +243,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
          * @return 注释
          */
         private String getComment(String columnLabel) {
-            return StringUtils.isNotBlank(columnLabel) ? formatComment(getStringResult(columnLabel)) : StringPool.EMPTY;
+            return StringUtils.isNotBlank(columnLabel) ? formatComment(getStringResult(columnLabel)) : "";
         }
 
         /**
@@ -273,7 +260,7 @@ public class DbQueryDecorator extends AbstractDbQuery {
          * @return 格式化内容
          */
         public String formatComment(String comment) {
-            return StringUtils.isBlank(comment) ? StringPool.EMPTY : comment.replaceAll("\r\n", "\t");
+            return StringUtils.isBlank(comment) ? "" : comment.replaceAll("\r\n", "\t");
         }
 
         /**
