@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.Base1;
+package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.config.*;
 
