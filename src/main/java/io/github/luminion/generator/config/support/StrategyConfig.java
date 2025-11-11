@@ -23,7 +23,6 @@ import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.rules.DateType;
 import io.github.luminion.generator.config.rules.ExtraFieldStrategy;
 import io.github.luminion.generator.config.fill.ITemplate;
-import io.github.luminion.generator.config.query.SQLQuery;
 import io.github.luminion.generator.config.rules.NamingStrategy;
 import io.github.luminion.generator.config.type.ITypeConvertHandler;
 import io.github.luminion.generator.util.StringUtils;
@@ -52,7 +51,11 @@ public class StrategyConfig implements ITemplate {
     /**
      * 数据库表映射到实体的命名策略
      */
-    protected NamingStrategy naming = NamingStrategy.underline_to_camel;
+    protected NamingStrategy entityNaming = NamingStrategy.underline_to_camel;
+    /**
+     * 数据库表字段映射到实体的命名策略
+     */
+    protected NamingStrategy columnNaming = NamingStrategy.underline_to_camel;
 
     /**
      * 类型转换处理
@@ -73,7 +76,7 @@ public class StrategyConfig implements ITemplate {
      * 指定生成的主键的ID类型
      */
     protected IdType idType;
-    
+
     /**
      * Boolean类型字段是否移除is前缀（默认 false）<br>
      * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
@@ -84,7 +87,7 @@ public class StrategyConfig implements ITemplate {
      * 是否生成实体时，生成字段注解（默认 false）
      */
     protected boolean tableFieldAnnotationEnable;
-    
+
     /**
      * 过滤表前缀
      * example: addTablePrefix("t_")

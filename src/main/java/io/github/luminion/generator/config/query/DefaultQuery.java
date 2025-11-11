@@ -91,7 +91,6 @@ public class DefaultQuery implements IDatabaseQuery {
                 }
             });
             filter(tableList, includeTableList, excludeTableList);
-            // 性能优化，只处理需执行表字段 https://github.com/baomidou/mybatis-plus/issues/219
             tableList.forEach(this::convertTableFields);
             return tableList;
         } finally {

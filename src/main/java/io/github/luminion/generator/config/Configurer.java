@@ -15,16 +15,11 @@
  */
 package io.github.luminion.generator.config;
 
-import io.github.luminion.generator.config.common.IDbQuery;
-import io.github.luminion.generator.config.common.INameConvert;
+import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.query.DefaultQuery;
 import io.github.luminion.generator.config.support.*;
-import io.github.luminion.generator.config.enums.TemplateLoadWay;
-import io.github.luminion.generator.config.po.TableInfo;
-import io.github.luminion.generator.config.query.IDatabaseQuery;
 import lombok.Getter;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -39,10 +34,6 @@ import java.util.regex.Pattern;
 @Getter
 public class Configurer<C> {
 
-    /**
-     * 过滤正则
-     */
-    private static final Pattern REGX = Pattern.compile("[~!/@#$%^&*()+\\\\\\[\\]|{};:'\",<.>?]+");
     /**
      * 数据库配置信息
      */

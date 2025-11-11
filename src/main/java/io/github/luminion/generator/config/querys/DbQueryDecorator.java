@@ -52,8 +52,8 @@ public class DbQueryDecorator extends AbstractDbQuery {
         this.dbQuery = dataSourceConfig.getDbQuery();
         this.connection = dataSourceConfig.createConnection();
         this.dbType = dataSourceConfig.getDbType();
-        this.strategyConfig = strategyConfig;
         this.schema = dataSourceConfig.getSchemaName();
+        this.strategyConfig = strategyConfig;
     }
 
     @Override
