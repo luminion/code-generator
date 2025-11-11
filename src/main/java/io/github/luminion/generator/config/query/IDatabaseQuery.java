@@ -13,35 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.fill;
+package io.github.luminion.generator.config.query;
 
 import io.github.luminion.generator.config.po.TableInfo;
-import lombok.SneakyThrows;
 
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
- * 渲染模板接口
- *
- * @author nieqiurong 2020/11/9.
+ * @author nieqiurong 2021/1/6.
  * @since 3.5.0
  */
+public interface IDatabaseQuery {
 
-public interface ITemplate extends Serializable {
-
-    @SneakyThrows
-    default Map<String, Object> renderData(TableInfo tableInfo) {
-        // 添加自定义配置字段信息
-//        HashMap<String, Object> data = new HashMap<>();
-//        Collection<Field> fields = ReflectUtils.fieldMap(getClass()).values();
-//        for (Field field : fields) {
-//            data.put(field.getName(), field.get(this));
-//        }
-//        return data;
-        return new HashMap<>();
-    }
+    /**
+     * 获取表信息
+     *
+     * @return 表信息
+     */
+    List<TableInfo> queryTables();
 
 }

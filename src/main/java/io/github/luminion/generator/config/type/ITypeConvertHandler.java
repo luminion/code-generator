@@ -13,24 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.query;
+package io.github.luminion.generator.config.type;
 
-import io.github.luminion.generator.config.po.TableInfo;
+import io.github.luminion.generator.config.support.GlobalConfig;
+import io.github.luminion.generator.config.po.TableField;
+import io.github.luminion.generator.config.rules.IColumnType;
 
-
-import java.util.List;
 
 /**
- * @author nieqiurong 2021/1/6.
- * @since 3.5.0
+ * 类型转换处理器
+ *
+ * @author nieqiurong 2022/5/12.
+ * @since 3.5.3
  */
-public interface IDatabaseQuery {
+public interface ITypeConvertHandler {
 
     /**
-     * 获取表信息
+     * 转换字段类型
      *
-     * @return 表信息
+     * @param globalConfig 全局配置
+     * @param typeRegistry 类型注册信息
+     * @param metaInfo     字段元数据信息
+     * @return 子类类型
      */
-    List<TableInfo> queryTables();
+    IColumnType convert(GlobalConfig globalConfig, TypeRegistry typeRegistry, TableField.MetaInfo metaInfo);
 
 }

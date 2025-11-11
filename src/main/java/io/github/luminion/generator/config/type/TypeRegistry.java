@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.type;
+package io.github.luminion.generator.config.type;
 
 import io.github.luminion.generator.config.support.GlobalConfig;
 import io.github.luminion.generator.config.po.TableField;

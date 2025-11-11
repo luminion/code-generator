@@ -18,8 +18,8 @@ package io.github.luminion.generator.config.support;
 import io.github.luminion.generator.config.po.LikeTable;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.rules.ExtraFieldStrategy;
-import io.github.luminion.generator.fill.ITemplate;
-import io.github.luminion.generator.query.SQLQuery;
+import io.github.luminion.generator.config.fill.ITemplate;
+import io.github.luminion.generator.config.query.SQLQuery;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 

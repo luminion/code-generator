@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.query;
+package io.github.luminion.generator.config.query;
 
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.support.DataSourceConfig;

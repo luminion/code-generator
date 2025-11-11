@@ -3,7 +3,7 @@ package io.github.luminion.generator.config.support.adapter;
 import io.github.luminion.generator.config.enums.IdType;
 import io.github.luminion.generator.config.rules.NamingStrategy;
 import io.github.luminion.generator.config.support.EntityConfig;
-import io.github.luminion.generator.fill.IFill;
+import io.github.luminion.generator.config.fill.IFill;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;

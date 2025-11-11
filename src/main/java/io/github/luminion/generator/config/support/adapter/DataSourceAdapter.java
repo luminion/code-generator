@@ -4,8 +4,8 @@ import io.github.luminion.generator.config.common.IDbQuery;
 import io.github.luminion.generator.config.common.IKeyWordsHandler;
 import io.github.luminion.generator.config.common.ITypeConvert;
 import io.github.luminion.generator.config.support.DataSourceConfig;
-import io.github.luminion.generator.query.AbstractDatabaseQuery;
-import io.github.luminion.generator.type.ITypeConvertHandler;
+import io.github.luminion.generator.config.query.AbstractDatabaseQuery;
+import io.github.luminion.generator.config.type.ITypeConvertHandler;
 import lombok.SneakyThrows;
 
 /**

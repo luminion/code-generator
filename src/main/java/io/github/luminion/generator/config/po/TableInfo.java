@@ -18,7 +18,7 @@ package io.github.luminion.generator.config.po;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.support.GlobalConfig;
 import io.github.luminion.generator.config.support.StrategyConfig;
-import io.github.luminion.generator.jdbc.DatabaseMetaDataWrapper;
+import io.github.luminion.generator.config.jdbc.DatabaseMetaDataWrapper;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;

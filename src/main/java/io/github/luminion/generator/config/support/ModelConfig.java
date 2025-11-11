@@ -5,7 +5,7 @@ import io.github.luminion.generator.config.enums.OutputFile;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.po.TableField.MetaInfo;
 import io.github.luminion.generator.config.po.TableInfo;
-import io.github.luminion.generator.fill.ITemplate;
+import io.github.luminion.generator.config.fill.ITemplate;
 import lombok.Data;
 
 import java.util.*;

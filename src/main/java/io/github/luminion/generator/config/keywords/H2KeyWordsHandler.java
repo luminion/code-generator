@@ -13,132 +13,112 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.keywords;
+package io.github.luminion.generator.config.keywords;
 
 
 
 import java.util.*;
 
 /**
- * <a href="https://www.postgresql.org/docs/11/sql-keywords-appendix.html">postgresql关键字处理</a>
+ * <a href="http://www.h2database.com/html/advanced.html#keywords">h2数据库关键字处理</a>
  *
- * @author nieqiurong 2020/5/9.
+ * @author nieqiurong 2020/5/7.
  * @since 3.3.2
  */
-public class PostgreSqlKeyWordsHandler extends BaseKeyWordsHandler {
+public class H2KeyWordsHandler extends BaseKeyWordsHandler {
 
     private static final List<String> KEY_WORDS = new ArrayList<>(Arrays.asList(
         "ALL",
-        "ANALYSE",
-        "ANALYZE",
         "AND",
-        "ANY",
         "ARRAY",
         "AS",
-        "ASC",
-        "ASYMMETRIC",
-        "AUTHORIZATION",
-        "BINARY",
+        "BETWEEN",
         "BOTH",
         "CASE",
-        "CAST",
         "CHECK",
-        "COLLATE",
-        "COLLATION",
-        "COLUMN",
-        "CONCURRENTLY",
         "CONSTRAINT",
-        "CREATE",
         "CROSS",
         "CURRENT_CATALOG",
         "CURRENT_DATE",
-        "CURRENT_ROLE",
         "CURRENT_SCHEMA",
         "CURRENT_TIME",
         "CURRENT_TIMESTAMP",
         "CURRENT_USER",
-        "DEFAULT",
-        "DEFERRABLE",
-        "DESC",
         "DISTINCT",
-        "DO",
-        "ELSE",
-        "END",
         "EXCEPT",
+        "EXISTS",
         "FALSE",
         "FETCH",
+        "FILTER",
         "FOR",
         "FOREIGN",
-        "FREEZE",
         "FROM",
         "FULL",
-        "GRANT",
         "GROUP",
+        "GROUPS",
         "HAVING",
+        "IF",
         "ILIKE",
         "IN",
-        "INITIALLY",
         "INNER",
         "INTERSECT",
-        "INTO",
+        "INTERSECTS",
+        "INTERVAL",
         "IS",
-        "ISNULL",
         "JOIN",
-        "LATERAL",
         "LEADING",
         "LEFT",
         "LIKE",
         "LIMIT",
         "LOCALTIME",
         "LOCALTIMESTAMP",
+        "MINUS",
         "NATURAL",
         "NOT",
-        "NOTNULL",
         "NULL",
         "OFFSET",
         "ON",
-        "ONLY",
         "OR",
         "ORDER",
-        "OUTER",
-        "OVERLAPS",
-        "PLACING",
+        "OVER",
+        "PARTITION",
         "PRIMARY",
-        "REFERENCES",
-        "RETURNING",
+        "QUALIFY",
+        "RANGE",
+        "REGEXP",
         "RIGHT",
+        "ROW",
+        "_ROWID_",
+        "ROWNUM",
+        "ROWS",
         "SELECT",
-        "SESSION_USER",
-        "SIMILAR",
-        "SOME",
-        "SYMMETRIC",
+        "SYSDATE",
+        "SYSTIME",
+        "SYSTIMESTAMP",
         "TABLE",
-        "TABLESAMPLE",
-        "THEN",
-        "TO",
+        "TODAY",
+        "TOP",
         "TRAILING",
         "TRUE",
         "UNION",
         "UNIQUE",
-        "USER",
+        "UNKNOWN",
         "USING",
-        "VARIADIC",
-        "VERBOSE",
-        "WHEN",
+        "VALUES",
         "WHERE",
         "WINDOW",
         "WITH"
     ));
 
-    public PostgreSqlKeyWordsHandler() {
+    public H2KeyWordsHandler() {
         super(new HashSet<>(KEY_WORDS));
     }
 
-    public PostgreSqlKeyWordsHandler(List<String> keyWords) {
+    public H2KeyWordsHandler(List<String> keyWords) {
         super(new HashSet<>(keyWords));
     }
 
-    public PostgreSqlKeyWordsHandler(Set<String> keyWords) {
+    public H2KeyWordsHandler(Set<String> keyWords) {
         super(keyWords);
     }
 

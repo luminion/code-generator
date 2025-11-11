@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.keywords;
+package io.github.luminion.generator.config.keywords;
 
 import io.github.luminion.generator.config.common.IKeyWordsHandler;
 

@@ -19,7 +19,7 @@ import io.github.luminion.generator.config.common.INameConvert;
 import io.github.luminion.generator.config.support.*;
 import io.github.luminion.generator.config.enums.TemplateLoadWay;
 import io.github.luminion.generator.config.po.TableInfo;
-import io.github.luminion.generator.query.IDatabaseQuery;
+import io.github.luminion.generator.config.query.IDatabaseQuery;
 import lombok.Getter;
 
 import java.lang.reflect.Constructor;

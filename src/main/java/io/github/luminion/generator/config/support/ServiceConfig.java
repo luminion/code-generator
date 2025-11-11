@@ -18,7 +18,7 @@ package io.github.luminion.generator.config.support;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.enums.OutputFile;
 import io.github.luminion.generator.config.po.TableInfo;
-import io.github.luminion.generator.fill.ITemplate;
+import io.github.luminion.generator.config.fill.ITemplate;
 import io.github.luminion.generator.util.ClassUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

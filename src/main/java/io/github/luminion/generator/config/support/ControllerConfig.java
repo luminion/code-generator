@@ -19,7 +19,7 @@ import io.github.luminion.generator.config.enums.OutputFile;
 import io.github.luminion.generator.config.po.MethodPayload;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.po.TableInfo;
-import io.github.luminion.generator.fill.ITemplate;
+import io.github.luminion.generator.config.fill.ITemplate;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
