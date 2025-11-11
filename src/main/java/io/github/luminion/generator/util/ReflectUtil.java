@@ -1,8 +1,7 @@
 package io.github.luminion.generator.util;
 
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import io.github.luminion.generator.SFunc;
-import io.github.luminion.generator.configold.po.MethodPayload;
+import io.github.luminion.generator.config.po.MethodPayload;
 
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Constructor;

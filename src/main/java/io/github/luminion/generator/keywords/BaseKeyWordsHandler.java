@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.keywords;
 
-import io.github.luminion.generator.configold.common.IKeyWordsHandler;
+import io.github.luminion.generator.config.common.IKeyWordsHandler;
 
 
 import java.util.*;

@@ -13,24 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.query;
+package io.github.luminion.generator.config.enums;
 
-import io.github.luminion.generator.config.po.TableInfo;
-
-
-import java.util.List;
+import lombok.AllArgsConstructor;
 
 /**
- * @author nieqiurong 2021/1/6.
- * @since 3.5.0
+ * 输出文件类型
+ *
+ * @author hubin
+ * @since 2021-06-01
  */
-public interface IDatabaseQuery {
-
-    /**
-     * 获取表信息
-     *
-     * @return 表信息
-     */
-    List<TableInfo> queryTables();
-
+@AllArgsConstructor
+public enum OutputFile {
+    entity,
+    service,
+    serviceImpl,
+    mapper,
+    mapperXml,
+    controller,
+    insertDTO,
+    updateDTO,
+    queryDTO,
+    queryVO,
+    ;
 }

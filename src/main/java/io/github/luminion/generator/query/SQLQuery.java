@@ -16,12 +16,12 @@
 package io.github.luminion.generator.query;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import io.github.luminion.generator.configold.Configurer;
-import io.github.luminion.generator.configold.support.EntityConfig;
-import io.github.luminion.generator.configold.po.TableField;
-import io.github.luminion.generator.configold.po.TableInfo;
-import io.github.luminion.generator.configold.querys.DbQueryDecorator;
-import io.github.luminion.generator.configold.rules.IColumnType;
+import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.support.EntityConfig;
+import io.github.luminion.generator.config.po.TableField;
+import io.github.luminion.generator.config.po.TableInfo;
+import io.github.luminion.generator.config.querys.DbQueryDecorator;
+import io.github.luminion.generator.config.rules.IColumnType;
 import io.github.luminion.generator.jdbc.DatabaseMetaDataWrapper;
 
 

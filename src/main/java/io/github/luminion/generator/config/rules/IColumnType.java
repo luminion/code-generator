@@ -13,24 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.query;
-
-import io.github.luminion.generator.config.po.TableInfo;
-
-
-import java.util.List;
+package io.github.luminion.generator.config.rules;
 
 /**
- * @author nieqiurong 2021/1/6.
- * @since 3.5.0
+ * 获取实体类字段属性类信息接口
+ *
+ * @author miemie
+ * @since 2018-08-22
  */
-public interface IDatabaseQuery {
+public interface IColumnType {
 
     /**
-     * 获取表信息
+     * 获取字段类型
      *
-     * @return 表信息
+     * @return 字段类型
      */
-    List<TableInfo> queryTables();
+    String getType();
 
+    /**
+     * 获取字段类型完整名
+     *
+     * @return 字段类型完整名
+     */
+    String getPkg();
 }

@@ -13,24 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.query;
-
-import io.github.luminion.generator.config.po.TableInfo;
-
-
-import java.util.List;
+package io.github.luminion.generator.config.rules;
 
 /**
- * @author nieqiurong 2021/1/6.
- * @since 3.5.0
+ * 数据库时间类型 到 实体类时间类型 对应策略
+ *
+ * @author miemie
+ * @since 2018/5/22
  */
-public interface IDatabaseQuery {
-
+public enum DateType {
     /**
-     * 获取表信息
-     *
-     * @return 表信息
+     * 只使用 java.util.date 代替
      */
-    List<TableInfo> queryTables();
-
+    ONLY_DATE,
+    /**
+     * 使用 java.sql 包下的
+     */
+    SQL_PACK,
+    /**
+     * 使用 java.time 包下的
+     * <p>java8 新的时间类型</p>
+     */
+    TIME_PACK
 }

@@ -13,24 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.query;
+package io.github.luminion.generator.config.querys;
 
-import io.github.luminion.generator.config.po.TableInfo;
+import io.github.luminion.generator.config.common.IDbQuery;
 
-
-import java.util.List;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
- * @author nieqiurong 2021/1/6.
- * @since 3.5.0
+ * 表数据查询抽象类
+ *
+ * @author hubin
+ * @since 2018-01-16
  */
-public interface IDatabaseQuery {
+public abstract class AbstractDbQuery implements IDbQuery {
 
-    /**
-     * 获取表信息
-     *
-     * @return 表信息
-     */
-    List<TableInfo> queryTables();
 
+    @Override
+    public boolean isKeyIdentity(ResultSet results) throws SQLException {
+        return false;
+    }
+
+
+    @Override
+    public String[] fieldCustom() {
+        return null;
+    }
 }

@@ -1,10 +1,10 @@
 package io.github.luminion.generator;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import io.github.luminion.generator.configold.Configurer;
-import io.github.luminion.generator.configold.rules.DateType;
-import io.github.luminion.generator.configold.rules.DbColumnType;
-import io.github.luminion.generator.configold.support.*;
+import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.rules.DateType;
+import io.github.luminion.generator.config.rules.DbColumnType;
+import io.github.luminion.generator.config.support.*;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.JdbcType;

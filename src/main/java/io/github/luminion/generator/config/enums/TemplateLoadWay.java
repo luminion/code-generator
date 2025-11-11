@@ -13,24 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.query;
+package io.github.luminion.generator.config.enums;
 
-import io.github.luminion.generator.config.po.TableInfo;
-
-
-import java.util.List;
+import lombok.Getter;
 
 /**
- * @author nieqiurong 2021/1/6.
- * @since 3.5.0
+ * 模板文件加载方式
+ *
+ * @author hubin
+ * @since 3.5.9
  */
-public interface IDatabaseQuery {
+@Getter
+public enum TemplateLoadWay {
+    STRING("string"),
+    FILE("file");
 
-    /**
-     * 获取表信息
-     *
-     * @return 表信息
-     */
-    List<TableInfo> queryTables();
+    private final String value;
 
+    TemplateLoadWay(String value) {
+        this.value = value;
+    }
+
+    public boolean isFile() {
+        return FILE == this;
+    }
 }

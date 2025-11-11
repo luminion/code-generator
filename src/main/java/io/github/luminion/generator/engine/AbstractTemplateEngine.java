@@ -16,10 +16,10 @@
 package io.github.luminion.generator.engine;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import io.github.luminion.generator.configold.Configurer;
-import io.github.luminion.generator.configold.po.CustomFile;
-import io.github.luminion.generator.configold.po.TableInfo;
-import io.github.luminion.generator.configold.support.StrategyConfig;
+import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.po.CustomFile;
+import io.github.luminion.generator.config.po.TableInfo;
+import io.github.luminion.generator.config.support.StrategyConfig;
 import io.github.luminion.generator.util.FileUtils;
 import io.github.luminion.generator.util.RuntimeUtils;
 import lombok.Getter;
