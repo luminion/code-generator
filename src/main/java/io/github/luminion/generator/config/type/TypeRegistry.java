@@ -32,12 +32,12 @@ import java.util.Map;
  */
 public class TypeRegistry {
 
-    private final GlobalConfig globalConfig;
+//    private final GlobalConfig globalConfig;
 
     private final Map<Integer, IColumnType> typeMap = new HashMap<>();
 
     public TypeRegistry(GlobalConfig globalConfig) {
-        this.globalConfig = globalConfig;
+//        this.globalConfig = globalConfig;
         // byte[]
         typeMap.put(Types.BINARY, DbColumnType.BYTE_ARRAY);
         typeMap.put(Types.BLOB, DbColumnType.BYTE_ARRAY);

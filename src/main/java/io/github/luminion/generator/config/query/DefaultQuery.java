@@ -24,6 +24,7 @@ import io.github.luminion.generator.config.jdbc.DatabaseMetaDataWrapper;
 import io.github.luminion.generator.config.type.ITypeConvertHandler;
 import io.github.luminion.generator.config.type.TypeRegistry;
 import io.github.luminion.generator.util.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 
 
 import java.util.ArrayList;
@@ -45,12 +46,13 @@ import java.util.Map;
  * </p>
  * @since 3.5.3
  */
+@Slf4j
 public class DefaultQuery extends AbstractDatabaseQuery {
 
     private final TypeRegistry typeRegistry;
     protected final DatabaseMetaDataWrapper databaseMetaDataWrapper;
 
-    public DefaultQuery(Configurer configBuilder) {
+    public DefaultQuery(Configurer<?> configBuilder) {
         super(configBuilder);
         typeRegistry = new TypeRegistry(configBuilder.getGlobalConfig());
         this.databaseMetaDataWrapper = new DatabaseMetaDataWrapper(dataSourceConfig.getConn(), dataSourceConfig.getSchemaName());
@@ -113,7 +115,7 @@ public class DefaultQuery extends AbstractDatabaseQuery {
                 field.primaryKey(columnInfo.isAutoIncrement());
                 tableInfo.setHavePrimaryKey(true);
                 if (field.isKeyIdentityFlag() && entity.getIdType() != null) {
-                    LOGGER.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableName);
+                    log.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableName);
                 }
             }
             field.setColumnName(columnName).setComment(columnInfo.getRemarks());

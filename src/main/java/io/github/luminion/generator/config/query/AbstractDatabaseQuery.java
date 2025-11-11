@@ -16,18 +16,17 @@
 package io.github.luminion.generator.config.query;
 
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.support.DataSourceConfig;
 import io.github.luminion.generator.config.support.GlobalConfig;
 import io.github.luminion.generator.config.support.StrategyConfig;
-import io.github.luminion.generator.config.po.TableInfo;
-
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -36,9 +35,8 @@ import java.util.stream.Collectors;
  * @author nieqiurong
  * @since 3.5.3
  */
+@Slf4j
 public abstract class AbstractDatabaseQuery implements IDatabaseQuery {
-
-    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Getter
     protected final Configurer configAdapter;
@@ -62,10 +60,11 @@ public abstract class AbstractDatabaseQuery implements IDatabaseQuery {
         boolean isInclude = !strategyConfig.getInclude().isEmpty();
         boolean isExclude = !strategyConfig.getExclude().isEmpty();
         if (isExclude || isInclude) {
+            Pattern pattern = Pattern.compile("[~!/@#$%^&*()+\\\\\\[\\]|{};:'\",<.>?]+");
             Map<String, String> notExistTables = new HashSet<>(isExclude ? strategyConfig.getExclude() : strategyConfig.getInclude())
-                .stream()
-                .filter(s -> !Configurer.matcherRegTable(s))
-                .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n));
+                    .stream()
+                    .filter(s -> !pattern.matcher(s).find())
+                    .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n));
             // 将已经存在的表移除，获取配置中数据库不存在的表
             for (TableInfo tabInfo : tableList) {
                 if (notExistTables.isEmpty()) {
@@ -75,7 +74,7 @@ public abstract class AbstractDatabaseQuery implements IDatabaseQuery {
                 notExistTables.remove(tabInfo.getName().toLowerCase());
             }
             if (!notExistTables.isEmpty()) {
-                LOGGER.warn("表[{}]在数据库中不存在！！！", String.join(",", notExistTables.values()));
+                log.warn("表[{}]在数据库中不存在！！！", String.join(",", notExistTables.values()));
             }
             // 需要反向生成的表信息
             if (isExclude) {

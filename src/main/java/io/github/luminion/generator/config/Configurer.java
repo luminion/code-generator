@@ -15,7 +15,9 @@
  */
 package io.github.luminion.generator.config;
 
+import io.github.luminion.generator.config.common.IDbQuery;
 import io.github.luminion.generator.config.common.INameConvert;
+import io.github.luminion.generator.config.query.DefaultQuery;
 import io.github.luminion.generator.config.support.*;
 import io.github.luminion.generator.config.enums.TemplateLoadWay;
 import io.github.luminion.generator.config.po.TableInfo;
@@ -101,36 +103,23 @@ public class Configurer<C> {
         getStrategyConfig().validate();
         getGlobalConfig().validate();
         getOutputConfig().processOutput(this);
-        
         if (this.tableInfo.isEmpty()){
             INameConvert nameConvert = entityConfig.getNameConvert();
             if (nameConvert == null) {
                 entityConfig.setNameConvert(new INameConvert.DefaultNameConvert(this));
             }
-            Class<? extends IDatabaseQuery> databaseQueryClass = dataSourceConfig.getDatabaseQueryClass();
             try {
-                Constructor<? extends IDatabaseQuery> declaredConstructor = databaseQueryClass.getDeclaredConstructor(this.getClass());
-                IDatabaseQuery databaseQuery = declaredConstructor.newInstance(this);
+                DefaultQuery defaultQuery = new DefaultQuery(this);
                 // 设置表信息
-                List<TableInfo> tableInfos = databaseQuery.queryTables();
+                List<TableInfo> tableInfos = defaultQuery.queryTables();
                 if (!tableInfos.isEmpty()) {
                     this.tableInfo.addAll(tableInfos);
                 }
-            } catch (ReflectiveOperationException exception) {
+            } catch (Exception exception) {
                 throw new RuntimeException("创建IDatabaseQuery实例出现错误:", exception);
             }
         }
         return tableInfo;
     }
 
-    /**
-     * 判断表名是否为正则表名(这表名规范比较随意,只能尽量匹配上特殊符号)
-     *
-     * @param tableName 表名
-     * @return 是否正则
-     * @since 3.5.0
-     */
-    public static boolean matcherRegTable(String tableName) {
-        return REGX.matcher(tableName).find();
-    }
 }
