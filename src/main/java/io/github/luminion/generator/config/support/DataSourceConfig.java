@@ -17,16 +17,16 @@ package io.github.luminion.generator.config.support;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import io.github.luminion.generator.config.converts.MySqlTypeConvert;
-import io.github.luminion.generator.config.converts.TypeConverts;
 import io.github.luminion.generator.config.common.IDbQuery;
 import io.github.luminion.generator.config.common.IKeyWordsHandler;
 import io.github.luminion.generator.config.common.ITypeConvert;
+import io.github.luminion.generator.config.converts.MySqlTypeConvert;
+import io.github.luminion.generator.config.converts.TypeConverts;
 import io.github.luminion.generator.config.querys.DbQueryRegistry;
 import io.github.luminion.generator.query.AbstractDatabaseQuery;
 import io.github.luminion.generator.query.DefaultQuery;
 import io.github.luminion.generator.type.ITypeConvertHandler;
-import lombok.Getter;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -45,6 +45,7 @@ import java.util.Properties;
  * @since 2016/8/30
  */
 @Slf4j
+@Data
 public class DataSourceConfig {
     public DataSourceConfig(String url, String username, String password) {
         this.url = url;
@@ -69,7 +70,6 @@ public class DataSourceConfig {
     /**
      * schemaName
      */
-    @Getter
     protected String schemaName;
 
     /**
@@ -82,25 +82,21 @@ public class DataSourceConfig {
      *
      * @since 3.3.2
      */
-    @Getter
     protected IKeyWordsHandler keyWordsHandler;
 
     /**
      * 驱动连接的URL
      */
-    @Getter
     protected String url;
 
     /**
      * 数据库连接用户名
      */
-    @Getter
     protected String username;
 
     /**
      * 数据库连接密码
      */
-    @Getter
     protected String password;
 
     /**
@@ -129,7 +125,6 @@ public class DataSourceConfig {
      *
      * @since 3.5.3
      */
-    @Getter
     protected Class<? extends AbstractDatabaseQuery> databaseQueryClass = DefaultQuery.class;
 
     /**
@@ -137,7 +132,6 @@ public class DataSourceConfig {
      *
      * @since 3.5.3
      */
-    @Getter
     protected ITypeConvertHandler typeConvertHandler;
     public ITypeConvert getTypeConvert() {
         if (null == typeConvert) {
@@ -156,7 +150,6 @@ public class DataSourceConfig {
      *
      * @since 3.5.8
      */
-    @Getter
     protected String driverClassName;
 
     /**
@@ -294,110 +287,4 @@ public class DataSourceConfig {
         return schema;
     }
 
-    public Adapter adapter() {
-        return new Adapter(this);
-    }
-
-    public static class Adapter {
-        private final DataSourceConfig config;
-
-        public Adapter(DataSourceConfig config) {
-            this.config = config;
-        }
-
-        /**
-         * 设置数据库查询实现
-         *
-         * @param dbQuery 数据库查询实现
-         * @return this
-         */
-        public Adapter dbQuery(IDbQuery dbQuery) {
-            this.config.dbQuery = dbQuery;
-            return this;
-        }
-
-        /**
-         * 设置数据库schema
-         *
-         * @param schemaName 数据库schema
-         * @return this
-         */
-        public Adapter schema(String schemaName) {
-            this.config.schemaName = schemaName;
-            return this;
-        }
-
-        /**
-         * 设置类型转换器
-         *
-         * @param typeConvert 类型转换器
-         * @return this
-         */
-        public Adapter typeConvert(ITypeConvert typeConvert) {
-            this.config.typeConvert = typeConvert;
-            return this;
-        }
-
-        /**
-         * 设置数据库关键字处理器
-         *
-         * @param keyWordsHandler 关键字处理器
-         * @return this
-         */
-        public Adapter keyWordsHandler(IKeyWordsHandler keyWordsHandler) {
-            this.config.keyWordsHandler = keyWordsHandler;
-            return this;
-        }
-
-        /**
-         * 指定数据库查询方式
-         *
-         * @param databaseQueryClass 查询类
-         * @return this
-         * @since 3.5.3
-         */
-        public Adapter databaseQueryClass(Class<? extends AbstractDatabaseQuery> databaseQueryClass) {
-            this.config.databaseQueryClass = databaseQueryClass;
-            return this;
-        }
-
-        /**
-         * 指定类型转换器
-         *
-         * @param typeConvertHandler 类型转换器
-         * @return this
-         * @since 3.5.3
-         */
-        public Adapter typeConvertHandler(ITypeConvertHandler typeConvertHandler) {
-            this.config.typeConvertHandler = typeConvertHandler;
-            return this;
-        }
-
-        /**
-         * 增加数据库连接属性
-         *
-         * @param key   属性名
-         * @param value 属性值
-         * @return this
-         * @since 3.5.3
-         */
-        public Adapter addConnectionProperty(String key, String value) {
-            this.config.connectionProperties.put(key, value);
-            return this;
-        }
-
-        /**
-         * 指定连接驱动
-         * <li>对于一些老驱动(低于4.0规范)没有实现SPI不能自动加载的,手动指定加载让其初始化注册到驱动列表去.</li>
-         *
-         * @param className 驱动全类名
-         * @return this
-         * @since 3.5.8
-         */
-        public Adapter driverClassName(String className) {
-            com.baomidou.mybatisplus.core.toolkit.ClassUtils.toClassConfident(className);
-            this.config.driverClassName = className;
-            return this;
-        }
-    }
 }
