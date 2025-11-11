@@ -20,6 +20,7 @@ import io.github.luminion.generator.config.enums.OutputFile;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.fill.ITemplate;
 import io.github.luminion.generator.util.ClassUtils;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
  * @since 3.5.0
  */
 @Slf4j
+@Data
 public class ServiceConfig implements ITemplate {
 
 
@@ -52,7 +54,7 @@ public class ServiceConfig implements ITemplate {
         data.put("superServiceClass", ClassUtils.getSimpleName(this.superServiceClass));
         data.put("superServiceImplClassPackage", this.superServiceImplClass);
         data.put("superServiceImplClass", ClassUtils.getSimpleName(this.superServiceImplClass));
-        Configurer configurer = tableInfo.getConfigurer();
+        Configurer<?> configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         if (globalConfig.isSqlBooster()) {
             OutputConfig outputConfig = tableInfo.getConfigurer().getOutputConfig();
@@ -173,60 +175,6 @@ public class ServiceConfig implements ITemplate {
             }
         }
         return importPackages;
-    }
-
-    public Adapter adapter() {
-        return new Adapter();
-    }
-
-    public static class Adapter {
-        private final ServiceConfig config;
-
-        public Adapter() {
-            this.config = new ServiceConfig();
-        }
-
-        /**
-         * Service接口父类
-         *
-         * @param clazz 类
-         * @return this
-         */
-        public Adapter superServiceClass(Class<?> clazz) {
-            return superServiceClass(clazz.getName());
-        }
-
-        /**
-         * Service接口父类
-         *
-         * @param superServiceClass 类名
-         * @return this
-         */
-        public Adapter superServiceClass(String superServiceClass) {
-            this.config.superServiceClass = superServiceClass;
-            return this;
-        }
-
-        /**
-         * Service实现类父类
-         *
-         * @param clazz 类
-         * @return this
-         */
-        public Adapter superServiceImplClass(Class<?> clazz) {
-            return superServiceImplClass(clazz.getName());
-        }
-
-        /**
-         * Service实现类父类
-         *
-         * @param superServiceImplClass 类名
-         * @return this
-         */
-        public Adapter superServiceImplClass(String superServiceImplClass) {
-            this.config.superServiceImplClass = superServiceImplClass;
-            return this;
-        }
     }
 
 }
