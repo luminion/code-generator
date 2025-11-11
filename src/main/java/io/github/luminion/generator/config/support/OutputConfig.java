@@ -94,7 +94,6 @@ public class OutputConfig implements ITemplate {
             "/templates/controller.java",
             ".java"
     );
-    @Getter
     protected TemplateFile insertDTO = new TemplateFile(
             OutputFile.insertDTO.name(),
             "%sInsertDTO",
@@ -123,6 +122,22 @@ public class OutputConfig implements ITemplate {
             "/templates/queryVO.java",
             ".java"
     );
+
+    public TemplateFile getInsertDTO() {
+        return insertDTO;
+    }
+
+    public TemplateFile getUpdateDTO() {
+        return updateDTO;
+    }
+
+    public TemplateFile getQueryDTO() {
+        return queryDTO;
+    }
+
+    public TemplateFile getQueryVO() {
+        return queryVO;
+    }
 
     protected Stream<TemplateFile> templateFileStream() {
         return Stream.of(entity, mapper, mapperXml, service, serviceImpl, controller, insertDTO, updateDTO, queryDTO, queryVO);

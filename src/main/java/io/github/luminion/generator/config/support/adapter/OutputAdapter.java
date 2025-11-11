@@ -119,7 +119,7 @@ public class OutputAdapter {
     /**
      * entity文件输出目录
      *
-     * @param outputDir 输出方向
+     * @param outputDir 输出目录
      * @return this
      */
     public OutputAdapter entityOutputDir(String outputDir){
@@ -174,7 +174,7 @@ public class OutputAdapter {
     /**
      * mapper文件输出目录
      *
-     * @param outputDir 输出方向
+     * @param outputDir 输出目录
      * @return this
      */
     public OutputAdapter mapperOutputDir(String outputDir){
@@ -217,7 +217,7 @@ public class OutputAdapter {
     /**
      * mapperXml文件输出目录
      *
-     * @param outputDir 输出方向
+     * @param outputDir 输出目录
      * @return this
      */
     public OutputAdapter mapperXmlOutputDir(String outputDir){
@@ -273,7 +273,7 @@ public class OutputAdapter {
     /**
      * service文件输出目录
      *
-     * @param outputDir 输出方向
+     * @param outputDir 输出目录
      * @return this
      */
     public OutputAdapter serviceOutputDir(String outputDir){
@@ -329,7 +329,7 @@ public class OutputAdapter {
     /**
      * serviceImpl文件输出目录
      *
-     * @param outputDir 输出方向
+     * @param outputDir 输出目录
      * @return this
      */
     public OutputAdapter serviceImplOutputDir(String outputDir){
@@ -396,46 +396,221 @@ public class OutputAdapter {
         return this;
     }
     
-    
-    
-    
     /**
-     * insertDTO配置
+     * insertDTO格式化名称
      *
-     * @param adapter 适配器
+     * @param formatPattern 格式化名称
+     * @return this
      */
-    public OutputAdapter insertDTO(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-        adapter.apply(this.outputConfig.insertDTO.adapter());
+    public OutputAdapter insertDTOFormatPattern(String formatPattern){
+        this.outputConfig.getInsertDTO().setFormatPattern(formatPattern);
         return this;
     }
 
     /**
-     * updateDTO配置
+     * insertDTO子包名
      *
-     * @param adapter 适配器
+     * @param subPackage 子包名
+     * @return this
      */
-    public OutputAdapter updateDTO(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-        adapter.apply(this.outputConfig.updateDTO.adapter());
+    public OutputAdapter insertDTOSubPackage(String subPackage){
+        this.outputConfig.getInsertDTO().setSubPackage(subPackage);
         return this;
     }
 
     /**
-     * queryDTO配置
+     * insertDTO模板路径
      *
-     * @param adapter 适配器
+     * @param templatePath 模板路径
+     * @return this
      */
-    public OutputAdapter queryDTO(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-        adapter.apply(this.outputConfig.queryDTO.adapter());
+    public OutputAdapter insertDTOTemplatePath(String templatePath){
+        this.outputConfig.getInsertDTO().setTemplatePath(templatePath);
         return this;
     }
 
     /**
-     * vo配置
+     * insertDTO文件输出目录
      *
-     * @param adapter 适配器
+     * @param outputDir 输出目录
+     * @return this
      */
-    public OutputAdapter queryVO(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-        adapter.apply(this.outputConfig.queryVO.adapter());
+    public OutputAdapter insertDTOOutputDir(String outputDir){
+        this.outputConfig.getInsertDTO().setOutputDir(outputDir);
         return this;
     }
+
+    /**
+     * 不生成insertDTO
+     *
+     * @return this
+     */
+    public OutputAdapter insertDTODisable(){
+        this.outputConfig.getInsertDTO().setGenerate(false);
+        return this;
+    }
+
+    /**
+     * updateDTO格式化名称
+     *
+     * @param formatPattern 格式化名称
+     * @return this
+     */
+    public OutputAdapter updateDTOFormatPattern(String formatPattern){
+        this.outputConfig.getUpdateDTO().setFormatPattern(formatPattern);
+        return this;
+    }
+
+    /**
+     * updateDTO子包名
+     *
+     * @param subPackage 子包名
+     * @return this
+     */
+    public OutputAdapter updateDTOSubPackage(String subPackage){
+        this.outputConfig.getUpdateDTO().setSubPackage(subPackage);
+        return this;
+    }
+
+    /**
+     * updateDTO模板路径
+     *
+     * @param templatePath 模板路径
+     * @return this
+     */
+    public OutputAdapter updateDTOTemplatePath(String templatePath){
+        this.outputConfig.getUpdateDTO().setTemplatePath(templatePath);
+        return this;
+    }
+
+    /**
+     * updateDTO文件输出目录
+     *
+     * @param outputDir 输出目录
+     * @return this
+     */
+    public OutputAdapter updateDTOOutputDir(String outputDir){
+        this.outputConfig.getUpdateDTO().setOutputDir(outputDir);
+        return this;
+    }
+
+    /**
+     * 不生成updateDTO
+     *
+     * @return this
+     */
+    public OutputAdapter updateDTODisable(){
+        this.outputConfig.getUpdateDTO().setGenerate(false);
+        return this;
+    }
+
+    /**
+     * queryDTO格式化名称
+     *
+     * @param formatPattern 格式化名称
+     * @return this
+     */
+    public OutputAdapter queryDTOFormatPattern(String formatPattern){
+        this.outputConfig.getQueryDTO().setFormatPattern(formatPattern);
+        return this;
+    }
+
+    /**
+     * queryDTO子包名
+     *
+     * @param subPackage 子包名
+     * @return this
+     */
+    public OutputAdapter queryDTOSubPackage(String subPackage){
+        this.outputConfig.getQueryDTO().setSubPackage(subPackage);
+        return this;
+    }
+
+    /**
+     * queryDTO模板路径
+     *
+     * @param templatePath 模板路径
+     * @return this
+     */
+    public OutputAdapter queryDTOTemplatePath(String templatePath){
+        this.outputConfig.getQueryDTO().setTemplatePath(templatePath);
+        return this;
+    }
+
+    /**
+     * queryDTO文件输出目录
+     *
+     * @param outputDir 输出目录
+     * @return this
+     */
+    public OutputAdapter queryDTOOutputDir(String outputDir){
+        this.outputConfig.getQueryDTO().setOutputDir(outputDir);
+        return this;
+    }
+
+    /**
+     * 不生成queryDTO
+     *
+     * @return this
+     */
+    public OutputAdapter queryDTODisable(){
+        this.outputConfig.getQueryDTO().setGenerate(false);
+        return this;
+    }
+
+    /**
+     * queryVO格式化名称
+     *
+     * @param formatPattern 格式化名称
+     * @return this
+     */
+    public OutputAdapter queryVOFormatPattern(String formatPattern){
+        this.outputConfig.getQueryVO().setFormatPattern(formatPattern);
+        return this;
+    }
+
+    /**
+     * queryVO子包名
+     *
+     * @param subPackage 子包名
+     * @return this
+     */
+    public OutputAdapter queryVOSubPackage(String subPackage){
+        this.outputConfig.getQueryVO().setSubPackage(subPackage);
+        return this;
+    }
+
+    /**
+     * queryVO模板路径
+     *
+     * @param templatePath 模板路径
+     * @return this
+     */
+    public OutputAdapter queryVOTemplatePath(String templatePath){
+        this.outputConfig.getQueryVO().setTemplatePath(templatePath);
+        return this;
+    }
+
+    /**
+     * queryVO文件输出目录
+     *
+     * @param outputDir 输出目录
+     * @return this
+     */
+    public OutputAdapter queryVOOutputDir(String outputDir){
+        this.outputConfig.getQueryVO().setOutputDir(outputDir);
+        return this;
+    }
+
+    /**
+     * 不生成queryVO
+     *
+     * @return this
+     */
+    public OutputAdapter queryVODisable(){
+        this.outputConfig.getQueryVO().setGenerate(false);
+        return this;
+    }
+
+
 }
