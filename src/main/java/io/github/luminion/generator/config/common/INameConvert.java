@@ -15,11 +15,11 @@
  */
 package io.github.luminion.generator.config.common;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.rules.NamingStrategy;
+import io.github.luminion.generator.util.StringUtils;
 
 
 import java.util.Set;
@@ -28,7 +28,8 @@ import java.util.Set;
  * 名称转换接口类
  *
  * @author hubin
- * @since 2017-01-20
+ * @author luminion
+ * @since 1.0.0
  */
 public interface INameConvert {
 

@@ -29,7 +29,8 @@ import static io.github.luminion.generator.config.rules.DbColumnType.*;
  * SQLite 字段类型转换
  *
  * @author chen_wj, hanchunlin
- * @since 2019-05-08
+ * @author luminion
+ * @since 1.0.0
  */
 public class SqliteTypeConvert implements ITypeConvert {
     public static final SqliteTypeConvert INSTANCE = new SqliteTypeConvert();

@@ -28,7 +28,8 @@ import java.util.function.Supplier;
  * 一旦结果被选择，其他的分支将不再被调用
  *
  * @author hanchunlin
- * Created at 2020/6/11 16:55
+ * @author luminion
+ * @since 1.0.0
  */
 public class Selector<P, T> {
     /**

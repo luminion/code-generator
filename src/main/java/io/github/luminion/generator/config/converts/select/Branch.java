@@ -22,7 +22,8 @@ import java.util.function.Predicate;
  * 分支提供者
  *
  * @author hanchunlin
- * Created at 2020/6/11 17:19
+ * @author luminion
+ * @since 1.0.0
  * @see BranchBuilder
  */
 public interface Branch<P, T> {

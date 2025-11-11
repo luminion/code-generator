@@ -24,7 +24,8 @@ import java.sql.SQLException;
  * 表数据查询接口
  *
  * @author hubin
- * @since 2018-01-16
+ * @author luminion
+ * @since 1.0.0
  */
 public interface IDbQuery {
     /**

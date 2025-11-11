@@ -27,7 +27,8 @@ import static io.github.luminion.generator.config.rules.DbColumnType.*;
  * SQLServer 字段类型转换
  *
  * @author hubin, hanchunlin
- * @since 2017-01-20
+ * @author luminion
+ * @since 1.0.0
  */
 public class SqlServerTypeConvert implements ITypeConvert {
 

@@ -15,12 +15,12 @@
  */
 package io.github.luminion.generator.config.support;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.po.LikeTable;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.rules.ExtraFieldStrategy;
 import io.github.luminion.generator.fill.ITemplate;
 import io.github.luminion.generator.query.SQLQuery;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
 import java.util.HashSet;

@@ -15,6 +15,7 @@
  */
 package io.github.luminion.generator.jdbc;
 
+// todo 移除mybatis-plus
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.Getter;

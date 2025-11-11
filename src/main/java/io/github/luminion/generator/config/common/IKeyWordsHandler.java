@@ -23,7 +23,8 @@ import java.util.Collection;
  * 关键字处理接口
  *
  * @author nieqiurong 2020/5/7.
- * @since 3.3.2
+ * @author luminion
+ * @since 1.0.0
  */
 public interface IKeyWordsHandler {
 

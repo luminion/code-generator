@@ -21,7 +21,8 @@ import lombok.AllArgsConstructor;
  * 输出文件类型
  *
  * @author hubin
- * @since 2021-06-01
+ * @author luminion
+ * @since 1.0.0
  */
 @AllArgsConstructor
 public enum OutputFile {

@@ -4,6 +4,7 @@ import lombok.Data;
 
 /**
  * @author luminion
+ * @since 1.0.0
  */
 @Data
 public class TemplateFile {

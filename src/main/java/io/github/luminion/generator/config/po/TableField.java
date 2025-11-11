@@ -15,6 +15,7 @@
  */
 package io.github.luminion.generator.config.po;
 
+// todo 移除StringUtils
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.common.IKeyWordsHandler;
@@ -29,6 +30,7 @@ import io.github.luminion.generator.jdbc.DatabaseMetaDataWrapper;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+// todo 移除JdbcType
 import org.apache.ibatis.type.JdbcType;
 
 import java.util.Map;
@@ -37,7 +39,8 @@ import java.util.Map;
  * 表字段信息
  *
  * @author YangHu
- * @since 2016-12-03
+ * @author luminion
+ * @since 1.0.0
  */
 @ToString
 public class TableField {

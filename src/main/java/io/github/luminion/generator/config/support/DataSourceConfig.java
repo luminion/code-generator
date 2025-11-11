@@ -15,13 +15,12 @@
  */
 package io.github.luminion.generator.config.support;
 
-import com.baomidou.mybatisplus.annotation.DbType;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.common.IDbQuery;
 import io.github.luminion.generator.config.common.IKeyWordsHandler;
 import io.github.luminion.generator.config.common.ITypeConvert;
 import io.github.luminion.generator.config.converts.MySqlTypeConvert;
 import io.github.luminion.generator.config.converts.TypeConverts;
+import io.github.luminion.generator.config.enums.DbType;
 import io.github.luminion.generator.config.querys.DbQueryRegistry;
 import io.github.luminion.generator.query.AbstractDatabaseQuery;
 import io.github.luminion.generator.query.DefaultQuery;

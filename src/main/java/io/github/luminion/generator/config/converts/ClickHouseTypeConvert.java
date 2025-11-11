@@ -28,7 +28,8 @@ import static io.github.luminion.generator.config.rules.DbColumnType.*;
  * ClickHouse 字段类型转换
  *
  * @author urzeye
- * @date 2021年9月12日
+ * @author luminion
+ * @since 1.0.0
  */
 public class ClickHouseTypeConvert implements ITypeConvert {
 

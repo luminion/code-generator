@@ -15,9 +15,7 @@
  */
 package io.github.luminion.generator.config.support;
 
-import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.common.INameConvert;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.rules.IColumnType;
@@ -26,8 +24,6 @@ import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.fill.ITemplate;
 import io.github.luminion.generator.util.ClassUtils;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Serializable;

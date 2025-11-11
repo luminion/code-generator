@@ -28,7 +28,8 @@ import static io.github.luminion.generator.config.rules.DbColumnType.*;
  * MYSQL 数据库字段类型转换
  *
  * @author hubin, hanchunlin
- * @since 2017-01-20
+ * @author luminion
+ * @since 1.0.0
  */
 public class FirebirdTypeConvert implements ITypeConvert {
     public static final FirebirdTypeConvert INSTANCE = new FirebirdTypeConvert();

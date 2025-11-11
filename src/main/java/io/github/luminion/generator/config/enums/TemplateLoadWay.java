@@ -21,7 +21,8 @@ import lombok.Getter;
  * 模板文件加载方式
  *
  * @author hubin
- * @since 3.5.9
+ * @author luminion
+ * @since 1.0.0
  */
 @Getter
 public enum TemplateLoadWay {

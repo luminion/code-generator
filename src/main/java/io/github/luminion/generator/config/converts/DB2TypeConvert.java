@@ -27,7 +27,8 @@ import static io.github.luminion.generator.config.rules.DbColumnType.*;
  * DB2 字段类型转换
  *
  * @author zhanyao, hanchunlin
- * @since 2018-05-16
+ * @author luminion
+ * @since 1.0.0
  */
 public class DB2TypeConvert implements ITypeConvert {
     public static final DB2TypeConvert INSTANCE = new DB2TypeConvert();

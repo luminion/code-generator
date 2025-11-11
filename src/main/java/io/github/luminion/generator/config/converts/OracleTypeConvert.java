@@ -28,7 +28,8 @@ import static io.github.luminion.generator.config.rules.DbColumnType.*;
  * Oracle 数据库生成对应实体类时字段类型转换，跟据 Oracle 中的数据类型，返回对应的 Java 类型
  *
  * @author hubin, hanchunlin
- * @since 2017-01-20
+ * @author luminion
+ * @since 1.0.0
  */
 public class OracleTypeConvert implements ITypeConvert {
     public static final OracleTypeConvert INSTANCE = new OracleTypeConvert();

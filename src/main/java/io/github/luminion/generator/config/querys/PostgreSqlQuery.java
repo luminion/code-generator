@@ -15,6 +15,7 @@
  */
 package io.github.luminion.generator.config.querys;
 
+// todo 移除mybatis-plus
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 
 import java.sql.ResultSet;

@@ -15,10 +15,10 @@
  */
 package io.github.luminion.generator.config.converts;
 
-import com.baomidou.mybatisplus.annotation.DbType;
 import io.github.luminion.generator.config.converts.select.BranchBuilder;
 import io.github.luminion.generator.config.converts.select.Selector;
 import io.github.luminion.generator.config.common.ITypeConvert;
+import io.github.luminion.generator.config.enums.DbType;
 import io.github.luminion.generator.config.rules.IColumnType;
 
 /**

@@ -29,7 +29,8 @@ import static io.github.luminion.generator.config.rules.DbColumnType.*;
  * KingbaseES 字段类型转换
  *
  * @author kingbase, hanchunlin
- * @since 2019-10-12
+ * @author luminion
+ * @since 1.0.0
  */
 public class KingbaseESTypeConvert implements ITypeConvert {
     public static final KingbaseESTypeConvert INSTANCE = new KingbaseESTypeConvert();

@@ -15,14 +15,14 @@
  */
 package io.github.luminion.generator.config.po;
 
-import com.baomidou.mybatisplus.core.enums.SqlLike;
-import com.baomidou.mybatisplus.core.toolkit.sql.SqlUtils;
+import io.github.luminion.generator.config.enums.SqlLike;
 
 /**
  * 表名拼接
  *
  * @author nieqiuqiu
- * @since 3.3.0
+ * @author luminion
+ * @since 1.0.0
  */
 public class LikeTable {
 
@@ -45,7 +45,7 @@ public class LikeTable {
     }
 
     public String getValue() {
-        return SqlUtils.concatLike(this.value, like);
+        return SqlLike.concatLike(this.value, like);
     }
 
 }

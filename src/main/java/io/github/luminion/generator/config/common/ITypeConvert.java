@@ -25,7 +25,8 @@ import io.github.luminion.generator.config.rules.IColumnType;
  *
  * @author hubin
  * @author hanchunlin
- * @since 2017-01-20
+ * @author luminion
+ * @since 1.0.0
  */
 public interface ITypeConvert {
 

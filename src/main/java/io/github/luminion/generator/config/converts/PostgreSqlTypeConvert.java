@@ -28,7 +28,8 @@ import static io.github.luminion.generator.config.rules.DbColumnType.*;
  * PostgreSQL 字段类型转换
  *
  * @author hubin, hanchunlin
- * @since 2017-01-20
+ * @author luminion
+ * @since 1.0.0
  */
 public class PostgreSqlTypeConvert implements ITypeConvert {
     public static final PostgreSqlTypeConvert INSTANCE = new PostgreSqlTypeConvert();

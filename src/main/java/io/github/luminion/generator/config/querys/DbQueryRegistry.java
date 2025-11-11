@@ -15,8 +15,8 @@
  */
 package io.github.luminion.generator.config.querys;
 
-import com.baomidou.mybatisplus.annotation.DbType;
 import io.github.luminion.generator.config.common.IDbQuery;
+import io.github.luminion.generator.config.enums.DbType;
 
 import java.util.EnumMap;
 import java.util.Map;

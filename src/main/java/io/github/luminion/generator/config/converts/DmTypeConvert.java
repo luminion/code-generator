@@ -28,7 +28,8 @@ import static io.github.luminion.generator.config.rules.DbColumnType.*;
  * DM 字段类型转换
  *
  * @author halower, hanchunlin, daiby
- * @since 2019-06-27
+ * @author luminion
+ * @since 1.0.0
  */
 public class DmTypeConvert implements ITypeConvert {
     public static final DmTypeConvert INSTANCE = new DmTypeConvert();
