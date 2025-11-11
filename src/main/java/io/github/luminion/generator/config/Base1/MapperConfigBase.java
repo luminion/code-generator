@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.Base;
+package io.github.luminion.generator.config.Base1;
 
 import io.github.luminion.generator.config.ConfigSwitcher;
 import io.github.luminion.generator.config.Switchable;

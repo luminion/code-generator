@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.Base;
+package io.github.luminion.generator.config.Base1;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.ConfigSwitcher;

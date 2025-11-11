@@ -1,7 +1,7 @@
 package io.github.luminion.generator.config.support;
 
 import io.github.luminion.generator.SFunc;
-import io.github.luminion.generator.config.Base.ControllerConfigBase;
+import io.github.luminion.generator.config.Base1.ControllerConfigBase;
 import io.github.luminion.generator.config.ConfigSwitcher;
 import io.github.luminion.generator.config.ControllerConfig;
 import io.github.luminion.generator.config.Switchable;
