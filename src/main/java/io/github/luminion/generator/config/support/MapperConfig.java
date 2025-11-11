@@ -49,8 +49,9 @@ public class MapperConfig implements ITemplate {
      * Mapper标记注解
      *
      * @since 3.5.3
+     * @see org.apache.ibatis.annotations.Mapper
      */
-    protected Class<? extends Annotation> mapperAnnotationClass = org.apache.ibatis.annotations.Mapper.class;
+    protected Class<?> mapperAnnotationClass = ClassUtils.toClass("org.apache.ibatis.annotations.Mapper");
 
     /**
      * 是否开启BaseResultMap（默认 false）

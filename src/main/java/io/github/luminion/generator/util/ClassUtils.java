@@ -15,20 +15,20 @@
  */
 package io.github.luminion.generator.util;
 
-import com.baomidou.mybatisplus.core.toolkit.ExceptionUtils;
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+
+import lombok.SneakyThrows;
 
 /**
- * @author nieqiurong 2020/11/9.
- * @since 3.5.0
+ * @author luminion
+ * @since 1.0.0
  */
-public final class ClassUtils {
-
-    private ClassUtils() {
+public abstract class ClassUtils {
+    
+    @SneakyThrows
+    public static Class<?> toClass(String className) {
+        return Class.forName(className);
     }
-
-
+    
     /**
      * 获取类名
      *
@@ -36,7 +36,7 @@ public final class ClassUtils {
      * @return ignore
      */
     public static String getSimpleName(String className) {
-        return StringUtils.isBlank(className) ? null : className.substring(className.lastIndexOf(StringPool.DOT) + 1);
+        return StringUtils.isBlank(className) ? null : className.substring(className.lastIndexOf(".") + 1);
     }
 
 
@@ -55,26 +55,15 @@ public final class ClassUtils {
             try {
                 return Class.forName(name);
             } catch (ClassNotFoundException ex) {
-                throw ExceptionUtils.mpe("找不到指定的class！请仅在明确确定会有 class 的时候，调用该方法", e);
+                throw new RuntimeException("找不到指定的class！请仅在明确确定会有 class 的时候，调用该方法", e);
             }
         }
     }
 
     /**
-     * Return the default ClassLoader to use: typically the thread context
-     * ClassLoader, if available; the ClassLoader that loaded the ClassUtils
-     * class will be used as fallback.
-     * <p>Call this method if you intend to use the thread context ClassLoader
-     * in a scenario where you clearly prefer a non-null ClassLoader reference:
-     * for example, for class path resource loading (but not necessarily for
-     * {@code Class.forName}, which accepts a {@code null} ClassLoader
-     * reference as well).
+     * 获取默认 ClassLoader
      *
-     * @return the default ClassLoader (only {@code null} if even the system
-     * ClassLoader isn't accessible)
-     * @see Thread#getContextClassLoader()
-     * @see ClassLoader#getSystemClassLoader()
-     * @since 3.3.2
+     * @return 默认 ClassLoader
      */
     public static ClassLoader getDefaultClassLoader() {
         ClassLoader cl = null;
