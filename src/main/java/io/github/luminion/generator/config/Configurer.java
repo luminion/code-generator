@@ -104,7 +104,6 @@ public class Configurer<C> {
         getGlobalConfig().validate();
         getOutputConfig().processOutput(this);
         if (this.tableInfo.isEmpty()){
-            INameConvert nameConvert = entityConfig.getNameConvert();
             try {
                 DefaultQuery defaultQuery = new DefaultQuery(this);
                 // 设置表信息

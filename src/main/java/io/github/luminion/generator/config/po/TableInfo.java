@@ -125,20 +125,19 @@ public class TableInfo {
     /**
      * 构造方法
      *
-     * @param configBuilder 配置构建
      * @param name          表名
      * @since 3.5.0
      */
-    public TableInfo(Configurer configBuilder, String name) {
-        this.configurer = configBuilder;
+    public TableInfo(String name, Configurer<?> configurer) {
         this.name = name;
+        this.configurer = configurer;
     }
 
     /**
      * @since 3.5.0
      */
     protected TableInfo setConvert() {
-        if (this.getConfigurer().getStrategyConfig().startsWithTablePrefix(name) || this.getConfigurer().getEntityConfig().isTableFieldAnnotationEnable()) {
+        if (this.getConfigurer().getStrategyConfig().startsWithTablePrefix(name) || this.getConfigurer().getStrategyConfig().isTableFieldAnnotationEnable()) {
             this.convert = true;
         } else {
             this.convert = !entityName.equalsIgnoreCase(name);
@@ -204,7 +203,7 @@ public class TableInfo {
      * @since 3.5.0
      */
     public void processTable() {
-        String entityName = this.getConfigurer().getEntityConfig().getNameConvert().entityNameConvert(this);
+        String entityName = this.getConfigurer().getStrategyConfig().getNameConvert().entityNameConvert(this);
         this.setEntityName(entityName);
         this.processExtraField();
     }

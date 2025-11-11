@@ -78,22 +78,6 @@ public class EntityConfig implements ITemplate {
     protected String logicDeletePropertyName;
 
     /**
-     * 数据库表映射到实体的命名策略，默认下划线转驼峰命名
-     */
-    protected NamingStrategy naming = NamingStrategy.underline_to_camel;
-
-    protected INameConvert nameConvert;
-    /**
-     * 数据库表字段映射到实体的命名策略
-     * <p>未指定按照 naming 执行</p>
-     */
-    protected NamingStrategy columnNaming = null;
-    public NamingStrategy getColumnNaming() {
-        // 未指定以 naming 策略为准
-        return Optional.ofNullable(columnNaming).orElse(naming);
-    }
-
-    /**
      * 自定义基础的Entity类，公共字段
      */
     protected final Set<String> superEntityColumns = new HashSet<>();
@@ -130,11 +114,7 @@ public class EntityConfig implements ITemplate {
      */
     protected boolean columnConstant;
 
-    /**
-     * Boolean类型字段是否移除is前缀（默认 false）<br>
-     * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
-     */
-    protected boolean booleanColumnRemoveIsPrefix;
+
 
     /**
      * 是否生成实体时，生成字段注解（默认 false）

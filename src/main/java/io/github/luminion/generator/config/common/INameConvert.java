@@ -63,7 +63,7 @@ public interface INameConvert {
 
         @Override
         public String entityNameConvert(TableInfo tableInfo) {
-            return NamingStrategy.capitalFirst(processName(tableInfo.getName(), configAdapter.getEntityConfig().getNaming(), configAdapter.getStrategyConfig().getTablePrefix(), configAdapter.getStrategyConfig().getTableSuffix()));
+            return NamingStrategy.capitalFirst(processName(tableInfo.getName(), configAdapter.getStrategyConfig().getNaming(), configAdapter.getStrategyConfig().getTablePrefix(), configAdapter.getStrategyConfig().getTableSuffix()));
         }
 
         @Override

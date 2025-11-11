@@ -45,13 +45,13 @@ import java.util.stream.Collectors;
  * </p>
  * <p>
  * FAQ:
- * 1.Mysql无法读取表注释: 链接增加属性 remarks=true和useInformationSchema=true 
- * 2.Oracle无法读取注释: 增加属性remarks=true，也有些驱动版本说是增加remarksReporting=true 
+ * 1.Mysql无法读取表注释: 链接增加属性 remarks=true和useInformationSchema=true
+ * 2.Oracle无法读取注释: 增加属性remarks=true，也有些驱动版本说是增加remarksReporting=true
  * </p>
  * @since 1.0.0
  */
 @Slf4j
-public class DefaultQuery implements IDatabaseQuery{
+public class DefaultQuery implements IDatabaseQuery {
 
     private final TypeRegistry typeRegistry;
     protected final DatabaseMetaDataWrapper databaseMetaDataWrapper;
@@ -59,7 +59,7 @@ public class DefaultQuery implements IDatabaseQuery{
     protected final Configurer<?> configurer;
 
     public DefaultQuery(Configurer<?> configBuilder) {
-        this.configurer  = configBuilder;
+        this.configurer = configBuilder;
         this.strategyConfig = configBuilder.getStrategyConfig();
         typeRegistry = new TypeRegistry(strategyConfig.getDateType());
         DataSourceConfig dataSourceConfig = configBuilder.getDataSourceConfig();
@@ -80,7 +80,7 @@ public class DefaultQuery implements IDatabaseQuery{
             tables.forEach(table -> {
                 String tableName = table.getName();
                 if (StringUtils.isNotBlank(tableName)) {
-                    TableInfo tableInfo = new TableInfo(this.configurer, tableName);
+                    TableInfo tableInfo = new TableInfo(tableName, configurer);
                     tableInfo.setComment(table.getRemarks());
                     if (isInclude && strategyConfig.matchIncludeTable(tableName)) {
                         includeTableList.add(tableInfo);
@@ -113,10 +113,12 @@ public class DefaultQuery implements IDatabaseQuery{
 
     protected void convertTableFields(TableInfo tableInfo) {
         String tableName = tableInfo.getName();
+        tableInfo.setIndexList(getIndex(tableName));
+        tableInfo.processTable();
         Map<String, DatabaseMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
         columnsInfoMap.forEach((k, columnInfo) -> {
             String columnName = columnInfo.getName();
-            TableField field = new TableField(configurer, columnName);
+            TableField field = new TableField(columnName);
             // 处理ID
             if (columnInfo.isPrimaryKey()) {
                 field.primaryKey(columnInfo.isAutoIncrement());
@@ -125,7 +127,8 @@ public class DefaultQuery implements IDatabaseQuery{
                     log.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableName);
                 }
             }
-            field.setColumnName(columnName).setComment(columnInfo.getRemarks());
+            field.setColumnName(columnName);
+            field.setComment(columnInfo.getRemarks());
             String propertyName = strategyConfig.getNameConvert().propertyNameConvert(field);
             // 设置字段的元数据信息
             TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo, tableInfo);
@@ -136,12 +139,10 @@ public class DefaultQuery implements IDatabaseQuery{
             } else {
                 columnType = typeRegistry.getColumnType(metaInfo);
             }
-            field.setPropertyName(propertyName, columnType);
+            field.setPropertyName(strategyConfig, propertyName, columnType);
             field.setMetaInfo(metaInfo);
             tableInfo.addField(field);
         });
-        tableInfo.setIndexList(getIndex(tableName));
-        tableInfo.processTable();
     }
 
     protected Map<String, DatabaseMetaDataWrapper.Column> getColumnsInfo(String tableName) {
@@ -151,6 +152,7 @@ public class DefaultQuery implements IDatabaseQuery{
     protected List<DatabaseMetaDataWrapper.Index> getIndex(String tableName) {
         return databaseMetaDataWrapper.getIndex(tableName);
     }
+
     protected void filter(List<TableInfo> tableList, List<TableInfo> includeTableList, List<TableInfo> excludeTableList) {
         boolean isInclude = !strategyConfig.getInclude().isEmpty();
         boolean isExclude = !strategyConfig.getExclude().isEmpty();
@@ -180,5 +182,5 @@ public class DefaultQuery implements IDatabaseQuery{
             }
         }
     }
-    
+
 }

@@ -24,6 +24,7 @@ import io.github.luminion.generator.config.rules.DateType;
 import io.github.luminion.generator.config.rules.ExtraFieldStrategy;
 import io.github.luminion.generator.config.fill.ITemplate;
 import io.github.luminion.generator.config.query.SQLQuery;
+import io.github.luminion.generator.config.rules.NamingStrategy;
 import io.github.luminion.generator.config.type.ITypeConvertHandler;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -48,6 +49,10 @@ public class StrategyConfig implements ITemplate {
      * 名称转换
      */
     protected INameConvert nameConvert;
+    /**
+     * 数据库表映射到实体的命名策略
+     */
+    protected NamingStrategy naming = NamingStrategy.underline_to_camel;
 
     /**
      * 类型转换处理
@@ -68,6 +73,17 @@ public class StrategyConfig implements ITemplate {
      * 指定生成的主键的ID类型
      */
     protected IdType idType;
+    
+    /**
+     * Boolean类型字段是否移除is前缀（默认 false）<br>
+     * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
+     */
+    protected boolean booleanColumnRemoveIsPrefix;
+
+    /**
+     * 是否生成实体时，生成字段注解（默认 false）
+     */
+    protected boolean tableFieldAnnotationEnable;
     
     /**
      * 过滤表前缀

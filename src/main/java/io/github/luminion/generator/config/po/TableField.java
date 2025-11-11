@@ -15,17 +15,14 @@
  */
 package io.github.luminion.generator.config.po;
 
-import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.common.IKeyWordsHandler;
 import io.github.luminion.generator.config.enums.JdbcType;
 import io.github.luminion.generator.config.rules.IColumnType;
 import io.github.luminion.generator.config.rules.NamingStrategy;
-import io.github.luminion.generator.config.support.DataSourceConfig;
-import io.github.luminion.generator.config.support.EntityConfig;
-import io.github.luminion.generator.config.support.GlobalConfig;
 import io.github.luminion.generator.config.fill.Column;
 import io.github.luminion.generator.config.fill.Property;
 import io.github.luminion.generator.config.jdbc.DatabaseMetaDataWrapper;
+import io.github.luminion.generator.config.support.StrategyConfig;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -128,35 +125,15 @@ public class TableField {
     @Getter
     private MetaInfo metaInfo;
 
-    /**
-     * 实体属性配置
-     */
-    @Getter
-    private final EntityConfig entity;
-
-    /**
-     * 数据库配置
-     */
-    private final DataSourceConfig dataSourceConfig;
-
-    /**
-     * 全局配置
-     */
-    private final GlobalConfig globalConfig;
 
     /**
      * 构造方法
      *
-     * @param configAdapter 配置构建
-     * @param name          数据库字段名称
-     * @since 3.5.0
+     * @param name 数据库字段名称
      */
-    public TableField(Configurer configAdapter, String name) {
+    public TableField(String name) {
         this.name = name;
         this.columnName = name;
-        this.entity = configAdapter.getEntityConfig();
-        this.dataSourceConfig = configAdapter.getDataSourceConfig();
-        this.globalConfig = configAdapter.getGlobalConfig();
     }
 
     /**
@@ -167,10 +144,10 @@ public class TableField {
      * @return this
      * @since 3.5.0
      */
-    public TableField setPropertyName(String propertyName, IColumnType columnType) {
+    public TableField setPropertyName(StrategyConfig strategyConfig, String propertyName, IColumnType columnType) {
         this.columnType = columnType;
-        if (entity.isBooleanColumnRemoveIsPrefix()
-            && "boolean".equalsIgnoreCase(this.getPropertyType()) && propertyName.startsWith("is")) {
+        if (strategyConfig.isBooleanColumnRemoveIsPrefix()
+                && "boolean".equalsIgnoreCase(this.getPropertyType()) && propertyName.startsWith("is")) {
             this.convert = true;
             this.propertyName = StringUtils.removePrefixAfterPrefixToLower(propertyName, 2);
             return this;
@@ -245,7 +222,7 @@ public class TableField {
         String propertyName = entity.getVersionPropertyName();
         String columnName = entity.getVersionColumnName();
         return StringUtils.isNotBlank(propertyName) && this.propertyName.equals(propertyName)
-            || StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
+                || StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
     }
 
     /**
@@ -258,7 +235,7 @@ public class TableField {
         String propertyName = entity.getLogicDeletePropertyName();
         String columnName = entity.getLogicDeleteColumnName();
         return StringUtils.isNotBlank(propertyName) && this.propertyName.equals(propertyName)
-            || StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
+                || StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
     }
 
     /**
@@ -286,7 +263,7 @@ public class TableField {
     public TableField setComment(String comment) {
         // 待重构此处
         this.comment = (this.globalConfig.isSwagger() || this.globalConfig.isSpringdoc())
-            && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
+                && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
         return this;
     }
 
@@ -308,10 +285,10 @@ public class TableField {
     public String getFill() {
         if (StringUtils.isBlank(fill)) {
             entity.getTableFillList().stream()
-                //忽略大写字段问题
-                .filter(tf -> tf instanceof Column && tf.getName().equalsIgnoreCase(name)
-                    || tf instanceof Property && tf.getName().equals(propertyName))
-                .findFirst().ifPresent(tf -> this.fill = tf.getFieldFill().name());
+                    //忽略大写字段问题
+                    .filter(tf -> tf instanceof Column && tf.getName().equalsIgnoreCase(name)
+                            || tf instanceof Property && tf.getName().equals(propertyName))
+                    .findFirst().ifPresent(tf -> this.fill = tf.getFieldFill().name());
         }
         return fill;
     }
