@@ -3,7 +3,7 @@ package io.github.luminion.generator.config.support.adapter;
 import io.github.luminion.generator.config.SFunc;
 import io.github.luminion.generator.config.po.MethodPayload;
 import io.github.luminion.generator.config.support.ControllerConfig;
-import io.github.luminion.generator.util.ReflectUtil;
+import io.github.luminion.generator.util.ReflectUtils;
 
 /**
  * @author luminion
@@ -147,7 +147,7 @@ public class ControllerAdapter {
      * @return this
      */
     public <R> ControllerAdapter returnMethod(SFunc<Object, R> methodReference) {
-        MethodPayload methodPayload = ReflectUtil.lambdaMethodInfo(methodReference, Object.class);
+        MethodPayload methodPayload = ReflectUtils.lambdaMethodInfo(methodReference, Object.class);
         this.controllerConfig.setReturnMethod(methodPayload);
         return this;
     }
@@ -159,7 +159,7 @@ public class ControllerAdapter {
      * @return this
      */
     public <T, R> ControllerAdapter pageMethod(SFunc<T, R> methodReference, Class<T> output) {
-        MethodPayload payload = ReflectUtil.lambdaMethodInfo(methodReference, output);
+        MethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, output);
         this.controllerConfig.setPageMethod(payload);
         return this;
     }

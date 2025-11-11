@@ -15,7 +15,6 @@
  */
 package io.github.luminion.generator.config.support;
 
-import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import io.github.luminion.generator.config.common.INameConvert;
 import io.github.luminion.generator.config.enums.IdType;
 import io.github.luminion.generator.config.po.TableInfo;
@@ -24,7 +23,7 @@ import io.github.luminion.generator.config.rules.NamingStrategy;
 import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.fill.ITemplate;
 import io.github.luminion.generator.util.ClassUtils;
-import io.github.luminion.generator.util.ReflectUtil;
+import io.github.luminion.generator.util.ReflectUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -161,7 +160,7 @@ public class EntityConfig implements ITemplate {
      * @param clazz 实体父类 Class
      */
     public void convertSuperEntityColumns(Class<?> clazz) {
-        Map<String, Field> fieldMap = ReflectUtil.fieldMap(clazz);
+        Map<String, Field> fieldMap = ReflectUtils.fieldMap(clazz);
         // todo 待完善 原逻辑
 //        List<Field> fields = TableInfoHelper.getAllFields(clazz);
 //        this.superEntityColumns.addAll(fieldMap.values().stream().map(field -> {

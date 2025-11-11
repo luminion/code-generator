@@ -16,7 +16,7 @@ import java.util.Map;
  *
  * @author luminion
  */
-public class ReflectUtil {
+public class ReflectUtils {
 
     /**
      * lambda方法信息
