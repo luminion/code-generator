@@ -1,6 +1,6 @@
 package io.github.luminion.generator.util;
 
-import io.github.luminion.generator.SFunc;
+import io.github.luminion.generator.config.SFunc;
 import io.github.luminion.generator.config.po.MethodPayload;
 
 import java.lang.invoke.SerializedLambda;

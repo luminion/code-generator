@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config;
+package io.github.luminion.generator.config.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

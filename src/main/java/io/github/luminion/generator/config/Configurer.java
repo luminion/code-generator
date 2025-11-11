@@ -31,7 +31,8 @@ import java.util.regex.Pattern;
  * 配置汇总 传递给文件生成工具
  *
  * @author YangHu, tangguo, hubin, Juzi, lanjerry
- * @since 2016-08-30
+ * @author luminion
+ * @since 1.0.0
  */
 @Getter
 public class Configurer<C> {
