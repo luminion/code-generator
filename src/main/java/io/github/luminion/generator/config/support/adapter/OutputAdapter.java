@@ -346,18 +346,59 @@ public class OutputAdapter {
         this.outputConfig.getServiceImpl().setGenerate(false);
         return this;
     }
-    
 
     /**
-     * controller配置
+     * controller格式化名称
      *
-     * @param adapter 适配器
+     * @param formatPattern 格式化名称
+     * @return this
      */
-    public OutputAdapter controller(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-        adapter.apply(this.outputConfig.controller.adapter());
+    public OutputAdapter controllerFormatPattern(String formatPattern){
+        this.outputConfig.getController().setFormatPattern(formatPattern);
         return this;
     }
 
+    /**
+     * controller子包名
+     *
+     * @param subPackage 子包名
+     * @return this
+     */
+    public OutputAdapter controllerSubPackage(String subPackage){
+        this.outputConfig.getController().setSubPackage(subPackage);
+        return this;
+    }
+
+
+    /**
+     * controller模板路径
+     *
+     * @param templatePath 模板路径
+     * @return this
+     */
+    public OutputAdapter controllerTemplatePath(String templatePath){
+        this.outputConfig.getController().setTemplatePath(templatePath);
+        return this;
+    }
+
+    public OutputAdapter controllerOutputDir(String outputDir){
+        this.outputConfig.getController().setOutputDir(outputDir);
+        return this;
+    }
+
+    /**
+     * 不生成controller
+     *
+     * @return this
+     */
+    public OutputAdapter controllerDisable(){
+        this.outputConfig.getController().setGenerate(false);
+        return this;
+    }
+    
+    
+    
+    
     /**
      * insertDTO配置
      *
