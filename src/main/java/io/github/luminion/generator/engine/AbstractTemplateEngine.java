@@ -15,17 +15,15 @@
  */
 package io.github.luminion.generator.engine;
 
-// todo 移除mybatis-plus
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.po.CustomFile;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.support.StrategyConfig;
 import io.github.luminion.generator.util.FileUtils;
 import io.github.luminion.generator.util.RuntimeUtils;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,9 +40,8 @@ import java.util.function.Function;
  * @author hubin
  * @since 2018-01-10
  */
+@Slf4j
 public abstract class AbstractTemplateEngine {
-
-    protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 配置信息
@@ -159,7 +156,7 @@ public abstract class AbstractTemplateEngine {
             try {
                 RuntimeUtils.openDir(outDir);
             } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
+                log.error(e.getMessage(), e);
             }
         }
     }
@@ -241,7 +238,7 @@ public abstract class AbstractTemplateEngine {
      */
     protected boolean isCreate(File file, boolean fileOverride) {
         if (file.exists() && !fileOverride) {
-            LOGGER.warn("文件[{}]已存在，且未开启文件覆盖配置，需要开启配置可到策略配置中设置！！！", file.getName());
+            log.warn("文件[{}]已存在，且未开启文件覆盖配置，需要开启配置可到策略配置中设置！！！", file.getName());
         }
         return !file.exists() || fileOverride;
     }

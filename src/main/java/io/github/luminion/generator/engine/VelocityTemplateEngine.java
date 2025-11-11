@@ -15,10 +15,9 @@
  */
 package io.github.luminion.generator.engine;
 
-// todo 移除mybatis-plus
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.enums.TemplateLoadWay;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
@@ -35,6 +34,7 @@ import java.util.Properties;
  * @author hubin
  * @since 2018-01-10
  */
+@Slf4j
 public class VelocityTemplateEngine extends AbstractTemplateEngine {
     private VelocityEngine velocityEngine;
 
@@ -43,7 +43,7 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
             Class.forName("org.apache.velocity.util.DuckType");
         } catch (ClassNotFoundException e) {
             // velocity1.x的生成格式错乱 https://github.com/baomidou/generator/issues/5
-            LOGGER.warn("Velocity 1.x is outdated, please upgrade to 2.x or later.");
+            log.warn("Velocity 1.x is outdated, please upgrade to 2.x or later.");
         }
     }
 
@@ -55,8 +55,8 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
             p.setProperty(Velocity.INPUT_ENCODING, StandardCharsets.UTF_8.name());
             if (getConfigurer().getTemplateLoadWay().isFile()) {
                 p.setProperty("resource.loader.file.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-                p.setProperty("resource.loader.file.unicode", StringPool.TRUE);
-                p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, StringPool.EMPTY);
+                p.setProperty("resource.loader.file.unicode", "true");
+                p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, "");
             } else {
                 // 文本模板
                 p.setProperty(Velocity.RESOURCE_LOADER, TemplateLoadWay.STRING.getValue());
@@ -80,7 +80,7 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
              BufferedWriter writer = new BufferedWriter(ow)) {
             template.merge(new VelocityContext(objectMap), writer);
         }
-        LOGGER.debug("模板:{};  文件:{}", templatePath, outputFile);
+        log.debug("模板:{};  文件:{}", templatePath, outputFile);
     }
 
 
