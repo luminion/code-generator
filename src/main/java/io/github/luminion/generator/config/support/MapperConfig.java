@@ -21,6 +21,7 @@ import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.fill.ITemplate;
 import io.github.luminion.generator.util.ClassUtils;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.cache.decorators.LoggingCache;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
  * @since 3.5.0
  */
 @Slf4j
+@Data
 public class MapperConfig implements ITemplate {
 
     /**
@@ -133,108 +135,6 @@ public class MapperConfig implements ITemplate {
             importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
         }
         return importPackages;
-    }
-
-    public Adapter adapter() {
-        return new Adapter(this);
-    }
-
-    public static class Adapter {
-        private final MapperConfig config;
-
-        public Adapter(MapperConfig config) {
-            this.config = config;
-        }
-
-        /**
-         * 父类Mapper
-         *
-         * @param superClass 类名
-         * @return this
-         */
-        public Adapter superClass(String superClass) {
-            this.config.superClass = superClass;
-            return this;
-        }
-
-        /**
-         * 父类Mapper
-         *
-         * @param superClass 类
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter superClass(Class<?> superClass) {
-            return superClass(superClass.getName());
-        }
-
-        /**
-         * 标记 MapperConfigurer 注解
-         *
-         * @param annotationClass 注解Class
-         * @return this
-         * @since 3.5.3
-         */
-        public Adapter mapperAnnotation(Class<? extends Annotation> annotationClass) {
-            this.config.mapperAnnotationClass = annotationClass;
-            return this;
-        }
-
-        /**
-         * 开启baseResultMap
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter enableBaseResultMap() {
-            this.config.baseResultMap = true;
-            return this;
-        }
-
-        /**
-         * 开启baseColumnList
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter enableBaseColumnList() {
-            this.config.baseColumnList = true;
-            return this;
-        }
-
-        /**
-         * 设置缓存实现类
-         *
-         * @param cache 缓存实现
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter cache(Class<? extends Cache> cache) {
-            this.config.cache = cache;
-            return this;
-        }
-
-        /**
-         * 清空排序字段
-         *
-         * @return this
-         */
-        public Adapter clearSortColumnMap() {
-            this.config.sortColumnMap.clear();
-            return this;
-        }
-
-        /**
-         * 添加排序字段
-         *
-         * @param columnName 字段名
-         * @param isDesc     是否倒排
-         * @return this
-         */
-        public Adapter sortColumn(String columnName, boolean isDesc) {
-            this.config.sortColumnMap.put(columnName, isDesc);
-            return this;
-        }
     }
 
 }
