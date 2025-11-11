@@ -25,6 +25,7 @@ import io.github.luminion.generator.config.rules.NamingStrategy;
 import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.fill.ITemplate;
 import io.github.luminion.generator.util.ClassUtils;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -41,12 +42,12 @@ import java.util.stream.Collectors;
  * @since 3.5.0
  */
 @Slf4j
+@Data
 public class EntityConfig implements ITemplate {
 
     /**
      * 自定义继承的Entity类全称，带包名
      */
-    @Getter
     protected String superClass;
 
     /**
@@ -54,7 +55,6 @@ public class EntityConfig implements ITemplate {
      *
      * @since 3.5.0
      */
-    @Getter
     protected String versionColumnName;
 
     /**
@@ -62,7 +62,6 @@ public class EntityConfig implements ITemplate {
      *
      * @since 3.5.0
      */
-    @Getter
     protected String versionPropertyName;
 
     /**
@@ -70,7 +69,6 @@ public class EntityConfig implements ITemplate {
      *
      * @since 3.5.0
      */
-    @Getter
     protected String logicDeleteColumnName;
 
     /**
@@ -78,23 +76,18 @@ public class EntityConfig implements ITemplate {
      *
      * @since 3.5.0
      */
-    @Getter
     protected String logicDeletePropertyName;
 
     /**
      * 数据库表映射到实体的命名策略，默认下划线转驼峰命名
      */
-    @Getter
     protected NamingStrategy naming = NamingStrategy.underline_to_camel;
 
-    @Getter
-    @Setter
     protected INameConvert nameConvert;
     /**
      * 数据库表字段映射到实体的命名策略
      * <p>未指定按照 naming 执行</p>
      */
-    @Setter
     protected NamingStrategy columnNaming = null;
     public NamingStrategy getColumnNaming() {
         // 未指定以 naming 策略为准
@@ -115,7 +108,6 @@ public class EntityConfig implements ITemplate {
     /**
      * 表填充字段
      */
-    @Getter
     protected final List<IFill> tableFillList = new ArrayList<>();
 
     /**
@@ -123,7 +115,6 @@ public class EntityConfig implements ITemplate {
      *
      * @since 3.5.0
      */
-    @Getter
     protected IdType idType;
 
     /**
@@ -149,13 +140,11 @@ public class EntityConfig implements ITemplate {
      * Boolean类型字段是否移除is前缀（默认 false）<br>
      * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
      */
-    @Getter
     protected boolean booleanColumnRemoveIsPrefix;
 
     /**
      * 是否生成实体时，生成字段注解（默认 false）
      */
-    @Getter
     protected boolean tableFieldAnnotationEnable;
 
     /**
@@ -163,7 +152,6 @@ public class EntityConfig implements ITemplate {
      *
      * @since 3.5.0
      */
-    @Getter
     protected boolean activeRecord;
 
     /**
@@ -331,248 +319,5 @@ public class EntityConfig implements ITemplate {
         }
         return importPackages;
     }
-    
-    public Adapter adapter() {
-        return new Adapter(this);
-    }
 
-    public static class Adapter {
-        private final EntityConfig config;
-
-        public Adapter(EntityConfig config) {
-            this.config = config;
-        }
-
-        /**
-         * 自定义继承的Entity类全称
-         *
-         * @param clazz 类
-         * @return this
-         */
-        public Adapter superClass(Class<?> clazz) {
-            return superClass(clazz.getName());
-        }
-
-        /**
-         * 自定义继承的Entity类全称，带包名
-         *
-         * @param superEntityClass 类全称
-         * @return this
-         */
-        public Adapter superClass(String superEntityClass) {
-            this.config.superClass = superEntityClass;
-            if (StringUtils.isNotBlank(superEntityClass)) {
-                try {
-                    Optional.of(ClassUtils.toClassConfident(superEntityClass)).ifPresent(this.config::convertSuperEntityColumns);
-                } catch (Exception e) {
-                    //当父类实体存在类加载器的时候,识别父类实体字段，不存在的情况就只有通过指定superEntityColumns属性了。
-                }
-            } else {
-                if (!this.config.superEntityColumns.isEmpty()) {
-                    log.warn("Forgot to set entity supper class ?");
-                }
-            }
-            return this;
-        }
-
-        /**
-         * 设置乐观锁数据库表字段名称
-         *
-         * @param versionColumnName 乐观锁数据库字段名称
-         * @return this
-         */
-        public Adapter versionColumnName(String versionColumnName) {
-            this.config.versionColumnName = versionColumnName;
-            return this;
-        }
-
-        /**
-         * 设置乐观锁实体属性字段名称
-         *
-         * @param versionPropertyName 乐观锁实体属性字段名称
-         * @return this
-         */
-        public Adapter versionPropertyName(String versionPropertyName) {
-            this.config.versionPropertyName = versionPropertyName;
-            return this;
-        }
-
-        /**
-         * 逻辑删除数据库字段名称
-         *
-         * @param logicDeleteColumnName 逻辑删除字段名称
-         * @return this
-         */
-        public Adapter logicDeleteColumnName(String logicDeleteColumnName) {
-            this.config.logicDeleteColumnName = logicDeleteColumnName;
-            return this;
-        }
-
-        /**
-         * 逻辑删除实体属性名称
-         *
-         * @param logicDeletePropertyName 逻辑删除实体属性名称
-         * @return this
-         */
-        public Adapter logicDeletePropertyName(String logicDeletePropertyName) {
-            this.config.logicDeletePropertyName = logicDeletePropertyName;
-            return this;
-        }
-
-        /**
-         * 数据库表映射到实体的命名策略
-         *
-         * @param namingStrategy 数据库表映射到实体的命名策略
-         * @return this
-         */
-        public Adapter naming(NamingStrategy namingStrategy) {
-            this.config.naming = namingStrategy;
-            return this;
-        }
-
-        /**
-         * 数据库表字段映射到实体的命名策略
-         *
-         * @param namingStrategy 数据库表字段映射到实体的命名策略
-         * @return this
-         */
-        public Adapter columnNaming(NamingStrategy namingStrategy) {
-            this.config.columnNaming = namingStrategy;
-            return this;
-        }
-
-        /**
-         * 添加父类公共字段
-         *
-         * @param superEntityColumns 父类字段(数据库字段列名)
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter addSuperEntityColumns(String... superEntityColumns) {
-            return addSuperEntityColumns(Arrays.asList(superEntityColumns));
-        }
-
-        public Adapter addSuperEntityColumns(List<String> superEntityColumnList) {
-            this.config.superEntityColumns.addAll(superEntityColumnList);
-            return this;
-        }
-
-        /**
-         * 添加忽略字段
-         *
-         * @param ignoreColumns 需要忽略的字段(数据库字段列名)
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter addIgnoreColumns(String... ignoreColumns) {
-            return addIgnoreColumns(Arrays.asList(ignoreColumns));
-        }
-
-        public Adapter addIgnoreColumns(List<String> ignoreColumnList) {
-            this.config.ignoreColumns.addAll(ignoreColumnList);
-            return this;
-        }
-
-        /**
-         * 添加表字段填充
-         *
-         * @param tableFills 填充字段
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter addTableFills(IFill... tableFills) {
-            return addTableFills(Arrays.asList(tableFills));
-        }
-
-        /**
-         * 添加表字段填充
-         *
-         * @param tableFillList 填充字段集合
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter addTableFills(List<IFill> tableFillList) {
-            this.config.tableFillList.addAll(tableFillList);
-            return this;
-        }
-
-        /**
-         * 指定生成的主键的ID类型
-         *
-         * @param idType ID类型
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter idType(IdType idType) {
-            this.config.idType = idType;
-            return this;
-        }
-
-        /**
-         * 启用生成 {@link java.io.Serial} (需JAVA 14)
-         * <p>当开启了 {@link #serialVersionUID} 时,会增加 {@link java.io.Serial} 注解在此字段上</p>
-         *
-         * @return this
-         * @since 3.5.11
-         */
-        public Adapter enableSerialAnnotation() {
-            this.config.serialAnnotation = true;
-            return this;
-        }
-
-        /**
-         * 开启生成字段常量
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter enableColumnConstant() {
-            this.config.columnConstant = true;
-            return this;
-        }
-
-        /**
-         * 开启Boolean类型字段移除is前缀
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter enableRemoveIsPrefix() {
-            this.config.booleanColumnRemoveIsPrefix = true;
-            return this;
-        }
-
-        /**
-         * 开启生成实体时生成字段注解
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter enableTableFieldAnnotation() {
-            this.config.tableFieldAnnotationEnable = true;
-            return this;
-        }
-
-        /**
-         * 开启 ActiveRecord 模式
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter enableActiveRecord() {
-            this.config.activeRecord = true;
-            return this;
-        }
-
-        /**
-         * 禁用生成serialVersionUID
-         *
-         * @return this
-         * @since 3.5.0
-         */
-        public Adapter disableSerialVersionUID() {
-            this.config.serialVersionUID = false;
-            return this;
-        }
-    }
 }
