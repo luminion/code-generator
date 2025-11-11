@@ -18,6 +18,7 @@ package io.github.luminion.generator.config.support;
 import io.github.luminion.generator.config.po.CustomFile;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.fill.ITemplate;
+import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,6 +35,7 @@ import java.util.function.BiConsumer;
  * @since 2016-12-07
  */
 @Slf4j
+@Data
 public class InjectionConfig implements ITemplate {
 
     /**
@@ -44,7 +46,6 @@ public class InjectionConfig implements ITemplate {
     /**
      * 自定义配置 Map 对象
      */
-    @Getter
     protected Map<String, Object> customMap = new HashMap<>();
 
     /**
@@ -52,7 +53,6 @@ public class InjectionConfig implements ITemplate {
      *
      * @since 3.5.3
      */
-    @Getter
     protected final List<CustomFile> customFiles = new ArrayList<>();
 
     /**
@@ -66,62 +66,6 @@ public class InjectionConfig implements ITemplate {
         }
         if (null != beforeOutputFileBiConsumer) {
             beforeOutputFileBiConsumer.accept(tableInfo, objectMap);
-        }
-    }
-
-    public Adapter adapter() {
-        return new Adapter(this);
-    }
-
-    public static class Adapter {
-        private final InjectionConfig config;
-
-        public Adapter(InjectionConfig config) {
-            this.config = config;
-        }
-
-        /**
-         * 输出文件之前消费者
-         *
-         * @param biConsumer 消费者
-         * @return this
-         */
-        public Adapter beforeOutputFile(BiConsumer<TableInfo, Map<String, Object>> biConsumer) {
-            this.config.beforeOutputFileBiConsumer = biConsumer;
-            return this;
-        }
-
-        /**
-         * 自定义配置 Map 对象
-         *
-         * @param customMap Map 对象
-         * @return this
-         */
-        public Adapter customMap(Map<String, Object> customMap) {
-            this.config.customMap = customMap;
-            return this;
-        }
-
-        /**
-         * 添加自定义文件
-         *
-         * @param customFile 自定义文件
-         * @return this
-         */
-        public Adapter customFile(CustomFile customFile) {
-            this.config.customFiles.add(customFile);
-            return this;
-        }
-
-        /**
-         * 添加自定义文件列表
-         *
-         * @param customFiles 自定义文件列表
-         * @return this
-         */
-        public Adapter customFile(List<CustomFile> customFiles) {
-            this.config.customFiles.addAll(customFiles);
-            return this;
         }
     }
 
