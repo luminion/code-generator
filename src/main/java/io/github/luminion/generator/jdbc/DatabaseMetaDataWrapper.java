@@ -18,10 +18,10 @@ package io.github.luminion.generator.jdbc;
 // todo 移除mybatis-plus
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import io.github.luminion.generator.config.enums.JdbcType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.ibatis.type.JdbcType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

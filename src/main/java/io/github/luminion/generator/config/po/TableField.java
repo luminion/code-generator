@@ -15,10 +15,9 @@
  */
 package io.github.luminion.generator.config.po;
 
-// todo 移除StringUtils
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.common.IKeyWordsHandler;
+import io.github.luminion.generator.config.enums.JdbcType;
 import io.github.luminion.generator.config.rules.IColumnType;
 import io.github.luminion.generator.config.rules.NamingStrategy;
 import io.github.luminion.generator.config.support.DataSourceConfig;
@@ -27,11 +26,10 @@ import io.github.luminion.generator.config.support.GlobalConfig;
 import io.github.luminion.generator.fill.Column;
 import io.github.luminion.generator.fill.Property;
 import io.github.luminion.generator.jdbc.DatabaseMetaDataWrapper;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-// todo 移除JdbcType
-import org.apache.ibatis.type.JdbcType;
 
 import java.util.Map;
 

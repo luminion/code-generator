@@ -15,12 +15,11 @@
  */
 package io.github.luminion.generator.config.po;
 
-// todo 移除StringUtils
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.support.GlobalConfig;
 import io.github.luminion.generator.config.support.StrategyConfig;
 import io.github.luminion.generator.jdbc.DatabaseMetaDataWrapper;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 
