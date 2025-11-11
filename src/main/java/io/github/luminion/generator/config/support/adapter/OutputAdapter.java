@@ -82,7 +82,7 @@ public class OutputAdapter {
     }
 
     /**
-     * 实体类格式化名称
+     * entity格式化名称
      *
      * @param formatPattern 格式化名称
      * @return this
@@ -93,7 +93,7 @@ public class OutputAdapter {
     }
 
     /**
-     * 实体类子包名
+     * entity子包名
      *
      * @param subPackage 子包名
      * @return this
@@ -105,7 +105,7 @@ public class OutputAdapter {
 
 
     /**
-     * 实体类模板路径
+     * entity模板路径
      *
      * @param templatePath 模板路径
      * @return this
@@ -117,7 +117,7 @@ public class OutputAdapter {
 
 
     /**
-     * 实体类文件输出目录
+     * entity文件输出目录
      *
      * @param outputDir 输出方向
      * @return this
@@ -128,7 +128,7 @@ public class OutputAdapter {
     }
 
     /**
-     * 禁用实体类
+     * 不生成entity
      *
      * @return this
      */
@@ -137,48 +137,216 @@ public class OutputAdapter {
         return this;
     }
 
+    /**
+     * mapper格式化名称
+     *
+     * @param formatPattern 格式化名称
+     * @return this
+     */
+    public OutputAdapter mapperFormatPattern(String formatPattern){
+        this.outputConfig.getMapper().setFormatPattern(formatPattern);
+        return this;
+    }
 
+    /**
+     * mapper子包名
+     *
+     * @param subPackage 子包名
+     * @return this
+     */
+    public OutputAdapter mapperSubPackage(String subPackage){
+        this.outputConfig.getMapper().setSubPackage(subPackage);
+        return this;
+    }
+
+    /**
+     * mapper模板路径
+     *
+     * @param templatePath 模板路径
+     * @return this
+     */
+    public OutputAdapter mapperTemplatePath(String templatePath){
+        this.outputConfig.getMapper().setTemplatePath(templatePath);
+        return this;
+    }
+
+
+    /**
+     * mapper文件输出目录
+     *
+     * @param outputDir 输出方向
+     * @return this
+     */
+    public OutputAdapter mapperOutputDir(String outputDir){
+        this.outputConfig.getMapper().setOutputDir(outputDir);
+        return this;
+    }
+
+    /**
+     * 不生成mapper
+     *
+     * @return this
+     */
+    public OutputAdapter mapperDisable(){
+        this.outputConfig.getMapper().setGenerate(false);
+        return this;
+    }
+
+    /**
+     * mapperXml格式化名称
+     *
+     * @param formatPattern 格式化名称
+     * @return this
+     */
+    public OutputAdapter mapperXmlFormatPattern(String formatPattern){
+        this.outputConfig.getMapperXml().setFormatPattern(formatPattern);
+        return this;
+    }
+
+    /**
+     * mapperXml模板路径
+     *
+     * @param templatePath 模板路径
+     * @return this
+     */
+    public OutputAdapter mapperXmlTemplatePath(String templatePath){
+        this.outputConfig.getMapperXml().setTemplatePath(templatePath);
+        return this;
+    }
     
-
     /**
-     * mapper配置
+     * mapperXml文件输出目录
      *
-     * @param adapter 适配器
+     * @param outputDir 输出方向
+     * @return this
      */
-    public OutputAdapter mapper(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-        adapter.apply(this.outputConfig.mapper.adapter());
+    public OutputAdapter mapperXmlOutputDir(String outputDir){
+        this.outputConfig.getMapperXml().setOutputDir(outputDir);
         return this;
     }
 
     /**
-     * mapperXml配置
+     * 不生成mapperXml
      *
-     * @param adapter 适配器
+     * @return this
      */
-    public OutputAdapter mapperXml(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-        adapter.apply(this.outputConfig.mapperXml.adapter());
+    public OutputAdapter mapperXmlDisable(){
+        this.outputConfig.getMapperXml().setGenerate(false);
+        return this;
+    }
+    
+    /**
+     * service格式化名称
+     *
+     * @param formatPattern 格式化名称
+     * @return this
+     */
+    public OutputAdapter serviceFormatPattern(String formatPattern){
+        this.outputConfig.getService().setFormatPattern(formatPattern);
         return this;
     }
 
     /**
-     * service配置
+     * service子包名
      *
-     * @param adapter 适配器
+     * @param subPackage 子包名
+     * @return this
      */
-    public OutputAdapter service(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-        adapter.apply(this.outputConfig.service.adapter());
+    public OutputAdapter serviceSubPackage(String subPackage){
+        this.outputConfig.getService().setSubPackage(subPackage);
+        return this;
+    }
+
+
+    /**
+     * service模板路径
+     *
+     * @param templatePath 模板路径
+     * @return this
+     */
+    public OutputAdapter serviceTemplatePath(String templatePath){
+        this.outputConfig.getService().setTemplatePath(templatePath);
+        return this;
+    }
+
+
+    /**
+     * service文件输出目录
+     *
+     * @param outputDir 输出方向
+     * @return this
+     */
+    public OutputAdapter serviceOutputDir(String outputDir){
+        this.outputConfig.getService().setOutputDir(outputDir);
         return this;
     }
 
     /**
-     * serviceImpl配置
+     * 不生成service
      *
-     * @param adapter 适配器
+     * @return this
      */
-    public OutputAdapter serviceImpl(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-        adapter.apply(this.outputConfig.serviceImpl.adapter());
+    public OutputAdapter serviceDisable(){
+        this.outputConfig.getService().setGenerate(false);
         return this;
     }
+    
+    /**
+     * serviceImpl格式化名称
+     *
+     * @param formatPattern 格式化名称
+     * @return this
+     */
+    public OutputAdapter serviceImplFormatPattern(String formatPattern){
+        this.outputConfig.getServiceImpl().setFormatPattern(formatPattern);
+        return this;
+    }
+
+    /**
+     * serviceImpl子包名
+     *
+     * @param subPackage 子包名
+     * @return this
+     */
+    public OutputAdapter serviceImplSubPackage(String subPackage){
+        this.outputConfig.getServiceImpl().setSubPackage(subPackage);
+        return this;
+    }
+
+
+    /**
+     * serviceImpl模板路径
+     *
+     * @param templatePath 模板路径
+     * @return this
+     */
+    public OutputAdapter serviceImplTemplatePath(String templatePath){
+        this.outputConfig.getServiceImpl().setTemplatePath(templatePath);
+        return this;
+    }
+
+
+    /**
+     * serviceImpl文件输出目录
+     *
+     * @param outputDir 输出方向
+     * @return this
+     */
+    public OutputAdapter serviceImplOutputDir(String outputDir){
+        this.outputConfig.getServiceImpl().setOutputDir(outputDir);
+        return this;
+    }
+
+    /**
+     * 不生成serviceImpl
+     *
+     * @return this
+     */
+    public OutputAdapter serviceImplDisable(){
+        this.outputConfig.getServiceImpl().setGenerate(false);
+        return this;
+    }
+    
 
     /**
      * controller配置
