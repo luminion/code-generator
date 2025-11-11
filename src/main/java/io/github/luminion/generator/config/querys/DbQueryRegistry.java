@@ -20,6 +20,7 @@ import io.github.luminion.generator.config.enums.DbType;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 数据库查询接口注册中心
@@ -53,6 +54,7 @@ public class DbQueryRegistry {
     }
 
     public IDbQuery getDbQuery(DbType dbType) {
-        return db_query_enum_map.get(dbType);
+        IDbQuery iDbQuery = db_query_enum_map.get(dbType);
+        return Optional.ofNullable(iDbQuery).orElse(db_query_enum_map.get(DbType.MYSQL));
     }
 }

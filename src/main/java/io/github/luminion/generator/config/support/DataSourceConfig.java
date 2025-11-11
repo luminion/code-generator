@@ -22,9 +22,11 @@ import io.github.luminion.generator.config.converts.MySqlTypeConvert;
 import io.github.luminion.generator.config.converts.TypeConverts;
 import io.github.luminion.generator.config.enums.DbType;
 import io.github.luminion.generator.config.querys.DbQueryRegistry;
+import io.github.luminion.generator.config.rules.NamingStrategy;
 import io.github.luminion.generator.query.AbstractDatabaseQuery;
 import io.github.luminion.generator.query.DefaultQuery;
 import io.github.luminion.generator.type.ITypeConvertHandler;
+import io.github.luminion.generator.util.DatasourceUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -48,30 +50,32 @@ import java.util.Properties;
 @Slf4j
 @Data
 public class DataSourceConfig {
-    public DataSourceConfig(String url, String username, String password) {
-        this.url = url;
-        this.username = username;
-        this.password = password;
-    }
+    /**
+     * 驱动连接的URL
+     */
+    protected final String url;
 
+    /**
+     * 数据库连接用户名
+     */
+    protected final String username;
+
+    /**
+     * 数据库连接密码
+     */
+    protected final String password;
+    /**
+     * 数据库类型
+     */
+    protected final DbType dbType;
     /**
      * 数据库信息查询
      */
-    protected IDbQuery dbQuery;
-    public IDbQuery getDbQuery() {
-        if (null == dbQuery) {
-            DbType dbType = getDbType();
-            DbQueryRegistry dbQueryRegistry = new DbQueryRegistry();
-            // 默认 MYSQL
-            dbQuery = Optional.ofNullable(dbQueryRegistry.getDbQuery(dbType)).orElseGet(() -> dbQueryRegistry.getDbQuery(DbType.MYSQL));
-        }
-        return dbQuery;
-    }
-
+    protected final IDbQuery dbQuery;
     /**
-     * schemaName
+     * 查询方式
      */
-    protected String schemaName;
+    protected Class<? extends AbstractDatabaseQuery> databaseQueryClass = DefaultQuery.class;
 
     /**
      * 类型转换
@@ -80,72 +84,33 @@ public class DataSourceConfig {
 
     /**
      * 关键字处理器
-     *
-     * @since 3.3.2
      */
     protected IKeyWordsHandler keyWordsHandler;
+    /**
+     * 类型转换处理
+     */
+    protected ITypeConvertHandler typeConvertHandler;
 
     /**
-     * 驱动连接的URL
+     * schemaName
      */
-    protected String url;
-
-    /**
-     * 数据库连接用户名
-     */
-    protected String username;
-
-    /**
-     * 数据库连接密码
-     */
-    protected String password;
+    protected String schemaName;
 
     /**
      * 数据源实例
-     *
-     * @since 3.5.0
      */
     protected DataSource dataSource;
 
     /**
      * 数据库连接
-     *
-     * @since 3.5.0
      */
     protected Connection connection;
 
     /**
      * 数据库连接属性
-     *
-     * @since 3.5.3
      */
     protected final Map<String, String> connectionProperties = new HashMap<>();
-
-    /**
-     * 查询方式
-     *
-     * @since 3.5.3
-     */
-    protected Class<? extends AbstractDatabaseQuery> databaseQueryClass = DefaultQuery.class;
-
-    /**
-     * 类型转换处理
-     *
-     * @since 3.5.3
-     */
-    protected ITypeConvertHandler typeConvertHandler;
-    public ITypeConvert getTypeConvert() {
-        if (null == typeConvert) {
-            DbType dbType = getDbType();
-            // 默认 MYSQL
-            typeConvert = TypeConverts.getTypeConvert(dbType);
-            if (null == typeConvert) {
-                typeConvert = MySqlTypeConvert.INSTANCE;
-            }
-        }
-        return typeConvert;
-    }
-
+    
     /**
      * 驱动全类名
      *
@@ -153,59 +118,13 @@ public class DataSourceConfig {
      */
     protected String driverClassName;
 
-    /**
-     * 判断数据库类型
-     *
-     * @return 类型枚举值
-     */
-    public DbType getDbType() {
-        return this.getDbType(this.url.toLowerCase());
-    }
-
-    /**
-     * 判断数据库类型
-     *
-     * @param str url
-     * @return 类型枚举值，如果没找到，则返回 null
-     */
-    protected DbType getDbType(String str) {
-        if (str.contains(":mysql:") || str.contains(":cobar:")) {
-            return DbType.MYSQL;
-        } else if (str.contains(":oracle:")) {
-            return DbType.ORACLE;
-        } else if (str.contains(":postgresql:")) {
-            return DbType.POSTGRE_SQL;
-        } else if (str.contains(":sqlserver:")) {
-            return DbType.SQL_SERVER;
-        } else if (str.contains(":db2:")) {
-            return DbType.DB2;
-        } else if (str.contains(":mariadb:")) {
-            return DbType.MARIADB;
-        } else if (str.contains(":sqlite:")) {
-            return DbType.SQLITE;
-        } else if (str.contains(":h2:")) {
-            return DbType.H2;
-//        } else if (str.contains(":lealone:")) {
-//            return DbType.LEALONE;
-        } else if (str.contains(":kingbase:") || str.contains(":kingbase8:")) {
-            return DbType.KINGBASE_ES;
-        } else if (str.contains(":dm:")) {
-            return DbType.DM;
-        } else if (str.contains(":zenith:")) {
-            return DbType.GAUSS;
-        } else if (str.contains(":oscar:")) {
-            return DbType.OSCAR;
-        } else if (str.contains(":firebird:")) {
-            return DbType.FIREBIRD;
-        } else if (str.contains(":xugu:")) {
-            return DbType.XU_GU;
-        } else if (str.contains(":clickhouse:")) {
-            return DbType.CLICK_HOUSE;
-        } else if (str.contains(":sybase:")) {
-            return DbType.SYBASE;
-        } else {
-            return DbType.OTHER;
-        }
+    public DataSourceConfig(String url, String username, String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        this.dbType = DatasourceUtils.getDbType(url);
+        this.dbQuery = new DbQueryRegistry().getDbQuery(dbType);
+        this.typeConvert = TypeConverts.getTypeConvert(this.dbType);
     }
 
     /**
