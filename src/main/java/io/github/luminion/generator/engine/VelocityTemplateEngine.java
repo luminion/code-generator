@@ -49,20 +49,13 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
 
     public VelocityTemplateEngine(Configurer configAdapter) {
         super(configAdapter);
-        if (null == velocityEngine) {
-            Properties p = new Properties();
-            p.setProperty(Velocity.ENCODING_DEFAULT, StandardCharsets.UTF_8.name());
-            p.setProperty(Velocity.INPUT_ENCODING, StandardCharsets.UTF_8.name());
-            if (getConfigurer().getTemplateLoadWay().isFile()) {
-                p.setProperty("resource.loader.file.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-                p.setProperty("resource.loader.file.unicode", "true");
-                p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, "");
-            } else {
-                // 文本模板
-                p.setProperty(Velocity.RESOURCE_LOADER, TemplateLoadWay.STRING.getValue());
-            }
-            velocityEngine = new VelocityEngine(p);
-        }
+        Properties p = new Properties();
+        p.setProperty(Velocity.ENCODING_DEFAULT, StandardCharsets.UTF_8.name());
+        p.setProperty(Velocity.INPUT_ENCODING, StandardCharsets.UTF_8.name());
+        p.setProperty("resource.loader.file.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+        p.setProperty("resource.loader.file.unicode", "true");
+        p.setProperty(Velocity.FILE_RESOURCE_LOADER_PATH, "");
+        velocityEngine = new VelocityEngine(p);
     }
 
     @Override

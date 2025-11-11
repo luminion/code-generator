@@ -78,24 +78,19 @@ public class Configurer<C> {
      */
     private final ControllerConfig controllerConfig = new ControllerConfig();
     /**
-     * 自定义配置
-     */
-    private final C customConfig;
-    /**
      * 模型配置
      */
     private final ModelConfig modelConfig = new ModelConfig();
+    /**
+     * 自定义配置
+     */
+    private final C customConfig;
     /**
      * 数据库表信息
      * 配置
      */
     private final List<TableInfo> tableInfo = new ArrayList<>();
-    /**
-     * 资源加载器
-     *
-     * @since 3.5.9
-     */
-    private final TemplateLoadWay templateLoadWay = TemplateLoadWay.FILE;
+
 
     public Configurer(String url, String username, String password, C customConfig) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
