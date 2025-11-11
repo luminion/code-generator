@@ -25,6 +25,7 @@ import io.github.luminion.generator.config.querys.DbQueryRegistry;
 import io.github.luminion.generator.query.AbstractDatabaseQuery;
 import io.github.luminion.generator.query.DefaultQuery;
 import io.github.luminion.generator.type.ITypeConvertHandler;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,7 +42,8 @@ import java.util.Properties;
  * 数据库配置
  *
  * @author YangHu, hcl, hubin
- * @since 2016/8/30
+ * @author luminion
+ * @since 1.0.0
  */
 @Slf4j
 @Data

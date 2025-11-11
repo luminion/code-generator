@@ -1,6 +1,5 @@
 package io.github.luminion.generator.util;
 
-
 import java.util.regex.Pattern;
 
 /**
@@ -153,6 +152,125 @@ public class StringUtils {
         }
         return sb.toString();
     }
+
+
+    /**
+     * 驼峰转连字符
+     * <p>StringUtils.camelToHyphen( "managerAdminUserService" ) = manager-admin-user-service</p>
+     *
+     * @param input ignore
+     * @return 以'-'分隔
+     * @see <a href="https://github.com/krasa/StringManipulation">document</a>
+     */
+    public static String camelToHyphen(String input) {
+        return wordsToHyphenCase(wordsAndHyphenAndCamelToConstantCase(input));
+    }
+    private static String wordsToHyphenCase(String s) {
+        StringBuilder buf = new StringBuilder();
+        char lastChar = 'a';
+        for (char c : s.toCharArray()) {
+            if ((Character.isWhitespace(lastChar)) && (!Character.isWhitespace(c))
+                    && ('-' != c) && (buf.length() > 0)
+                    && (buf.charAt(buf.length() - 1) != '-')) {
+                buf.append("-");
+            }
+            if ('_' == c) {
+                buf.append("-");
+            } else if ('.' == c) {
+                buf.append("-");
+            } else if (!Character.isWhitespace(c)) {
+                buf.append(Character.toLowerCase(c));
+            }
+            lastChar = c;
+        }
+        if (Character.isWhitespace(lastChar)) {
+            buf.append("-");
+        }
+        return buf.toString();
+    }
     
+    private static String wordsAndHyphenAndCamelToConstantCase(String input) {
+        StringBuilder buf = new StringBuilder();
+        char previousChar = ' ';
+        char[] chars = input.toCharArray();
+        for (char c : chars) {
+            boolean isUpperCaseAndPreviousIsLowerCase = (Character.isLowerCase(previousChar)) && (Character.isUpperCase(c));
+
+            boolean previousIsWhitespace = Character.isWhitespace(previousChar);
+            boolean lastOneIsNotUnderscore = (buf.length() > 0) && (buf.charAt(buf.length() - 1) != '_');
+            boolean isNotUnderscore = c != '_';
+            if (lastOneIsNotUnderscore && (isUpperCaseAndPreviousIsLowerCase || previousIsWhitespace)) {
+                buf.append("_");
+            } else if ((Character.isDigit(previousChar) && Character.isLetter(c))) {
+                buf.append("_");
+            }
+            if ((shouldReplace(c)) && (lastOneIsNotUnderscore)) {
+                buf.append("_");
+            } else if (!Character.isWhitespace(c) && (isNotUnderscore || lastOneIsNotUnderscore)) {
+                buf.append(Character.toUpperCase(c));
+            }
+            previousChar = c;
+        }
+        if (Character.isWhitespace(previousChar)) {
+            buf.append("_");
+        }
+        return buf.toString();
+    }
+
+    private static boolean shouldReplace(char c) {
+        return (c == '.') || (c == '_') || (c == '-');
+    }
+
+
+    /**
+     * 判断是否以某个字符串结尾（区分大小写）
+     * Check if a String ends with a specified suffix.
+     * <p>
+     * <code>null</code>s are handled without exceptions. Two <code>null</code>
+     * references are considered to be equal. The comparison is case sensitive.
+     * </p>
+     * <p>
+     * <pre>
+     * StringUtils.endsWith(null, null)      = true
+     * StringUtils.endsWith(null, "abcdef")  = false
+     * StringUtils.endsWith("def", null)     = false
+     * StringUtils.endsWith("def", "abcdef") = true
+     * StringUtils.endsWith("def", "ABCDEF") = false
+     * </pre>
+     * </p>
+     *
+     * @param str    the String to check, may be null
+     * @param suffix the suffix to find, may be null
+     * @return <code>true</code> if the String ends with the suffix, case
+     * sensitive, or both <code>null</code>
+     * @see String#endsWith(String)
+     * @since 2.4
+     */
+    public static boolean endsWith(String str, String suffix) {
+        return endsWith(str, suffix, false);
+    }
+
+    /**
+     * Check if a String ends with a specified suffix (optionally case
+     * insensitive).
+     *
+     * @param str        the String to check, may be null
+     * @param suffix     the suffix to find, may be null
+     * @param ignoreCase inidicates whether the compare should ignore case (case
+     *                   insensitive) or not.
+     * @return <code>true</code> if the String starts with the prefix or both
+     * <code>null</code>
+     * @see String#endsWith(String)
+     */
+    private static boolean endsWith(String str, String suffix, boolean ignoreCase) {
+        if (str == null || suffix == null) {
+            return (str == null && suffix == null);
+        }
+        if (suffix.length() > str.length()) {
+            return false;
+        }
+        int strOffset = str.length() - suffix.length();
+        return str.regionMatches(ignoreCase, strOffset, suffix, 0, suffix.length());
+    }
     
 }

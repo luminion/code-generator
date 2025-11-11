@@ -37,7 +37,8 @@ import java.util.stream.Collectors;
  * 实体属性配置
  *
  * @author nieqiurong 2020/10/11.
- * @since 3.5.0
+ * @author luminion
+ * @since 1.0.0
  */
 @Slf4j
 @Data

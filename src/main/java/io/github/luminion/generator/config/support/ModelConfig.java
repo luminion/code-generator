@@ -1,13 +1,12 @@
 package io.github.luminion.generator.config.support;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
+import io.github.luminion.generator.config.enums.FieldFill;
 import io.github.luminion.generator.config.enums.OutputFile;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.po.TableField.MetaInfo;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.fill.ITemplate;
 import lombok.Data;
-import lombok.Getter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,6 +15,7 @@ import java.util.stream.Collectors;
  * 领域模型配置
  *
  * @author luminion
+ * @since 1.0.0
  */
 @Data
 public class ModelConfig implements ITemplate {

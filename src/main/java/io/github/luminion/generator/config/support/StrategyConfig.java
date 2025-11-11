@@ -33,7 +33,8 @@ import java.util.function.BiFunction;
  * 策略配置项
  *
  * @author YangHu, tangguo, hubin
- * @since 2016/8/30
+ * @author luminion
+ * @since 1.0.0
  */
 @Data
 public class StrategyConfig implements ITemplate {

@@ -30,7 +30,8 @@ import java.util.stream.Collectors;
  * Service属性配置
  *
  * @author nieqiurong 2020/10/11.
- * @since 3.5.0
+ * @author luminion
+ * @since 1.0.0
  */
 @Slf4j
 @Data
@@ -56,10 +57,11 @@ public class ServiceConfig implements ITemplate {
         data.put("superServiceImplClass", ClassUtils.getSimpleName(this.superServiceImplClass));
         Configurer<?> configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        if (globalConfig.isSqlBooster()) {
-            OutputConfig outputConfig = tableInfo.getConfigurer().getOutputConfig();
-            data.put("enhanceMethod", outputConfig.getService().isGenerate() ? outputConfig.getService().convertFormatName(tableInfo) + ".super" : "EnhancedService.super");
-        }
+        // todo 
+//        if (globalConfig.isSqlBooster()) {
+//            OutputConfig outputConfig = tableInfo.getConfigurer().getOutputConfig();
+//            data.put("enhanceMethod", outputConfig.getService().isGenerate() ? outputConfig.getService().convertFormatName(tableInfo) + ".super" : "EnhancedService.super");
+//        }
         Set<String> serviceImportPackages = this.serviceImportPackages(tableInfo);
         Collection<String> serviceImportPackages4Java = serviceImportPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> serviceImportPackages4Framework = serviceImportPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
@@ -84,9 +86,13 @@ public class ServiceConfig implements ITemplate {
         Map<String, String> outputClassCanonicalNameMap = outputConfig.getOutputClassCanonicalNameMap(tableInfo);
         importPackages.add(outputClassCanonicalNameMap.get(OutputFile.entity.name()));
         importPackages.add(this.superServiceClass);
-        if (globalConfig.isSqlBooster()) {
-            importPackages.add("io.github.luminion.mybatisplus.enhancer.EnhancedService");
-            importPackages.add(outputClassCanonicalNameMap.get(OutputFile.queryVO.name()));
+        
+        // todo sqlBooster
+//        if (globalConfig.isSqlBooster()) {
+//            importPackages.add("io.github.luminion.mybatisplus.enhancer.EnhancedService");
+//            importPackages.add(outputClassCanonicalNameMap.get(OutputFile.queryVO.name()));
+        if (1==1){
+            
         } else {
             if (globalConfig.isGenerateQuery()) {
                 importPackages.add(outputClassCanonicalNameMap.get(OutputFile.queryVO.name()));
@@ -138,8 +144,9 @@ public class ServiceConfig implements ITemplate {
         if (globalConfig.isGenerateDelete()) {
             importPackages.add("java.io.Serializable");
         }
-        // enhancer
-        if (globalConfig.isSqlBooster()) {
+        // todo sqlBooster
+//        if (globalConfig.isSqlBooster()) {
+        if (false) {
             if (!outputConfig.getService().isGenerate()){
                 importPackages.add("io.github.luminion.mybatisplus.enhancer.EnhancedService");
                 importPackages.add(outputClassCanonicalNameMap.get(OutputFile.queryVO.name()));

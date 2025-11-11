@@ -1,9 +1,6 @@
 package io.github.luminion.generator.config.support.adapter;
 
-import io.github.luminion.generator.config.po.TemplateFile;
 import io.github.luminion.generator.config.support.OutputConfig;
-
-import java.util.function.Function;
 
 /**
  * @author luminion

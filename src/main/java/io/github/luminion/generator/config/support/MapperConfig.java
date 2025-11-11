@@ -15,16 +15,15 @@
  */
 package io.github.luminion.generator.config.support;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.enums.OutputFile;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.fill.ITemplate;
 import io.github.luminion.generator.util.ClassUtils;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.cache.Cache;
-import org.apache.ibatis.cache.decorators.LoggingCache;
 
 import java.lang.annotation.Annotation;
 import java.util.*;
@@ -34,7 +33,8 @@ import java.util.stream.Collectors;
  * Mapper属性配置
  *
  * @author nieqiurong 2020/10/11.
- * @since 3.5.0
+ * @author luminion
+ * @since 1.0.0
  */
 @Slf4j
 @Data
@@ -69,12 +69,10 @@ public class MapperConfig implements ITemplate {
     /**
      * 设置缓存实现类
      *
+     * @see org.apache.ibatis.cache.Cache
      * @since 3.5.0
      */
-    protected Class<? extends Cache> cache;
-    public Class<? extends Cache> getCache() {
-        return this.cache == null ? LoggingCache.class : this.cache;
-    }
+    protected Class<?> cache;
 
     /**
      * 排序字段map
@@ -83,6 +81,7 @@ public class MapperConfig implements ITemplate {
     protected Map<String, Boolean> sortColumnMap = new LinkedHashMap<>();
 
     @Override
+    @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = ITemplate.super.renderData(tableInfo);
         boolean enableCache = this.cache != null;
@@ -93,9 +92,8 @@ public class MapperConfig implements ITemplate {
         data.put("baseColumnList", this.baseColumnList);
         data.put("superMapperClassPackage", this.superClass);
         if (enableCache) {
-            Class<? extends Cache> cacheClass = this.getCache();
-            data.put("cache", cacheClass);
-            data.put("cacheClassName", cacheClass.getName());
+            data.put("cache", cache);
+            data.put("cacheClassName", cache.getName());
         }
         data.put("superMapperClass", ClassUtils.getSimpleName(this.superClass));
         // 排序字段sql
@@ -113,8 +111,8 @@ public class MapperConfig implements ITemplate {
 
         return data;
     }
-    
-    public Set<String> mapperImportPackages(TableInfo tableInfo){
+
+    public Set<String> mapperImportPackages(TableInfo tableInfo) {
         Set<String> importPackages = new TreeSet<>();
         if (StringUtils.isNotBlank(superClass)) {
             importPackages.add(superClass);
@@ -125,11 +123,7 @@ public class MapperConfig implements ITemplate {
         Map<String, String> classCanonicalNameMap = tableInfo.getConfigurer().getOutputConfig().getOutputClassCanonicalNameMap(tableInfo);
         importPackages.add(classCanonicalNameMap.get(OutputFile.entity.name()));
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
-        if (globalConfig.isSqlBooster()){
-            importPackages.add("io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpMapper");
-            importPackages.add(classCanonicalNameMap.get(OutputFile.queryVO.name()));
-        }
-        if (globalConfig.isGenerateQuery()){
+        if (globalConfig.isGenerateQuery()) {
             importPackages.add(List.class.getCanonicalName());
             importPackages.add(classCanonicalNameMap.get(OutputFile.queryVO.name()));
             importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");

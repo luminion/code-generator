@@ -19,7 +19,6 @@ import io.github.luminion.generator.config.po.CustomFile;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.fill.ITemplate;
 import lombok.Data;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -32,7 +31,8 @@ import java.util.function.BiConsumer;
  * 注入配置
  *
  * @author hubin
- * @since 2016-12-07
+ * @author luminion
+ * @since 1.0.0
  */
 @Slf4j
 @Data

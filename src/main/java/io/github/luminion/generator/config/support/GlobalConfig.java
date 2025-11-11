@@ -19,20 +19,19 @@ import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.rules.DateType;
 import io.github.luminion.generator.fill.ITemplate;
 import lombok.Data;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
-import java.util.function.Supplier;
 
 
 /**
  * 全局配置
  *
  * @author hubin
- * @since 2016-12-02
+ * @author luminion
+ * @since 1.0.0
  */
 @Slf4j
 @Data
@@ -53,7 +52,7 @@ public class GlobalConfig implements ITemplate {
      *
      * @since 3.5.0
      */
-    protected String commentDate = new SimpleDateFormat("yyyy-MM-dd" ).format(new Date());
+    protected String commentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
     /**
      * 【实体】是否为lombok模型（默认 false）<br>
@@ -72,6 +71,7 @@ public class GlobalConfig implements ITemplate {
      * 开启 swagger 模式（默认 false 与 springdoc 不可同时使用）
      */
     protected boolean swagger;
+
     public boolean isSwagger() {
         // springdoc 设置优先于 swagger
         return !springdoc && swagger;
@@ -141,6 +141,7 @@ public class GlobalConfig implements ITemplate {
      * 生成导出方法(需允许查询)
      */
     protected boolean generateExport = true;
+
     public boolean isGenerateExport() {
         return generateExport && generateQuery;
     }
@@ -176,9 +177,9 @@ public class GlobalConfig implements ITemplate {
     public String resolveExcelClassApiCanonicalName() {
         return excelApiPackagePrefix + "." + excelApiClass;
     }
-    
+
     public void validate() {
-        if (!generateQuery && generateExport){
+        if (!generateQuery && generateExport) {
             log.warn("已配置生成导出但未配置生成查询, 导出功能依赖查询功能, 将不会生成导出相关功能!!!");
             generateExport = false;
         }
@@ -198,7 +199,7 @@ public class GlobalConfig implements ITemplate {
         data.put("springdoc", this.springdoc);
         //  todo sqlBooster
 //        data.put("sqlBooster", this.sqlBooster);
-        
+
         data.put("javaApiPackagePrefix", this.jakartaApiPackagePrefix);
         data.put("excelApiPackagePrefix", this.excelApiPackagePrefix);
         data.put("excelApiClass", this.excelApiClass);

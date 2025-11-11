@@ -1,15 +1,13 @@
 package io.github.luminion.generator.config.support;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.enums.OutputFile;
 import io.github.luminion.generator.config.po.CustomFile;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.po.TemplateFile;
 import io.github.luminion.generator.fill.ITemplate;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
-import lombok.Getter;
 
 import java.io.File;
 import java.util.List;
@@ -21,6 +19,7 @@ import java.util.stream.Stream;
  * 输出文件配置
  *
  * @author luminion
+ * @since 1.0.0
  */
 @Data
 public class OutputConfig implements ITemplate {
@@ -148,7 +147,7 @@ public class OutputConfig implements ITemplate {
      */
     public String getParentPackage() {
         if (StringUtils.isNotBlank(moduleName)) {
-            return parentPackage + StringPool.DOT + moduleName;
+            return parentPackage + "." + moduleName;
         }
         return parentPackage;
     }
@@ -161,7 +160,7 @@ public class OutputConfig implements ITemplate {
      */
     public String joinPackage(String subPackage) {
         String parent = getParentPackage();
-        return StringUtils.isBlank(parent) ? subPackage : (parent + StringPool.DOT + subPackage);
+        return StringUtils.isBlank(parent) ? subPackage : (parent + "." + subPackage);
     }
 
     /**
@@ -178,7 +177,7 @@ public class OutputConfig implements ITemplate {
         if (!StringUtils.endsWith(parentDir, File.separator)) {
             parentDir += File.separator;
         }
-        packageName = packageName.replaceAll("\\.", StringPool.BACK_SLASH + File.separator);
+        packageName = packageName.replaceAll("\\.", "\\" + File.separator);
         return parentDir + packageName;
     }
 
@@ -268,9 +267,10 @@ public class OutputConfig implements ITemplate {
         }
         if (!globalConfig.isGenerateQuery()){
             this.queryDTO.setGenerate(false);
-            if (!globalConfig.isSqlBooster()){
-                this.queryVO.setGenerate(false);
-            }
+            // todo 待完善
+//            if (!globalConfig.isSqlBooster()){
+//                this.queryVO.setGenerate(false);
+//            }
         }
     }
 }

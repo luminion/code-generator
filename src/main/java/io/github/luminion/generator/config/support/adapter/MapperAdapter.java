@@ -1,7 +1,6 @@
 package io.github.luminion.generator.config.support.adapter;
 
 import io.github.luminion.generator.config.support.MapperConfig;
-import org.apache.ibatis.cache.Cache;
 
 import java.lang.annotation.Annotation;
 
@@ -77,10 +76,11 @@ public class MapperAdapter {
      * 设置缓存实现类
      *
      * @param cache 缓存实现
+     * @see org.apache.ibatis.cache.Cache 传入类必须是该类的子类
      * @return this
      * @since 3.5.0
      */
-    public MapperAdapter cache(Class<? extends Cache> cache) {
+    public MapperAdapter cache(Class<?> cache) {
         this.mapperConfig.setCache(cache);
         return this;
     }

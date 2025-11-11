@@ -15,13 +15,13 @@
  */
 package io.github.luminion.generator.config.support;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.enums.OutputFile;
 import io.github.luminion.generator.config.po.MethodPayload;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.fill.ITemplate;
 import io.github.luminion.generator.util.ClassUtils;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +35,8 @@ import java.util.stream.Stream;
  * 控制器属性配置
  *
  * @author nieqiurong 2020/10/11.
- * @since 3.5.0
+ * @author luminion
+ * @since 1.0.0
  */
 @Slf4j
 @Data
@@ -234,10 +235,6 @@ public class ControllerConfig implements ITemplate {
             importPackages.add("java.util.List");
             importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.queryDTO.name()));
             importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.queryVO.name()));
-            if (globalConfig.isSqlBooster()) {
-                importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.entity.name()));
-                importPackages.add("io.github.luminion.sqlbooster.model.sql.helper.SqlHelper");
-            }
             if (pageMethod.isMethodReady()) {
                 importPackages.add(pageMethod.getClassCanonicalName());
                 data.put("pageReturnType", pageMethod.returnGenericTypeStr(outputClassSimpleNameMap.get(OutputFile.queryVO.name())));
