@@ -15,11 +15,14 @@
  */
 package io.github.luminion.generator.config.support;
 
+import io.github.luminion.generator.config.common.IKeyWordsHandler;
+import io.github.luminion.generator.config.common.INameConvert;
 import io.github.luminion.generator.config.po.LikeTable;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.rules.ExtraFieldStrategy;
 import io.github.luminion.generator.config.fill.ITemplate;
 import io.github.luminion.generator.config.query.SQLQuery;
+import io.github.luminion.generator.config.type.ITypeConvertHandler;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
@@ -39,6 +42,21 @@ import java.util.function.BiFunction;
 @Data
 public class StrategyConfig implements ITemplate {
 
+    /**
+     * 名称转换
+     */
+    protected INameConvert nameConvert;
+
+    /**
+     * 类型转换处理
+     */
+    protected ITypeConvertHandler typeConvertHandler;
+
+    /**
+     * 关键字处理器
+     */
+    protected IKeyWordsHandler keyWordsHandler;
+    
     /**
      * 过滤表前缀
      * example: addTablePrefix("t_")

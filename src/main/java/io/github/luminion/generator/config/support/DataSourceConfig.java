@@ -17,19 +17,15 @@ package io.github.luminion.generator.config.support;
 
 import io.github.luminion.generator.config.common.IDbQuery;
 import io.github.luminion.generator.config.common.IKeyWordsHandler;
-import io.github.luminion.generator.config.common.ITypeConvert;
-import io.github.luminion.generator.config.converts.TypeConverts;
+import io.github.luminion.generator.config.common.INameConvert;
 import io.github.luminion.generator.config.enums.DbType;
 import io.github.luminion.generator.config.querys.DbQueryRegistry;
-import io.github.luminion.generator.config.query.AbstractDatabaseQuery;
-import io.github.luminion.generator.config.query.DefaultQuery;
 import io.github.luminion.generator.config.type.ITypeConvertHandler;
 import io.github.luminion.generator.util.DatasourceUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -51,12 +47,10 @@ public class DataSourceConfig {
      * 驱动连接的URL
      */
     protected final String url;
-
     /**
      * 数据库连接用户名
      */
     protected final String username;
-
     /**
      * 数据库连接密码
      */
@@ -68,52 +62,16 @@ public class DataSourceConfig {
     /**
      * 数据库信息查询
      */
-    protected IDbQuery dbQuery;
-    /**
-     * 查询方式
-     */
-    protected Class<? extends AbstractDatabaseQuery> databaseQueryClass = DefaultQuery.class;
-
-    /**
-     * 类型转换
-     */
-    protected ITypeConvert typeConvert;
-
-    /**
-     * 关键字处理器
-     */
-    protected IKeyWordsHandler keyWordsHandler;
-    /**
-     * 类型转换处理
-     */
-    protected ITypeConvertHandler typeConvertHandler;
-
-    /**
-     * schemaName
-     */
-    protected String schemaName;
-
-    /**
-     * 数据源实例
-     */
-    protected DataSource dataSource;
-
-    /**
-     * 数据库连接
-     */
-    protected Connection connection;
-
+    protected final IDbQuery dbQuery;
     /**
      * 数据库连接属性
      */
     protected final Map<String, String> connectionProperties = new HashMap<>();
-
+    
     /**
-     * 驱动全类名
-     *
-     * @since 3.5.8
+     * 数据库schema名
      */
-    protected String driverClassName;
+    protected String schemaName;
 
     public DataSourceConfig(String url, String username, String password) {
         this.url = url;
@@ -121,7 +79,6 @@ public class DataSourceConfig {
         this.password = password;
         this.dbType = DatasourceUtils.getDbType(url);
         this.dbQuery = new DbQueryRegistry().getDbQuery(dbType);
-        this.typeConvert = TypeConverts.getTypeConvert(this.dbType);
     }
 
     /**
@@ -130,40 +87,13 @@ public class DataSourceConfig {
      *
      * @return Connection
      */
-    public Connection getConn() {
+    public Connection createConnection() {
         try {
-            if (connection != null && !connection.isClosed()) {
-                return connection;
-            } else {
-                synchronized (this) {
-                    if (dataSource != null) {
-                        connection = dataSource.getConnection();
-                    } else {
-                        Properties properties = new Properties();
-                        connectionProperties.forEach(properties::setProperty);
-                        properties.put("user", username);
-                        properties.put("password", password);
-                        // 使用元数据查询方式时，有些数据库需要增加属性才能读取注释
-                        this.processProperties(properties);
-                        this.connection = DriverManager.getConnection(url, properties);
-                        if (StringUtils.isBlank(this.schemaName)) {
-                            try {
-                                this.schemaName = connection.getSchema();
-                            } catch (Exception exception) {
-                                // ignore 老古董1.7以下的驱动不支持.
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return connection;
-    }
-
-    protected void processProperties(Properties properties) {
-        if (this.databaseQueryClass.getName().equals(DefaultQuery.class.getName())) {
+            Properties properties = new Properties();
+            connectionProperties.forEach(properties::setProperty);
+            properties.put("user", username);
+            properties.put("password", password);
+            // 使用元数据查询方式时，有些数据库需要增加属性才能读取注释
             switch (this.getDbType()) {
                 case MYSQL:
                     properties.put("remarks", "true");
@@ -176,6 +106,18 @@ public class DataSourceConfig {
                 default:
                     break;
             }
+            Connection connection = DriverManager.getConnection(url, properties);
+            if (StringUtils.isBlank(this.schemaName)) {
+                try {
+                    this.schemaName = connection.getSchema();
+                } catch (Exception exception) {
+                    // ignore 老古董1.7以下的驱动不支持.
+                    log.debug("获取schemaName出错",exception);
+                }
+            }
+            return connection;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

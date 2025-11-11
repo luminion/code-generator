@@ -105,9 +105,6 @@ public class Configurer<C> {
         getOutputConfig().processOutput(this);
         if (this.tableInfo.isEmpty()){
             INameConvert nameConvert = entityConfig.getNameConvert();
-            if (nameConvert == null) {
-                entityConfig.setNameConvert(new INameConvert.DefaultNameConvert(this));
-            }
             try {
                 DefaultQuery defaultQuery = new DefaultQuery(this);
                 // 设置表信息
