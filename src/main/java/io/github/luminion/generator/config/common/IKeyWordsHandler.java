@@ -15,8 +15,6 @@
  */
 package io.github.luminion.generator.config.common;
 
-
-
 import java.util.Collection;
 
 /**
