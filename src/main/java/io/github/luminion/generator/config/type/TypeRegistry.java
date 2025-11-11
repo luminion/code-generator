@@ -29,15 +29,17 @@ import java.util.Map;
  * 类型注册处理类
  *
  * @author nieqiurong 2022/5/11.
+ * @author luminion
+ * @since 1.0.0
  */
 public class TypeRegistry {
 
-//    private final GlobalConfig globalConfig;
+    private final DateType dateType;
 
     private final Map<Integer, IColumnType> typeMap = new HashMap<>();
 
-    public TypeRegistry(GlobalConfig globalConfig) {
-//        this.globalConfig = globalConfig;
+    public TypeRegistry(DateType dateType) {
+        this.dateType = dateType;
         // byte[]
         typeMap.put(Types.BINARY, DbColumnType.BYTE_ARRAY);
         typeMap.put(Types.BLOB, DbColumnType.BYTE_ARRAY);
@@ -124,7 +126,6 @@ public class TypeRegistry {
 
     private IColumnType getDateType(TableField.MetaInfo metaInfo) {
         DbColumnType dbColumnType;
-        DateType dateType = globalConfig.getDateType();
         switch (dateType) {
             case SQL_PACK:
                 dbColumnType = DbColumnType.DATE_SQL;
@@ -140,7 +141,6 @@ public class TypeRegistry {
 
     private IColumnType getTimeType(TableField.MetaInfo metaInfo) {
         DbColumnType dbColumnType;
-        DateType dateType = globalConfig.getDateType();
         if (dateType == DateType.TIME_PACK) {
             dbColumnType = DbColumnType.LOCAL_TIME;
         } else {
@@ -151,7 +151,6 @@ public class TypeRegistry {
 
     private IColumnType getTimestampType(TableField.MetaInfo metaInfo) {
         DbColumnType dbColumnType;
-        DateType dateType = globalConfig.getDateType();
         if (dateType == DateType.TIME_PACK) {
             dbColumnType = DbColumnType.LOCAL_DATE_TIME;
         } else if (dateType == DateType.ONLY_DATE) {

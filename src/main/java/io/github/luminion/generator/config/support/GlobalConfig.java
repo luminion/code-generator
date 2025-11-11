@@ -42,10 +42,7 @@ public class GlobalConfig implements ITemplate {
      */
     protected String author = "luminion";
 
-    /**
-     * 时间类型对应策略
-     */
-    protected DateType dateType = DateType.TIME_PACK;
+
 
     /**
      * 获取注释日期

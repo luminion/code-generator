@@ -16,11 +16,12 @@
 package io.github.luminion.generator.config.query;
 
 import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.config.support.EntityConfig;
+import io.github.luminion.generator.config.support.DataSourceConfig;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.rules.IColumnType;
 import io.github.luminion.generator.config.jdbc.DatabaseMetaDataWrapper;
+import io.github.luminion.generator.config.support.StrategyConfig;
 import io.github.luminion.generator.config.type.ITypeConvertHandler;
 import io.github.luminion.generator.config.type.TypeRegistry;
 import io.github.luminion.generator.util.StringUtils;
@@ -28,8 +29,11 @@ import lombok.extern.slf4j.Slf4j;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * 元数据查询数据库信息.
@@ -41,20 +45,24 @@ import java.util.Map;
  * </p>
  * <p>
  * FAQ:
- * 1.Mysql无法读取表注释: 链接增加属性 remarks=true和useInformationSchema=true 或者通过io.github.luminion.mybatisplus.generator.config.support.DataSourceConfig.Adapter#addConnectionProperty(String, String)设置
- * 2.Oracle无法读取注释: 增加属性remarks=true，也有些驱动版本说是增加remarksReporting=true io.github.luminion.mybatisplus.generator.config.support.DataSourceConfig.Adapter#addConnectionProperty(String, String)
+ * 1.Mysql无法读取表注释: 链接增加属性 remarks=true和useInformationSchema=true 
+ * 2.Oracle无法读取注释: 增加属性remarks=true，也有些驱动版本说是增加remarksReporting=true 
  * </p>
- * @since 3.5.3
+ * @since 1.0.0
  */
 @Slf4j
-public class DefaultQuery extends AbstractDatabaseQuery {
+public class DefaultQuery implements IDatabaseQuery{
 
     private final TypeRegistry typeRegistry;
     protected final DatabaseMetaDataWrapper databaseMetaDataWrapper;
+    protected final StrategyConfig strategyConfig;
+    protected final Configurer<?> configurer;
 
     public DefaultQuery(Configurer<?> configBuilder) {
-        super(configBuilder);
-        typeRegistry = new TypeRegistry(configBuilder.getGlobalConfig());
+        this.configurer  = configBuilder;
+        this.strategyConfig = configBuilder.getStrategyConfig();
+        typeRegistry = new TypeRegistry(strategyConfig.getDateType());
+        DataSourceConfig dataSourceConfig = configBuilder.getDataSourceConfig();
         this.databaseMetaDataWrapper = new DatabaseMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchemaName());
     }
 
@@ -72,7 +80,7 @@ public class DefaultQuery extends AbstractDatabaseQuery {
             tables.forEach(table -> {
                 String tableName = table.getName();
                 if (StringUtils.isNotBlank(tableName)) {
-                    TableInfo tableInfo = new TableInfo(this.configAdapter, tableName);
+                    TableInfo tableInfo = new TableInfo(this.configurer, tableName);
                     tableInfo.setComment(table.getRemarks());
                     if (isInclude && strategyConfig.matchIncludeTable(tableName)) {
                         includeTableList.add(tableInfo);
@@ -106,26 +114,25 @@ public class DefaultQuery extends AbstractDatabaseQuery {
     protected void convertTableFields(TableInfo tableInfo) {
         String tableName = tableInfo.getName();
         Map<String, DatabaseMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
-        EntityConfig entity = getConfigAdapter().getEntityConfig();
         columnsInfoMap.forEach((k, columnInfo) -> {
             String columnName = columnInfo.getName();
-            TableField field = new TableField(this.configAdapter, columnName);
+            TableField field = new TableField(configurer, columnName);
             // 处理ID
             if (columnInfo.isPrimaryKey()) {
                 field.primaryKey(columnInfo.isAutoIncrement());
                 tableInfo.setHavePrimaryKey(true);
-                if (field.isKeyIdentityFlag() && entity.getIdType() != null) {
+                if (field.isKeyIdentityFlag() && strategyConfig.getIdType() != null) {
                     log.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableName);
                 }
             }
             field.setColumnName(columnName).setComment(columnInfo.getRemarks());
-            String propertyName = entity.getNameConvert().propertyNameConvert(field);
+            String propertyName = strategyConfig.getNameConvert().propertyNameConvert(field);
             // 设置字段的元数据信息
             TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo, tableInfo);
             IColumnType columnType;
-            ITypeConvertHandler typeConvertHandler = dataSourceConfig.getTypeConvertHandler();
+            ITypeConvertHandler typeConvertHandler = strategyConfig.getTypeConvertHandler();
             if (typeConvertHandler != null) {
-                columnType = typeConvertHandler.convert(globalConfig, typeRegistry, metaInfo);
+                columnType = typeConvertHandler.convert(typeRegistry, metaInfo);
             } else {
                 columnType = typeRegistry.getColumnType(metaInfo);
             }
@@ -144,4 +151,34 @@ public class DefaultQuery extends AbstractDatabaseQuery {
     protected List<DatabaseMetaDataWrapper.Index> getIndex(String tableName) {
         return databaseMetaDataWrapper.getIndex(tableName);
     }
+    protected void filter(List<TableInfo> tableList, List<TableInfo> includeTableList, List<TableInfo> excludeTableList) {
+        boolean isInclude = !strategyConfig.getInclude().isEmpty();
+        boolean isExclude = !strategyConfig.getExclude().isEmpty();
+        if (isExclude || isInclude) {
+            Pattern pattern = Pattern.compile("[~!/@#$%^&*()+\\\\\\[\\]|{};:'\",<.>?]+");
+            Map<String, String> notExistTables = new HashSet<>(isExclude ? strategyConfig.getExclude() : strategyConfig.getInclude())
+                    .stream()
+                    .filter(s -> !pattern.matcher(s).find())
+                    .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n));
+            // 将已经存在的表移除，获取配置中数据库不存在的表
+            for (TableInfo tabInfo : tableList) {
+                if (notExistTables.isEmpty()) {
+                    break;
+                }
+                //解决可能大小写不敏感的情况导致无法移除掉
+                notExistTables.remove(tabInfo.getName().toLowerCase());
+            }
+            if (!notExistTables.isEmpty()) {
+                log.warn("表[{}]在数据库中不存在！！！", String.join(",", notExistTables.values()));
+            }
+            // 需要反向生成的表信息
+            if (isExclude) {
+                tableList.removeAll(excludeTableList);
+            } else {
+                tableList.clear();
+                tableList.addAll(includeTableList);
+            }
+        }
+    }
+    
 }

@@ -109,12 +109,7 @@ public class EntityConfig implements ITemplate {
      */
     protected final List<IFill> tableFillList = new ArrayList<>();
 
-    /**
-     * 指定生成的主键的ID类型
-     *
-     * @since 3.5.0
-     */
-    protected IdType idType;
+
 
     /**
      * 实体是否生成 serialVersionUID

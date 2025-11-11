@@ -1,11 +1,7 @@
 package io.github.luminion.generator.config.support.adapter;
 
-import io.github.luminion.generator.config.common.IDbQuery;
-import io.github.luminion.generator.config.common.IKeyWordsHandler;
-import io.github.luminion.generator.config.common.ITypeConvert;
 import io.github.luminion.generator.config.support.DataSourceConfig;
-import io.github.luminion.generator.config.query.AbstractDatabaseQuery;
-import io.github.luminion.generator.config.type.ITypeConvertHandler;
+import io.github.luminion.generator.util.ClassUtils;
 import lombok.SneakyThrows;
 
 /**
@@ -20,17 +16,6 @@ public class DataSourceAdapter {
     }
 
     /**
-     * 设置数据库查询实现
-     *
-     * @param dbQuery 数据库查询实现
-     * @return this
-     */
-    public DataSourceAdapter dbQuery(IDbQuery dbQuery) {
-        this.dataSourceConfig.setDbQuery(dbQuery);
-        return this;
-    }
-
-    /**
      * 设置数据库schema
      *
      * @param schemaName 数据库schema
@@ -38,52 +23,6 @@ public class DataSourceAdapter {
      */
     public DataSourceAdapter schema(String schemaName) {
         this.dataSourceConfig.setSchemaName(schemaName);
-        return this;
-    }
-
-    /**
-     * 设置类型转换器
-     *
-     * @param typeConvert 类型转换器
-     * @return this
-     */
-    public DataSourceAdapter typeConvert(ITypeConvert typeConvert) {
-        this.dataSourceConfig.setTypeConvert(typeConvert);
-        return this;
-    }
-
-    /**
-     * 设置数据库关键字处理器
-     *
-     * @param keyWordsHandler 关键字处理器
-     * @return this
-     */
-    public DataSourceAdapter keyWordsHandler(IKeyWordsHandler keyWordsHandler) {
-        this.dataSourceConfig.setKeyWordsHandler(keyWordsHandler);
-        return this;
-    }
-
-    /**
-     * 指定数据库查询方式
-     *
-     * @param databaseQueryClass 查询类
-     * @return this
-     * @since 3.5.3
-     */
-    public DataSourceAdapter databaseQueryClass(Class<? extends AbstractDatabaseQuery> databaseQueryClass) {
-        this.dataSourceConfig.setDatabaseQueryClass(databaseQueryClass);
-        return this;
-    }
-
-    /**
-     * 指定类型转换器
-     *
-     * @param typeConvertHandler 类型转换器
-     * @return this
-     * @since 3.5.3
-     */
-    public DataSourceAdapter typeConvertHandler(ITypeConvertHandler typeConvertHandler) {
-        this.dataSourceConfig.setTypeConvertHandler(typeConvertHandler);
         return this;
     }
 
@@ -110,8 +49,7 @@ public class DataSourceAdapter {
      */
     @SneakyThrows
     public DataSourceAdapter driverClassName(String className) {
-        Class.forName(className);
-        this.dataSourceConfig.setDriverClassName(className);
+        ClassUtils.toClass(className);
         return this;
     }
 
