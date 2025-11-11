@@ -7,7 +7,6 @@ import io.github.luminion.generator.config.support.DataSourceConfig;
 import io.github.luminion.generator.query.AbstractDatabaseQuery;
 import io.github.luminion.generator.type.ITypeConvertHandler;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.ClassUtils;
 
 /**
  * @author luminion

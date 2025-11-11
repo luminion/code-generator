@@ -17,12 +17,15 @@ package io.github.luminion.generator.config.support;
 
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import io.github.luminion.generator.config.common.INameConvert;
+import io.github.luminion.generator.config.enums.IdType;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.rules.IColumnType;
 import io.github.luminion.generator.config.rules.NamingStrategy;
 import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.fill.ITemplate;
 import io.github.luminion.generator.util.ClassUtils;
+import io.github.luminion.generator.util.ReflectUtil;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -158,21 +161,23 @@ public class EntityConfig implements ITemplate {
      * @param clazz 实体父类 Class
      */
     public void convertSuperEntityColumns(Class<?> clazz) {
-        List<Field> fields = TableInfoHelper.getAllFields(clazz);
-        this.superEntityColumns.addAll(fields.stream().map(field -> {
-            TableId tableId = field.getAnnotation(TableId.class);
-            if (tableId != null && StringUtils.isNotBlank(tableId.value())) {
-                return tableId.value();
-            }
-            TableField tableField = field.getAnnotation(TableField.class);
-            if (tableField != null && StringUtils.isNotBlank(tableField.value())) {
-                return tableField.value();
-            }
-            if (null == columnNaming || columnNaming == NamingStrategy.no_change) {
-                return field.getName();
-            }
-            return StringUtils.camelToUnderline(field.getName());
-        }).collect(Collectors.toSet()));
+        Map<String, Field> fieldMap = ReflectUtil.fieldMap(clazz);
+        // todo 待完善 原逻辑
+//        List<Field> fields = TableInfoHelper.getAllFields(clazz);
+//        this.superEntityColumns.addAll(fieldMap.values().stream().map(field -> {
+//            TableId tableId = field.getAnnotation(Class.forName());
+//            if (tableId != null && StringUtils.isNotBlank(tableId.value())) {
+//                return tableId.value();
+//            }
+//            TableField tableField = field.getAnnotation(TableField.class);
+//            if (tableField != null && StringUtils.isNotBlank(tableField.value())) {
+//                return tableField.value();
+//            }
+//            if (null == columnNaming || columnNaming == NamingStrategy.no_change) {
+//                return field.getName();
+//            }
+//            return StringUtils.camelToUnderline(field.getName());
+//        }).collect(Collectors.toSet()));
     }
 
     /**
@@ -251,12 +256,12 @@ public class EntityConfig implements ITemplate {
             }
         }
         if (tableInfo.isConvert()) {
-            importPackages.add(TableName.class.getCanonicalName());
+            importPackages.add("com.baomidou.mybatisplus.annotation.TableName");
         }
         if (null != this.idType && tableInfo.isHavePrimaryKey()) {
             // 指定需要 IdType 场景
-            importPackages.add(IdType.class.getCanonicalName());
-            importPackages.add(TableId.class.getCanonicalName());
+            importPackages.add("com.baomidou.mybatisplus.annotation.IdType");
+            importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
         }
         tableInfo.getFields().forEach(field -> {
             IColumnType columnType = field.getColumnType();
@@ -266,26 +271,26 @@ public class EntityConfig implements ITemplate {
             if (field.isKeyFlag()) {
                 // 主键
                 if (field.isConvert() || field.isKeyIdentityFlag()) {
-                    importPackages.add(TableId.class.getCanonicalName());
+                    importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
                 }
                 // 自增
                 if (field.isKeyIdentityFlag()) {
-                    importPackages.add(IdType.class.getCanonicalName());
+                    importPackages.add("com.baomidou.mybatisplus.annotation.IdType");
                 }
             } else if (field.isConvert()) {
                 // 普通字段
-                importPackages.add(com.baomidou.mybatisplus.annotation.TableField.class.getCanonicalName());
+                importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
             }
             if (null != field.getFill()) {
                 // 填充字段
-                importPackages.add(com.baomidou.mybatisplus.annotation.TableField.class.getCanonicalName());
-                importPackages.add(FieldFill.class.getCanonicalName());
+                importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
+                importPackages.add("com.baomidou.mybatisplus.annotation.FieldFill");
             }
             if (field.isVersionField()) {
-                importPackages.add(Version.class.getCanonicalName());
+                importPackages.add("com.baomidou.mybatisplus.annotation.Version");
             }
             if (field.isLogicDeleteField()) {
-                importPackages.add(TableLogic.class.getCanonicalName());
+                importPackages.add("com.baomidou.mybatisplus.annotation.TableLogic");
             }
         });
         if (globalConfig.isSpringdoc()) {
