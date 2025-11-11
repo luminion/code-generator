@@ -53,7 +53,7 @@ public class OutputConfig implements ITemplate {
             OutputFile.entity.name(),
             "%s",
             "entity",
-            "/templates/entity.java",
+            "/mybatis/entity.java",
             ".java"
     );
 
@@ -61,7 +61,7 @@ public class OutputConfig implements ITemplate {
             OutputFile.mapper.name(),
             "%sMapper",
             "mapper",
-            "/templates/mapper.java",
+            "/mybatis/mapper.java",
             ".java"
     );
     
@@ -69,56 +69,56 @@ public class OutputConfig implements ITemplate {
             OutputFile.mapperXml.name(),
             "%sMapper",
             "mapper.xml",
-            "/templates/mapper.xml",
+            "/mybatis/mapper.xml",
             ".xml"
     );
     protected TemplateFile service = new TemplateFile(
             OutputFile.service.name(),
             "I%sService",
             "service",
-            "/templates/service.java",
+            "/mybatis/service.java",
             ".java"
     );
     protected TemplateFile serviceImpl = new TemplateFile(
             OutputFile.serviceImpl.name(),
             "%sServiceImpl",
             "service.impl",
-            "/templates/serviceImpl.java",
+            "/mybatis/serviceImpl.java",
             ".java"
     );
     protected TemplateFile controller = new TemplateFile(
             OutputFile.controller.name(),
             "%sController",
             "controller",
-            "/templates/controller.java",
+            "/mybatis/controller.java",
             ".java"
     );
     protected TemplateFile insertDTO = new TemplateFile(
             OutputFile.insertDTO.name(),
             "%sInsertDTO",
             "dto",
-            "/templates/insertDTO.java",
+            "/mybatis/insertDTO.java",
             ".java"
     );
     protected TemplateFile updateDTO = new TemplateFile(
             OutputFile.updateDTO.name(),
             "%sUpdateDTO",
             "dto",
-            "/templates/updateDTO.java",
+            "/mybatis/updateDTO.java",
             ".java"
     );
     protected TemplateFile queryDTO = new TemplateFile(
             OutputFile.queryDTO.name(),
             "%sQueryDTO",
             "dto",
-            "/templates/queryDTO.java",
+            "/mybatis/queryDTO.java",
             ".java"
     );
     protected TemplateFile queryVO = new TemplateFile(
             OutputFile.queryVO.name(),
             "%sQueryVO",
             "vo",
-            "/templates/queryVO.java",
+            "/mybatis/queryVO.java",
             ".java"
     );
 

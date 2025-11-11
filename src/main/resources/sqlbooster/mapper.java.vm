@@ -1,0 +1,50 @@
+package ${package.mapper};
+#if($mapperImportPackages4Framework.size()>0)
+
+#end
+#foreach($pkg in ${mapperImportPackages4Framework})
+import ${pkg};
+#end
+#if($mapperImportPackages4Java.size()>0)
+
+#end
+#foreach($pkg in ${mapperImportPackages4Java})
+import ${pkg};
+#end
+
+/**
+ * $!{table.comment} Mapper接口
+ *
+ * @author ${author}
+#if(${commentLink})
+ * @see ${class.queryDTO}
+#end
+ * @since ${date}
+ */
+#if(${mapperAnnotationClass})
+@${mapperAnnotationClass.simpleName}
+#end
+#if(${sqlBooster})
+public interface ${mapper} extends ${superMapperClass}<${entity}>, EnhancedMapper<${queryVO}> {
+#else
+public interface ${mapper} extends ${superMapperClass}<${entity}> {
+#end
+#if(${generateQuery})
+
+    #if(${sqlBooster})
+    @Override
+    #end
+    List<${queryVO}> voQueryByXml(Object queryDTO, IPage<${queryVO}> page);
+
+    #if(${sqlBooster})
+    @Override
+    #end
+    default List<${queryVO}> voQuery(Object queryDTO, IPage<${queryVO}> page) {
+        #if(${sqlBooster})
+        return EnhancedMapper.super.voQuery(queryDTO, page);
+        #else
+        return this.voQueryByXml(queryDTO, page);      
+        #end
+    }
+#end
+}

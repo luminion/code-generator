@@ -1,0 +1,55 @@
+package ${package.service};
+#if($serviceImportPackages4Framework.size()>0)
+
+#end
+#foreach($pkg in ${serviceImportPackages4Framework})
+import ${pkg};
+#end
+#if($serviceImportPackages4Java.size()>0)
+
+#end
+#foreach($pkg in ${serviceImportPackages4Java})
+import ${pkg};
+#end
+
+/**
+ * $!{table.comment} 服务类
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${enhancer})
+public interface ${service} extends ${superServiceClass}<${entity}>, EnhancedService<${queryVO}> {
+#else
+public interface ${service} extends ${superServiceClass}<${entity}> {
+#end
+#if(!${enhancer})
+    #if(${generateInsert})
+
+    Object insertByDTO(Object insertDTO);
+    #end
+    #if(${generateUpdate})
+
+    boolean updateByDTO(Object updateDTO);
+    #end
+    #if(${generateQuery})
+
+    ${queryVO} voById(Serializable id);
+
+    List<${queryVO}> voList(Object queryDTO);
+
+    IPage<${queryVO}> voPage(Object queryDTO, Long current, Long size);
+    #end
+    #if(${generateExport})
+
+    void excelExport(Object queryDTO, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields);
+    #end
+    #if(${generateImport})
+
+    void excelTemplate(OutputStream os, Class<?> clazz);
+
+    int excelImport(InputStream is, Class<?> clazz);
+    #end
+#end
+}
+

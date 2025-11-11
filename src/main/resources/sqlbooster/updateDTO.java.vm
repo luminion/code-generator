@@ -1,0 +1,107 @@
+package ${package.updateDTO};
+#if($updateDTOImportPackages4Framework.size()>0)
+
+#end
+#foreach($pkg in ${updateDTOImportPackages4Framework})
+import ${pkg};
+#end
+#if($updateDTOImportPackages4Java.size()>0)
+
+#end
+#foreach($pkg in ${updateDTOImportPackages4Java})
+import ${pkg};
+#end
+
+/**
+ * $!{table.comment}-修改DTO
+ *
+ * @author ${author}
+#if(${commentLink})
+ * @see ${class.entity}
+ * @see ${class.serviceImpl}
+#end
+ * @since ${date}
+ */
+#if(${lombok})
+@Data
+    #if(${chainModel})
+@Accessors(chain = true)
+    #end
+#end
+#if(${springdoc})
+@Schema(description = "$!{table.comment}-修改DTO")
+#elseif(${swagger})
+@ApiModel(description = "$!{table.comment}-修改DTO")
+#end
+public class ${updateDTO} {
+## ----------  BEGIN 字段循环遍历  ----------
+#foreach($field in ${table.fields})
+#if(${field.logicDeleteField})
+#elseif(${field.fill} && (${field.fill}=="UPDATE" || ${field.fill}=="INSERT_UPDATE" || ${field.fill}=="INSERT"))
+#elseif(${editExcludeFields.contains(${field.propertyName})})
+#elseif(${editExcludeColumns.contains(${field.columnName})})
+#else
+
+    #if("$!field.comment" != "")
+        #if(${springdoc})
+    @Schema(description = "${field.comment}")
+        #elseif(${swagger})
+    @ApiModelProperty("${field.comment}")
+        #else
+    /**
+     * ${field.comment}
+     */
+        #end
+    #end
+    #if(${validated})## 参数校验
+        #if(${field.keyFlag})## 主键
+    @NotNull(message = "${field.comment}为必填项")
+            #if(${field.propertyType}=="String")
+    @NotBlank(message = "${field.comment}为必填项")
+            #end
+        #end
+        #if(${field.versionField})## 乐观锁注解
+    @NotNull(message = "${field.comment}为必填项")
+            #if(${field.propertyType}=="String")
+    @NotBlank(message = "${field.comment}为必填项")
+            #end
+        #end
+        #if(${field.propertyType} == "String")## 字符串长度限制
+    @Size(message = "${field.comment}长度不能超过${field.metaInfo.length}", max = ${field.metaInfo.length})
+        #end
+    #end
+    private ${field.propertyType} ${field.propertyName};
+#end
+#end
+## ----------  END 字段循环遍历  ----------
+#if(!${lombok})
+#foreach($field in ${table.fields})
+#if(${field.logicDeleteField})
+#elseif(${field.fill} && (${field.fill}=="UPDATE" || ${field.fill}=="INSERT_UPDATE" || ${field.fill}=="INSERT"))
+#elseif(${editExcludeFields.contains(${field.propertyName})})
+#elseif(${editExcludeColumns.contains(${field.columnName})})
+#else
+    #if(${field.propertyType.equals("boolean")})
+        #set($getprefix="is")
+    #else
+        #set($getprefix="get")
+    #end
+
+    public ${field.propertyType} ${getprefix}${field.capitalName}() {
+        return ${field.propertyName};
+    }
+
+    #if(${chainModel})
+    public ${updateDTO} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    #else
+    public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    #end
+        this.${field.propertyName} = ${field.propertyName};
+    #if(${chainModel})
+        return this;
+    #end
+    }
+#end
+#end
+#end
+}

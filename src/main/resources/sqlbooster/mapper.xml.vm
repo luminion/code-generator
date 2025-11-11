@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${class.mapper}">
+
+#if(${enableCache})
+    <!-- 开启二级缓存 -->
+    <cache type="${cacheClassName}"/>
+
+#end
+#if(${baseResultMap})
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="${class.entity}">
+    #foreach($field in ${table.fields})
+        #if(${field.keyFlag})##生成主键排在第一位
+        <id column="${field.name}" property="${field.propertyName}" />
+        #end
+    #end
+    #foreach($field in ${table.commonFields})##生成公共字段
+        <result column="${field.name}" property="${field.propertyName}" />
+    #end
+    #foreach($field in ${table.fields})
+        #if(!${field.keyFlag})##生成普通字段
+        <result column="${field.name}" property="${field.propertyName}" />
+        #end
+    #end
+    </resultMap>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="voResultMap" type="${class.queryVO}">
+    #foreach($field in ${table.fields})
+        #if(${field.keyFlag})##生成主键排在第一位
+        <id column="${field.name}" property="${field.propertyName}" />
+        #end
+    #end
+    #foreach($field in ${table.commonFields})##生成公共字段
+        <result column="${field.name}" property="${field.propertyName}" />
+    #end
+    #foreach($field in ${table.fields})
+        #if(!${field.keyFlag})##生成普通字段
+            #if(${field.logicDeleteField} && !${queryVOExtendsEntity})
+            #else
+        <result column="${field.name}" property="${field.propertyName}" />
+            #end
+        #end
+    #end
+    </resultMap>
+
+#end
+#if(${baseColumnList})
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+    #foreach($field in ${table.commonFields})
+        ${field.columnName},
+    #end
+        ${table.fieldNames}
+    </sql>
+
+#end
+#if(!${enhancer} && ${generateQuery})
+    <sql id="queryFragment">
+        <if test="param1 != null">
+    #foreach($field in ${table.fields})
+        #if(${field.logicDeleteField})
+        #else
+            <if test="param1.${field.propertyName} != null">
+                AND a.${field.columnName} = #{param1.${field.propertyName}}
+            </if>
+        #end
+    #end
+    #if(${table.extraFields.size()}>0)
+            <!-- 额外后缀查询条件 -->
+    #end
+    #foreach($field in ${table.extraFields})
+        #if(${field.sqlOperator}=="IN" || ${field.sqlOperator}=="NOT IN")
+            <if test="param1.${field.propertyName} != null and param1.${field.propertyName}.size()>0">
+                AND a.${field.columnName} ${field.sqlOperatorXml}
+                <foreach collection="param1.${field.propertyName}" open="("  close=")" separator="," item="item">
+                    #{item}
+                </foreach>
+            </if>
+        #elseif(${field.sqlOperator}=="IS NULL" || ${field.sqlOperator}=="IS NOT NULL")
+            <if test="param1.${field.propertyName} != null">
+                AND a.${field.columnName} ${field.sqlOperatorXml}
+            </if>
+        #elseif(${field.sqlOperator}=="&>" || ${field.sqlOperator}=="&=")
+            <if test="param1.${field.propertyName} != null">
+                AND a.${field.columnName} &amp; #{param1.${field.propertyName}} ${field.sqlOperatorXml} 0
+            </if>
+        #else
+            <if test="param1.${field.propertyName} != null">
+                AND a.${field.columnName} ${field.sqlOperatorXml} #{param1.${field.propertyName}}
+            </if>
+        #end
+    #end
+        </if>
+    </sql>
+
+#end
+#if(${generateQuery})
+    #if(${baseResultMap})
+    <select id="voQueryByXml" resultMap="voResultMap">
+    #else
+    <select id="voQueryByXml" resultType="${class.queryVO}">
+    #end
+        SELECT
+        a.*
+        FROM
+        ${schemaName}${table.name} a
+        <where>
+        #if(${sqlBooster})
+            <include refid="io.github.luminion.mybatisplus.sqlBooster.EnhancedMapper.queryFragment"/>
+        #else
+            <include refid="queryFragment"/>
+        #end
+            #foreach($field in ${table.fields})
+                #if(${field.logicDeleteField})
+                    #if(${field.metaInfo.defaultValue})
+            AND a.${field.columnName} = ${field.metaInfo.defaultValue}
+                    #else
+            AND a.${field.columnName} IS NULL
+                    #end
+                    #break
+                #end
+            #end
+        </where>
+        <trim prefix="ORDER BY" prefixOverrides=",">
+        #if(${sqlBooster})
+            <include refid="io.github.luminion.mybatisplus.enhancer.EnhancedMapper.sortFragment"/>
+        #end
+            #if(${orderBySql})
+            , ${orderBySql}
+            #end
+        </trim>
+    </select>
+
+#end
+</mapper>
