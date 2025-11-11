@@ -15,7 +15,6 @@
  */
 package io.github.luminion.generator.query;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.support.EntityConfig;
 import io.github.luminion.generator.config.po.TableField;
@@ -24,6 +23,7 @@ import io.github.luminion.generator.config.rules.IColumnType;
 import io.github.luminion.generator.jdbc.DatabaseMetaDataWrapper;
 import io.github.luminion.generator.type.ITypeConvertHandler;
 import io.github.luminion.generator.type.TypeRegistry;
+import io.github.luminion.generator.util.StringUtils;
 
 
 import java.util.ArrayList;

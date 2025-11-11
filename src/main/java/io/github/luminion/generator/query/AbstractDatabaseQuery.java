@@ -15,7 +15,6 @@
  */
 package io.github.luminion.generator.query;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.support.DataSourceConfig;
 import io.github.luminion.generator.config.support.GlobalConfig;
@@ -76,7 +75,7 @@ public abstract class AbstractDatabaseQuery implements IDatabaseQuery {
                 notExistTables.remove(tabInfo.getName().toLowerCase());
             }
             if (!notExistTables.isEmpty()) {
-                LOGGER.warn("表[{}]在数据库中不存在！！！", String.join(StringPool.COMMA, notExistTables.values()));
+                LOGGER.warn("表[{}]在数据库中不存在！！！", String.join(",", notExistTables.values()));
             }
             // 需要反向生成的表信息
             if (isExclude) {

@@ -15,10 +15,8 @@
  */
 package io.github.luminion.generator.jdbc;
 
-// todo 移除mybatis-plus
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import io.github.luminion.generator.config.enums.JdbcType;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -159,7 +157,7 @@ public class DatabaseMetaDataWrapper {
     }
 
     public String formatComment(String comment) {
-        return StringUtils.isBlank(comment) ? StringPool.EMPTY : comment.replaceAll("\r\n", "\t");
+        return StringUtils.isBlank(comment) ? "" : comment.replaceAll("\r\n", "\t");
     }
 
     public Table getTableInfo(String tableName) {
