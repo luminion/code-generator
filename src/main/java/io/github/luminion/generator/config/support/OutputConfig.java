@@ -8,12 +8,12 @@ import io.github.luminion.generator.config.po.CustomFile;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.po.TemplateFile;
 import io.github.luminion.generator.fill.ITemplate;
+import lombok.Data;
 import lombok.Getter;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,12 +22,12 @@ import java.util.stream.Stream;
  *
  * @author luminion
  */
+@Data
 public class OutputConfig implements ITemplate {
 
     /**
      * 生成文件的输出目录
      */
-    @Getter
     protected String outputDir = System.getProperty("user.dir") + "/src/main/java";
 
     /**
@@ -38,22 +38,18 @@ public class OutputConfig implements ITemplate {
     /**
      * 父包模块名
      */
-    @Getter
     protected String moduleName = "";
 
     /**
      * 全局文件覆盖
      */
-    @Getter
     protected boolean globalFileOverride;
 
     /**
      * 是否打开输出目录
      */
-    @Getter
     protected boolean open = true;
-
-    @Getter
+    
     protected TemplateFile entity = new TemplateFile(
             OutputFile.entity.name(),
             "%s",
@@ -61,7 +57,7 @@ public class OutputConfig implements ITemplate {
             "/templates/entity.java",
             ".java"
     );
-    @Getter
+
     protected TemplateFile mapper = new TemplateFile(
             OutputFile.mapper.name(),
             "%sMapper",
@@ -69,8 +65,7 @@ public class OutputConfig implements ITemplate {
             "/templates/mapper.java",
             ".java"
     );
-
-    @Getter
+    
     protected TemplateFile mapperXml = new TemplateFile(
             OutputFile.mapperXml.name(),
             "%sMapper",
@@ -78,7 +73,6 @@ public class OutputConfig implements ITemplate {
             "/templates/mapper.xml",
             ".xml"
     );
-    @Getter
     protected TemplateFile service = new TemplateFile(
             OutputFile.service.name(),
             "I%sService",
@@ -86,7 +80,6 @@ public class OutputConfig implements ITemplate {
             "/templates/service.java",
             ".java"
     );
-    @Getter
     protected TemplateFile serviceImpl = new TemplateFile(
             OutputFile.serviceImpl.name(),
             "%sServiceImpl",
@@ -94,7 +87,6 @@ public class OutputConfig implements ITemplate {
             "/templates/serviceImpl.java",
             ".java"
     );
-    @Getter
     protected TemplateFile controller = new TemplateFile(
             OutputFile.controller.name(),
             "%sController",
@@ -110,7 +102,6 @@ public class OutputConfig implements ITemplate {
             "/templates/insertDTO.java",
             ".java"
     );
-    @Getter
     protected TemplateFile updateDTO = new TemplateFile(
             OutputFile.updateDTO.name(),
             "%sUpdateDTO",
@@ -118,7 +109,6 @@ public class OutputConfig implements ITemplate {
             "/templates/updateDTO.java",
             ".java"
     );
-    @Getter
     protected TemplateFile queryDTO = new TemplateFile(
             OutputFile.queryDTO.name(),
             "%sQueryDTO",
@@ -126,7 +116,6 @@ public class OutputConfig implements ITemplate {
             "/templates/queryDTO.java",
             ".java"
     );
-    @Getter
     protected TemplateFile queryVO = new TemplateFile(
             OutputFile.queryVO.name(),
             "%sQueryVO",
@@ -230,7 +219,11 @@ public class OutputConfig implements ITemplate {
                 String joinPackage = joinPackage(e.getSubPackage());
                 fileOutputDir = joinPath(outputDir, joinPackage);
             }
-            customFile.setFormatNameFunction(e::convertFormatName).setTemplatePath(e.getTemplatePath()).setOutputFileSuffix(e.getOutputFileSuffix()).setOutputDir(fileOutputDir).setFileOverride(e.isFileOverride() || this.globalFileOverride);
+            customFile.setFormatNameFunction(e::convertFormatName)
+                    .setTemplatePath(e.getTemplatePath())
+                    .setOutputFileSuffix(e.getOutputFileSuffix())
+                    .setOutputDir(fileOutputDir)
+                    .setFileOverride(e.isFileOverride() || this.globalFileOverride);
             return customFile;
         }).collect(Collectors.toList());
     }
@@ -253,195 +246,16 @@ public class OutputConfig implements ITemplate {
     public void processOutput(Configurer configurer) {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         if (!globalConfig.isGenerateInsert()){
-            this.insertDTO.adapter().disable();
+            this.insertDTO.setGenerate(false);
         }
         if (!globalConfig.isGenerateUpdate()){
-            this.updateDTO.adapter().disable();
+            this.updateDTO.setGenerate(false);
         }
         if (!globalConfig.isGenerateQuery()){
-            this.queryDTO.adapter().disable();
+            this.queryDTO.setGenerate(false);
             if (!globalConfig.isSqlBooster()){
-                this.queryVO.adapter().disable();
+                this.queryVO.setGenerate(false);
             }
         }
-    }
-    
-    public Adapter adapter() {
-        return new Adapter(this);
-    }
-
-    public static class Adapter {
-        private final OutputConfig config;
-
-        public Adapter(OutputConfig config) {
-            this.config = config;
-        }
-
-        /**
-         * 文件输出目录
-         *
-         * @param outputDir 文件输出目录
-         * @return this
-         */
-        public Adapter outputDir(String outputDir) {
-            this.config.outputDir = outputDir;
-            return this;
-        }
-
-        /**
-         * 父包名
-         *
-         * @param parentPackage 父包名
-         * @return this
-         */
-        public Adapter parentPackage(String parentPackage) {
-            this.config.parentPackage = parentPackage;
-            return this;
-        }
-
-        /**
-         * 模块名
-         *
-         * @param moduleName 模块名
-         * @return this
-         */
-        public Adapter moduleName(String moduleName) {
-            this.config.moduleName = moduleName;
-            return this;
-        }
-
-        /**
-         * 启用全局文件覆盖(仅影响本配置提供的模板文件)
-         *
-         * @return this
-         */
-        public Adapter enableGlobalFileOverride() {
-            this.config.globalFileOverride = true;
-            return this;
-        }
-
-        /**
-         * 禁用打开输出目录
-         *
-         * @return this
-         */
-        public Adapter disableOpenOutputDir() {
-            this.config.open = false;
-            return this;
-        }
-
-        /**
-         * 启用打开输出目录
-         *
-         * @return this
-         * @deprecated 默认值,无需设置
-         */
-        @Deprecated
-        public Adapter enableOpenOutputDir() {
-            this.config.open = false;
-            return this;
-        }
-        
-
-        /**
-         * 实体类配置
-         *
-         * @param adapter 适配器
-         */
-        public Adapter entity(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-            adapter.apply(this.config.entity.adapter());
-            return this;
-        }
-
-        /**
-         * mapper配置
-         *
-         * @param adapter 适配器
-         */
-        public Adapter mapper(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-            adapter.apply(this.config.mapper.adapter());
-            return this;
-        }
-
-        /**
-         * mapperXml配置
-         *
-         * @param adapter 适配器
-         */
-        public Adapter mapperXml(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-            adapter.apply(this.config.mapperXml.adapter());
-            return this;
-        }
-
-        /**
-         * service配置
-         *
-         * @param adapter 适配器
-         */
-        public Adapter service(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-            adapter.apply(this.config.service.adapter());
-            return this;
-        }
-
-        /**
-         * serviceImpl配置
-         *
-         * @param adapter 适配器
-         */
-        public Adapter serviceImpl(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-            adapter.apply(this.config.serviceImpl.adapter());
-            return this;
-        }
-
-        /**
-         * controller配置
-         *
-         * @param adapter 适配器
-         */
-        public Adapter controller(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-            adapter.apply(this.config.controller.adapter());
-            return this;
-        }
-
-        /**
-         * insertDTO配置
-         *
-         * @param adapter 适配器
-         */
-        public Adapter insertDTO(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-            adapter.apply(this.config.insertDTO.adapter());
-            return this;
-        }
-
-        /**
-         * updateDTO配置
-         *
-         * @param adapter 适配器
-         */
-        public Adapter updateDTO(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-            adapter.apply(this.config.updateDTO.adapter());
-            return this;
-        }
-
-        /**
-         * queryDTO配置
-         *
-         * @param adapter 适配器
-         */
-        public Adapter queryDTO(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-            adapter.apply(this.config.queryDTO.adapter());
-            return this;
-        }
-
-        /**
-         * vo配置
-         *
-         * @param adapter 适配器
-         */
-        public Adapter queryVO(Function<TemplateFile.Adapter, TemplateFile.Adapter> adapter) {
-            adapter.apply(this.config.queryVO.adapter());
-            return this;
-        }
-        
     }
 }
