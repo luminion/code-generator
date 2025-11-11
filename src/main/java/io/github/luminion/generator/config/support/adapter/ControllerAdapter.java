@@ -1,6 +1,6 @@
 package io.github.luminion.generator.config.support.adapter;
 
-import io.github.luminion.generator.SFunc;
+import io.github.luminion.generator.config.SFunc;
 import io.github.luminion.generator.config.po.MethodPayload;
 import io.github.luminion.generator.config.support.ControllerConfig;
 import io.github.luminion.generator.util.ReflectUtil;
@@ -10,10 +10,10 @@ import io.github.luminion.generator.util.ReflectUtil;
  * @since 1.0.0
  */
 public class ControllerAdapter {
-    private final ControllerConfig config;
+    private final ControllerConfig controllerConfig;
 
     public ControllerAdapter(ControllerConfig config) {
-        this.config = config;
+        this.controllerConfig = config;
     }
 
     /**
@@ -33,7 +33,7 @@ public class ControllerAdapter {
      * @return this
      */
     public ControllerAdapter superClass(String superClass) {
-        this.config.setSuperClass(superClass);
+        this.controllerConfig.setSuperClass(superClass);
         return this;
     }
 
@@ -44,7 +44,7 @@ public class ControllerAdapter {
      * @since 3.5.0
      */
     public ControllerAdapter disableRestController() {
-        this.config.setRestController(false);
+        this.controllerConfig.setRestController(false);
         return this;
     }
 
@@ -55,7 +55,7 @@ public class ControllerAdapter {
      * @since 3.5.0
      */
     public ControllerAdapter disableHyphenStyle() {
-        this.config.setHyphenStyle(false);
+        this.controllerConfig.setHyphenStyle(false);
         return this;
     }
 
@@ -67,7 +67,7 @@ public class ControllerAdapter {
      */
     public ControllerAdapter baseUrl(String url) {
         if (url == null || url.isEmpty()) {
-            this.config.setBaseUrl(url);
+            this.controllerConfig.setBaseUrl(url);
             return this;
         }
         if (!url.startsWith("/")) {
@@ -76,7 +76,7 @@ public class ControllerAdapter {
         if (url.endsWith("/")) {
             url = url.substring(0, url.length() - 1);
         }
-        this.config.setBaseUrl(url); 
+        this.controllerConfig.setBaseUrl(url); 
         return this;
     }
 
@@ -86,7 +86,7 @@ public class ControllerAdapter {
      * @return this
      */
     public ControllerAdapter enableCrossOrigin() {
-        this.config.setCrossOrigin(true);
+        this.controllerConfig.setCrossOrigin(true);
         return this;
     }
 
@@ -96,7 +96,7 @@ public class ControllerAdapter {
      * @return this
      */
     public ControllerAdapter disableBatchQueryPost() {
-        this.config.setBatchQueryPost(false);
+        this.controllerConfig.setBatchQueryPost(false);
         return this;
     }
 
@@ -106,7 +106,7 @@ public class ControllerAdapter {
      * @return this
      */
     public ControllerAdapter disableBatchQueryRequiredBody() {
-        this.config.setBatchQueryRequiredBody(false);
+        this.controllerConfig.setBatchQueryRequiredBody(false);
         return this;
     }
 
@@ -116,7 +116,7 @@ public class ControllerAdapter {
      * @return this
      */
     public ControllerAdapter enableRestful() {
-        this.config.setRestful(true);
+        this.controllerConfig.setRestful(true);
         return this;
     }
 
@@ -126,7 +126,7 @@ public class ControllerAdapter {
      * @return this
      */
     public ControllerAdapter disablePathVariable() {
-        this.config.setPathVariable(false);
+        this.controllerConfig.setPathVariable(false);
         return this;
     }
 
@@ -136,7 +136,7 @@ public class ControllerAdapter {
      * @return this
      */
     public ControllerAdapter disableRequestBody() {
-        this.config.setRequestBody(false);
+        this.controllerConfig.setRequestBody(false);
         return this;
     }
 
@@ -148,7 +148,7 @@ public class ControllerAdapter {
      */
     public <R> ControllerAdapter returnMethod(SFunc<Object, R> methodReference) {
         MethodPayload methodPayload = ReflectUtil.lambdaMethodInfo(methodReference, Object.class);
-        this.config.setReturnMethod(methodPayload);
+        this.controllerConfig.setReturnMethod(methodPayload);
         return this;
     }
 
@@ -160,7 +160,7 @@ public class ControllerAdapter {
      */
     public <T, R> ControllerAdapter pageMethod(SFunc<T, R> methodReference, Class<T> output) {
         MethodPayload payload = ReflectUtil.lambdaMethodInfo(methodReference, output);
-        this.config.setPageMethod(payload);
+        this.controllerConfig.setPageMethod(payload);
         return this;
     }
     
