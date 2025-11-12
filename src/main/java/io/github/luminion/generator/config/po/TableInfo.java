@@ -136,13 +136,12 @@ public class TableInfo {
     /**
      * @since 3.5.0
      */
-    protected TableInfo setConvert() {
+    protected void setConvert() {
         if (this.getConfigurer().getStrategyConfig().startsWithTablePrefix(name) || this.getConfigurer().getStrategyConfig().isTableFieldAnnotationEnable()) {
             this.convert = true;
         } else {
             this.convert = !entityName.equalsIgnoreCase(name);
         }
-        return this;
     }
 
     public String getEntityPath() {
@@ -151,12 +150,10 @@ public class TableInfo {
 
     /**
      * @param entityName 实体名称
-     * @return this
      */
-    public TableInfo setEntityName(String entityName) {
+    public void setEntityName(String entityName) {
         this.entityName = entityName;
         setConvert();
-        return this;
     }
 
     /**
@@ -199,8 +196,6 @@ public class TableInfo {
 
     /**
      * 处理表信息
-     *
-     * @since 3.5.0
      */
     public void processTable() {
         String entityName = this.getConfigurer().getStrategyConfig().getNameConvert().entityNameConvert(this);

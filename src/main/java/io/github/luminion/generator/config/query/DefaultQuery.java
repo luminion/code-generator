@@ -52,17 +52,16 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class DefaultQuery implements IDatabaseQuery {
-
-    private final TypeRegistry typeRegistry;
+    protected final TypeRegistry typeRegistry;
     protected final DatabaseMetaDataWrapper databaseMetaDataWrapper;
     protected final StrategyConfig strategyConfig;
     protected final Configurer configurer;
 
-    public DefaultQuery(Configurer configBuilder) {
-        this.configurer = configBuilder;
-        this.strategyConfig = configBuilder.getStrategyConfig();
-        typeRegistry = new TypeRegistry(strategyConfig.getDateType());
-        DataSourceConfig dataSourceConfig = configBuilder.getDataSourceConfig();
+    public DefaultQuery(Configurer configurer) {
+        this.configurer = configurer;
+        this.strategyConfig = configurer.getStrategyConfig();
+        this.typeRegistry = new TypeRegistry(strategyConfig.getDateType());
+        DataSourceConfig dataSourceConfig = configurer.getDataSourceConfig();
         this.databaseMetaDataWrapper = new DatabaseMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchemaName());
     }
 
@@ -90,7 +89,9 @@ public class DefaultQuery implements IDatabaseQuery {
                     tableList.add(tableInfo);
                 }
             });
+            // 过滤表
             filter(tableList, includeTableList, excludeTableList);
+            // 转换表信息
             tableList.forEach(this::convertTableFields);
             return tableList;
         } finally {
@@ -116,30 +117,7 @@ public class DefaultQuery implements IDatabaseQuery {
         tableInfo.processTable();
         Map<String, DatabaseMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
         columnsInfoMap.forEach((k, columnInfo) -> {
-            String columnName = columnInfo.getName();
-            TableField field = new TableField(columnName);
-            // 处理ID
-            if (columnInfo.isPrimaryKey()) {
-                field.primaryKey(columnInfo.isAutoIncrement());
-                tableInfo.setHavePrimaryKey(true);
-                if (field.isKeyIdentityFlag() && strategyConfig.getIdType() != null) {
-                    log.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableName);
-                }
-            }
-            field.setColumnName(columnName);
-            field.setComment(columnInfo.getRemarks());
-            String propertyName = strategyConfig.getNameConvert().propertyNameConvert(field);
-            // 设置字段的元数据信息
-            TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo, tableInfo);
-            IColumnType columnType;
-            ITypeConvertHandler typeConvertHandler = strategyConfig.getTypeConvertHandler();
-            if (typeConvertHandler != null) {
-                columnType = typeConvertHandler.convert(typeRegistry, metaInfo);
-            } else {
-                columnType = typeRegistry.getColumnType(metaInfo);
-            }
-            field.setPropertyName(strategyConfig, propertyName, columnType);
-            field.setMetaInfo(metaInfo);
+            TableField field = new TableField(strategyConfig, tableInfo, columnInfo);
             tableInfo.addField(field);
         });
     }

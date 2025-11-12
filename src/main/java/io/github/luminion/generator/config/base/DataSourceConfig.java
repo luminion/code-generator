@@ -15,9 +15,7 @@
  */
 package io.github.luminion.generator.config.base;
 
-import io.github.luminion.generator.config.common.IDbQuery;
 import io.github.luminion.generator.config.enums.DbType;
-import io.github.luminion.generator.config.querys.DbQueryRegistry;
 import io.github.luminion.generator.util.DatasourceUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -57,10 +55,6 @@ public class DataSourceConfig {
      */
     protected final DbType dbType;
     /**
-     * 数据库信息查询
-     */
-    protected final IDbQuery dbQuery;
-    /**
      * 数据库连接属性
      */
     protected final Map<String, String> connectionProperties = new HashMap<>();
@@ -75,7 +69,6 @@ public class DataSourceConfig {
         this.username = username;
         this.password = password;
         this.dbType = DatasourceUtils.getDbType(url);
-        this.dbQuery = new DbQueryRegistry().getDbQuery(dbType);
     }
 
     /**

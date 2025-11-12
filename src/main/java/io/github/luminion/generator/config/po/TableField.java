@@ -16,6 +16,8 @@
 package io.github.luminion.generator.config.po;
 
 import io.github.luminion.generator.config.common.IKeyWordsHandler;
+import io.github.luminion.generator.config.common.ITypeConvertHandler;
+import io.github.luminion.generator.config.common.TypeRegistry;
 import io.github.luminion.generator.config.enums.JdbcType;
 import io.github.luminion.generator.config.rules.IColumnType;
 import io.github.luminion.generator.config.rules.NamingStrategy;
@@ -27,6 +29,7 @@ import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
@@ -38,7 +41,10 @@ import java.util.Map;
  * @since 1.0.0
  */
 @ToString
+@Slf4j
 public class TableField {
+
+    private final StrategyConfig strategyConfig;
 
     /**
      * 是否做注解转换
@@ -64,12 +70,6 @@ public class TableField {
     @Getter
     private String name;
 
-    /**
-     * 字段类型（已弃用，使用 {@link #columnType} 代替）
-     */
-    @Getter
-    @Deprecated
-    private String type;
 
     /**
      * 属性名称
@@ -131,36 +131,57 @@ public class TableField {
      *
      * @param name 数据库字段名称
      */
-    public TableField(String name) {
-        this.name = name;
+    public TableField(StrategyConfig strategyConfig, 
+                      TableInfo tableInfo, 
+                      DatabaseMetaDataWrapper.Column columnInfo) {
+        this.strategyConfig = strategyConfig;
+        if (columnInfo.isPrimaryKey()){
+            this.keyFlag = true;
+            this.keyIdentityFlag = columnInfo.isAutoIncrement();
+            tableInfo.setHavePrimaryKey(true);
+            if (this.keyIdentityFlag && strategyConfig.getIdType() != null) {
+                log.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableInfo.getName());
+            }
+        }
+        this.name = columnInfo.getName();
         this.columnName = name;
-    }
-
-    /**
-     * 设置属性名称
-     *
-     * @param propertyName 属性名
-     * @param columnType   字段类型
-     * @return this
-     * @since 3.5.0
-     */
-    public TableField setPropertyName(StrategyConfig strategyConfig, String propertyName, IColumnType columnType) {
+        IKeyWordsHandler keyWordsHandler = strategyConfig.getKeyWordsHandler();
+        if (keyWordsHandler != null && keyWordsHandler.isKeyWords(columnName)) {
+            this.keyWords = true;
+            this.columnName = keyWordsHandler.formatColumn(columnName);
+        }
+        // 注释双引号替换为单引号
+        if (columnInfo.getRemarks()!=null){
+            this.comment = columnInfo.getRemarks().replace("\"", "'");
+        }
+        String propertyName = strategyConfig.getNameConvert().propertyNameConvert(this);
+        // 设置字段的元数据信息
+        TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo, tableInfo);
+        IColumnType columnType;
+        ITypeConvertHandler typeConvertHandler = strategyConfig.getTypeConvertHandler();
+        TypeRegistry typeRegistry = strategyConfig.getTypeRegistry();
+        if (typeConvertHandler != null) {
+            columnType = typeConvertHandler.convert(typeRegistry, metaInfo);
+        } else {
+            columnType = typeRegistry.getColumnType(metaInfo);
+        }
         this.columnType = columnType;
         if (strategyConfig.isBooleanColumnRemoveIsPrefix()
-                && "boolean".equalsIgnoreCase(this.getPropertyType()) && propertyName.startsWith("is")) {
+                && "boolean".equalsIgnoreCase(this.getPropertyType())
+                && propertyName.startsWith("is")
+        ) {
             this.convert = true;
             this.propertyName = StringUtils.removePrefixAfterPrefixToLower(propertyName, 2);
-            return this;
         }
         // 下划线转驼峰策略
-        if (NamingStrategy.underline_to_camel.equals(this.entity.getColumnNaming())) {
+        if (NamingStrategy.underline_to_camel.equals(strategyConfig.getColumnNaming())) {
             this.convert = !propertyName.equalsIgnoreCase(NamingStrategy.underlineToCamel(this.columnName));
         }
         // 原样输出策略
-        if (NamingStrategy.no_change.equals(this.entity.getColumnNaming())) {
+        if (NamingStrategy.no_change.equals(strategyConfig.getColumnNaming())) {
             this.convert = !propertyName.equalsIgnoreCase(this.columnName);
         }
-        if (entity.isTableFieldAnnotationEnable()) {
+        if (strategyConfig.isTableFieldAnnotationEnable()) {
             this.convert = true;
         } else {
             if (this.keyFlag) {
@@ -168,7 +189,41 @@ public class TableField {
             }
         }
         this.propertyName = propertyName;
-        return this;
+        this.metaInfo = metaInfo;
+        
+    }
+
+    /**
+     * 设置属性名称
+     *
+     * @param propertyName 属性名
+     * @param columnType   字段类型
+     */
+    public void setPropertyName(String propertyName, IColumnType columnType) {
+        this.columnType = columnType;
+        if (strategyConfig.isBooleanColumnRemoveIsPrefix()
+                && "boolean".equalsIgnoreCase(this.getPropertyType())
+                && propertyName.startsWith("is")
+        ) {
+            this.convert = true;
+            this.propertyName = StringUtils.removePrefixAfterPrefixToLower(propertyName, 2);
+        }
+        // 下划线转驼峰策略
+        if (NamingStrategy.underline_to_camel.equals(strategyConfig.getColumnNaming())) {
+            this.convert = !propertyName.equalsIgnoreCase(NamingStrategy.underlineToCamel(this.columnName));
+        }
+        // 原样输出策略
+        if (NamingStrategy.no_change.equals(strategyConfig.getColumnNaming())) {
+            this.convert = !propertyName.equalsIgnoreCase(this.columnName);
+        }
+        if (strategyConfig.isTableFieldAnnotationEnable()) {
+            this.convert = true;
+        } else {
+            if (this.keyFlag) {
+                this.convert = !"id".equals(propertyName);
+            }
+        }
+        this.propertyName = propertyName;
     }
 
     public String getPropertyType() {
@@ -232,8 +287,8 @@ public class TableField {
      * @since 3.5.0
      */
     public boolean isLogicDeleteField() {
-        String propertyName = entity.getLogicDeletePropertyName();
-        String columnName = entity.getLogicDeleteColumnName();
+        String propertyName = strategyConfig.getLogicDeletePropertyName();
+        String columnName = strategyConfig.getLogicDeleteColumnName();
         return StringUtils.isNotBlank(propertyName) && this.propertyName.equals(propertyName)
                 || StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
     }
@@ -242,34 +297,21 @@ public class TableField {
      * 设置主键
      *
      * @param autoIncrement 自增标识
-     * @return this
-     * @since 3.5.0
      */
-    public TableField primaryKey(boolean autoIncrement) {
+    public void primaryKey(boolean autoIncrement) {
         this.keyFlag = true;
         this.keyIdentityFlag = autoIncrement;
-        return this;
-    }
-
-    /**
-     * @param type 类型
-     * @return this
-     */
-    public TableField setType(String type) {
-        this.type = type;
-        return this;
     }
 
     public TableField setComment(String comment) {
-        // 待重构此处
-        this.comment = (this.globalConfig.isSwagger() || this.globalConfig.isSpringdoc())
-                && StringUtils.isNotBlank(comment) ? comment.replace("\"", "\\\"") : comment;
+        // 双引号替换为单引号
+        this.comment = comment.replace("\"", "'");
         return this;
     }
 
     public TableField setColumnName(String columnName) {
         this.columnName = columnName;
-        IKeyWordsHandler keyWordsHandler = dataSourceConfig.getKeyWordsHandler();
+        IKeyWordsHandler keyWordsHandler = strategyConfig.getKeyWordsHandler();
         if (keyWordsHandler != null && keyWordsHandler.isKeyWords(columnName)) {
             this.keyWords = true;
             this.columnName = keyWordsHandler.formatColumn(columnName);

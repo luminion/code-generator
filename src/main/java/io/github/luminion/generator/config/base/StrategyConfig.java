@@ -17,6 +17,7 @@ package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.config.common.IKeyWordsHandler;
 import io.github.luminion.generator.config.common.INameConvert;
+import io.github.luminion.generator.config.common.TypeRegistry;
 import io.github.luminion.generator.config.enums.IdType;
 import io.github.luminion.generator.config.po.LikeTable;
 import io.github.luminion.generator.config.po.TableField;
@@ -66,11 +67,14 @@ public class StrategyConfig implements ITemplate {
      * 关键字处理器
      */
     protected IKeyWordsHandler keyWordsHandler;
-
+//    /**
+//     * 时间类型对应策略(todo 直接设置类型转化)
+//     */
+//    protected DateType dateType = DateType.TIME_PACK;
     /**
-     * 时间类型对应策略
+     * 类型转化策略
      */
-    protected DateType dateType = DateType.TIME_PACK;
+    protected TypeRegistry typeRegistry = new TypeRegistry(DateType.TIME_PACK);
 
     /**
      * 指定生成的主键的ID类型
