@@ -51,7 +51,7 @@ public enum JdbcType {
     TIMESTAMP_WITH_TIMEZONE(2014);
 
     public final int TYPE_CODE;
-    private static Map<Integer, JdbcType> codeLookup = new HashMap();
+    private static final Map<Integer, JdbcType> codeLookup = new HashMap<>();
 
     JdbcType(int code) {
         this.TYPE_CODE = code;

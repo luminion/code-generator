@@ -16,8 +16,8 @@
 package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.IColumnType;
-import io.github.luminion.generator.common.ITemplate;
+import io.github.luminion.generator.common.JavaFieldType;
+import io.github.luminion.generator.common.ConfigRender;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class EntityConfig implements ITemplate {
+public class EntityConfig implements ConfigRender {
 
     /**
      * 自定义继承的Entity类全称，带包名
@@ -79,7 +79,7 @@ public class EntityConfig implements ITemplate {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = ITemplate.super.renderData(tableInfo);
+        Map<String, Object> data = ConfigRender.super.renderData(tableInfo);
         data.put("activeRecord", this.activeRecord);
         data.put("entitySerialVersionUID", this.serialVersionUID);
         data.put("entitySerialAnnotation", this.serialAnnotation);
@@ -134,7 +134,7 @@ public class EntityConfig implements ITemplate {
 //            importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
 //        }
         tableInfo.getFields().forEach(field -> {
-            IColumnType columnType = field.getColumnType();
+            JavaFieldType columnType = field.getColumnType();
             if (null != columnType && null != columnType.getPkg()) {
                 importPackages.add(columnType.getPkg());
             }

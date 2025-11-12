@@ -98,10 +98,7 @@ public class DefaultQuery implements IDatabaseQuery {
         // 是否跳过视图
         boolean skipView = strategyConfig.isSkipView();
         // 获取表过滤
-        String tableNamePattern = null;
-        if (strategyConfig.getLikeTable() != null) {
-            tableNamePattern = strategyConfig.getLikeTable().getValue();
-        }
+        String tableNamePattern = strategyConfig.getTableNamePattern();
         return databaseMetaDataWrapper.getTables(tableNamePattern, skipView ? new String[]{"TABLE"} : new String[]{"TABLE", "VIEW"});
     }
 

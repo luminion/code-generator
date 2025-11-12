@@ -5,7 +5,7 @@ import io.github.luminion.generator.enums.OutputFile;
 import io.github.luminion.generator.po.CustomFile;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
-import io.github.luminion.generator.common.ITemplate;
+import io.github.luminion.generator.common.ConfigRender;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  * @since 1.0.0
  */
 @Data
-public class OutputConfig implements ITemplate {
+public class OutputConfig implements ConfigRender {
 
     /**
      * 生成文件的输出目录
@@ -244,7 +244,7 @@ public class OutputConfig implements ITemplate {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> map = ITemplate.super.renderData(tableInfo);
+        Map<String, Object> map = ConfigRender.super.renderData(tableInfo);
         map.putAll(this.getOutputClassSimpleNameMap(tableInfo));
         map.put("package", this.getOutputClassPackageInfoMap());
         map.put("class", this.getOutputClassCanonicalNameMap(tableInfo));

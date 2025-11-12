@@ -17,11 +17,13 @@ package io.github.luminion.generator.po;
 
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.base.StrategyConfig;
+import io.github.luminion.generator.enums.NamingStrategy;
 import io.github.luminion.generator.jdbc.DatabaseMetaDataWrapper;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -84,7 +86,7 @@ public class TableInfo {
      * 额外字段
      */
     @Getter
-    private final List<ExtraField> extraFields = new ArrayList<>();
+    private final List<TableExtraField> extraFields = new ArrayList<>();
 
     /**
      * 是否有主键
@@ -123,7 +125,10 @@ public class TableInfo {
         if (remarks != null) {
             this.comment = remarks.replaceAll("[\r\n]", "");
         }
-        String entityName = strategyConfig.getNameConvert().entityNameConvert(this);
+        Set<String> tablePrefix = strategyConfig.getTablePrefix();
+        Set<String> tableSuffix = strategyConfig.getTableSuffix();
+        Function<String, String> tableNameToEntityName = strategyConfig.getTableNameToEntityName();
+        String entityName = NamingStrategy.doConvertName(name, tablePrefix, tableSuffix, tableNameToEntityName);
         this.entityName = entityName;
         if (strategyConfig.startsWithTablePrefix(name) || strategyConfig.isTableFieldAnnotationEnable()) {
             this.convert = true;
@@ -161,7 +166,7 @@ public class TableInfo {
      *
      * @param field 字段
      */
-    public void addExtraField(ExtraField field) {
+    public void addExtraField(TableExtraField field) {
         this.extraFields.add(field);
     }
 
@@ -196,7 +201,7 @@ public class TableInfo {
                         continue;
                     }
                     existPropertyNames.add(suffixPropertyName);
-                    ExtraField extraField = new ExtraField();
+                    TableExtraField extraField = new TableExtraField();
                     extraField.setSqlOperator(sqlOperator);
                     extraField.setPropertyType(field.getPropertyType());
                     extraField.setPropertyName(field.getPropertyName() + suffix);

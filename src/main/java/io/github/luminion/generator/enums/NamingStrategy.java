@@ -16,27 +16,37 @@
 package io.github.luminion.generator.enums;
 
 import io.github.luminion.generator.util.StringUtils;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
- * 从数据库表到文件的命名策略
+ * 名称转化策略
  *
  * @author YangHu, tangguo
- * @since 2016/8/30
+ * @author luminion
+ * @since 1.0.0
  */
+@AllArgsConstructor
 public enum NamingStrategy {
-
     /**
      * 不做任何改变，原样输出
      */
-    no_change,
-
+    NO_CHANGE(e -> e),
     /**
      * 下划线转驼峰命名
      */
-    underline_to_camel;
+    UNDERLINE_TO_CAMEL_CASE(NamingStrategy::underlineToCamel),
+    /**
+     * 下划线转驼峰命名(首字母大写)
+     */
+    UNDERLINE_TO_PASCAL_CASE(e -> NamingStrategy.capitalFirst(NamingStrategy.underlineToCamel(e))),
+    ;
+    @Getter
+    private final Function<String, String> function;
 
     /**
      * 下划线转驼峰
@@ -72,6 +82,20 @@ public enum NamingStrategy {
     }
 
     /**
+     * 实体首字母大写
+     *
+     * @param name 待转换的字符串
+     * @return 转换后的字符串
+     */
+    public static String capitalFirst(String name) {
+        if (StringUtils.isNotBlank(name)) {
+            return name.substring(0, 1).toUpperCase() + name.substring(1);
+        }
+        return "";
+    }
+
+
+    /**
      * 去掉指定的前缀
      *
      * @param name   表名
@@ -84,18 +108,7 @@ public enum NamingStrategy {
         }
         // 判断是否有匹配的前缀，然后截取前缀
         return prefix.stream().filter(pf -> name.toLowerCase().startsWith(pf.toLowerCase()))
-            .findFirst().map(pf -> name.substring(pf.length())).orElse(name);
-    }
-
-    /**
-     * 去掉下划线前缀并转成驼峰格式
-     *
-     * @param name   表名
-     * @param prefix 前缀
-     * @return 转换后的字符串
-     */
-    public static String removePrefixAndCamel(String name, Set<String> prefix) {
-        return underlineToCamel(removePrefix(name, prefix));
+                .findFirst().map(pf -> name.substring(pf.length())).orElse(name);
     }
 
     /**
@@ -111,30 +124,32 @@ public enum NamingStrategy {
         }
         // 判断是否有匹配的后缀，然后截取后缀
         return suffix.stream().filter(sf -> name.toLowerCase().endsWith(sf.toLowerCase()))
-            .findFirst().map(sf -> name.substring(0, name.length() - sf.length())).orElse(name);
+                .findFirst().map(sf -> name.substring(0, name.length() - sf.length())).orElse(name);
     }
 
-    /**
-     * 去掉下划线后缀并转成驼峰格式
-     *
-     * @param name   表名
-     * @param suffix 后缀
-     * @return 转换后的字符串
-     */
-    public static String removeSuffixAndCamel(String name, Set<String> suffix) {
-        return underlineToCamel(removeSuffix(name, suffix));
-    }
 
     /**
-     * 实体首字母大写
+     * 去除前缀和后缀, 并转化
      *
-     * @param name 待转换的字符串
-     * @return 转换后的字符串
+     * @param converter 转化器
+     * @param name      姓名
+     * @param prefix    前缀
+     * @param suffix    后缀
+     * @return {@link String }
      */
-    public static String capitalFirst(String name) {
-        if (StringUtils.isNotBlank(name)) {
-            return name.substring(0, 1).toUpperCase() + name.substring(1);
+    public static String doConvertName(String name, Set<String> prefix, Set<String> suffix, Function<String, String> converter) {
+        String propertyName = name;
+        // 删除前缀
+        if (!prefix.isEmpty()) {
+            propertyName = removePrefix(propertyName, prefix);
         }
-        return "";
+        // 删除后缀
+        if (!suffix.isEmpty()) {
+            propertyName = removeSuffix(propertyName, suffix);
+        }
+        if (StringUtils.isBlank(propertyName)) {
+            throw new IllegalArgumentException(String.format("%s 的名称转换结果为空，请检查是否配置问题", name));
+        }
+        return converter.apply(propertyName);
     }
 }

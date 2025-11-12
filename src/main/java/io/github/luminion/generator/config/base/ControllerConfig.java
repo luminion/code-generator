@@ -19,7 +19,7 @@ import io.github.luminion.generator.enums.OutputFile;
 import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.ITemplate;
+import io.github.luminion.generator.common.ConfigRender;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -40,7 +40,7 @@ import java.util.stream.Stream;
  */
 @Slf4j
 @Data
-public class ControllerConfig implements ITemplate {
+public class ControllerConfig implements ConfigRender {
 
     /**
      * 自定义继承的Controller类全称，带包名
@@ -104,7 +104,7 @@ public class ControllerConfig implements ITemplate {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = ITemplate.super.renderData(tableInfo);
+        Map<String, Object> data = ConfigRender.super.renderData(tableInfo);
         OutputConfig outputConfig = tableInfo.getConfigurer().getOutputConfig();
         Map<String, Boolean> outputClassGenerateMap = outputConfig.getOutputClassGenerateMap();
         Map<String, String> outputClassSimpleNameMap = outputConfig.getOutputClassSimpleNameMap(tableInfo);

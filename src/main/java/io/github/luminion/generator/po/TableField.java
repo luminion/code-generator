@@ -15,10 +15,13 @@
  */
 package io.github.luminion.generator.po;
 
+import io.github.luminion.generator.common.TableColumnTypeToJavaTypeConverter;
+import io.github.luminion.generator.common.support.ColumnTypeToJavaFieldTypeConverterHelper;
 import io.github.luminion.generator.config.base.StrategyConfig;
-import io.github.luminion.generator.common.IColumnType;
-import io.github.luminion.generator.common.IKeyWordsHandler;
+import io.github.luminion.generator.common.JavaFieldType;
+import io.github.luminion.generator.common.DatabaseKeyWordsHandler;
 import io.github.luminion.generator.common.ITypeConvertHandler;
+import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.JdbcType;
 import io.github.luminion.generator.enums.NamingStrategy;
 import io.github.luminion.generator.fill.Column;
@@ -30,6 +33,8 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 
 /**
  * 表字段信息
@@ -42,6 +47,7 @@ import java.util.Map;
 @Slf4j
 public class TableField {
 
+    @Getter
     private final StrategyConfig strategyConfig;
 
     /**
@@ -49,7 +55,7 @@ public class TableField {
      */
     @Getter
     private boolean convert;
-
+    
     /**
      * 是否主键
      */
@@ -68,7 +74,6 @@ public class TableField {
     @Getter
     private String name;
 
-
     /**
      * 属性名称
      */
@@ -79,7 +84,7 @@ public class TableField {
      * 字段类型
      */
     @Getter
-    private IColumnType columnType;
+    private JavaFieldType columnType;
 
     /**
      * 字段注释
@@ -122,11 +127,11 @@ public class TableField {
     @Getter
     private MetaInfo metaInfo;
 
-    
-    public TableField(TableInfo tableInfo, 
+
+    public TableField(TableInfo tableInfo,
                       DatabaseMetaDataWrapper.Column columnInfo) {
         this.strategyConfig = tableInfo.getConfigurer().getStrategyConfig();
-        if (columnInfo.isPrimaryKey()){
+        if (columnInfo.isPrimaryKey()) {
             this.keyFlag = true;
             this.keyIdentityFlag = columnInfo.isAutoIncrement();
             tableInfo.setHavePrimaryKey(true);
@@ -137,24 +142,29 @@ public class TableField {
         }
         this.name = columnInfo.getName();
         this.columnName = name;
-        IKeyWordsHandler keyWordsHandler = strategyConfig.getKeyWordsHandler();
+        DatabaseKeyWordsHandler keyWordsHandler = strategyConfig.getKeyWordsHandler();
         if (keyWordsHandler != null && keyWordsHandler.isKeyWords(columnName)) {
             this.keyWords = true;
             this.columnName = keyWordsHandler.formatColumn(columnName);
         }
         // 注释双引号替换为单引号
-        if (columnInfo.getRemarks()!=null){
+        if (columnInfo.getRemarks() != null) {
             this.comment = columnInfo.getRemarks().replace("\"", "'");
         }
-        String propertyName = strategyConfig.getNameConvert().propertyNameConvert(this);
+        Function<String, String> converter = strategyConfig.getTableColumnNameToEntityFieldName();
+        Set<String> fieldPrefix = strategyConfig.getFieldPrefix();
+        Set<String> fieldSuffix = strategyConfig.getFieldSuffix();
+        String propertyName = NamingStrategy.doConvertName(columnName, fieldPrefix, fieldSuffix, converter);
         // 设置字段的元数据信息
         TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo, tableInfo);
-        IColumnType columnType;
-        ITypeConvertHandler typeConvertHandler = strategyConfig.getTypeConvertHandler();
-        if (typeConvertHandler != null) {
-            columnType = typeConvertHandler.convert(metaInfo);
+        JavaFieldType columnType;
+        TableColumnTypeToJavaTypeConverter tableColumnTypeToJavaTypeConverter = strategyConfig.getTableColumnTypeToJavaTypeConverter();
+        if (tableColumnTypeToJavaTypeConverter != null) {
+            columnType = tableColumnTypeToJavaTypeConverter.convert(metaInfo);
         } else {
-            columnType = strategyConfig.getDefaultTypeConvertHandler().convert(metaInfo);
+            DateType dateType = strategyConfig.getDateType();
+            
+            columnType = ColumnTypeToJavaFieldTypeConverterHelper.getJavaFieldType(metaInfo,dateType);
         }
         this.columnType = columnType;
         if (strategyConfig.isBooleanColumnRemoveIsPrefix()
@@ -164,14 +174,14 @@ public class TableField {
             this.convert = true;
             this.propertyName = StringUtils.removePrefixAfterPrefixToLower(propertyName, 2);
         }
-        // 下划线转驼峰策略
-        if (NamingStrategy.underline_to_camel.equals(strategyConfig.getColumnNaming())) {
+        
+        if (NamingStrategy.UNDERLINE_TO_CAMEL_CASE.getFunction().equals(strategyConfig.getTableColumnNameToEntityFieldName())) {
+            // 下划线转驼峰策略
             this.convert = !propertyName.equalsIgnoreCase(NamingStrategy.underlineToCamel(this.columnName));
-        }
-        // 原样输出策略
-        if (NamingStrategy.no_change.equals(strategyConfig.getColumnNaming())) {
+        } else {
             this.convert = !propertyName.equalsIgnoreCase(this.columnName);
         }
+        
         if (strategyConfig.isTableFieldAnnotationEnable()) {
             this.convert = true;
         } else {
@@ -247,7 +257,7 @@ public class TableField {
         return StringUtils.isNotBlank(propertyName) && this.propertyName.equals(propertyName)
                 || StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
     }
-    
+
 
     public TableField setCustomMap(Map<String, Object> customMap) {
         this.customMap = customMap;

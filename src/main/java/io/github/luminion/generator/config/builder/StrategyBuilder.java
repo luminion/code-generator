@@ -1,6 +1,5 @@
 package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.po.LikeTable;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.config.base.StrategyConfig;
 
@@ -131,25 +130,25 @@ public class StrategyBuilder {
         return this;
     }
 
-    /**
-     * 包含表名
-     *
-     * @return this
-     */
-    public StrategyBuilder likeTable(LikeTable likeTable) {
-        this.strategyConfig.setLikeTable(likeTable);
-        return this;
-    }
-
-    /**
-     * 不包含表名
-     *
-     * @return this
-     */
-    public StrategyBuilder notLikeTable(LikeTable notLikeTable) {
-        this.strategyConfig.setNotLikeTable(notLikeTable);
-        return this;
-    }
+//    /**
+//     * 包含表名
+//     *
+//     * @return this
+//     */
+//    public StrategyBuilder likeTable(LikeTable likeTable) {
+//        this.strategyConfig.setLikeTable(likeTable);
+//        return this;
+//    }
+//
+//    /**
+//     * 不包含表名
+//     *
+//     * @return this
+//     */
+//    public StrategyBuilder notLikeTable(LikeTable notLikeTable) {
+//        this.strategyConfig.setNotLikeTable(notLikeTable);
+//        return this;
+//    }
 
     /**
      * 额外字段后缀

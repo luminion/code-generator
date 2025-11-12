@@ -3,10 +3,12 @@ package io.github.luminion.generator.po;
 import lombok.Data;
 
 /**
+ * 表后缀字段
  * @author luminion
+ * @since 1.0.0
  */
 @Data
-public class ExtraField {
+public class TableExtraField {
     /**
      * 属性类型
      */
@@ -43,9 +45,9 @@ public class ExtraField {
     /**
      * 重构
      *
-     * @return {@link ExtraField }
+     * @return {@link TableExtraField }
      */
-    public ExtraField refactor() {
+    public TableExtraField refactor() {
         switch (sqlOperator.toUpperCase()) {
             case "LIKE":
                  this.comment += "(包含字符)";

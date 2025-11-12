@@ -16,7 +16,7 @@
 package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.ITemplate;
+import io.github.luminion.generator.common.ConfigRender;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +34,7 @@ import java.util.Map;
  */
 @Slf4j
 @Data
-public class GlobalConfig implements ITemplate {
+public class GlobalConfig implements ConfigRender {
 
     /**
      * 作者
@@ -183,7 +183,7 @@ public class GlobalConfig implements ITemplate {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = ITemplate.super.renderData(tableInfo);
+        Map<String, Object> data = ConfigRender.super.renderData(tableInfo);
         data.put("author", this.author);
         data.put("date", this.getCommentDate());
         data.put("validated", this.validated);

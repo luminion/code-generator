@@ -15,17 +15,16 @@
  */
 package io.github.luminion.generator.config.base;
 
-import io.github.luminion.generator.common.IKeyWordsHandler;
-import io.github.luminion.generator.common.INameConvert;
+import io.github.luminion.generator.common.TableColumnTypeToJavaTypeConverter;
+import io.github.luminion.generator.common.DatabaseKeyWordsHandler;
 import io.github.luminion.generator.common.ITypeConvertHandler;
 import io.github.luminion.generator.enums.IdType;
+import io.github.luminion.generator.enums.NamingStrategy;
 import io.github.luminion.generator.fill.IFill;
-import io.github.luminion.generator.po.LikeTable;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.ExtraFieldStrategy;
-import io.github.luminion.generator.common.ITemplate;
-import io.github.luminion.generator.enums.NamingStrategy;
+import io.github.luminion.generator.common.ConfigRender;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.util.ReflectUtils;
 import io.github.luminion.generator.util.StringUtils;
@@ -34,6 +33,7 @@ import lombok.Data;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * 策略配置项
@@ -43,37 +43,31 @@ import java.util.function.BiFunction;
  * @since 1.0.0
  */
 @Data
-public class StrategyConfig implements ITemplate {
+public class StrategyConfig implements ConfigRender {
+    /**
+     * 数据库表名转换实体类名
+     */
+    protected Function<String, String> tableNameToEntityName = NamingStrategy.UNDERLINE_TO_PASCAL_CASE.getFunction();
+    
+    /**
+     * 数据库列名称转换为属性名的方法
+     */
+    protected Function<String, String> tableColumnNameToEntityFieldName = NamingStrategy.UNDERLINE_TO_CAMEL_CASE.getFunction();
 
     /**
-     * 名称转换
+     * 日期类型
      */
-    protected INameConvert nameConvert = new INameConvert.DefaultNameConvert(this);
-
-    /**
-     * 数据库表映射到实体的命名策略
-     */
-    protected NamingStrategy entityNaming = NamingStrategy.underline_to_camel;
-
-    /**
-     * 数据库表字段映射到实体的命名策略
-     */
-    protected NamingStrategy columnNaming = NamingStrategy.underline_to_camel;
-
-    /**
-     * 类型转化策略
-     */
-    protected ITypeConvertHandler defaultTypeConvertHandler = new ITypeConvertHandler.DefaultTypeConvertHandler(DateType.TIME_PACK);
+    private DateType dateType = DateType.TIME_PACK;
 
     /**
      * 类型转换处理
      */
-    protected ITypeConvertHandler typeConvertHandler;
+    protected TableColumnTypeToJavaTypeConverter tableColumnTypeToJavaTypeConverter;
 
     /**
      * 关键字处理器
      */
-    protected IKeyWordsHandler keyWordsHandler;
+    protected DatabaseKeyWordsHandler keyWordsHandler;
 
     /**
      * 指定生成的主键的ID类型
@@ -85,7 +79,6 @@ public class StrategyConfig implements ITemplate {
      * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
      */
     protected boolean booleanColumnRemoveIsPrefix;
-
     /**
      * 是否生成实体时，生成字段注解（默认 false）
      */
@@ -111,17 +104,15 @@ public class StrategyConfig implements ITemplate {
      * 自定义基础的Entity类，公共字段
      */
     protected final Set<String> superEntityColumns = new HashSet<>();
-
     /**
      * 自定义忽略字段
-     * <a href="https://github.com/baomidou/generator/issues/46">...</a>
      */
     protected final Set<String> ignoreColumns = new HashSet<>();
     /**
      * 表填充字段
      */
     protected final List<IFill> tableFillList = new ArrayList<>();
-    
+
     /**
      * 过滤表前缀
      * example: addTablePrefix("t_")
@@ -163,21 +154,11 @@ public class StrategyConfig implements ITemplate {
     protected final Set<String> exclude = new HashSet<>();
 
     /**
-     * 包含表名
+     * 模糊查询包含的表名, 需要自行拼接(%)
      *
-     * @since 3.3.0
      */
-    protected LikeTable likeTable;
+    protected String tableNamePattern;
 
-    /**
-     * 不包含表名
-     * <p>
-     * 只在{@link SQLQuery}模式下生效.
-     * </p>
-     *
-     * @since 3.3.0
-     */
-    protected LikeTable notLikeTable;
 
     /**
      * 额外字段后缀
@@ -211,7 +192,6 @@ public class StrategyConfig implements ITemplate {
      */
     protected boolean enableSqlFilter = true;
 
-    
 
     /**
      * 大写命名、字段符合大写字母数字下划线命名
@@ -234,17 +214,12 @@ public class StrategyConfig implements ITemplate {
 
     /**
      * 验证配置项
-     *
-     * @since 3.5.0
      */
     public void validate() {
         boolean isInclude = !this.include.isEmpty();
         boolean isExclude = !this.exclude.isEmpty();
         if (isInclude && isExclude) {
             throw new IllegalArgumentException("<strategy> 标签中 <include> 与 <exclude> 只能配置一项！");
-        }
-        if (this.notLikeTable != null && this.likeTable != null) {
-            throw new IllegalArgumentException("<strategy> 标签中 <likeTable> 与 <notLikeTable> 只能配置一项！");
         }
     }
 
@@ -319,7 +294,7 @@ public class StrategyConfig implements ITemplate {
 //            return StringUtils.camelToUnderline(field.getName());
 //        }).collect(Collectors.toSet()));
     }
-    
+
 
     /**
      * 匹配父类字段(忽略大小写)
@@ -346,7 +321,7 @@ public class StrategyConfig implements ITemplate {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = ITemplate.super.renderData(tableInfo);
+        Map<String, Object> data = ConfigRender.super.renderData(tableInfo);
         data.put("idType", idType == null ? null : idType.toString());
         data.put("logicDeleteFieldName", this.logicDeleteColumnName);
         data.put("versionFieldName", this.versionColumnName);

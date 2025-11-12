@@ -15,15 +15,16 @@
  */
 package io.github.luminion.generator.enums;
 
-import io.github.luminion.generator.common.IColumnType;
+import io.github.luminion.generator.common.JavaFieldType;
+
 
 /**
- * 表字段类型
+ * java字段类型枚举
  *
- * @author hubin
- * @since 2017-01-11
+ * @author luminion
+ * @since 1.0.0
  */
-public enum DbColumnType implements IColumnType {
+public enum JavaFieldTypeEnum implements JavaFieldType {
     // 基本类型
     BASE_BYTE("byte", null),
     BASE_SHORT("short", null),
@@ -78,7 +79,7 @@ public enum DbColumnType implements IColumnType {
      */
     private final String pkg;
 
-    DbColumnType(final String type, final String pkg) {
+    JavaFieldTypeEnum(final String type, final String pkg) {
         this.type = type;
         this.pkg = pkg;
     }

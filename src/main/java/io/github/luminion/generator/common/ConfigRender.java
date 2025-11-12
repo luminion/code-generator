@@ -23,14 +23,14 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 渲染模板接口
- *
- * @author nieqiurong 2020/11/9.
- * @since 3.5.0
- */
 
-public interface ITemplate extends Serializable {
+/**
+ * 配置属性渲染器
+ *
+ * @author luminion
+ * @since 1.0.0
+ */
+public interface ConfigRender extends Serializable {
 
     @SneakyThrows
     default Map<String, Object> renderData(TableInfo tableInfo) {

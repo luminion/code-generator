@@ -15,8 +15,8 @@
  */
 package io.github.luminion.generator.util;
 
-import io.github.luminion.generator.enums.DbColumnType;
-import io.github.luminion.generator.common.IColumnType;
+import io.github.luminion.generator.enums.JavaFieldTypeEnum;
+import io.github.luminion.generator.common.JavaFieldType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,25 +29,25 @@ import java.util.Map;
  */
 public class KotlinTypeUtils {
 
-    private static final Map<IColumnType, String> JAVA_TO_KOTLIN_TYPE = new HashMap<>();
+    private static final Map<JavaFieldType, String> JAVA_TO_KOTLIN_TYPE = new HashMap<>();
 
     static {
-        JAVA_TO_KOTLIN_TYPE.put(DbColumnType.BASE_INT, "Int");
-        JAVA_TO_KOTLIN_TYPE.put(DbColumnType.INTEGER, "Int");
-        JAVA_TO_KOTLIN_TYPE.put(DbColumnType.BASE_DOUBLE, "Double");
-        JAVA_TO_KOTLIN_TYPE.put(DbColumnType.BASE_FLOAT, "Float");
-        JAVA_TO_KOTLIN_TYPE.put(DbColumnType.BASE_LONG, "Long");
-        JAVA_TO_KOTLIN_TYPE.put(DbColumnType.BASE_BOOLEAN, "Boolean");
-        JAVA_TO_KOTLIN_TYPE.put(DbColumnType.BASE_CHAR, "Char");
+        JAVA_TO_KOTLIN_TYPE.put(JavaFieldTypeEnum.BASE_INT, "Int");
+        JAVA_TO_KOTLIN_TYPE.put(JavaFieldTypeEnum.INTEGER, "Int");
+        JAVA_TO_KOTLIN_TYPE.put(JavaFieldTypeEnum.BASE_DOUBLE, "Double");
+        JAVA_TO_KOTLIN_TYPE.put(JavaFieldTypeEnum.BASE_FLOAT, "Float");
+        JAVA_TO_KOTLIN_TYPE.put(JavaFieldTypeEnum.BASE_LONG, "Long");
+        JAVA_TO_KOTLIN_TYPE.put(JavaFieldTypeEnum.BASE_BOOLEAN, "Boolean");
+        JAVA_TO_KOTLIN_TYPE.put(JavaFieldTypeEnum.BASE_CHAR, "Char");
     }
 
     /**
      * 转换Java类型至Kotlin类型
      *
-     * @param columnType {@link DbColumnType}
+     * @param columnType {@link JavaFieldTypeEnum}
      * @return Kotlin类型
      */
-    public static String getStringType(IColumnType columnType) {
+    public static String getStringType(JavaFieldType columnType) {
         return JAVA_TO_KOTLIN_TYPE.getOrDefault(columnType, columnType.getType());
     }
 

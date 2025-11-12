@@ -5,7 +5,7 @@ import io.github.luminion.generator.enums.OutputFile;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableField.MetaInfo;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.ITemplate;
+import io.github.luminion.generator.common.ConfigRender;
 import lombok.Data;
 
 import java.util.*;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Data
-public class ModelConfig implements ITemplate {
+public class ModelConfig implements ConfigRender {
 
     /**
      * 查询dto继承实体类
@@ -47,7 +47,7 @@ public class ModelConfig implements ITemplate {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = ITemplate.super.renderData(tableInfo);
+        Map<String, Object> data = ConfigRender.super.renderData(tableInfo);
         data.put("queryDTOExtendsEntity", this.queryDTOExtendsEntity);
         data.put("queryVOExtendsEntity", this.queryVOExtendsEntity);
         data.put("editExcludeFields", this.editExcludeFields);
