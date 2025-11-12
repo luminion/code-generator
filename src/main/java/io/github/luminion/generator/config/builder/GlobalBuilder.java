@@ -26,14 +26,7 @@ public class GlobalBuilder {
         return this;
     }
 
-    /**
-     * 时间类型对应策略
-     */
-    public GlobalBuilder dateType(DateType dateType) {
-        // todo 迁移到数据库设置
-        this.globalConfig.setDateType(dateType);
-        return this;
-    }
+
 
     /**
      * 指定注释日期格式化

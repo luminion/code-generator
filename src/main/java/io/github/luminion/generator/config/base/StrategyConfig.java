@@ -15,24 +15,19 @@
  */
 package io.github.luminion.generator.config.base;
 
-import io.github.luminion.generator.config.common.IKeyWordsHandler;
-import io.github.luminion.generator.config.common.INameConvert;
-import io.github.luminion.generator.config.common.TypeRegistry;
+import io.github.luminion.generator.config.common.*;
 import io.github.luminion.generator.config.enums.IdType;
+import io.github.luminion.generator.config.fill.IFill;
 import io.github.luminion.generator.config.po.LikeTable;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.rules.DateType;
 import io.github.luminion.generator.config.rules.ExtraFieldStrategy;
 import io.github.luminion.generator.config.fill.ITemplate;
 import io.github.luminion.generator.config.rules.NamingStrategy;
-import io.github.luminion.generator.config.common.ITypeConvertHandler;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 
 /**
@@ -48,7 +43,7 @@ public class StrategyConfig implements ITemplate {
     /**
      * 名称转换
      */
-    protected INameConvert nameConvert;
+    protected INameConvert nameConvert = new DefaultNameConvert(this);
     /**
      * 数据库表映射到实体的命名策略
      */
@@ -91,6 +86,31 @@ public class StrategyConfig implements ITemplate {
      * 是否生成实体时，生成字段注解（默认 false）
      */
     protected boolean tableFieldAnnotationEnable;
+    /**
+     * 乐观锁字段名称(数据库字段)
+     */
+    protected String versionColumnName;
+    /**
+     * 乐观锁属性名称(实体字段)
+     */
+    protected String versionPropertyName;
+    /**
+     * 逻辑删除字段名称(数据库字段)
+     */
+    protected String logicDeleteColumnName;
+
+    /**
+     * 逻辑删除属性名称(实体字段)
+     */
+    protected String logicDeletePropertyName;
+
+    /**
+     * 表填充字段
+     */
+    protected final List<IFill> tableFillList = new ArrayList<>();
+    
+    
+    
 
     /**
      * 过滤表前缀

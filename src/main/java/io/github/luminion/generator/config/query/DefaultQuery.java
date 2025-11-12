@@ -52,7 +52,6 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class DefaultQuery implements IDatabaseQuery {
-    protected final TypeRegistry typeRegistry;
     protected final DatabaseMetaDataWrapper databaseMetaDataWrapper;
     protected final StrategyConfig strategyConfig;
     protected final Configurer configurer;
@@ -60,7 +59,6 @@ public class DefaultQuery implements IDatabaseQuery {
     public DefaultQuery(Configurer configurer) {
         this.configurer = configurer;
         this.strategyConfig = configurer.getStrategyConfig();
-        this.typeRegistry = new TypeRegistry(strategyConfig.getDateType());
         DataSourceConfig dataSourceConfig = configurer.getDataSourceConfig();
         this.databaseMetaDataWrapper = new DatabaseMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchemaName());
     }

@@ -50,7 +50,8 @@ public class MapperConfig implements ITemplate {
      * @since 3.5.3
      * @see org.apache.ibatis.annotations.Mapper
      */
-    protected Class<?> mapperAnnotationClass = ClassUtils.toClass("org.apache.ibatis.annotations.Mapper");
+//    protected Class<?> mapperAnnotationClass = ClassUtils.toClass("org.apache.ibatis.annotations.Mapper");
+    protected Class<?> mapperAnnotationClass;
 
     /**
      * 是否开启BaseResultMap（默认 false）

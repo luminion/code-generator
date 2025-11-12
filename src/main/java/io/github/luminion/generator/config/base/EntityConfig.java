@@ -47,34 +47,6 @@ public class EntityConfig implements ITemplate {
     protected String superClass;
 
     /**
-     * 乐观锁字段名称(数据库字段)
-     *
-     * @since 3.5.0
-     */
-    protected String versionColumnName;
-
-    /**
-     * 乐观锁属性名称(实体字段)
-     *
-     * @since 3.5.0
-     */
-    protected String versionPropertyName;
-
-    /**
-     * 逻辑删除字段名称(数据库字段)
-     *
-     * @since 3.5.0
-     */
-    protected String logicDeleteColumnName;
-
-    /**
-     * 逻辑删除属性名称(实体字段)
-     *
-     * @since 3.5.0
-     */
-    protected String logicDeletePropertyName;
-
-    /**
      * 自定义基础的Entity类，公共字段
      */
     protected final Set<String> superEntityColumns = new HashSet<>();
@@ -178,14 +150,14 @@ public class EntityConfig implements ITemplate {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = ITemplate.super.renderData(tableInfo);
-        data.put("idType", idType == null ? null : idType.toString());
-        data.put("logicDeleteFieldName", this.logicDeleteColumnName);
-        data.put("versionFieldName", this.versionColumnName);
-        data.put("activeRecord", this.activeRecord);
-        data.put("entitySerialVersionUID", this.serialVersionUID);
-        data.put("entitySerialAnnotation", this.serialAnnotation);
-        data.put("entityColumnConstant", this.columnConstant);
-        data.put("entityBooleanColumnRemoveIsPrefix", this.booleanColumnRemoveIsPrefix);
+//        data.put("idType", idType == null ? null : idType.toString());
+//        data.put("logicDeleteFieldName", this.logicDeleteColumnName);
+//        data.put("versionFieldName", this.versionColumnName);
+//        data.put("activeRecord", this.activeRecord);
+//        data.put("entitySerialVersionUID", this.serialVersionUID);
+//        data.put("entitySerialAnnotation", this.serialAnnotation);
+//        data.put("entityColumnConstant", this.columnConstant);
+//        data.put("entityBooleanColumnRemoveIsPrefix", this.booleanColumnRemoveIsPrefix);
         data.put("superEntityClass", ClassUtils.getSimpleName(this.superClass));
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
         ModelConfig modelConfig = tableInfo.getConfigurer().getModelConfig();
@@ -230,11 +202,11 @@ public class EntityConfig implements ITemplate {
         if (tableInfo.isConvert()) {
             importPackages.add("com.baomidou.mybatisplus.annotation.TableName");
         }
-        if (null != this.idType && tableInfo.isHavePrimaryKey()) {
-            // 指定需要 IdType 场景
-            importPackages.add("com.baomidou.mybatisplus.annotation.IdType");
-            importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
-        }
+//        if (null != this.idType && tableInfo.isHavePrimaryKey()) {
+//            // 指定需要 IdType 场景
+//            importPackages.add("com.baomidou.mybatisplus.annotation.IdType");
+//            importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
+//        }
         tableInfo.getFields().forEach(field -> {
             IColumnType columnType = field.getColumnType();
             if (null != columnType && null != columnType.getPkg()) {
