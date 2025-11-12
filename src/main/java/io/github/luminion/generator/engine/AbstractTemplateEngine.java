@@ -18,7 +18,7 @@ package io.github.luminion.generator.engine;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.po.CustomFile;
 import io.github.luminion.generator.config.po.TableInfo;
-import io.github.luminion.generator.config.support.StrategyConfig;
+import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.util.FileUtils;
 import io.github.luminion.generator.util.RuntimeUtils;
 import io.github.luminion.generator.util.StringUtils;

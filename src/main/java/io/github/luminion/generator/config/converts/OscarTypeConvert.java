@@ -19,7 +19,7 @@ import io.github.luminion.generator.config.common.ITypeConvert;
 import io.github.luminion.generator.config.rules.DateType;
 import io.github.luminion.generator.config.rules.DbColumnType;
 import io.github.luminion.generator.config.rules.IColumnType;
-import io.github.luminion.generator.config.support.GlobalConfig;
+import io.github.luminion.generator.config.base.GlobalConfig;
 
 import static io.github.luminion.generator.config.converts.TypeConverts.contains;
 import static io.github.luminion.generator.config.converts.TypeConverts.containsAny;

@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.config.support;
+package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.config.common.IDbQuery;
-import io.github.luminion.generator.config.common.IKeyWordsHandler;
-import io.github.luminion.generator.config.common.INameConvert;
 import io.github.luminion.generator.config.enums.DbType;
 import io.github.luminion.generator.config.querys.DbQueryRegistry;
-import io.github.luminion.generator.config.type.ITypeConvertHandler;
 import io.github.luminion.generator.util.DatasourceUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;

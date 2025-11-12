@@ -16,8 +16,8 @@
 package io.github.luminion.generator.config.po;
 
 import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.config.support.GlobalConfig;
-import io.github.luminion.generator.config.support.StrategyConfig;
+import io.github.luminion.generator.config.base.GlobalConfig;
+import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.config.jdbc.DatabaseMetaDataWrapper;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
@@ -128,7 +128,7 @@ public class TableInfo {
      * @param name          表名
      * @since 3.5.0
      */
-    public TableInfo(String name, Configurer<?> configurer) {
+    public TableInfo(String name, Configurer configurer) {
         this.name = name;
         this.configurer = configurer;
     }

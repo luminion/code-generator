@@ -1,6 +1,6 @@
-package io.github.luminion.generator.config.support.adapter;
+package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.support.MapperConfig;
+import io.github.luminion.generator.config.base.MapperConfig;
 
 import java.lang.annotation.Annotation;
 
@@ -8,11 +8,11 @@ import java.lang.annotation.Annotation;
  * @author luminion
  * @since 1.0.0
  */
-public class MapperAdapter {
+public class MapperBuilder {
 
     private final MapperConfig mapperConfig;
 
-    public MapperAdapter(MapperConfig mapperConfig) {
+    public MapperBuilder(MapperConfig mapperConfig) {
         this.mapperConfig = mapperConfig;
     }
 
@@ -22,7 +22,7 @@ public class MapperAdapter {
      * @param superClass 类名
      * @return this
      */
-    public MapperAdapter superClass(String superClass) {
+    public MapperBuilder superClass(String superClass) {
         this.mapperConfig.setSuperClass(superClass);
         return this;
     }
@@ -34,7 +34,7 @@ public class MapperAdapter {
      * @return this
      * @since 3.5.0
      */
-    public MapperAdapter superClass(Class<?> superClass) {
+    public MapperBuilder superClass(Class<?> superClass) {
         return superClass(superClass.getName());
     }
 
@@ -45,7 +45,7 @@ public class MapperAdapter {
      * @return this
      * @since 3.5.3
      */
-    public MapperAdapter mapperAnnotation(Class<? extends Annotation> annotationClass) {
+    public MapperBuilder mapperAnnotation(Class<? extends Annotation> annotationClass) {
         this.mapperConfig.setMapperAnnotationClass(annotationClass);
         return this;
     }
@@ -56,7 +56,7 @@ public class MapperAdapter {
      * @return this
      * @since 3.5.0
      */
-    public MapperAdapter enableBaseResultMap() {
+    public MapperBuilder enableBaseResultMap() {
         this.mapperConfig.setBaseResultMap(true);
         return this;
     }
@@ -67,7 +67,7 @@ public class MapperAdapter {
      * @return this
      * @since 3.5.0
      */
-    public MapperAdapter enableBaseColumnList() {
+    public MapperBuilder enableBaseColumnList() {
         this.mapperConfig.setBaseColumnList(true);
         return this;
     }
@@ -80,7 +80,7 @@ public class MapperAdapter {
      * @return this
      * @since 3.5.0
      */
-    public MapperAdapter cache(Class<?> cache) {
+    public MapperBuilder cache(Class<?> cache) {
         this.mapperConfig.setCache(cache);
         return this;
     }
@@ -90,7 +90,7 @@ public class MapperAdapter {
      *
      * @return this
      */
-    public MapperAdapter clearSortColumnMap() {
+    public MapperBuilder clearSortColumnMap() {
         this.mapperConfig.getSortColumnMap().clear();
         return this;
     }
@@ -102,7 +102,7 @@ public class MapperAdapter {
      * @param isDesc     是否倒排
      * @return this
      */
-    public MapperAdapter sortColumn(String columnName, boolean isDesc) {
+    public MapperBuilder sortColumn(String columnName, boolean isDesc) {
         this.mapperConfig.getSortColumnMap().put(columnName, isDesc);
         return this;
     }

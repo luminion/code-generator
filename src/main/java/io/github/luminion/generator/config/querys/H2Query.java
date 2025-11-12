@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.config.querys;
 
-import io.github.luminion.generator.config.support.DataSourceConfig;
+import io.github.luminion.generator.config.base.DataSourceConfig;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

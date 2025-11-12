@@ -1,8 +1,8 @@
-package io.github.luminion.generator.config.support.adapter;
+package io.github.luminion.generator.config.builder;
 
 import io.github.luminion.generator.config.po.LikeTable;
 import io.github.luminion.generator.config.po.TableField;
-import io.github.luminion.generator.config.support.StrategyConfig;
+import io.github.luminion.generator.config.base.StrategyConfig;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,10 +12,10 @@ import java.util.function.BiFunction;
  * @author luminion
  * @since 1.0.0
  */
-public class StrategyAdapter {
+public class StrategyBuilder {
     private final StrategyConfig strategyConfig;
 
-    public StrategyAdapter(StrategyConfig config) {
+    public StrategyBuilder(StrategyConfig config) {
         this.strategyConfig = config;
     }
 
@@ -25,7 +25,7 @@ public class StrategyAdapter {
      * @param tablePrefix 过滤表前缀
      * @return this
      */
-    public StrategyAdapter addTablePrefix(String... tablePrefix) {
+    public StrategyBuilder addTablePrefix(String... tablePrefix) {
         return addTablePrefix(Arrays.asList(tablePrefix));
     }
 
@@ -33,10 +33,10 @@ public class StrategyAdapter {
      * 添加表前缀
      *
      * @param tablePrefixList 表前缀列表
-     * @return {@link StrategyAdapter }
+     * @return {@link StrategyBuilder }
      * @since 1.0.0
      */
-    public StrategyAdapter addTablePrefix(List<String> tablePrefixList) {
+    public StrategyBuilder addTablePrefix(List<String> tablePrefixList) {
         this.strategyConfig.getTablePrefix().addAll(tablePrefixList);
         return this;
     }
@@ -48,11 +48,11 @@ public class StrategyAdapter {
      * @return this
      * @since 3.5.1
      */
-    public StrategyAdapter addTableSuffix(String... tableSuffix) {
+    public StrategyBuilder addTableSuffix(String... tableSuffix) {
         return addTableSuffix(Arrays.asList(tableSuffix));
     }
 
-    public StrategyAdapter addTableSuffix(List<String> tableSuffixList) {
+    public StrategyBuilder addTableSuffix(List<String> tableSuffixList) {
         this.strategyConfig.getTableSuffix().addAll(tableSuffixList);
         return this;
     }
@@ -64,11 +64,11 @@ public class StrategyAdapter {
      * @return this
      * @since 3.5.0
      */
-    public StrategyAdapter addFieldPrefix(String... fieldPrefix) {
+    public StrategyBuilder addFieldPrefix(String... fieldPrefix) {
         return addFieldPrefix(Arrays.asList(fieldPrefix));
     }
 
-    public StrategyAdapter addFieldPrefix(List<String> fieldPrefix) {
+    public StrategyBuilder addFieldPrefix(List<String> fieldPrefix) {
         this.strategyConfig.getFieldPrefix().addAll(fieldPrefix);
         return this;
     }
@@ -80,11 +80,11 @@ public class StrategyAdapter {
      * @return this
      * @since 3.5.1
      */
-    public StrategyAdapter addFieldSuffix(String... fieldSuffix) {
+    public StrategyBuilder addFieldSuffix(String... fieldSuffix) {
         return addFieldSuffix(Arrays.asList(fieldSuffix));
     }
 
-    public StrategyAdapter addFieldSuffix(List<String> fieldSuffixList) {
+    public StrategyBuilder addFieldSuffix(List<String> fieldSuffixList) {
         this.strategyConfig.getFieldSuffix().addAll(fieldSuffixList);
         return this;
     }
@@ -95,17 +95,17 @@ public class StrategyAdapter {
      * @param include 包含表
      * @return this
      */
-    public StrategyAdapter addInclude(String... include) {
+    public StrategyBuilder addInclude(String... include) {
         this.strategyConfig.getInclude().addAll(Arrays.asList(include));
         return this;
     }
 
-    public StrategyAdapter addInclude(List<String> includes) {
+    public StrategyBuilder addInclude(List<String> includes) {
         this.strategyConfig.getInclude().addAll(includes);
         return this;
     }
 
-    public StrategyAdapter addInclude(String include) {
+    public StrategyBuilder addInclude(String include) {
         this.strategyConfig.getInclude().addAll(Arrays.asList(include.split(",")));
         return this;
     }
@@ -117,16 +117,16 @@ public class StrategyAdapter {
      * @return this
      * @since 3.5.0
      */
-    public StrategyAdapter addExclude(String... exclude) {
+    public StrategyBuilder addExclude(String... exclude) {
         return addExclude(Arrays.asList(exclude));
     }
 
-    public StrategyAdapter addExclude(List<String> excludeList) {
+    public StrategyBuilder addExclude(List<String> excludeList) {
         this.strategyConfig.getExclude().addAll(excludeList);
         return this;
     }
 
-    public StrategyAdapter addExclude(String exclude) {
+    public StrategyBuilder addExclude(String exclude) {
         this.strategyConfig.getExclude().addAll(Arrays.asList(exclude.split(",")));
         return this;
     }
@@ -136,7 +136,7 @@ public class StrategyAdapter {
      *
      * @return this
      */
-    public StrategyAdapter likeTable(LikeTable likeTable) {
+    public StrategyBuilder likeTable(LikeTable likeTable) {
         this.strategyConfig.setLikeTable(likeTable);
         return this;
     }
@@ -146,7 +146,7 @@ public class StrategyAdapter {
      *
      * @return this
      */
-    public StrategyAdapter notLikeTable(LikeTable notLikeTable) {
+    public StrategyBuilder notLikeTable(LikeTable notLikeTable) {
         this.strategyConfig.setNotLikeTable(notLikeTable);
         return this;
     }
@@ -158,7 +158,7 @@ public class StrategyAdapter {
      * @param operator sql运算符
      * @return this
      */
-    public StrategyAdapter extraFieldSuffix(String suffix, String operator) {
+    public StrategyBuilder extraFieldSuffix(String suffix, String operator) {
         this.strategyConfig.getExtraFieldSuffixMap().put(suffix, operator);
         return this;
     }
@@ -168,7 +168,7 @@ public class StrategyAdapter {
      *
      * @return this
      */
-    public StrategyAdapter clearExtraFieldSuffix() {
+    public StrategyBuilder clearExtraFieldSuffix() {
         this.strategyConfig.getExtraFieldSuffixMap().clear();
         return this;
     }
@@ -179,7 +179,7 @@ public class StrategyAdapter {
      * @param extraFieldStrategy 额外字段策略, 3个泛型参数分别为sql运算符,表字段信息,是否生成
      * @return this
      */
-    public StrategyAdapter extraFieldStrategy(BiFunction<String, TableField, Boolean> extraFieldStrategy) {
+    public StrategyBuilder extraFieldStrategy(BiFunction<String, TableField, Boolean> extraFieldStrategy) {
         this.strategyConfig.setExtraFieldStrategy(extraFieldStrategy);
         return this;
     }
@@ -190,7 +190,7 @@ public class StrategyAdapter {
      * @return this
      * @since 3.5.0
      */
-    public StrategyAdapter enableCapitalMode() {
+    public StrategyBuilder enableCapitalMode() {
         this.strategyConfig.setCapitalMode(true);
         return this;
     }
@@ -201,7 +201,7 @@ public class StrategyAdapter {
      * @return this
      * @since 3.5.0
      */
-    public StrategyAdapter enableSkipView() {
+    public StrategyBuilder enableSkipView() {
         this.strategyConfig.setSkipView(true);
         return this;
     }
@@ -212,7 +212,7 @@ public class StrategyAdapter {
      * @return this
      * @since 3.5.1
      */
-    public StrategyAdapter enableSchema() {
+    public StrategyBuilder enableSchema() {
         this.strategyConfig.setEnableSchema(true);
         return this;
     }
@@ -223,7 +223,7 @@ public class StrategyAdapter {
      * @return this
      * @since 3.5.0
      */
-    public StrategyAdapter disableSqlFilter() {
+    public StrategyBuilder disableSqlFilter() {
         this.strategyConfig.setEnableSqlFilter(false);
         return this;
     }

@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.config.querys;
 
-import io.github.luminion.generator.config.support.DataSourceConfig;
+import io.github.luminion.generator.config.base.DataSourceConfig;
 
 /**
  * DM 表数据查询

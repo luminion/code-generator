@@ -15,7 +15,6 @@
  */
 package io.github.luminion.generator.config.type;
 
-import io.github.luminion.generator.config.support.GlobalConfig;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.rules.DateType;
 import io.github.luminion.generator.config.rules.DbColumnType;

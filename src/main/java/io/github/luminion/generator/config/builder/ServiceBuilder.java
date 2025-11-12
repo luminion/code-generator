@@ -1,15 +1,15 @@
-package io.github.luminion.generator.config.support.adapter;
+package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.support.ServiceConfig;
+import io.github.luminion.generator.config.base.ServiceConfig;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
-public class ServiceAdapter {
+public class ServiceBuilder {
     private final ServiceConfig config;
 
-    public ServiceAdapter() {
+    public ServiceBuilder() {
         this.config = new ServiceConfig();
     }
 
@@ -19,7 +19,7 @@ public class ServiceAdapter {
      * @param clazz 类
      * @return this
      */
-    public ServiceAdapter superServiceClass(Class<?> clazz) {
+    public ServiceBuilder superServiceClass(Class<?> clazz) {
         return superServiceClass(clazz.getName());
     }
 
@@ -29,7 +29,7 @@ public class ServiceAdapter {
      * @param superServiceClass 类名
      * @return this
      */
-    public ServiceAdapter superServiceClass(String superServiceClass) {
+    public ServiceBuilder superServiceClass(String superServiceClass) {
         this.config.setSuperServiceClass(superServiceClass);
         return this;
     }
@@ -40,7 +40,7 @@ public class ServiceAdapter {
      * @param clazz 类
      * @return this
      */
-    public ServiceAdapter superServiceImplClass(Class<?> clazz) {
+    public ServiceBuilder superServiceImplClass(Class<?> clazz) {
         return superServiceImplClass(clazz.getName());
     }
 
@@ -50,7 +50,7 @@ public class ServiceAdapter {
      * @param superServiceImplClass 类名
      * @return this
      */
-    public ServiceAdapter superServiceImplClass(String superServiceImplClass) {
+    public ServiceBuilder superServiceImplClass(String superServiceImplClass) {
         this.config.setSuperServiceImplClass(superServiceImplClass);
         return this;
     }

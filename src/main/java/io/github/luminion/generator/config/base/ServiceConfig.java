@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.config.support;
+package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.enums.OutputFile;
@@ -55,7 +55,7 @@ public class ServiceConfig implements ITemplate {
         data.put("superServiceClass", ClassUtils.getSimpleName(this.superServiceClass));
         data.put("superServiceImplClassPackage", this.superServiceImplClass);
         data.put("superServiceImplClass", ClassUtils.getSimpleName(this.superServiceImplClass));
-        Configurer<?> configurer = tableInfo.getConfigurer();
+        Configurer configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         // todo 
 //        if (globalConfig.isSqlBooster()) {

@@ -22,7 +22,7 @@ import io.github.luminion.generator.config.rules.NamingStrategy;
 import io.github.luminion.generator.config.fill.Column;
 import io.github.luminion.generator.config.fill.Property;
 import io.github.luminion.generator.config.jdbc.DatabaseMetaDataWrapper;
-import io.github.luminion.generator.config.support.StrategyConfig;
+import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;

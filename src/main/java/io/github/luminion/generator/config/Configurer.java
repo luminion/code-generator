@@ -17,12 +17,11 @@ package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.query.DefaultQuery;
-import io.github.luminion.generator.config.support.*;
+import io.github.luminion.generator.config.base.*;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * 配置汇总 传递给文件生成工具
@@ -32,7 +31,7 @@ import java.util.regex.Pattern;
  * @since 1.0.0
  */
 @Getter
-public class Configurer<C> {
+public class Configurer {
 
     /**
      * 数据库配置信息
@@ -75,19 +74,14 @@ public class Configurer<C> {
      */
     private final ModelConfig modelConfig = new ModelConfig();
     /**
-     * 自定义配置
-     */
-    private final C customConfig;
-    /**
      * 数据库表信息
      * 配置
      */
     private final List<TableInfo> tableInfo = new ArrayList<>();
 
 
-    public Configurer(String url, String username, String password, C customConfig) {
+    public Configurer(String url, String username, String password) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
-        this.customConfig = customConfig;
     }
 
     public List<TableInfo> getTableInfo() {

@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.support;
+package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.config.enums.FieldFill;
 import io.github.luminion.generator.config.enums.OutputFile;

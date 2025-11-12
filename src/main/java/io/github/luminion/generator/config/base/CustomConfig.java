@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.support;
+package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.fill.ITemplate;

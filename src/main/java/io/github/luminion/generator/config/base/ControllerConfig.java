@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.config.support;
+package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.config.enums.OutputFile;
 import io.github.luminion.generator.config.po.MethodPayload;

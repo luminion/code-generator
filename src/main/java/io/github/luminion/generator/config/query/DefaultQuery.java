@@ -16,12 +16,12 @@
 package io.github.luminion.generator.config.query;
 
 import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.config.support.DataSourceConfig;
+import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.rules.IColumnType;
 import io.github.luminion.generator.config.jdbc.DatabaseMetaDataWrapper;
-import io.github.luminion.generator.config.support.StrategyConfig;
+import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.config.type.ITypeConvertHandler;
 import io.github.luminion.generator.config.type.TypeRegistry;
 import io.github.luminion.generator.util.StringUtils;
@@ -56,9 +56,9 @@ public class DefaultQuery implements IDatabaseQuery {
     private final TypeRegistry typeRegistry;
     protected final DatabaseMetaDataWrapper databaseMetaDataWrapper;
     protected final StrategyConfig strategyConfig;
-    protected final Configurer<?> configurer;
+    protected final Configurer configurer;
 
-    public DefaultQuery(Configurer<?> configBuilder) {
+    public DefaultQuery(Configurer configBuilder) {
         this.configurer = configBuilder;
         this.strategyConfig = configBuilder.getStrategyConfig();
         typeRegistry = new TypeRegistry(strategyConfig.getDateType());

@@ -1,6 +1,6 @@
-package io.github.luminion.generator.config.support.adapter;
+package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.support.ModelConfig;
+import io.github.luminion.generator.config.base.ModelConfig;
 
 import java.util.Arrays;
 
@@ -8,10 +8,10 @@ import java.util.Arrays;
  * @author luminion
  * @since 1.0.0
  */
-public class ModelAdapter {
+public class ModelBuilder {
     private final ModelConfig modelConfig;
 
-    public ModelAdapter(ModelConfig config) {
+    public ModelBuilder(ModelConfig config) {
         this.modelConfig = config;
     }
 
@@ -20,7 +20,7 @@ public class ModelAdapter {
      *
      * @return this
      */
-    public ModelAdapter queryDTOExtendsEntity() {
+    public ModelBuilder queryDTOExtendsEntity() {
         this.modelConfig.setQueryDTOExtendsEntity(true);
         return this;
     }
@@ -30,7 +30,7 @@ public class ModelAdapter {
      *
      * @return this
      */
-    public ModelAdapter queryVOExtendsEntity() {
+    public ModelBuilder queryVOExtendsEntity() {
         this.modelConfig.setQueryVOExtendsEntity(true);
         return this;
     }
@@ -40,7 +40,7 @@ public class ModelAdapter {
      *
      * @param fields 字段
      */
-    public ModelAdapter addEditExcludeFields(String... fields) {
+    public ModelBuilder addEditExcludeFields(String... fields) {
         this.modelConfig.getEditExcludeFields().addAll(Arrays.asList(fields));
         return this;
     }
@@ -50,7 +50,7 @@ public class ModelAdapter {
      *
      * @param columns 列
      */
-    public ModelAdapter addEditExcludeColumns(String... columns) {
+    public ModelBuilder addEditExcludeColumns(String... columns) {
         this.modelConfig.getEditExcludeColumns().addAll(Arrays.asList(columns));
         return this;
     }

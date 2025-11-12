@@ -1,8 +1,8 @@
-package io.github.luminion.generator.config.support.adapter;
+package io.github.luminion.generator.config.builder;
 
 import io.github.luminion.generator.config.enums.IdType;
 import io.github.luminion.generator.config.rules.NamingStrategy;
-import io.github.luminion.generator.config.support.EntityConfig;
+import io.github.luminion.generator.config.base.EntityConfig;
 import io.github.luminion.generator.config.fill.IFill;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
@@ -17,10 +17,10 @@ import java.util.Optional;
  * @since 1.0.0
  */
 @Slf4j
-public class EntityAdapter {
+public class EntityBuilder {
     private final EntityConfig entityConfig;
 
-    public EntityAdapter(EntityConfig entityConfig) {
+    public EntityBuilder(EntityConfig entityConfig) {
         this.entityConfig = entityConfig;
     }
 
@@ -30,7 +30,7 @@ public class EntityAdapter {
      * @param clazz 类
      * @return this
      */
-    public EntityAdapter superClass(Class<?> clazz) {
+    public EntityBuilder superClass(Class<?> clazz) {
         return superClass(clazz.getName());
     }
 
@@ -40,7 +40,7 @@ public class EntityAdapter {
      * @param superEntityClass 类全称
      * @return this
      */
-    public EntityAdapter superClass(String superEntityClass) {
+    public EntityBuilder superClass(String superEntityClass) {
         this.entityConfig.setSuperClass(superEntityClass);
         if (StringUtils.isNotBlank(superEntityClass)) {
             try {
@@ -62,7 +62,7 @@ public class EntityAdapter {
      * @param versionColumnName 乐观锁数据库字段名称
      * @return this
      */
-    public EntityAdapter versionColumnName(String versionColumnName) {
+    public EntityBuilder versionColumnName(String versionColumnName) {
         this.entityConfig.setVersionColumnName(versionColumnName);
         return this;
     }
@@ -73,7 +73,7 @@ public class EntityAdapter {
      * @param versionPropertyName 乐观锁实体属性字段名称
      * @return this
      */
-    public EntityAdapter versionPropertyName(String versionPropertyName) {
+    public EntityBuilder versionPropertyName(String versionPropertyName) {
         this.entityConfig.setVersionPropertyName(versionPropertyName);
         return this;
     }
@@ -84,7 +84,7 @@ public class EntityAdapter {
      * @param logicDeleteColumnName 逻辑删除字段名称
      * @return this
      */
-    public EntityAdapter logicDeleteColumnName(String logicDeleteColumnName) {
+    public EntityBuilder logicDeleteColumnName(String logicDeleteColumnName) {
         this.entityConfig.setLogicDeleteColumnName(logicDeleteColumnName);
         return this;
     }
@@ -95,7 +95,7 @@ public class EntityAdapter {
      * @param logicDeletePropertyName 逻辑删除实体属性名称
      * @return this
      */
-    public EntityAdapter logicDeletePropertyName(String logicDeletePropertyName) {
+    public EntityBuilder logicDeletePropertyName(String logicDeletePropertyName) {
         this.entityConfig.setLogicDeletePropertyName(logicDeletePropertyName);
         return this;
     }
@@ -106,7 +106,7 @@ public class EntityAdapter {
      * @param namingStrategy 数据库表映射到实体的命名策略
      * @return this
      */
-    public EntityAdapter naming(NamingStrategy namingStrategy) {
+    public EntityBuilder naming(NamingStrategy namingStrategy) {
         this.entityConfig.setNaming(namingStrategy);
         return this;
     }
@@ -117,7 +117,7 @@ public class EntityAdapter {
      * @param namingStrategy 数据库表字段映射到实体的命名策略
      * @return this
      */
-    public EntityAdapter columnNaming(NamingStrategy namingStrategy) {
+    public EntityBuilder columnNaming(NamingStrategy namingStrategy) {
         this.entityConfig.setColumnNaming(namingStrategy);
         return this;
     }
@@ -129,11 +129,11 @@ public class EntityAdapter {
      * @return this
      * @since 3.5.0
      */
-    public EntityAdapter addSuperEntityColumns(String... superEntityColumns) {
+    public EntityBuilder addSuperEntityColumns(String... superEntityColumns) {
         return addSuperEntityColumns(Arrays.asList(superEntityColumns));
     }
 
-    public EntityAdapter addSuperEntityColumns(List<String> superEntityColumnList) {
+    public EntityBuilder addSuperEntityColumns(List<String> superEntityColumnList) {
         this.entityConfig.getSuperEntityColumns().addAll(superEntityColumnList);
         return this;
     }
@@ -145,11 +145,11 @@ public class EntityAdapter {
      * @return this
      * @since 3.5.0
      */
-    public EntityAdapter addIgnoreColumns(String... ignoreColumns) {
+    public EntityBuilder addIgnoreColumns(String... ignoreColumns) {
         return addIgnoreColumns(Arrays.asList(ignoreColumns));
     }
 
-    public EntityAdapter addIgnoreColumns(List<String> ignoreColumnList) {
+    public EntityBuilder addIgnoreColumns(List<String> ignoreColumnList) {
         this.entityConfig.getIgnoreColumns().addAll(ignoreColumnList);
         return this;
     }
@@ -161,7 +161,7 @@ public class EntityAdapter {
      * @return this
      * @since 3.5.0
      */
-    public EntityAdapter addTableFills(IFill... tableFills) {
+    public EntityBuilder addTableFills(IFill... tableFills) {
         return addTableFills(Arrays.asList(tableFills));
     }
 
@@ -172,7 +172,7 @@ public class EntityAdapter {
      * @return this
      * @since 3.5.0
      */
-    public EntityAdapter addTableFills(List<IFill> tableFillList) {
+    public EntityBuilder addTableFills(List<IFill> tableFillList) {
         this.entityConfig.getTableFillList().addAll(tableFillList);
         return this;
     }
@@ -184,7 +184,7 @@ public class EntityAdapter {
      * @return this
      * @since 3.5.0
      */
-    public EntityAdapter idType(IdType idType) {
+    public EntityBuilder idType(IdType idType) {
         this.entityConfig.setIdType(idType);
         return this;
     }
@@ -195,7 +195,7 @@ public class EntityAdapter {
      * @return this
      * @since 3.5.11
      */
-    public EntityAdapter enableSerialAnnotation() {
+    public EntityBuilder enableSerialAnnotation() {
         this.entityConfig.setSerialAnnotation(true);
         return this;
     }
@@ -206,7 +206,7 @@ public class EntityAdapter {
      * @return this
      * @since 3.5.0
      */
-    public EntityAdapter enableColumnConstant() {
+    public EntityBuilder enableColumnConstant() {
         this.entityConfig.setColumnConstant(true);
         return this;
     }
@@ -217,7 +217,7 @@ public class EntityAdapter {
      * @return this
      * @since 3.5.0
      */
-    public EntityAdapter enableRemoveIsPrefix() {
+    public EntityBuilder enableRemoveIsPrefix() {
         this.entityConfig.setBooleanColumnRemoveIsPrefix(true);
         return this;
     }
@@ -228,7 +228,7 @@ public class EntityAdapter {
      * @return this
      * @since 3.5.0
      */
-    public EntityAdapter enableTableFieldAnnotation() {
+    public EntityBuilder enableTableFieldAnnotation() {
         this.entityConfig.setTableFieldAnnotationEnable(true);
         return this;
     }
@@ -239,7 +239,7 @@ public class EntityAdapter {
      * @return this
      * @since 3.5.0
      */
-    public EntityAdapter enableActiveRecord() {
+    public EntityBuilder enableActiveRecord() {
         this.entityConfig.setActiveRecord(true);
         return this;
     }
@@ -250,7 +250,7 @@ public class EntityAdapter {
      * @return this
      * @since 3.5.0
      */
-    public EntityAdapter disableSerialVersionUID() {
+    public EntityBuilder disableSerialVersionUID() {
         this.entityConfig.setSerialVersionUID(false);
         return this;
     }

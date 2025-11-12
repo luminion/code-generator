@@ -3,7 +3,7 @@ package io.github.luminion.generator.config.common;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.rules.NamingStrategy;
-import io.github.luminion.generator.config.support.StrategyConfig;
+import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.util.StringUtils;
 
 import java.util.Set;

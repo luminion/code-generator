@@ -1,18 +1,18 @@
-package io.github.luminion.generator.config.support.adapter;
+package io.github.luminion.generator.config.builder;
 
 import io.github.luminion.generator.config.SFunc;
 import io.github.luminion.generator.config.po.MethodPayload;
-import io.github.luminion.generator.config.support.ControllerConfig;
+import io.github.luminion.generator.config.base.ControllerConfig;
 import io.github.luminion.generator.util.ReflectUtils;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
-public class ControllerAdapter {
+public class ControllerBuilder {
     private final ControllerConfig controllerConfig;
 
-    public ControllerAdapter(ControllerConfig config) {
+    public ControllerBuilder(ControllerConfig config) {
         this.controllerConfig = config;
     }
 
@@ -22,7 +22,7 @@ public class ControllerAdapter {
      * @param clazz 父类控制器
      * @return this
      */
-    public ControllerAdapter superClass(Class<?> clazz) {
+    public ControllerBuilder superClass(Class<?> clazz) {
         return superClass(clazz.getName());
     }
 
@@ -32,7 +32,7 @@ public class ControllerAdapter {
      * @param superClass 父类控制器类名
      * @return this
      */
-    public ControllerAdapter superClass(String superClass) {
+    public ControllerBuilder superClass(String superClass) {
         this.controllerConfig.setSuperClass(superClass);
         return this;
     }
@@ -43,7 +43,7 @@ public class ControllerAdapter {
      * @return this
      * @since 3.5.0
      */
-    public ControllerAdapter disableRestController() {
+    public ControllerBuilder disableRestController() {
         this.controllerConfig.setRestController(false);
         return this;
     }
@@ -54,7 +54,7 @@ public class ControllerAdapter {
      * @return this
      * @since 3.5.0
      */
-    public ControllerAdapter disableHyphenStyle() {
+    public ControllerBuilder disableHyphenStyle() {
         this.controllerConfig.setHyphenStyle(false);
         return this;
     }
@@ -65,7 +65,7 @@ public class ControllerAdapter {
      * @param url url
      * @return this
      */
-    public ControllerAdapter baseUrl(String url) {
+    public ControllerBuilder baseUrl(String url) {
         if (url == null || url.isEmpty()) {
             this.controllerConfig.setBaseUrl(url);
             return this;
@@ -85,7 +85,7 @@ public class ControllerAdapter {
      *
      * @return this
      */
-    public ControllerAdapter enableCrossOrigin() {
+    public ControllerBuilder enableCrossOrigin() {
         this.controllerConfig.setCrossOrigin(true);
         return this;
     }
@@ -95,7 +95,7 @@ public class ControllerAdapter {
      *
      * @return this
      */
-    public ControllerAdapter disableBatchQueryPost() {
+    public ControllerBuilder disableBatchQueryPost() {
         this.controllerConfig.setBatchQueryPost(false);
         return this;
     }
@@ -105,7 +105,7 @@ public class ControllerAdapter {
      *
      * @return this
      */
-    public ControllerAdapter disableBatchQueryRequiredBody() {
+    public ControllerBuilder disableBatchQueryRequiredBody() {
         this.controllerConfig.setBatchQueryRequiredBody(false);
         return this;
     }
@@ -115,7 +115,7 @@ public class ControllerAdapter {
      *
      * @return this
      */
-    public ControllerAdapter enableRestful() {
+    public ControllerBuilder enableRestful() {
         this.controllerConfig.setRestful(true);
         return this;
     }
@@ -125,7 +125,7 @@ public class ControllerAdapter {
      *
      * @return this
      */
-    public ControllerAdapter disablePathVariable() {
+    public ControllerBuilder disablePathVariable() {
         this.controllerConfig.setPathVariable(false);
         return this;
     }
@@ -135,7 +135,7 @@ public class ControllerAdapter {
      *
      * @return this
      */
-    public ControllerAdapter disableRequestBody() {
+    public ControllerBuilder disableRequestBody() {
         this.controllerConfig.setRequestBody(false);
         return this;
     }
@@ -146,7 +146,7 @@ public class ControllerAdapter {
      * @param methodReference 方法引用
      * @return this
      */
-    public <R> ControllerAdapter returnMethod(SFunc<Object, R> methodReference) {
+    public <R> ControllerBuilder returnMethod(SFunc<Object, R> methodReference) {
         MethodPayload methodPayload = ReflectUtils.lambdaMethodInfo(methodReference, Object.class);
         this.controllerConfig.setReturnMethod(methodPayload);
         return this;
@@ -158,7 +158,7 @@ public class ControllerAdapter {
      * @param methodReference 方法参考
      * @return this
      */
-    public <T, R> ControllerAdapter pageMethod(SFunc<T, R> methodReference, Class<T> output) {
+    public <T, R> ControllerBuilder pageMethod(SFunc<T, R> methodReference, Class<T> output) {
         MethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, output);
         this.controllerConfig.setPageMethod(payload);
         return this;

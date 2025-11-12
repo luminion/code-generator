@@ -1,8 +1,8 @@
-package io.github.luminion.generator.config.support.adapter;
+package io.github.luminion.generator.config.builder;
 
 import io.github.luminion.generator.config.po.CustomFile;
 import io.github.luminion.generator.config.po.TableInfo;
-import io.github.luminion.generator.config.support.InjectionConfig;
+import io.github.luminion.generator.config.base.InjectionConfig;
 
 import java.util.List;
 import java.util.Map;
@@ -12,11 +12,11 @@ import java.util.function.BiConsumer;
  * @author luminion
  * @since 1.0.0
  */
-public class InjectionAdapter {
+public class InjectionBuilder {
 
     private final InjectionConfig injectionConfig;
 
-    public InjectionAdapter(InjectionConfig injectionConfig) {
+    public InjectionBuilder(InjectionConfig injectionConfig) {
         this.injectionConfig = injectionConfig;
     }
 
@@ -26,7 +26,7 @@ public class InjectionAdapter {
      * @param biConsumer 消费者
      * @return this
      */
-    public InjectionAdapter beforeOutputFile(BiConsumer<TableInfo, Map<String, Object>> biConsumer) {
+    public InjectionBuilder beforeOutputFile(BiConsumer<TableInfo, Map<String, Object>> biConsumer) {
         this.injectionConfig.setBeforeOutputFileBiConsumer(biConsumer);
         return this;
     }
@@ -37,7 +37,7 @@ public class InjectionAdapter {
      * @param customMap Map 对象
      * @return this
      */
-    public InjectionAdapter customMap(Map<String, Object> customMap) {
+    public InjectionBuilder customMap(Map<String, Object> customMap) {
         this.injectionConfig.setCustomMap(customMap);
         return this;
     }
@@ -48,7 +48,7 @@ public class InjectionAdapter {
      * @param customFile 自定义文件
      * @return this
      */
-    public InjectionAdapter customFile(CustomFile customFile) {
+    public InjectionBuilder customFile(CustomFile customFile) {
         this.injectionConfig.getCustomFiles().add(customFile);
         return this;
     }
@@ -59,7 +59,7 @@ public class InjectionAdapter {
      * @param customFiles 自定义文件列表
      * @return this
      */
-    public InjectionAdapter customFile(List<CustomFile> customFiles) {
+    public InjectionBuilder customFile(List<CustomFile> customFiles) {
         this.injectionConfig.getCustomFiles().addAll(customFiles);
         return this;
     }

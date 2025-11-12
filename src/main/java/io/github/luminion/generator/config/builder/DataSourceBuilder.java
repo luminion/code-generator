@@ -1,6 +1,6 @@
-package io.github.luminion.generator.config.support.adapter;
+package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.support.DataSourceConfig;
+import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.util.ClassUtils;
 import lombok.SneakyThrows;
 
@@ -8,10 +8,10 @@ import lombok.SneakyThrows;
  * @author luminion
  * @since 1.0.0
  */
-public class DataSourceAdapter {
+public class DataSourceBuilder {
     private final DataSourceConfig dataSourceConfig;
 
-    public DataSourceAdapter(DataSourceConfig config) {
+    public DataSourceBuilder(DataSourceConfig config) {
         this.dataSourceConfig = config;
     }
 
@@ -21,7 +21,7 @@ public class DataSourceAdapter {
      * @param schemaName 数据库schema
      * @return this
      */
-    public DataSourceAdapter schema(String schemaName) {
+    public DataSourceBuilder schema(String schemaName) {
         this.dataSourceConfig.setSchemaName(schemaName);
         return this;
     }
@@ -34,7 +34,7 @@ public class DataSourceAdapter {
      * @return this
      * @since 3.5.3
      */
-    public DataSourceAdapter addConnectionProperty(String key, String value) {
+    public DataSourceBuilder addConnectionProperty(String key, String value) {
         this.dataSourceConfig.getConnectionProperties().put(key, value);
         return this;
     }
@@ -48,7 +48,7 @@ public class DataSourceAdapter {
      * @since 3.5.8
      */
     @SneakyThrows
-    public DataSourceAdapter driverClassName(String className) {
+    public DataSourceBuilder driverClassName(String className) {
         ClassUtils.toClass(className);
         return this;
     }
