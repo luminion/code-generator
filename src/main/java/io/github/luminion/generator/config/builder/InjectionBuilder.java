@@ -1,7 +1,7 @@
 package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.po.CustomFile;
-import io.github.luminion.generator.config.po.TableInfo;
+import io.github.luminion.generator.po.CustomFile;
+import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.config.base.InjectionConfig;
 
 import java.util.List;

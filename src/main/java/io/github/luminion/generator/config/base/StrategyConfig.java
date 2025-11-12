@@ -15,16 +15,18 @@
  */
 package io.github.luminion.generator.config.base;
 
-import io.github.luminion.generator.config.common.*;
-import io.github.luminion.generator.config.enums.IdType;
-import io.github.luminion.generator.config.fill.IFill;
-import io.github.luminion.generator.config.po.LikeTable;
-import io.github.luminion.generator.config.po.TableField;
-import io.github.luminion.generator.config.enums.DateType;
-import io.github.luminion.generator.config.enums.ExtraFieldStrategy;
-import io.github.luminion.generator.config.fill.ITemplate;
-import io.github.luminion.generator.config.enums.NamingStrategy;
-import io.github.luminion.generator.config.po.TableInfo;
+import io.github.luminion.generator.common.IKeyWordsHandler;
+import io.github.luminion.generator.common.INameConvert;
+import io.github.luminion.generator.common.ITypeConvertHandler;
+import io.github.luminion.generator.enums.IdType;
+import io.github.luminion.generator.fill.IFill;
+import io.github.luminion.generator.po.LikeTable;
+import io.github.luminion.generator.po.TableField;
+import io.github.luminion.generator.enums.DateType;
+import io.github.luminion.generator.enums.ExtraFieldStrategy;
+import io.github.luminion.generator.common.ITemplate;
+import io.github.luminion.generator.enums.NamingStrategy;
+import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.util.ReflectUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;

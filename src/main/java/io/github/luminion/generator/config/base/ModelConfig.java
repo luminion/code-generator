@@ -1,11 +1,11 @@
 package io.github.luminion.generator.config.base;
 
-import io.github.luminion.generator.config.enums.FieldFill;
-import io.github.luminion.generator.config.enums.OutputFile;
-import io.github.luminion.generator.config.po.TableField;
-import io.github.luminion.generator.config.po.TableField.MetaInfo;
-import io.github.luminion.generator.config.po.TableInfo;
-import io.github.luminion.generator.config.fill.ITemplate;
+import io.github.luminion.generator.enums.FieldFill;
+import io.github.luminion.generator.enums.OutputFile;
+import io.github.luminion.generator.po.TableField;
+import io.github.luminion.generator.po.TableField.MetaInfo;
+import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.common.ITemplate;
 import lombok.Data;
 
 import java.util.*;

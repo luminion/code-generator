@@ -1,7 +1,7 @@
 package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.common.SFunc;
-import io.github.luminion.generator.config.po.MethodPayload;
+import io.github.luminion.generator.common.SFunc;
+import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.config.base.ControllerConfig;
 import io.github.luminion.generator.util.ReflectUtils;
 
@@ -147,7 +147,7 @@ public class ControllerBuilder {
      * @return this
      */
     public <R> ControllerBuilder returnMethod(SFunc<Object, R> methodReference) {
-        MethodPayload methodPayload = ReflectUtils.lambdaMethodInfo(methodReference, Object.class);
+        ClassMethodPayload methodPayload = ReflectUtils.lambdaMethodInfo(methodReference, Object.class);
         this.controllerConfig.setReturnMethod(methodPayload);
         return this;
     }
@@ -159,7 +159,7 @@ public class ControllerBuilder {
      * @return this
      */
     public <T, R> ControllerBuilder pageMethod(SFunc<T, R> methodReference, Class<T> output) {
-        MethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, output);
+        ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, output);
         this.controllerConfig.setPageMethod(payload);
         return this;
     }

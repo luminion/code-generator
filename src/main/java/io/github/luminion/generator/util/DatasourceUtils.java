@@ -1,6 +1,6 @@
 package io.github.luminion.generator.util;
 
-import io.github.luminion.generator.config.enums.DbType;
+import io.github.luminion.generator.enums.DbType;
 
 /**
  * @author luminion

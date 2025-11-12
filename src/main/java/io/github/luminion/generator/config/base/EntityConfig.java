@@ -15,9 +15,9 @@
  */
 package io.github.luminion.generator.config.base;
 
-import io.github.luminion.generator.config.po.TableInfo;
-import io.github.luminion.generator.config.common.IColumnType;
-import io.github.luminion.generator.config.fill.ITemplate;
+import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.common.IColumnType;
+import io.github.luminion.generator.common.ITemplate;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;

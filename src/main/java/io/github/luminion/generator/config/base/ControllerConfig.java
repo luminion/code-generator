@@ -15,11 +15,11 @@
  */
 package io.github.luminion.generator.config.base;
 
-import io.github.luminion.generator.config.enums.OutputFile;
-import io.github.luminion.generator.config.po.MethodPayload;
-import io.github.luminion.generator.config.po.TableField;
-import io.github.luminion.generator.config.po.TableInfo;
-import io.github.luminion.generator.config.fill.ITemplate;
+import io.github.luminion.generator.enums.OutputFile;
+import io.github.luminion.generator.po.ClassMethodPayload;
+import io.github.luminion.generator.po.TableField;
+import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.common.ITemplate;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -95,12 +95,12 @@ public class ControllerConfig implements ITemplate {
     /**
      * 返回结果方法
      */
-    protected MethodPayload returnMethod = new MethodPayload();
+    protected ClassMethodPayload returnMethod = new ClassMethodPayload();
 
     /**
      * 分页结果方法
      */
-    protected MethodPayload pageMethod = new MethodPayload();
+    protected ClassMethodPayload pageMethod = new ClassMethodPayload();
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {

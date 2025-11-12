@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.config.base;
 
-import io.github.luminion.generator.config.enums.DbType;
+import io.github.luminion.generator.enums.DbType;
 import io.github.luminion.generator.util.DatasourceUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;

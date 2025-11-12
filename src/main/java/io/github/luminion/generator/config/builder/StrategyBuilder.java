@@ -1,7 +1,7 @@
 package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.po.LikeTable;
-import io.github.luminion.generator.config.po.TableField;
+import io.github.luminion.generator.po.LikeTable;
+import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.config.base.StrategyConfig;
 
 import java.util.Arrays;
