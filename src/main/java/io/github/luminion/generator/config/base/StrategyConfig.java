@@ -24,6 +24,7 @@ import io.github.luminion.generator.config.enums.DateType;
 import io.github.luminion.generator.config.enums.ExtraFieldStrategy;
 import io.github.luminion.generator.config.fill.ITemplate;
 import io.github.luminion.generator.config.enums.NamingStrategy;
+import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.util.ReflectUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -45,15 +46,22 @@ public class StrategyConfig implements ITemplate {
     /**
      * 名称转换
      */
-    protected INameConvert nameConvert = new DefaultNameConvert(this);
+    protected INameConvert nameConvert = new INameConvert.DefaultNameConvert(this);
+
     /**
      * 数据库表映射到实体的命名策略
      */
     protected NamingStrategy entityNaming = NamingStrategy.underline_to_camel;
+
     /**
      * 数据库表字段映射到实体的命名策略
      */
     protected NamingStrategy columnNaming = NamingStrategy.underline_to_camel;
+
+    /**
+     * 类型转化策略
+     */
+    protected ITypeConvertHandler defaultTypeConvertHandler = new ITypeConvertHandler.DefaultTypeConvertHandler(DateType.TIME_PACK);
 
     /**
      * 类型转换处理
@@ -64,14 +72,6 @@ public class StrategyConfig implements ITemplate {
      * 关键字处理器
      */
     protected IKeyWordsHandler keyWordsHandler;
-//    /**
-//     * 时间类型对应策略(todo 直接设置类型转化)
-//     */
-//    protected DateType dateType = DateType.TIME_PACK;
-    /**
-     * 类型转化策略
-     */
-    protected TypeRegistry typeRegistry = new TypeRegistry(DateType.TIME_PACK);
 
     /**
      * 指定生成的主键的ID类型
@@ -342,4 +342,12 @@ public class StrategyConfig implements ITemplate {
         return ignoreColumns.stream().anyMatch(e -> e.equalsIgnoreCase(fieldName));
     }
 
+    @Override
+    public Map<String, Object> renderData(TableInfo tableInfo) {
+        Map<String, Object> data = ITemplate.super.renderData(tableInfo);
+        data.put("idType", idType == null ? null : idType.toString());
+        data.put("logicDeleteFieldName", this.logicDeleteColumnName);
+        data.put("versionFieldName", this.versionColumnName);
+        return data;
+    }
 }

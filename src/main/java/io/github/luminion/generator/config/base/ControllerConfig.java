@@ -48,20 +48,12 @@ public class ControllerConfig implements ITemplate {
     protected String superClass;
 
     /**
-     * 生成 <code>@RestController</code> 控制器
-     * <pre>
-     *      <code>@ControllerConfig</code>
-     *      ->
-     *      <code>@RestController</code>
-     * </pre>
+     * 生成 @RestController控制器
      */
     protected boolean restController = true;
 
     /**
-     * 驼峰转连字符
-     * <pre>
-     *      <code>@RequestMapping("/managerUserActionHistory")</code> -> <code>@RequestMapping("/manager-user-action-history")</code>
-     * </pre>
+     * 驼峰转连字符(managerUserActionHistory -> manager-user-action-history)
      */
     protected boolean hyphenStyle = true;
 
@@ -136,6 +128,7 @@ public class ControllerConfig implements ITemplate {
         data.put("returnMethod", this.returnMethod);
         data.put("pageMethod", this.pageMethod);
         data.put("batchQueryMethod", batchQueryPost ? "@PostMapping" : "@GetMapping");
+        
         if (pathVariable) {
             data.put("idPathParams", "/{id}");
             data.put("idMethodParams", "@PathVariable(\"id\") ");
@@ -144,11 +137,11 @@ public class ControllerConfig implements ITemplate {
         } else {
             data.put("pageMethodParams", "Long current, Long size");
         }
-        String requiredBodyStr = "@RequestBody ";
-        String optionalBodyStr = batchQueryRequiredBody ? "@RequestBody " : "@RequestBody(required = false) ";
+        String requestBodyStr = "@RequestBody ";
+        String optionalBodyStr = batchQueryRequiredBody ? "@RequestBody " : "@RequestBody ";
         String validatedStr = "@Validated ";
         if (requestBody) {
-            data.put("requiredBodyStr", requiredBodyStr);
+            data.put("requestBodyStr", requestBodyStr);
             if (batchQueryPost) {
                 data.put("optionalBodyStr", optionalBodyStr);
             }
@@ -196,14 +189,13 @@ public class ControllerConfig implements ITemplate {
             data.put("baseService", outputClassSimpleNameMap.get(OutputFile.serviceImpl.name()));
             importPackages.add(outputConfig.getOutputClassCanonicalNameMap(tableInfo).get(OutputFile.serviceImpl.name()));
         }
+        
         String primaryKeyPropertyType = "Object";
         String primaryKeyPropertyClass = null;
-        for (TableField field : tableInfo.getFields()) {
-            if (field.isKeyFlag()) {
-                primaryKeyPropertyType = field.getPropertyType();
-                primaryKeyPropertyClass = field.getColumnType().getPkg();
-                break;
-            }
+        TableField primaryTableField = tableInfo.getPrimaryTableField();
+        if (primaryTableField != null) {
+            primaryKeyPropertyType = primaryTableField.getPropertyType();
+            primaryKeyPropertyClass = primaryTableField.getColumnType().getPkg();
         }
         data.put("primaryKeyPropertyType", primaryKeyPropertyType);
         if (globalConfig.isValidated()) {

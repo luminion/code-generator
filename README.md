@@ -88,7 +88,7 @@ public static void main(String[] args) {
                     .insertDTO(f -> f
                             .formatPattern("%sInsertDTO") // 格式化名称
                             .subPackage("dto") // 指定文件所在的子包 
-                            .templatePath("/mybatis/insertDTO.java") // 指定模板路径
+                            .templatePath("/templates/base/insertDTO.java") // 指定模板路径
                             .outputDir("D:/project/src/main/java") // 单独指定文件输出目录
                             .disable() // 禁用生成
                     )

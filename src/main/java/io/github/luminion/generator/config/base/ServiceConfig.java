@@ -37,12 +37,12 @@ import java.util.stream.Collectors;
 @Data
 public class ServiceConfig implements ITemplate {
     /**
-     * 自定义继承的Service类
+     * service层导入的类
      */
     protected Set<String> serviceImportPackages = new TreeSet<>();
     
     /**
-     * 自定义继承的ServiceImpl类
+     * ServiceImpl导入的类
      */
     protected Set<String> serviceImplImportPackages = new TreeSet<>();
 

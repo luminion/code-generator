@@ -177,13 +177,13 @@ public abstract class AbstractTemplateEngine {
         // 启用 schema 处理逻辑
         String schemaName = "";
         if (strategyConfig.isEnableSchema()) {
-            // 存在 schemaName 设置拼接 . 组合表名
+            // todo 存在 schemaName 设置拼接 . 组合表名
             schemaName = config.getDataSourceConfig().getSchemaName();
-            if (StringUtils.isNotBlank(schemaName)) {
-                tableInfo.setSchemaName(schemaName);
-                schemaName += ".";
-                tableInfo.setConvert(true);
-            }
+//            if (StringUtils.isNotBlank(schemaName)) {
+//                tableInfo.setSchemaName(schemaName);
+//                schemaName += ".";
+//                tableInfo.setConvert(true);
+//            }
         }
         objectMap.put("schemaName", schemaName);
         objectMap.put("config", config);

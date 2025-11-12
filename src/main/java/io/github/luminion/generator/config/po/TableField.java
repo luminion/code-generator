@@ -16,15 +16,14 @@
 package io.github.luminion.generator.config.po;
 
 import io.github.luminion.generator.config.base.StrategyConfig;
+import io.github.luminion.generator.config.common.IColumnType;
 import io.github.luminion.generator.config.common.IKeyWordsHandler;
 import io.github.luminion.generator.config.common.ITypeConvertHandler;
-import io.github.luminion.generator.config.common.TypeRegistry;
 import io.github.luminion.generator.config.enums.JdbcType;
+import io.github.luminion.generator.config.enums.NamingStrategy;
 import io.github.luminion.generator.config.fill.Column;
 import io.github.luminion.generator.config.fill.Property;
 import io.github.luminion.generator.config.jdbc.DatabaseMetaDataWrapper;
-import io.github.luminion.generator.config.common.IColumnType;
-import io.github.luminion.generator.config.enums.NamingStrategy;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.ToString;
@@ -124,14 +123,14 @@ public class TableField {
     private MetaInfo metaInfo;
 
     
-    public TableField(StrategyConfig strategyConfig, 
-                      TableInfo tableInfo, 
+    public TableField(TableInfo tableInfo, 
                       DatabaseMetaDataWrapper.Column columnInfo) {
-        this.strategyConfig = strategyConfig;
+        this.strategyConfig = tableInfo.getConfigurer().getStrategyConfig();
         if (columnInfo.isPrimaryKey()){
             this.keyFlag = true;
             this.keyIdentityFlag = columnInfo.isAutoIncrement();
             tableInfo.setHavePrimaryKey(true);
+            tableInfo.setPrimaryTableField(this);
             if (this.keyIdentityFlag && strategyConfig.getIdType() != null) {
                 log.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableInfo.getName());
             }
@@ -152,11 +151,10 @@ public class TableField {
         TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo, tableInfo);
         IColumnType columnType;
         ITypeConvertHandler typeConvertHandler = strategyConfig.getTypeConvertHandler();
-        TypeRegistry typeRegistry = strategyConfig.getTypeRegistry();
         if (typeConvertHandler != null) {
-            columnType = typeConvertHandler.convert(typeRegistry, metaInfo);
+            columnType = typeConvertHandler.convert(metaInfo);
         } else {
-            columnType = typeRegistry.getColumnType(metaInfo);
+            columnType = strategyConfig.getDefaultTypeConvertHandler().convert(metaInfo);
         }
         this.columnType = columnType;
         if (strategyConfig.isBooleanColumnRemoveIsPrefix()

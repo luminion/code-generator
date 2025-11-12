@@ -1,4 +1,6 @@
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.base.GlobalConfig;
+import io.github.luminion.generator.config.base.OutputConfig;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
 
 /**
@@ -12,6 +14,9 @@ public class T1 {
         String username = "root";
         String password = "root";
         Configurer configurer = new Configurer(url,username,password);
+        OutputConfig outputConfig = configurer.getOutputConfig();
+        outputConfig.setGlobalFileOverride(true);
+        outputConfig.setOutputDir("D:\\github\\test\\generator-test-sp3\\src\\main\\java");
         VelocityTemplateEngine templateEngine = new VelocityTemplateEngine(configurer);
         configurer.getStrategyConfig().getInclude().add("sys_user");
         templateEngine.batchOutput().open();

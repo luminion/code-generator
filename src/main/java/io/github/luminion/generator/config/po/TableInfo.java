@@ -15,6 +15,7 @@
  */
 package io.github.luminion.generator.config.po;
 
+import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.config.jdbc.DatabaseMetaDataWrapper;
 import lombok.Getter;
@@ -33,6 +34,9 @@ import java.util.stream.Collectors;
  */
 public class TableInfo {
 
+
+    @Getter
+    private final Configurer configurer;
     /**
      * 配置适配器
      */
@@ -88,6 +92,13 @@ public class TableInfo {
     @Getter
     @Setter
     private boolean havePrimaryKey;
+    
+    /**
+     * 主键字段
+     */
+    @Getter
+    @Setter
+    private TableField primaryTableField;
 
     /**
      * 索引信息
@@ -104,8 +115,9 @@ public class TableInfo {
     @Getter
     private String schemaName;
 
-    public TableInfo(StrategyConfig strategyConfig, DatabaseMetaDataWrapper.Table table) {
-        this.strategyConfig = strategyConfig;
+    public TableInfo(Configurer configurer, DatabaseMetaDataWrapper.Table table) {
+        this.configurer = configurer;
+        this.strategyConfig = configurer.getStrategyConfig();
         this.name = table.getName();
         String remarks = table.getRemarks();
         if (remarks != null) {

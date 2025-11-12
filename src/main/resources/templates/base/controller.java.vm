@@ -75,7 +75,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Object")} insert($!{requiredBodyStr}$!{validatedStr}${insertDTO} insertDTO) {
+    public ${returnMethod.returnGenericTypeStr(${primaryKeyPropertyType})} insert($!{requestBodyStr}$!{validatedStr}${insertDTO} insertDTO) {
         return ${returnMethod.invokeMethodStr("baseService.insertByDTO(insertDTO)")};
     }
 #end
@@ -101,7 +101,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Boolean")} update($!{requiredBodyStr}$!{validatedStr}${updateDTO} updateDTO) {
+    public ${returnMethod.returnGenericTypeStr("Boolean")} update($!{requestBodyStr}$!{validatedStr}${updateDTO} updateDTO) {
         return ${returnMethod.invokeMethodStr("baseService.updateByDTO(updateDTO)")};
     }
 #end
@@ -173,15 +173,15 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} selectList($!{optionalBodyStr}${queryDTO} queryDTO) {
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} selectList($!{requestBodyStr}${queryDTO} queryDTO) {
         return ${returnMethod.invokeMethodStr("baseService.voList(queryDTO)")};
     }
 #if(${sqlBooster})
 
     #if(${springdoc})
-    @Operation(summary = "列表查询-动态条件")
+    @Operation(summary = "列表查询-sql")
     #elseif(${swagger})
-    @ApiOperation(value = "列表查询-动态条件")
+    @ApiOperation(value = "列表查询-sql")
     #else
     /**
      * 列表查询-动态条件
@@ -190,11 +190,33 @@ public class ${controller} {
      * @return 查询结果
      */
     #end
-    @PostMapping("/dynamic/list")
+    @PostMapping("/list/sql")
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} dynamicList($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper) {
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} selectListBySqlHelper($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper) {
+        return ${returnMethod.invokeMethodStr("baseService.voList(sqlHelper)")};
+    }
+
+    #if(${springdoc})
+    @Operation(summary = "列表查询-Map")
+    #elseif(${swagger})
+    @ApiOperation(value = "列表查询-Map")
+    #else
+    /**
+     * 列表查询-Map
+     *
+     * @param sqlHelper 条件构造器
+     * @return 查询结果
+     */
+    #end
+    @PostMapping("/list/map")
+    #if(!${restControllerStyle})
+    @ResponseBody
+    #end
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} selectListByMap($!{requiredBodyStr}Map<String, Object> map) {
+        SqlHelper<${entity}> sqlHelper = new SqlHelper.of(baseService).merge(map);
+        
         return ${returnMethod.invokeMethodStr("baseService.voList(sqlHelper)")};
     }
 #end
@@ -217,34 +239,9 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-##    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} selectPage($!{mapRequestParam}$!{optionalBodyStr}${controllerQueryParam} queryDTO, $!{pageMethodParams}) {
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} selectPage($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
+    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} selectPage($!{requestBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
     }
-#if(${sqlBooster})
-
-    #if(${springdoc})
-    @Operation(summary = "分页查询-动态条件")
-    #elseif(${swagger})
-    @ApiOperation(value = "分页查询-动态条件")
-    #else
-    /**
-     * 分页查询-动态条件
-     *
-     * @param sqlHelper 条件构造器
-     * @param current 页码
-     * @param size 每页大小(-1为全部)
-     * @return 查询结果
-     */
-    #end
-    @PostMapping("/dynamic/page/$!{pagePathParams}")
-    #if(!${restControllerStyle})
-    @ResponseBody
-    #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} dynamicPage($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, $!{pageMethodParams}) {
-        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlHelper, current, size)")})};
-    }
-#end
 #end
 #if(${generateImport})
 
@@ -302,34 +299,120 @@ public class ${controller} {
      */
     #end
     ${batchQueryMethod}("/excel/export$!{pagePathParams}")
-    public void excelExport($!{optionalBodyStr}${queryDTO} queryDTO, ${pageMethodParams}, HttpServletResponse response) throws IOException {
+    public void excelExport($!{requestBodyStr}${queryDTO} queryDTO, ${pageMethodParams}, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
         baseService.excelExport(queryDTO, response.getOutputStream(), ${queryVO}.class, current, size);
     }
-#if(${sqlBooster})
-    
-    #if(${springdoc})
-    @Operation(summary = "excel文件导出-动态条件")
-    #elseif(${swagger})
-    @ApiOperation(value = "excel文件导出-动态条件")
-    #else
-    /**
-     * excel文件导出-动态条件
-     * 
-     * @param sqlHelper 条件构造器
-     * @param current 页码
-     * @param size 每页大小(-1为全部)
-     */
-    #end
-    @PostMapping("/dynamic/excel/export$!{pagePathParams}")
-    public void excelExport($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, ${pageMethodParams}, HttpServletResponse response) throws IOException {
-        response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-        response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        baseService.excelExport(sqlHelper, response.getOutputStream(), ${queryVO}.class, current, size);
-    }
+#if(${sqlHelperQuery})
+
+
+##    #if(${springdoc})
+##    @Operation(summary = "分页查询-动态条件")
+##    #elseif(${swagger})
+##    @ApiOperation(value = "分页查询-动态条件")
+##    #else
+##    /**
+##     * 分页查询-动态条件
+##     *
+##     * @param sqlHelper 条件构造器
+##     * @param current 页码
+##     * @param size 每页大小(-1为全部)
+##     * @return 查询结果
+##     */
+##    #end
+##    @PostMapping("/sql/page/$!{pagePathParams}")
+##    #if(!${restControllerStyle})
+##    @ResponseBody
+##    #end
+##    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} dynamicPage($!{requestBodyStr}SqlHelper<${entity}> sqlHelper, $!{pageMethodParams}) {
+##        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlHelper, current, size)")})};
+##    }    
+##
+##    #if(${springdoc})
+##    @Operation(summary = "excel文件导出-动态条件")
+##    #elseif(${swagger})
+##    @ApiOperation(value = "excel文件导出-动态条件")
+##    #else
+##    /**
+##     * excel文件导出-动态条件
+##     * 
+##     * @param sqlHelper 条件构造器
+##     * @param current 页码
+##     * @param size 每页大小(-1为全部)
+##     */
+##    #end
+##    @PostMapping("/sql/excel/export$!{pagePathParams}")
+##    public void excelExport($!{requestBodyStr}SqlHelper<${entity}> sqlHelper, ${pageMethodParams}, HttpServletResponse response) throws IOException {
+##        response.setContentType("application/vnd.ms-excel");
+##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+##        response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
+##        baseService.excelExport(sqlHelper, response.getOutputStream(), ${queryVO}.class, current, size);
+##    }    
+##    
+##    #if(${springdoc})
+##    @Operation(summary = "列表查询-动态条件")
+##    #elseif(${swagger})
+##    @ApiOperation(value = "列表查询-动态条件")
+##    #else
+##    /**
+##     * 列表查询-动态条件
+##     *
+##     * @param sqlHelper 条件构造器
+##     * @return 查询结果
+##     */
+##    #end
+##    @PostMapping("/sql/list")
+##    #if(!${restControllerStyle})
+##    @ResponseBody
+##    #end
+##    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} dynamicList($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper) {
+##        return ${returnMethod.invokeMethodStr("baseService.voList(sqlHelper)")};
+##    }
+##
+##    #if(${springdoc})
+##    @Operation(summary = "分页查询-动态条件")
+##    #elseif(${swagger})
+##    @ApiOperation(value = "分页查询-动态条件")
+##    #else
+##    /**
+##     * 分页查询-动态条件
+##     *
+##     * @param sqlHelper 条件构造器
+##     * @param current 页码
+##     * @param size 每页大小(-1为全部)
+##     * @return 查询结果
+##     */
+##    #end
+##    @PostMapping("/sql/page/$!{pagePathParams}")
+##    #if(!${restControllerStyle})
+##    @ResponseBody
+##    #end
+##    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} dynamicPage($!{requestBodyStr}SqlHelper<${entity}> sqlHelper, $!{pageMethodParams}) {
+##        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlHelper, current, size)")})};
+##    }    
+##
+##    #if(${springdoc})
+##    @Operation(summary = "excel文件导出-动态条件")
+##    #elseif(${swagger})
+##    @ApiOperation(value = "excel文件导出-动态条件")
+##    #else
+##    /**
+##     * excel文件导出-动态条件
+##     * 
+##     * @param sqlHelper 条件构造器
+##     * @param current 页码
+##     * @param size 每页大小(-1为全部)
+##     */
+##    #end
+##    @PostMapping("/sql/excel/export$!{pagePathParams}")
+##    public void excelExport($!{requestBodyStr}SqlHelper<${entity}> sqlHelper, ${pageMethodParams}, HttpServletResponse response) throws IOException {
+##        response.setContentType("application/vnd.ms-excel");
+##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+##        response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
+##        baseService.excelExport(sqlHelper, response.getOutputStream(), ${queryVO}.class, current, size);
+##    }
 #end
 #end
 }

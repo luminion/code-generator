@@ -75,7 +75,7 @@ public class DefaultQuery implements IDatabaseQuery {
             tables.forEach(table -> {
                 String tableName = table.getName();
                 if (StringUtils.isNotBlank(tableName)) {
-                    TableInfo tableInfo = new TableInfo(configurer.getStrategyConfig(), table);
+                    TableInfo tableInfo = new TableInfo(configurer, table);
                     if (isInclude && strategyConfig.matchIncludeTable(tableName)) {
                         includeTableList.add(tableInfo);
                     } else if (isExclude && strategyConfig.matchExcludeTable(tableName)) {
@@ -111,7 +111,7 @@ public class DefaultQuery implements IDatabaseQuery {
         tableInfo.setIndexList(getIndex(tableName));
         Map<String, DatabaseMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
         columnsInfoMap.forEach((k, columnInfo) -> {
-            TableField field = new TableField(strategyConfig, tableInfo, columnInfo);
+            TableField field = new TableField( tableInfo, columnInfo);
             tableInfo.addField(field);
         });
     }

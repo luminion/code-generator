@@ -80,14 +80,10 @@ public class EntityConfig implements ITemplate {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = ITemplate.super.renderData(tableInfo);
-        data.put("idType", idType == null ? null : idType.toString());
-        data.put("logicDeleteFieldName", this.logicDeleteColumnName);
-        data.put("versionFieldName", this.versionColumnName);
         data.put("activeRecord", this.activeRecord);
         data.put("entitySerialVersionUID", this.serialVersionUID);
         data.put("entitySerialAnnotation", this.serialAnnotation);
         data.put("entityColumnConstant", this.columnConstant);
-        data.put("entityBooleanColumnRemoveIsPrefix", this.booleanColumnRemoveIsPrefix);
         data.put("superEntityClass", ClassUtils.getSimpleName(this.superClass));
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
         ModelConfig modelConfig = tableInfo.getConfigurer().getModelConfig();
