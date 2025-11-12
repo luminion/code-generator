@@ -22,8 +22,8 @@ import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.rules.IColumnType;
 import io.github.luminion.generator.config.jdbc.DatabaseMetaDataWrapper;
 import io.github.luminion.generator.config.base.StrategyConfig;
-import io.github.luminion.generator.config.type.ITypeConvertHandler;
-import io.github.luminion.generator.config.type.TypeRegistry;
+import io.github.luminion.generator.config.common.ITypeConvertHandler;
+import io.github.luminion.generator.config.common.TypeRegistry;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 

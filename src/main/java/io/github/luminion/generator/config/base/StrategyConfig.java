@@ -24,7 +24,7 @@ import io.github.luminion.generator.config.rules.DateType;
 import io.github.luminion.generator.config.rules.ExtraFieldStrategy;
 import io.github.luminion.generator.config.fill.ITemplate;
 import io.github.luminion.generator.config.rules.NamingStrategy;
-import io.github.luminion.generator.config.type.ITypeConvertHandler;
+import io.github.luminion.generator.config.common.ITypeConvertHandler;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 

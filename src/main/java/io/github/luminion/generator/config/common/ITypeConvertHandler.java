@@ -15,39 +15,25 @@
  */
 package io.github.luminion.generator.config.common;
 
-import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.rules.IColumnType;
 
 
 /**
- * 数据库字段类型转换
+ * 类型转换处理器
  *
- * @author hubin
- * @author hanchunlin
- * @author luminion
- * @since 1.0.0
+ * @author nieqiurong 2022/5/12.
+ * @since 3.5.3
  */
-public interface ITypeConvert {
+public interface ITypeConvertHandler {
 
     /**
-     * 执行类型转换
+     * 转换字段类型
      *
-     * @param globalConfig 全局配置
-     * @param tableField   字段列信息
-     * @return ignore
+     * @param typeRegistry 类型注册信息
+     * @param metaInfo     字段元数据信息
+     * @return 子类类型
      */
-    default IColumnType processTypeConvert(GlobalConfig globalConfig, TableField tableField) {
-        return processTypeConvert(globalConfig, tableField.getColumnType().getType());
-    }
-
-    /**
-     * 执行类型转换
-     *
-     * @param globalConfig 全局配置
-     * @param fieldType    字段类型
-     * @return ignore
-     */
-    IColumnType processTypeConvert(GlobalConfig globalConfig, String fieldType);
+    IColumnType convert(TypeRegistry typeRegistry, TableField.MetaInfo metaInfo);
 
 }
