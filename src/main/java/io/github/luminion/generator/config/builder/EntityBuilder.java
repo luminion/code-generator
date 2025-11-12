@@ -1,7 +1,7 @@
 //package io.github.luminion.generator.config.builder;
 //
 //import io.github.luminion.generator.config.enums.IdType;
-//import io.github.luminion.generator.config.rules.NamingStrategy;
+//import io.github.luminion.generator.config.rules.NameConvertStrategy;
 //import io.github.luminion.generator.config.base.EntityConfig;
 //import io.github.luminion.generator.config.fill.IFill;
 //import io.github.luminion.generator.util.ClassUtils;
@@ -106,7 +106,7 @@
 //     * @param namingStrategy 数据库表映射到实体的命名策略
 //     * @return this
 //     */
-//    public EntityBuilder naming(NamingStrategy namingStrategy) {
+//    public EntityBuilder naming(NameConvertStrategy namingStrategy) {
 //        this.entityConfig.setNaming(namingStrategy);
 //        return this;
 //    }
@@ -117,7 +117,7 @@
 //     * @param namingStrategy 数据库表字段映射到实体的命名策略
 //     * @return this
 //     */
-//    public EntityBuilder columnNaming(NamingStrategy namingStrategy) {
+//    public EntityBuilder columnNaming(NameConvertStrategy namingStrategy) {
 //        this.entityConfig.setColumnNaming(namingStrategy);
 //        return this;
 //    }

@@ -23,7 +23,7 @@ import io.github.luminion.generator.common.DatabaseKeyWordsHandler;
 import io.github.luminion.generator.common.ITypeConvertHandler;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.JdbcType;
-import io.github.luminion.generator.enums.NamingStrategy;
+import io.github.luminion.generator.enums.NameConvertStrategy;
 import io.github.luminion.generator.fill.Column;
 import io.github.luminion.generator.fill.Property;
 import io.github.luminion.generator.jdbc.DatabaseMetaDataWrapper;
@@ -154,7 +154,7 @@ public class TableField {
         Function<String, String> converter = strategyConfig.getTableColumnNameToEntityFieldName();
         Set<String> fieldPrefix = strategyConfig.getFieldPrefix();
         Set<String> fieldSuffix = strategyConfig.getFieldSuffix();
-        String propertyName = NamingStrategy.doConvertName(columnName, fieldPrefix, fieldSuffix, converter);
+        String propertyName = NameConvertStrategy.doConvertName(columnName, fieldPrefix, fieldSuffix, converter);
         // 设置字段的元数据信息
         TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo, tableInfo);
         JavaFieldType columnType;
@@ -175,9 +175,9 @@ public class TableField {
             this.propertyName = StringUtils.removePrefixAfterPrefixToLower(propertyName, 2);
         }
         
-        if (NamingStrategy.UNDERLINE_TO_CAMEL_CASE.getFunction().equals(strategyConfig.getTableColumnNameToEntityFieldName())) {
+        if (NameConvertStrategy.UNDERLINE_TO_CAMEL_CASE.getFunction().equals(strategyConfig.getTableColumnNameToEntityFieldName())) {
             // 下划线转驼峰策略
-            this.convert = !propertyName.equalsIgnoreCase(NamingStrategy.underlineToCamel(this.columnName));
+            this.convert = !propertyName.equalsIgnoreCase(NameConvertStrategy.underlineToCamel(this.columnName));
         } else {
             this.convert = !propertyName.equalsIgnoreCase(this.columnName);
         }

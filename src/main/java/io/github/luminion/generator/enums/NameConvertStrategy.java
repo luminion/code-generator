@@ -31,7 +31,7 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 @AllArgsConstructor
-public enum NamingStrategy {
+public enum NameConvertStrategy {
     /**
      * 不做任何改变，原样输出
      */
@@ -39,11 +39,11 @@ public enum NamingStrategy {
     /**
      * 下划线转驼峰命名
      */
-    UNDERLINE_TO_CAMEL_CASE(NamingStrategy::underlineToCamel),
+    UNDERLINE_TO_CAMEL_CASE(NameConvertStrategy::underlineToCamel),
     /**
      * 下划线转驼峰命名(首字母大写)
      */
-    UNDERLINE_TO_PASCAL_CASE(e -> NamingStrategy.capitalFirst(NamingStrategy.underlineToCamel(e))),
+    UNDERLINE_TO_PASCAL_CASE(e -> NameConvertStrategy.capitalFirst(NameConvertStrategy.underlineToCamel(e))),
     ;
     @Getter
     private final Function<String, String> function;

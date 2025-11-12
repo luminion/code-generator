@@ -19,7 +19,7 @@ import io.github.luminion.generator.common.TableColumnTypeToJavaTypeConverter;
 import io.github.luminion.generator.common.DatabaseKeyWordsHandler;
 import io.github.luminion.generator.common.ITypeConvertHandler;
 import io.github.luminion.generator.enums.IdType;
-import io.github.luminion.generator.enums.NamingStrategy;
+import io.github.luminion.generator.enums.NameConvertStrategy;
 import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.enums.DateType;
@@ -47,12 +47,12 @@ public class StrategyConfig implements ConfigRender {
     /**
      * 数据库表名转换实体类名
      */
-    protected Function<String, String> tableNameToEntityName = NamingStrategy.UNDERLINE_TO_PASCAL_CASE.getFunction();
+    protected Function<String, String> tableNameToEntityName = NameConvertStrategy.UNDERLINE_TO_PASCAL_CASE.getFunction();
     
     /**
      * 数据库列名称转换为属性名的方法
      */
-    protected Function<String, String> tableColumnNameToEntityFieldName = NamingStrategy.UNDERLINE_TO_CAMEL_CASE.getFunction();
+    protected Function<String, String> tableColumnNameToEntityFieldName = NameConvertStrategy.UNDERLINE_TO_CAMEL_CASE.getFunction();
 
     /**
      * 日期类型
@@ -288,7 +288,7 @@ public class StrategyConfig implements ConfigRender {
 //            if (tableField != null && StringUtils.isNotBlank(tableField.value())) {
 //                return tableField.value();
 //            }
-//            if (null == columnNaming || columnNaming == NamingStrategy.no_change) {
+//            if (null == columnNaming || columnNaming == NameConvertStrategy.no_change) {
 //                return field.getName();
 //            }
 //            return StringUtils.camelToUnderline(field.getName());
