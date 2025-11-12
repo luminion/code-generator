@@ -24,8 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -54,10 +52,6 @@ public class DataSourceConfig {
      * 数据库类型
      */
     protected final DbType dbType;
-    /**
-     * 数据库连接属性
-     */
-    protected final Map<String, String> connectionProperties = new HashMap<>();
     
     /**
      * 数据库schema名
@@ -80,7 +74,6 @@ public class DataSourceConfig {
     public Connection createConnection() {
         try {
             Properties properties = new Properties();
-            connectionProperties.forEach(properties::setProperty);
             properties.put("user", username);
             properties.put("password", password);
             // 使用元数据查询方式时，有些数据库需要增加属性才能读取注释
@@ -102,7 +95,7 @@ public class DataSourceConfig {
                     this.schemaName = connection.getSchema();
                 } catch (Exception exception) {
                     // ignore 老古董1.7以下的驱动不支持.
-                    log.debug("获取schemaName出错",exception);
+                    log.debug("获取schemaName失败",exception);
                 }
             }
             return connection;

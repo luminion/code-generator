@@ -15,11 +15,8 @@
  */
 package io.github.luminion.generator.config.po;
 
-import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.config.jdbc.DatabaseMetaDataWrapper;
-import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +37,7 @@ public class TableInfo {
      * 配置适配器
      */
     @Getter
-    private final Configurer configurer;
+    private final StrategyConfig strategyConfig;
 
     /**
      * 是否转换
@@ -68,11 +65,17 @@ public class TableInfo {
     private String entityName;
 
     /**
+     * 公共字段
+     */
+    @Getter
+    private final List<TableField> commonFields = new ArrayList<>();
+
+    /**
      * 表字段
      */
     @Getter
     private final List<TableField> fields = new ArrayList<>();
-    
+
     /**
      * 额外字段
      */
@@ -87,18 +90,6 @@ public class TableInfo {
     private boolean havePrimaryKey;
 
     /**
-     * 公共字段
-     */
-    @Getter
-    private final List<TableField> commonFields = new ArrayList<>();
-
-    /**
-     * 字段名称集
-     */
-    private String fieldNames;
-
-
-    /**
      * 索引信息
      *
      * @since 3.5.10
@@ -107,53 +98,31 @@ public class TableInfo {
     @Getter
     private List<DatabaseMetaDataWrapper.Index> indexList;
 
-    /**
-     * 字段信息
-     *
-     * @since 3.5.10
-     */
     @Getter
     private final Map<String, TableField> tableFieldMap = new HashMap<>();
 
-    /**
-     * @since 3.5.10
-     */
     @Getter
-    @Setter
     private String schemaName;
 
-    /**
-     * 构造方法
-     *
-     * @param name          表名
-     * @since 3.5.0
-     */
-    public TableInfo(String name, Configurer configurer) {
-        this.name = name;
-        this.configurer = configurer;
-    }
-
-    /**
-     * @since 3.5.0
-     */
-    protected void setConvert() {
-        if (this.getConfigurer().getStrategyConfig().startsWithTablePrefix(name) || this.getConfigurer().getStrategyConfig().isTableFieldAnnotationEnable()) {
+    public TableInfo(StrategyConfig strategyConfig, DatabaseMetaDataWrapper.Table table) {
+        this.strategyConfig = strategyConfig;
+        this.name = table.getName();
+        String remarks = table.getRemarks();
+        if (remarks != null) {
+            this.comment = remarks.replaceAll("[\r\n]", "");
+        }
+        String entityName = strategyConfig.getNameConvert().entityNameConvert(this);
+        this.entityName = entityName;
+        if (strategyConfig.startsWithTablePrefix(name) || strategyConfig.isTableFieldAnnotationEnable()) {
             this.convert = true;
         } else {
             this.convert = !entityName.equalsIgnoreCase(name);
         }
+        this.processExtraField();
     }
 
     public String getEntityPath() {
         return entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
-    }
-
-    /**
-     * @param entityName 实体名称
-     */
-    public void setEntityName(String entityName) {
-        this.entityName = entityName;
-        setConvert();
     }
 
     /**
@@ -163,12 +132,12 @@ public class TableInfo {
      * @since 3.5.0
      */
     public void addField(TableField field) {
-        if (this.getConfigurer().getEntityConfig().matchIgnoreColumns(field.getColumnName())) {
+        if (strategyConfig.matchIgnoreColumns(field.getColumnName())) {
             // 忽略字段不在处理
             return;
         }
         tableFieldMap.put(field.getName(), field);
-        if (this.getConfigurer().getEntityConfig().matchSuperEntityColumns(field.getColumnName())) {
+        if (strategyConfig.matchSuperEntityColumns(field.getColumnName())) {
             this.commonFields.add(field);
         } else {
             this.fields.add(field);
@@ -188,19 +157,11 @@ public class TableInfo {
      * 转换filed实体为 xml mapper 中的 base column 字符串信息
      */
     public String getFieldNames() {
-        if (StringUtils.isBlank(fieldNames)) {
-            this.fieldNames = this.fields.stream().map(TableField::getColumnName).collect(Collectors.joining(", "));
-        }
-        return this.fieldNames;
-    }
-
-    /**
-     * 处理表信息
-     */
-    public void processTable() {
-        String entityName = this.getConfigurer().getStrategyConfig().getNameConvert().entityNameConvert(this);
-        this.setEntityName(entityName);
-        this.processExtraField();
+        String fieldNames = this.fields.stream()
+                .map(TableField::getColumnName)
+                .collect(Collectors.joining(", "));
+        // 用于base column 
+        return fieldNames;
     }
 
     /**
@@ -210,7 +171,6 @@ public class TableInfo {
         Set<String> existPropertyNames = this.getFields().stream()
                 .map(e -> e.getPropertyName())
                 .collect(Collectors.toSet());
-        StrategyConfig strategyConfig = this.getConfigurer().getStrategyConfig();
         for (TableField field : this.getFields()) {
             if (field.isLogicDeleteField()) {
                 continue;
@@ -239,17 +199,6 @@ public class TableInfo {
 
     public TableField getField(String name) {
         return tableFieldMap.get(name);
-    }
-
-    public TableInfo setComment(String comment) {
-        GlobalConfig globalConfig = this.getConfigurer().getGlobalConfig();
-        boolean swagger = globalConfig.isSwagger();
-        boolean springdoc = globalConfig.isSpringdoc();
-        boolean notBlank = StringUtils.isNotBlank(comment);
-        boolean commentUUID = globalConfig.isCommentUUID();
-        String uuid = commentUUID ? "@" + UUID.randomUUID().toString().substring(0, 4).toUpperCase() : "";
-        this.comment = (swagger || springdoc) && notBlank ? comment.replace("\"", "\\\"") + uuid : comment;
-        return this;
     }
 
 }

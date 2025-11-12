@@ -15,6 +15,7 @@
  */
 package io.github.luminion.generator.config;
 
+import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.config.po.TableInfo;
 import io.github.luminion.generator.config.query.DefaultQuery;
 import io.github.luminion.generator.config.base.*;

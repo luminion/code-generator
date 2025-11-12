@@ -47,24 +47,6 @@ public class EntityConfig implements ITemplate {
     protected String superClass;
 
     /**
-     * 自定义基础的Entity类，公共字段
-     */
-    protected final Set<String> superEntityColumns = new HashSet<>();
-
-    /**
-     * 自定义忽略字段
-     * <a href="https://github.com/baomidou/generator/issues/46">...</a>
-     */
-    protected final Set<String> ignoreColumns = new HashSet<>();
-
-    /**
-     * 表填充字段
-     */
-    protected final List<IFill> tableFillList = new ArrayList<>();
-
-
-
-    /**
      * 实体是否生成 serialVersionUID
      */
     protected boolean serialVersionUID = true;
@@ -83,8 +65,6 @@ public class EntityConfig implements ITemplate {
      */
     protected boolean columnConstant;
 
-
-
     /**
      * 是否生成实体时，生成字段注解（默认 false）
      */
@@ -97,32 +77,7 @@ public class EntityConfig implements ITemplate {
      */
     protected boolean activeRecord;
 
-    /**
-     * <p>
-     * 父类 Class 反射属性转换为公共字段
-     * </p>
-     *
-     * @param clazz 实体父类 Class
-     */
-    public void convertSuperEntityColumns(Class<?> clazz) {
-        Map<String, Field> fieldMap = ReflectUtils.fieldMap(clazz);
-        // todo 待完善 原逻辑
-//        List<Field> fields = TableInfoHelper.getAllFields(clazz);
-//        this.superEntityColumns.addAll(fieldMap.values().stream().map(field -> {
-//            TableId tableId = field.getAnnotation(Class.forName());
-//            if (tableId != null && StringUtils.isNotBlank(tableId.value())) {
-//                return tableId.value();
-//            }
-//            TableField tableField = field.getAnnotation(TableField.class);
-//            if (tableField != null && StringUtils.isNotBlank(tableField.value())) {
-//                return tableField.value();
-//            }
-//            if (null == columnNaming || columnNaming == NamingStrategy.no_change) {
-//                return field.getName();
-//            }
-//            return StringUtils.camelToUnderline(field.getName());
-//        }).collect(Collectors.toSet()));
-    }
+
 
     /**
      * 匹配父类字段(忽略大小写)

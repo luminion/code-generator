@@ -19,11 +19,9 @@ import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.config.po.TableField;
 import io.github.luminion.generator.config.po.TableInfo;
-import io.github.luminion.generator.config.rules.IColumnType;
 import io.github.luminion.generator.config.jdbc.DatabaseMetaDataWrapper;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.config.common.ITypeConvertHandler;
-import io.github.luminion.generator.config.common.TypeRegistry;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -77,8 +75,7 @@ public class DefaultQuery implements IDatabaseQuery {
             tables.forEach(table -> {
                 String tableName = table.getName();
                 if (StringUtils.isNotBlank(tableName)) {
-                    TableInfo tableInfo = new TableInfo(tableName, configurer);
-                    tableInfo.setComment(table.getRemarks());
+                    TableInfo tableInfo = new TableInfo(configurer.getStrategyConfig(), table);
                     if (isInclude && strategyConfig.matchIncludeTable(tableName)) {
                         includeTableList.add(tableInfo);
                     } else if (isExclude && strategyConfig.matchExcludeTable(tableName)) {
@@ -112,7 +109,6 @@ public class DefaultQuery implements IDatabaseQuery {
     protected void convertTableFields(TableInfo tableInfo) {
         String tableName = tableInfo.getName();
         tableInfo.setIndexList(getIndex(tableName));
-        tableInfo.processTable();
         Map<String, DatabaseMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
         columnsInfoMap.forEach((k, columnInfo) -> {
             TableField field = new TableField(strategyConfig, tableInfo, columnInfo);

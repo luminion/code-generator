@@ -24,9 +24,11 @@ import io.github.luminion.generator.config.rules.DateType;
 import io.github.luminion.generator.config.rules.ExtraFieldStrategy;
 import io.github.luminion.generator.config.fill.ITemplate;
 import io.github.luminion.generator.config.rules.NamingStrategy;
+import io.github.luminion.generator.util.ReflectUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -103,15 +105,21 @@ public class StrategyConfig implements ITemplate {
      * 逻辑删除属性名称(实体字段)
      */
     protected String logicDeletePropertyName;
+    /**
+     * 自定义基础的Entity类，公共字段
+     */
+    protected final Set<String> superEntityColumns = new HashSet<>();
 
+    /**
+     * 自定义忽略字段
+     * <a href="https://github.com/baomidou/generator/issues/46">...</a>
+     */
+    protected final Set<String> ignoreColumns = new HashSet<>();
     /**
      * 表填充字段
      */
     protected final List<IFill> tableFillList = new ArrayList<>();
     
-    
-    
-
     /**
      * 过滤表前缀
      * example: addTablePrefix("t_")
@@ -201,6 +209,8 @@ public class StrategyConfig implements ITemplate {
      */
     protected boolean enableSqlFilter = true;
 
+    
+
     /**
      * 大写命名、字段符合大写字母数字下划线命名
      *
@@ -279,6 +289,57 @@ public class StrategyConfig implements ITemplate {
      */
     protected boolean tableNameMatches(String matchTableName, String dbTableName) {
         return matchTableName.equalsIgnoreCase(dbTableName) || StringUtils.matches(matchTableName, dbTableName);
+    }
+
+    /**
+     * <p>
+     * 父类 Class 反射属性转换为公共字段
+     * </p>
+     *
+     * @param clazz 实体父类 Class
+     */
+    public void convertSuperEntityColumns(Class<?> clazz) {
+        Map<String, Field> fieldMap = ReflectUtils.fieldMap(clazz);
+        // todo 待完善 原逻辑
+//        List<Field> fields = TableInfoHelper.getAllFields(clazz);
+//        this.superEntityColumns.addAll(fieldMap.values().stream().map(field -> {
+//            TableId tableId = field.getAnnotation(Class.forName());
+//            if (tableId != null && StringUtils.isNotBlank(tableId.value())) {
+//                return tableId.value();
+//            }
+//            TableField tableField = field.getAnnotation(TableField.class);
+//            if (tableField != null && StringUtils.isNotBlank(tableField.value())) {
+//                return tableField.value();
+//            }
+//            if (null == columnNaming || columnNaming == NamingStrategy.no_change) {
+//                return field.getName();
+//            }
+//            return StringUtils.camelToUnderline(field.getName());
+//        }).collect(Collectors.toSet()));
+    }
+    
+
+    /**
+     * 匹配父类字段(忽略大小写)
+     *
+     * @param fieldName 字段名
+     * @return 是否匹配
+     * @since 3.5.0
+     */
+    public boolean matchSuperEntityColumns(String fieldName) {
+        // 公共字段判断忽略大小写【 部分数据库大小写不敏感 】
+        return superEntityColumns.stream().anyMatch(e -> e.equalsIgnoreCase(fieldName));
+    }
+
+    /**
+     * 匹配忽略字段(忽略大小写)
+     *
+     * @param fieldName 字段名
+     * @return 是否匹配
+     * @since 3.5.0
+     */
+    public boolean matchIgnoreColumns(String fieldName) {
+        return ignoreColumns.stream().anyMatch(e -> e.equalsIgnoreCase(fieldName));
     }
 
 }
