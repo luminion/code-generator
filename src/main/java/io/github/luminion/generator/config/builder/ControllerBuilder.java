@@ -1,6 +1,6 @@
 package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.SFunc;
+import io.github.luminion.generator.config.common.SFunc;
 import io.github.luminion.generator.config.po.MethodPayload;
 import io.github.luminion.generator.config.base.ControllerConfig;
 import io.github.luminion.generator.util.ReflectUtils;

@@ -15,8 +15,8 @@
  */
 package io.github.luminion.generator.util;
 
-import io.github.luminion.generator.config.rules.DbColumnType;
-import io.github.luminion.generator.config.rules.IColumnType;
+import io.github.luminion.generator.config.enums.DbColumnType;
+import io.github.luminion.generator.config.common.IColumnType;
 
 import java.util.HashMap;
 import java.util.Map;

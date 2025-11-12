@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.rules;
+package io.github.luminion.generator.config.enums;
 
 
 import io.github.luminion.generator.config.po.TableField;

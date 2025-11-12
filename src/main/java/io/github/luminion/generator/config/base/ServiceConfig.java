@@ -36,7 +36,15 @@ import java.util.stream.Collectors;
 @Slf4j
 @Data
 public class ServiceConfig implements ITemplate {
-
+    /**
+     * 自定义继承的Service类
+     */
+    protected Set<String> serviceImportPackages = new TreeSet<>();
+    
+    /**
+     * 自定义继承的ServiceImpl类
+     */
+    protected Set<String> serviceImplImportPackages = new TreeSet<>();
 
     /**
      * 自定义继承的Service类全称，带包名
@@ -55,26 +63,16 @@ public class ServiceConfig implements ITemplate {
         data.put("superServiceClass", ClassUtils.getSimpleName(this.superServiceClass));
         data.put("superServiceImplClassPackage", this.superServiceImplClass);
         data.put("superServiceImplClass", ClassUtils.getSimpleName(this.superServiceImplClass));
-        Configurer configurer = tableInfo.getConfigurer();
-        GlobalConfig globalConfig = configurer.getGlobalConfig();
-        // todo 
-//        if (globalConfig.isSqlBooster()) {
-//            OutputConfig outputConfig = tableInfo.getConfigurer().getOutputConfig();
-//            data.put("enhanceMethod", outputConfig.getService().isGenerate() ? outputConfig.getService().convertFormatName(tableInfo) + ".super" : "EnhancedService.super");
-//        }
-        Set<String> serviceImportPackages = this.serviceImportPackages(tableInfo);
+
         Collection<String> serviceImportPackages4Java = serviceImportPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> serviceImportPackages4Framework = serviceImportPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
         data.put("serviceImportPackages4Java", serviceImportPackages4Java);
         data.put("serviceImportPackages4Framework", serviceImportPackages4Framework);
 
-
-        Set<String> serviceImplImportPackages = this.serviceImplImportPackages(tableInfo);
         Collection<String> serviceImplImportPackages4Java = serviceImplImportPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> serviceImplImportPackages4Framework = serviceImplImportPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
         data.put("serviceImplImportPackages4Java", serviceImplImportPackages4Java);
         data.put("serviceImplImportPackages4Framework", serviceImplImportPackages4Framework);
-
         return data;
     }
 

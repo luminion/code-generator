@@ -16,9 +16,8 @@
 package io.github.luminion.generator.config.common;
 
 import io.github.luminion.generator.config.po.TableField;
-import io.github.luminion.generator.config.rules.DateType;
-import io.github.luminion.generator.config.rules.DbColumnType;
-import io.github.luminion.generator.config.rules.IColumnType;
+import io.github.luminion.generator.config.enums.DateType;
+import io.github.luminion.generator.config.enums.DbColumnType;
 
 import java.sql.Types;
 import java.util.HashMap;

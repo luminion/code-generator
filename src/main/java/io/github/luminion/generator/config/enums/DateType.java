@@ -13,27 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.config.rules;
+package io.github.luminion.generator.config.enums;
 
 /**
- * 获取实体类字段属性类信息接口
+ * 数据库时间类型 到 实体类时间类型 对应策略
  *
  * @author miemie
- * @since 2018-08-22
+ * @since 2018/5/22
  */
-public interface IColumnType {
-
+public enum DateType {
     /**
-     * 获取字段类型
-     *
-     * @return 字段类型
+     * 只使用 java.util.date 代替
      */
-    String getType();
-
+    ONLY_DATE,
     /**
-     * 获取字段类型完整名
-     *
-     * @return 字段类型完整名
+     * 使用 java.sql 包下的
      */
-    String getPkg();
+    SQL_PACK,
+    /**
+     * 使用 java.time 包下的
+     * <p>java8 新的时间类型</p>
+     */
+    TIME_PACK
 }

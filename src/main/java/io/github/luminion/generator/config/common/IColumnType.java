@@ -13,29 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.config.enums;
-
-import lombok.Getter;
+package io.github.luminion.generator.config.common;
 
 /**
- * 模板文件加载方式
+ * 获取实体类字段属性类信息接口
  *
- * @author hubin
- * @author luminion
- * @since 1.0.0
+ * @author miemie
+ * @since 2018-08-22
  */
-@Getter
-public enum TemplateLoadWay {
-    STRING("string"),
-    FILE("file");
+public interface IColumnType {
 
-    private final String value;
+    /**
+     * 获取字段类型
+     *
+     * @return 字段类型
+     */
+    String getType();
 
-    TemplateLoadWay(String value) {
-        this.value = value;
-    }
-
-    public boolean isFile() {
-        return FILE == this;
-    }
+    /**
+     * 获取字段类型完整名
+     *
+     * @return 字段类型完整名
+     */
+    String getPkg();
 }

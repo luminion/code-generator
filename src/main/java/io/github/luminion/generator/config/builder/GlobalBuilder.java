@@ -1,6 +1,5 @@
 package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.rules.DateType;
 import io.github.luminion.generator.config.base.GlobalConfig;
 
 import java.text.SimpleDateFormat;

@@ -16,7 +16,6 @@
 package io.github.luminion.generator.config.common;
 
 import io.github.luminion.generator.config.po.TableField;
-import io.github.luminion.generator.config.rules.IColumnType;
 
 
 /**
