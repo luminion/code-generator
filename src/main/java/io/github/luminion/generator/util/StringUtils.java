@@ -3,7 +3,9 @@ package io.github.luminion.generator.util;
 import java.util.regex.Pattern;
 
 /**
- * @author luminion
+ * 该文件源码截自mybatis-plus的StringUtils
+ * 移除了外部依赖
+ * 
  * @author luminion
  * @since 1.0.0
  */
