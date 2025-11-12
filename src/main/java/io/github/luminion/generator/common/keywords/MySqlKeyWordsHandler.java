@@ -24,7 +24,8 @@ import java.util.*;
  * <a href="https://dev.mysql.com/doc/refman/8.0/en/keywords.html">这里选取了mysql8.0文档中的关键字和保留字（含移除）</a>
  *
  * @author nieqiurong 2020/5/7.
- * @since 3.3.2
+ * @author luminion
+ * @since 1.0.0
  */
 public class MySqlKeyWordsHandler extends BaseKeyWordsHandler {
 

@@ -20,7 +20,6 @@ import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.config.base.StrategyConfig;
-import io.github.luminion.generator.common.ITypeConvertHandler;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,9 +33,6 @@ import java.util.stream.Collectors;
 
 /**
  * 元数据查询数据库信息.
- *
- * @author nieqiurong 2022/5/11.
- * @see ITypeConvertHandler 类型转换器(如果默认逻辑不能满足，可实现此接口重写类型转换)
  * <p>
  * 测试通过的数据库：H2、Mysql-5.7.37、Mysql-8.0.25、PostgreSQL-11.15、PostgreSQL-14.1、Oracle-11.2.0.1.0、DM8
  * </p>
@@ -45,6 +41,9 @@ import java.util.stream.Collectors;
  * 1.Mysql无法读取表注释: 链接增加属性 remarks=true和useInformationSchema=true
  * 2.Oracle无法读取注释: 增加属性remarks=true，也有些驱动版本说是增加remarksReporting=true
  * </p>
+ *
+ * @author nieqiurong 2022/5/11.
+ * @author luminion
  * @since 1.0.0
  */
 @Slf4j

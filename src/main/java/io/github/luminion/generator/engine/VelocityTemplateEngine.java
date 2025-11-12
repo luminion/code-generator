@@ -31,7 +31,8 @@ import java.util.Properties;
  * Velocity 模板引擎实现文件输出
  *
  * @author hubin
- * @since 2018-01-10
+ * @author luminion
+ * @since 1.0.0
  */
 @Slf4j
 public class VelocityTemplateEngine extends AbstractTemplateEngine {

@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author luminion
+ * @author luminion
  * @since 1.0.0
  */
 public class StringUtils {

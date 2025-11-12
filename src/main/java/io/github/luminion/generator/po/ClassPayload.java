@@ -9,6 +9,7 @@ import java.util.Collections;
 /**
  * 类承载信息
  * @author luminion
+ * @since 1.0.0
  */
 @Getter
 @NoArgsConstructor

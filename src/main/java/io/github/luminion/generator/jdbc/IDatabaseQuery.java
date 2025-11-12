@@ -22,7 +22,8 @@ import java.util.List;
 
 /**
  * @author nieqiurong 2021/1/6.
- * @since 3.5.0
+ * @author luminion
+ * @since 1.0.0
  */
 public interface IDatabaseQuery {
 

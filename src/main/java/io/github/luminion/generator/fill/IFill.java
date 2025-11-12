@@ -22,7 +22,8 @@ import io.github.luminion.generator.enums.FieldFill;
  * 填充接口
  *
  * @author nieqiurong
- * @since 3.5.0 2020/11/30.
+ * @author luminion
+ * @since 1.0.0.
  */
 public interface IFill {
 

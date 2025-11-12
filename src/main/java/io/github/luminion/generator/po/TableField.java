@@ -20,7 +20,6 @@ import io.github.luminion.generator.common.support.ColumnTypeToJavaFieldTypeConv
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.common.JavaFieldType;
 import io.github.luminion.generator.common.DatabaseKeyWordsHandler;
-import io.github.luminion.generator.common.ITypeConvertHandler;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.JdbcType;
 import io.github.luminion.generator.enums.NameConvertStrategy;

@@ -86,7 +86,7 @@ public class TableInfo {
      * 额外字段
      */
     @Getter
-    private final List<TableExtraField> extraFields = new ArrayList<>();
+    private final List<TableSuffixField> extraFields = new ArrayList<>();
 
     /**
      * 是否有主键
@@ -166,7 +166,7 @@ public class TableInfo {
      *
      * @param field 字段
      */
-    public void addExtraField(TableExtraField field) {
+    public void addExtraField(TableSuffixField field) {
         this.extraFields.add(field);
     }
 
@@ -201,7 +201,7 @@ public class TableInfo {
                         continue;
                     }
                     existPropertyNames.add(suffixPropertyName);
-                    TableExtraField extraField = new TableExtraField();
+                    TableSuffixField extraField = new TableSuffixField();
                     extraField.setSqlOperator(sqlOperator);
                     extraField.setPropertyType(field.getPropertyType());
                     extraField.setPropertyName(field.getPropertyName() + suffix);

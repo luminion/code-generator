@@ -8,7 +8,7 @@ import lombok.Data;
  * @since 1.0.0
  */
 @Data
-public class TableExtraField {
+public class TableSuffixField {
     /**
      * 属性类型
      */
@@ -45,9 +45,9 @@ public class TableExtraField {
     /**
      * 重构
      *
-     * @return {@link TableExtraField }
+     * @return {@link TableSuffixField }
      */
-    public TableExtraField refactor() {
+    public TableSuffixField refactor() {
         switch (sqlOperator.toUpperCase()) {
             case "LIKE":
                  this.comment += "(包含字符)";

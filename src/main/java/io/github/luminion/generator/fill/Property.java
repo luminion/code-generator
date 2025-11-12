@@ -22,7 +22,8 @@ import io.github.luminion.generator.enums.FieldFill;
  * 属性填充
  *
  * @author nieqiurong
- * @since 3.5.0 2020/11/30.
+ * @author luminion
+ * @since 1.0.0
  */
 public class Property implements IFill {
 

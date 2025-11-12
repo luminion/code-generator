@@ -23,7 +23,8 @@ import java.util.*;
  * <a href="https://www.postgresql.org/docs/11/sql-keywords-appendix.html">postgresql关键字处理</a>
  *
  * @author nieqiurong 2020/5/9.
- * @since 3.3.2
+ * @author luminion
+ * @since 1.0.0
  */
 public class PostgreSqlKeyWordsHandler extends BaseKeyWordsHandler {
 

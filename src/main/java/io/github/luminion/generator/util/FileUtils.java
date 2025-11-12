@@ -19,9 +19,10 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 文件处理工具类 {@link FileUtils}
+ * 文件处理工具类
  *
- * @since 3.5.0
+ * @author luminion
+ * @since 1.0.0 
  */
 public class FileUtils {
 

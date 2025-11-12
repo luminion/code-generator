@@ -19,7 +19,8 @@ package io.github.luminion.generator.enums;
  * 数据库时间类型 到 实体类时间类型 对应策略
  *
  * @author miemie
- * @since 2018/5/22
+ * @author luminion
+ * @since 1.0.0
  */
 public enum DateType {
     /**

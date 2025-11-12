@@ -38,7 +38,8 @@ import java.util.function.Function;
  * 模板引擎抽象类
  *
  * @author hubin
- * @since 2018-01-10
+ * @author luminion
+ * @since 1.0.0
  */
 @Slf4j
 public abstract class AbstractTemplateEngine {

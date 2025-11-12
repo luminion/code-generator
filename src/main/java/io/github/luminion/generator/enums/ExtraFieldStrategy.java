@@ -11,6 +11,7 @@ import java.util.function.BiFunction;
  * 额外字段配置
  *
  * @author luminion
+ * @since 1.0.0
  */
 public class ExtraFieldStrategy implements BiFunction<String, TableField, Boolean> {
     private static final List<String> ALLOW_COMPARE = Arrays.asList(

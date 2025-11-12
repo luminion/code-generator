@@ -23,7 +23,8 @@ import java.util.*;
  * <a href="http://www.h2database.com/html/advanced.html#keywords">h2数据库关键字处理</a>
  *
  * @author nieqiurong 2020/5/7.
- * @since 3.3.2
+ * @author luminion
+ * @since 1.0.0
  */
 public class H2KeyWordsHandler extends BaseKeyWordsHandler {
 
