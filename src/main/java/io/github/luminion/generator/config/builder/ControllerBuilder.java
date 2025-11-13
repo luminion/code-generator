@@ -4,6 +4,7 @@ import io.github.luminion.generator.common.SFunc;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.util.ReflectUtils;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -17,21 +18,11 @@ public class ControllerBuilder {
     /**
      * 父类控制器
      *
-     * @param clazz 父类控制器
+     * @param className 父类控制器类名
      * @return this
      */
-    public ControllerBuilder superClass(Class<?> clazz) {
-        return superClass(clazz.getName());
-    }
-
-    /**
-     * 父类控制器
-     *
-     * @param superClass 父类控制器类名
-     * @return this
-     */
-    public ControllerBuilder superClass(String superClass) {
-        this.configurer.getControllerConfig().setSuperClass(superClass);
+    public ControllerBuilder superClass(String className) {
+        this.configurer.getControllerConfig().setSuperClass(className);
         return this;
     }
 
@@ -63,8 +54,8 @@ public class ControllerBuilder {
      * @param url url
      * @return this
      */
-    public ControllerBuilder baseUrl(String url) {
-        if (url == null || url.isEmpty()) {
+    public ControllerBuilder baseUrl(@NonNull String url) {
+        if (url.isEmpty()) {
             this.configurer.getControllerConfig().setBaseUrl(url);
             return this;
         }
@@ -88,15 +79,7 @@ public class ControllerBuilder {
         return this;
     }
 
-    /**
-     * 禁止批量数据查询使用post请求
-     *
-     * @return this
-     */
-    public ControllerBuilder disableBatchQueryPost() {
-        this.configurer.getControllerConfig().setBatchQueryPost(false);
-        return this;
-    }
+
 
 
     /**
@@ -126,6 +109,16 @@ public class ControllerBuilder {
      */
     public ControllerBuilder disableRequestBody() {
         this.configurer.getControllerConfig().setRequestBody(false);
+        return this;
+    }
+
+    /**
+     * 禁止批量数据查询使用post请求
+     *
+     * @return this
+     */
+    public ControllerBuilder disableBatchQueryPost() {
+        this.configurer.getControllerConfig().setBatchQueryPost(false);
         return this;
     }
 
