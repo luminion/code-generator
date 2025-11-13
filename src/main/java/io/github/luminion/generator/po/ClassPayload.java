@@ -19,31 +19,31 @@ public class ClassPayload {
     protected Class<?> clazz;
     protected String classPackage;
     protected String classSimpleName;
-    protected String classCanonicalName;
+    protected String className;
     protected int classGenericTypeCount;
 
     public ClassPayload(String className) {
         this.classPackage = ClassUtils.getPackage(className);
         this.classSimpleName = ClassUtils.getSimpleName(className);
-        this.classCanonicalName = className;
+        this.className = className;
     }
 
     public ClassPayload(String classPackage, String classSimpleName) {
         this.classPackage = classPackage;
         this.classSimpleName = classSimpleName;
-        this.classCanonicalName = classPackage + "." + classSimpleName;
+        this.className = classPackage + "." + classSimpleName;
     }
 
     public ClassPayload(Class<?> clazz) {
         this.clazz = clazz;
         this.classPackage = clazz.getPackage().getName();
         this.classSimpleName = clazz.getSimpleName();
-        this.classCanonicalName = clazz.getName();
+        this.className = clazz.getName();
         this.classGenericTypeCount = clazz.getTypeParameters().length;
     }
 
     public boolean isClassReady() {
-        if (classPackage == null || classSimpleName == null || classCanonicalName == null) {
+        if (classPackage == null || classSimpleName == null || className == null) {
             return false;
         }
         return true;

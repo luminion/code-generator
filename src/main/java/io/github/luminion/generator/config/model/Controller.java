@@ -20,10 +20,7 @@ import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.config.core.OutputConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
-import io.github.luminion.generator.po.ClassMethodPayload;
-import io.github.luminion.generator.po.ClassPayload;
-import io.github.luminion.generator.po.TableField;
-import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.po.*;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -45,6 +42,17 @@ import java.util.stream.Stream;
 @Slf4j
 @Data
 public class Controller implements TemplateRender {
+
+    /**
+     * 模板文件
+     */
+    protected TemplateFile templateFile = new TemplateFile(
+            TemplateFileEnum.CONTROLLER.name(),
+            "%s",
+            "entity",
+            "/templates/base/entity.java",
+            ".java"
+    );
 
     /**
      * 自定义继承的Controller类全称，带包名
@@ -96,6 +104,12 @@ public class Controller implements TemplateRender {
      */
     protected ClassMethodPayload returnMethod = new ClassMethodPayload();
 
+    /**
+     * 分页返回方法
+     */
+    protected ClassMethodPayload pageMethod = new ClassMethodPayload();
+
+
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
@@ -123,6 +137,7 @@ public class Controller implements TemplateRender {
         data.put("crossOrigin", this.crossOrigin);
         data.put("restful", this.restful);
         data.put("returnMethod", this.returnMethod);
+        data.put("pageMethod", this.pageMethod);
         data.put("batchQueryMethod", batchQueryPost ? "@PostMapping" : "@GetMapping");
 
         // 路径参数
@@ -172,7 +187,7 @@ public class Controller implements TemplateRender {
         }
         // 返回类包
         if (returnMethod.isClassReady()) {
-            importPackages.add(returnMethod.getClassCanonicalName());
+            importPackages.add(returnMethod.getClassName());
         }
 
         Resolver resolver = tableInfo.getConfigurer().getResolver();
@@ -205,12 +220,13 @@ public class Controller implements TemplateRender {
             importPackages.add("java.util.List");
             importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.ENTITY_QUERY_DTO));
             importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.ENTITY_VO));
-            ClassPayload pageClassPayload = globalConfig.getPageClassPayload();
-            if (pageClassPayload != null && pageClassPayload.isClassReady()) {
-                importPackages.add(pageClassPayload.getClassCanonicalName());
-                data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_VO)));
+            if (pageMethod != null && pageMethod.isClassReady()) {
+                importPackages.add(pageMethod.getClassName());
+                data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_VO)));
             } else {
-                data.put("pageReturnType", "Object");
+                ClassPayload pageClassPayload = globalConfig.getPageClassPayload();
+                importPackages.add(pageClassPayload.getClassName());
+                data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_VO)));
             }
         }
         String responseClass = globalConfig.getJavaEE().packagePrefix + ".servlet.http.HttpServletResponse";
@@ -225,7 +241,6 @@ public class Controller implements TemplateRender {
             importPackages.add(responseClass);
             importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO));
         }
-
         Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
         data.put("controllerImportPackages4Java", javaPackages);

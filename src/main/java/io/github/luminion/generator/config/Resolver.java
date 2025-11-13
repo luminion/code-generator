@@ -1,17 +1,14 @@
 package io.github.luminion.generator.config;
 
-/**
- * @author luminion
- * @since 1.0.0
- */
-
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.StringUtils;
-import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用于为其他配置提供使用方法
@@ -19,9 +16,14 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-@RequiredArgsConstructor
 public class Resolver {
     private final Configurer configurer;
+    private final Map<TemplateFileEnum, TemplateFile> templateFileMap = new HashMap<>();
+
+    public Resolver(@NonNull Configurer configurer) {
+        this.configurer = configurer;
+        // 将模板文件添加进map
+    }
 
     /**
      * 获取父包名( parent.module.xxxx)

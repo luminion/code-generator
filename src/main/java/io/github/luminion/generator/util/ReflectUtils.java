@@ -1,6 +1,6 @@
 package io.github.luminion.generator.util;
 
-import io.github.luminion.generator.common.SFunc;
+import io.github.luminion.generator.common.MethodReference;
 import io.github.luminion.generator.po.ClassMethodPayload;
 
 import java.lang.invoke.SerializedLambda;
@@ -26,7 +26,7 @@ public class ReflectUtils {
      * @param parameterClass  参数类型
      * @return {@link ClassMethodPayload }
      */
-    public static ClassMethodPayload lambdaMethodInfo(SFunc<?, ?> methodReference, Class<?> parameterClass) {
+    public static ClassMethodPayload lambdaMethodInfo(MethodReference<?, ?> methodReference, Class<?> parameterClass) {
         String methodName = "", className = "";
         try {
             Method lambdaMethod = methodReference.getClass().getDeclaredMethod("writeReplace");

@@ -16,7 +16,7 @@ public class TemplateFile {
     /**
      * 格式化文件名称
      */
-    protected String formatPattern;
+    protected String nameFormat;
     /**
      * 子包名(可空)
      */
@@ -42,9 +42,9 @@ public class TemplateFile {
      */
     protected boolean generate = true;
 
-    public TemplateFile(String key, String formatPattern,String subPackage, String templatePath, String outputFileSuffix) {
+    public TemplateFile(String key, String nameFormat, String subPackage, String templatePath, String outputFileSuffix) {
         this.key = key;
-        this.formatPattern = formatPattern;
+        this.nameFormat = nameFormat;
         this.subPackage = subPackage;
         this.templatePath = templatePath;
         this.outputFileSuffix = outputFileSuffix;
@@ -56,7 +56,7 @@ public class TemplateFile {
      * @param tableInfo 表信息
      */
     public String convertFormatName(TableInfo tableInfo) {
-        return String.format(formatPattern, tableInfo.getEntityName());
+        return String.format(nameFormat, tableInfo.getEntityName());
     }
     
 }

@@ -79,6 +79,11 @@ public class Configurer {
      * 配置
      */
     private final List<TableInfo> tableInfo = new ArrayList<>();
+
+    /**
+     * 解析器
+     */
+    private Resolver resolver;
     
     public Configurer(String url, String username, String password) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
@@ -110,7 +115,10 @@ public class Configurer {
      * @since 1.0.0
      */
     public Resolver getResolver() {
-        return new Resolver(this);
+        if (resolver==null){
+            this.resolver = new Resolver(this);
+        }
+        return resolver;
     }
 
 }
