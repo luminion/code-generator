@@ -1,17 +1,16 @@
 package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.base.OutputConfig;
+import io.github.luminion.generator.config.Configurer;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
+@RequiredArgsConstructor
 public class OutputBuilder {
-    private final OutputConfig outputConfig;
+    private final Configurer configurer;
 
-    public OutputBuilder(OutputConfig config) {
-        this.outputConfig = config;
-    }
 
     /**
      * 文件输出目录
@@ -20,7 +19,7 @@ public class OutputBuilder {
      * @return this
      */
     public OutputBuilder outputDir(String outputDir) {
-        this.outputConfig.setOutputDir(outputDir);
+        this.configurer.getOutputConfig().setOutputDir(outputDir);
         return this;
     }
 
@@ -31,7 +30,7 @@ public class OutputBuilder {
      * @return this
      */
     public OutputBuilder parentPackage(String parentPackage) {
-        this.outputConfig.setParentPackage(parentPackage);
+        this.configurer.getOutputConfig().setParentPackage(parentPackage);
         return this;
     }
 
@@ -42,7 +41,7 @@ public class OutputBuilder {
      * @return this
      */
     public OutputBuilder moduleName(String moduleName) {
-        this.outputConfig.setModuleName(moduleName);
+        this.configurer.getOutputConfig().setModuleName(moduleName);
         return this;
     }
 
@@ -52,7 +51,7 @@ public class OutputBuilder {
      * @return this
      */
     public OutputBuilder enableGlobalFileOverride() {
-        this.outputConfig.setOutputFileGlobalOverride(true);
+        this.configurer.getOutputConfig().setOutputFileGlobalOverride(true);
         return this;
     }
 
@@ -62,7 +61,7 @@ public class OutputBuilder {
      * @return this
      */
     public OutputBuilder disableOpenOutputDir() {
-        this.outputConfig.setOutputDirOpen(false);
+        this.configurer.getOutputConfig().setOutputDirOpen(false);
         return this;
     }
 
@@ -74,7 +73,7 @@ public class OutputBuilder {
      */
     @Deprecated
     public OutputBuilder enableOpenOutputDir() {
-        this.outputConfig.setOutputDirOpen(true);
+        this.configurer.getOutputConfig().setOutputDirOpen(true);
         return this;
     }
 
@@ -84,8 +83,8 @@ public class OutputBuilder {
      * @param formatPattern 格式化名称
      * @return this
      */
-    public OutputBuilder entityFormatPattern(String formatPattern){
-        this.outputConfig.getEntity().setFormatPattern(formatPattern);
+    public OutputBuilder entityFormatPattern(String formatPattern) {
+        this.configurer.getOutputConfig().getEntity().setFormatPattern(formatPattern);
         return this;
     }
 
@@ -95,8 +94,8 @@ public class OutputBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public OutputBuilder entitySubPackage(String subPackage){
-        this.outputConfig.getEntity().setSubPackage(subPackage);
+    public OutputBuilder entitySubPackage(String subPackage) {
+        this.configurer.getOutputConfig().getEntity().setSubPackage(subPackage);
         return this;
     }
 
@@ -107,8 +106,8 @@ public class OutputBuilder {
      * @param templatePath 模板路径
      * @return this
      */
-    public OutputBuilder entityTemplatePath(String templatePath){
-        this.outputConfig.getEntity().setTemplatePath(templatePath);
+    public OutputBuilder entityTemplatePath(String templatePath) {
+        this.configurer.getOutputConfig().getEntity().setTemplatePath(templatePath);
         return this;
     }
 
@@ -119,8 +118,8 @@ public class OutputBuilder {
      * @param outputDir 输出目录
      * @return this
      */
-    public OutputBuilder entityOutputDir(String outputDir){
-        this.outputConfig.getEntity().setOutputDir(outputDir);
+    public OutputBuilder entityOutputDir(String outputDir) {
+        this.configurer.getOutputConfig().getEntity().setOutputDir(outputDir);
         return this;
     }
 
@@ -129,8 +128,8 @@ public class OutputBuilder {
      *
      * @return this
      */
-    public OutputBuilder entityDisable(){
-        this.outputConfig.getEntity().setGenerate(false);
+    public OutputBuilder entityDisable() {
+        this.configurer.getOutputConfig().getEntity().setGenerate(false);
         return this;
     }
 
@@ -140,8 +139,8 @@ public class OutputBuilder {
      * @param formatPattern 格式化名称
      * @return this
      */
-    public OutputBuilder mapperFormatPattern(String formatPattern){
-        this.outputConfig.getMapper().setFormatPattern(formatPattern);
+    public OutputBuilder mapperFormatPattern(String formatPattern) {
+        this.configurer.getOutputConfig().getMapper().setFormatPattern(formatPattern);
         return this;
     }
 
@@ -151,8 +150,8 @@ public class OutputBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public OutputBuilder mapperSubPackage(String subPackage){
-        this.outputConfig.getMapper().setSubPackage(subPackage);
+    public OutputBuilder mapperSubPackage(String subPackage) {
+        this.configurer.getOutputConfig().getMapper().setSubPackage(subPackage);
         return this;
     }
 
@@ -162,8 +161,8 @@ public class OutputBuilder {
      * @param templatePath 模板路径
      * @return this
      */
-    public OutputBuilder mapperTemplatePath(String templatePath){
-        this.outputConfig.getMapper().setTemplatePath(templatePath);
+    public OutputBuilder mapperTemplatePath(String templatePath) {
+        this.configurer.getOutputConfig().getMapper().setTemplatePath(templatePath);
         return this;
     }
 
@@ -174,8 +173,8 @@ public class OutputBuilder {
      * @param outputDir 输出目录
      * @return this
      */
-    public OutputBuilder mapperOutputDir(String outputDir){
-        this.outputConfig.getMapper().setOutputDir(outputDir);
+    public OutputBuilder mapperOutputDir(String outputDir) {
+        this.configurer.getOutputConfig().getMapper().setOutputDir(outputDir);
         return this;
     }
 
@@ -184,8 +183,8 @@ public class OutputBuilder {
      *
      * @return this
      */
-    public OutputBuilder mapperDisable(){
-        this.outputConfig.getMapper().setGenerate(false);
+    public OutputBuilder mapperDisable() {
+        this.configurer.getOutputConfig().getMapper().setGenerate(false);
         return this;
     }
 
@@ -195,8 +194,8 @@ public class OutputBuilder {
      * @param formatPattern 格式化名称
      * @return this
      */
-    public OutputBuilder mapperXmlFormatPattern(String formatPattern){
-        this.outputConfig.getMapperXml().setFormatPattern(formatPattern);
+    public OutputBuilder mapperXmlFormatPattern(String formatPattern) {
+        this.configurer.getOutputConfig().getMapperXml().setFormatPattern(formatPattern);
         return this;
     }
 
@@ -206,19 +205,19 @@ public class OutputBuilder {
      * @param templatePath 模板路径
      * @return this
      */
-    public OutputBuilder mapperXmlTemplatePath(String templatePath){
-        this.outputConfig.getMapperXml().setTemplatePath(templatePath);
+    public OutputBuilder mapperXmlTemplatePath(String templatePath) {
+        this.configurer.getOutputConfig().getMapperXml().setTemplatePath(templatePath);
         return this;
     }
-    
+
     /**
      * mapperXml文件输出目录
      *
      * @param outputDir 输出目录
      * @return this
      */
-    public OutputBuilder mapperXmlOutputDir(String outputDir){
-        this.outputConfig.getMapperXml().setOutputDir(outputDir);
+    public OutputBuilder mapperXmlOutputDir(String outputDir) {
+        this.configurer.getOutputConfig().getMapperXml().setOutputDir(outputDir);
         return this;
     }
 
@@ -227,19 +226,19 @@ public class OutputBuilder {
      *
      * @return this
      */
-    public OutputBuilder mapperXmlDisable(){
-        this.outputConfig.getMapperXml().setGenerate(false);
+    public OutputBuilder mapperXmlDisable() {
+        this.configurer.getOutputConfig().getMapperXml().setGenerate(false);
         return this;
     }
-    
+
     /**
      * service格式化名称
      *
      * @param formatPattern 格式化名称
      * @return this
      */
-    public OutputBuilder serviceFormatPattern(String formatPattern){
-        this.outputConfig.getService().setFormatPattern(formatPattern);
+    public OutputBuilder serviceFormatPattern(String formatPattern) {
+        this.configurer.getOutputConfig().getService().setFormatPattern(formatPattern);
         return this;
     }
 
@@ -249,8 +248,8 @@ public class OutputBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public OutputBuilder serviceSubPackage(String subPackage){
-        this.outputConfig.getService().setSubPackage(subPackage);
+    public OutputBuilder serviceSubPackage(String subPackage) {
+        this.configurer.getOutputConfig().getService().setSubPackage(subPackage);
         return this;
     }
 
@@ -261,8 +260,8 @@ public class OutputBuilder {
      * @param templatePath 模板路径
      * @return this
      */
-    public OutputBuilder serviceTemplatePath(String templatePath){
-        this.outputConfig.getService().setTemplatePath(templatePath);
+    public OutputBuilder serviceTemplatePath(String templatePath) {
+        this.configurer.getOutputConfig().getService().setTemplatePath(templatePath);
         return this;
     }
 
@@ -273,8 +272,8 @@ public class OutputBuilder {
      * @param outputDir 输出目录
      * @return this
      */
-    public OutputBuilder serviceOutputDir(String outputDir){
-        this.outputConfig.getService().setOutputDir(outputDir);
+    public OutputBuilder serviceOutputDir(String outputDir) {
+        this.configurer.getOutputConfig().getService().setOutputDir(outputDir);
         return this;
     }
 
@@ -283,19 +282,19 @@ public class OutputBuilder {
      *
      * @return this
      */
-    public OutputBuilder serviceDisable(){
-        this.outputConfig.getService().setGenerate(false);
+    public OutputBuilder serviceDisable() {
+        this.configurer.getOutputConfig().getService().setGenerate(false);
         return this;
     }
-    
+
     /**
      * serviceImpl格式化名称
      *
      * @param formatPattern 格式化名称
      * @return this
      */
-    public OutputBuilder serviceImplFormatPattern(String formatPattern){
-        this.outputConfig.getServiceImpl().setFormatPattern(formatPattern);
+    public OutputBuilder serviceImplFormatPattern(String formatPattern) {
+        this.configurer.getOutputConfig().getServiceImpl().setFormatPattern(formatPattern);
         return this;
     }
 
@@ -305,8 +304,8 @@ public class OutputBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public OutputBuilder serviceImplSubPackage(String subPackage){
-        this.outputConfig.getServiceImpl().setSubPackage(subPackage);
+    public OutputBuilder serviceImplSubPackage(String subPackage) {
+        this.configurer.getOutputConfig().getServiceImpl().setSubPackage(subPackage);
         return this;
     }
 
@@ -317,8 +316,8 @@ public class OutputBuilder {
      * @param templatePath 模板路径
      * @return this
      */
-    public OutputBuilder serviceImplTemplatePath(String templatePath){
-        this.outputConfig.getServiceImpl().setTemplatePath(templatePath);
+    public OutputBuilder serviceImplTemplatePath(String templatePath) {
+        this.configurer.getOutputConfig().getServiceImpl().setTemplatePath(templatePath);
         return this;
     }
 
@@ -329,8 +328,8 @@ public class OutputBuilder {
      * @param outputDir 输出目录
      * @return this
      */
-    public OutputBuilder serviceImplOutputDir(String outputDir){
-        this.outputConfig.getServiceImpl().setOutputDir(outputDir);
+    public OutputBuilder serviceImplOutputDir(String outputDir) {
+        this.configurer.getOutputConfig().getServiceImpl().setOutputDir(outputDir);
         return this;
     }
 
@@ -339,8 +338,8 @@ public class OutputBuilder {
      *
      * @return this
      */
-    public OutputBuilder serviceImplDisable(){
-        this.outputConfig.getServiceImpl().setGenerate(false);
+    public OutputBuilder serviceImplDisable() {
+        this.configurer.getOutputConfig().getServiceImpl().setGenerate(false);
         return this;
     }
 
@@ -350,8 +349,8 @@ public class OutputBuilder {
      * @param formatPattern 格式化名称
      * @return this
      */
-    public OutputBuilder controllerFormatPattern(String formatPattern){
-        this.outputConfig.getController().setFormatPattern(formatPattern);
+    public OutputBuilder controllerFormatPattern(String formatPattern) {
+        this.configurer.getOutputConfig().getController().setFormatPattern(formatPattern);
         return this;
     }
 
@@ -361,8 +360,8 @@ public class OutputBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public OutputBuilder controllerSubPackage(String subPackage){
-        this.outputConfig.getController().setSubPackage(subPackage);
+    public OutputBuilder controllerSubPackage(String subPackage) {
+        this.configurer.getOutputConfig().getController().setSubPackage(subPackage);
         return this;
     }
 
@@ -373,13 +372,13 @@ public class OutputBuilder {
      * @param templatePath 模板路径
      * @return this
      */
-    public OutputBuilder controllerTemplatePath(String templatePath){
-        this.outputConfig.getController().setTemplatePath(templatePath);
+    public OutputBuilder controllerTemplatePath(String templatePath) {
+        this.configurer.getOutputConfig().getController().setTemplatePath(templatePath);
         return this;
     }
 
-    public OutputBuilder controllerOutputDir(String outputDir){
-        this.outputConfig.getController().setOutputDir(outputDir);
+    public OutputBuilder controllerOutputDir(String outputDir) {
+        this.configurer.getOutputConfig().getController().setOutputDir(outputDir);
         return this;
     }
 
@@ -388,19 +387,19 @@ public class OutputBuilder {
      *
      * @return this
      */
-    public OutputBuilder controllerDisable(){
-        this.outputConfig.getController().setGenerate(false);
+    public OutputBuilder controllerDisable() {
+        this.configurer.getOutputConfig().getController().setGenerate(false);
         return this;
     }
-    
+
     /**
      * insertDTO格式化名称
      *
      * @param formatPattern 格式化名称
      * @return this
      */
-    public OutputBuilder insertDTOFormatPattern(String formatPattern){
-        this.outputConfig.getInsertDTO().setFormatPattern(formatPattern);
+    public OutputBuilder insertDTOFormatPattern(String formatPattern) {
+        this.configurer.getOutputConfig().getInsertDTO().setFormatPattern(formatPattern);
         return this;
     }
 
@@ -410,8 +409,8 @@ public class OutputBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public OutputBuilder insertDTOSubPackage(String subPackage){
-        this.outputConfig.getInsertDTO().setSubPackage(subPackage);
+    public OutputBuilder insertDTOSubPackage(String subPackage) {
+        this.configurer.getOutputConfig().getInsertDTO().setSubPackage(subPackage);
         return this;
     }
 
@@ -421,8 +420,8 @@ public class OutputBuilder {
      * @param templatePath 模板路径
      * @return this
      */
-    public OutputBuilder insertDTOTemplatePath(String templatePath){
-        this.outputConfig.getInsertDTO().setTemplatePath(templatePath);
+    public OutputBuilder insertDTOTemplatePath(String templatePath) {
+        this.configurer.getOutputConfig().getInsertDTO().setTemplatePath(templatePath);
         return this;
     }
 
@@ -432,8 +431,8 @@ public class OutputBuilder {
      * @param outputDir 输出目录
      * @return this
      */
-    public OutputBuilder insertDTOOutputDir(String outputDir){
-        this.outputConfig.getInsertDTO().setOutputDir(outputDir);
+    public OutputBuilder insertDTOOutputDir(String outputDir) {
+        this.configurer.getOutputConfig().getInsertDTO().setOutputDir(outputDir);
         return this;
     }
 
@@ -442,8 +441,8 @@ public class OutputBuilder {
      *
      * @return this
      */
-    public OutputBuilder insertDTODisable(){
-        this.outputConfig.getInsertDTO().setGenerate(false);
+    public OutputBuilder insertDTODisable() {
+        this.configurer.getOutputConfig().getInsertDTO().setGenerate(false);
         return this;
     }
 
@@ -453,8 +452,8 @@ public class OutputBuilder {
      * @param formatPattern 格式化名称
      * @return this
      */
-    public OutputBuilder updateDTOFormatPattern(String formatPattern){
-        this.outputConfig.getUpdateDTO().setFormatPattern(formatPattern);
+    public OutputBuilder updateDTOFormatPattern(String formatPattern) {
+        this.configurer.getOutputConfig().getUpdateDTO().setFormatPattern(formatPattern);
         return this;
     }
 
@@ -464,8 +463,8 @@ public class OutputBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public OutputBuilder updateDTOSubPackage(String subPackage){
-        this.outputConfig.getUpdateDTO().setSubPackage(subPackage);
+    public OutputBuilder updateDTOSubPackage(String subPackage) {
+        this.configurer.getOutputConfig().getUpdateDTO().setSubPackage(subPackage);
         return this;
     }
 
@@ -475,8 +474,8 @@ public class OutputBuilder {
      * @param templatePath 模板路径
      * @return this
      */
-    public OutputBuilder updateDTOTemplatePath(String templatePath){
-        this.outputConfig.getUpdateDTO().setTemplatePath(templatePath);
+    public OutputBuilder updateDTOTemplatePath(String templatePath) {
+        this.configurer.getOutputConfig().getUpdateDTO().setTemplatePath(templatePath);
         return this;
     }
 
@@ -486,8 +485,8 @@ public class OutputBuilder {
      * @param outputDir 输出目录
      * @return this
      */
-    public OutputBuilder updateDTOOutputDir(String outputDir){
-        this.outputConfig.getUpdateDTO().setOutputDir(outputDir);
+    public OutputBuilder updateDTOOutputDir(String outputDir) {
+        this.configurer.getOutputConfig().getUpdateDTO().setOutputDir(outputDir);
         return this;
     }
 
@@ -496,8 +495,8 @@ public class OutputBuilder {
      *
      * @return this
      */
-    public OutputBuilder updateDTODisable(){
-        this.outputConfig.getUpdateDTO().setGenerate(false);
+    public OutputBuilder updateDTODisable() {
+        this.configurer.getOutputConfig().getUpdateDTO().setGenerate(false);
         return this;
     }
 
@@ -507,8 +506,8 @@ public class OutputBuilder {
      * @param formatPattern 格式化名称
      * @return this
      */
-    public OutputBuilder queryDTOFormatPattern(String formatPattern){
-        this.outputConfig.getQueryDTO().setFormatPattern(formatPattern);
+    public OutputBuilder queryDTOFormatPattern(String formatPattern) {
+        this.configurer.getOutputConfig().getQueryDTO().setFormatPattern(formatPattern);
         return this;
     }
 
@@ -518,8 +517,8 @@ public class OutputBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public OutputBuilder queryDTOSubPackage(String subPackage){
-        this.outputConfig.getQueryDTO().setSubPackage(subPackage);
+    public OutputBuilder queryDTOSubPackage(String subPackage) {
+        this.configurer.getOutputConfig().getQueryDTO().setSubPackage(subPackage);
         return this;
     }
 
@@ -529,8 +528,8 @@ public class OutputBuilder {
      * @param templatePath 模板路径
      * @return this
      */
-    public OutputBuilder queryDTOTemplatePath(String templatePath){
-        this.outputConfig.getQueryDTO().setTemplatePath(templatePath);
+    public OutputBuilder queryDTOTemplatePath(String templatePath) {
+        this.configurer.getOutputConfig().getQueryDTO().setTemplatePath(templatePath);
         return this;
     }
 
@@ -540,8 +539,8 @@ public class OutputBuilder {
      * @param outputDir 输出目录
      * @return this
      */
-    public OutputBuilder queryDTOOutputDir(String outputDir){
-        this.outputConfig.getQueryDTO().setOutputDir(outputDir);
+    public OutputBuilder queryDTOOutputDir(String outputDir) {
+        this.configurer.getOutputConfig().getQueryDTO().setOutputDir(outputDir);
         return this;
     }
 
@@ -550,8 +549,8 @@ public class OutputBuilder {
      *
      * @return this
      */
-    public OutputBuilder queryDTODisable(){
-        this.outputConfig.getQueryDTO().setGenerate(false);
+    public OutputBuilder queryDTODisable() {
+        this.configurer.getOutputConfig().getQueryDTO().setGenerate(false);
         return this;
     }
 
@@ -561,8 +560,8 @@ public class OutputBuilder {
      * @param formatPattern 格式化名称
      * @return this
      */
-    public OutputBuilder queryVOFormatPattern(String formatPattern){
-        this.outputConfig.getQueryVO().setFormatPattern(formatPattern);
+    public OutputBuilder queryVOFormatPattern(String formatPattern) {
+        this.configurer.getOutputConfig().getQueryVO().setFormatPattern(formatPattern);
         return this;
     }
 
@@ -572,8 +571,8 @@ public class OutputBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public OutputBuilder queryVOSubPackage(String subPackage){
-        this.outputConfig.getQueryVO().setSubPackage(subPackage);
+    public OutputBuilder queryVOSubPackage(String subPackage) {
+        this.configurer.getOutputConfig().getQueryVO().setSubPackage(subPackage);
         return this;
     }
 
@@ -583,8 +582,8 @@ public class OutputBuilder {
      * @param templatePath 模板路径
      * @return this
      */
-    public OutputBuilder queryVOTemplatePath(String templatePath){
-        this.outputConfig.getQueryVO().setTemplatePath(templatePath);
+    public OutputBuilder queryVOTemplatePath(String templatePath) {
+        this.configurer.getOutputConfig().getQueryVO().setTemplatePath(templatePath);
         return this;
     }
 
@@ -594,8 +593,8 @@ public class OutputBuilder {
      * @param outputDir 输出目录
      * @return this
      */
-    public OutputBuilder queryVOOutputDir(String outputDir){
-        this.outputConfig.getQueryVO().setOutputDir(outputDir);
+    public OutputBuilder queryVOOutputDir(String outputDir) {
+        this.configurer.getOutputConfig().getQueryVO().setOutputDir(outputDir);
         return this;
     }
 
@@ -604,8 +603,8 @@ public class OutputBuilder {
      *
      * @return this
      */
-    public OutputBuilder queryVODisable(){
-        this.outputConfig.getQueryVO().setGenerate(false);
+    public OutputBuilder queryVODisable() {
+        this.configurer.getOutputConfig().getQueryVO().setGenerate(false);
         return this;
     }
 

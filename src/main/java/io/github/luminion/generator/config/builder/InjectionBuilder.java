@@ -1,8 +1,9 @@
 package io.github.luminion.generator.config.builder;
 
+import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.po.CustomFile;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.config.base.InjectionConfig;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
@@ -12,13 +13,9 @@ import java.util.function.BiConsumer;
  * @author luminion
  * @since 1.0.0
  */
+@RequiredArgsConstructor
 public class InjectionBuilder {
-
-    private final InjectionConfig injectionConfig;
-
-    public InjectionBuilder(InjectionConfig injectionConfig) {
-        this.injectionConfig = injectionConfig;
-    }
+    private Configurer configurer;
 
     /**
      * 输出文件之前消费者
@@ -27,7 +24,7 @@ public class InjectionBuilder {
      * @return this
      */
     public InjectionBuilder beforeOutputFile(BiConsumer<TableInfo, Map<String, Object>> biConsumer) {
-        this.injectionConfig.setBeforeOutputFileBiConsumer(biConsumer);
+        this.configurer.getInjectionConfig().setBeforeOutputFileBiConsumer(biConsumer);
         return this;
     }
 
@@ -38,7 +35,7 @@ public class InjectionBuilder {
      * @return this
      */
     public InjectionBuilder customMap(Map<String, Object> customMap) {
-        this.injectionConfig.setCustomMap(customMap);
+        this.configurer.getInjectionConfig().setCustomMap(customMap);
         return this;
     }
 
@@ -49,7 +46,7 @@ public class InjectionBuilder {
      * @return this
      */
     public InjectionBuilder customFile(CustomFile customFile) {
-        this.injectionConfig.getCustomFiles().add(customFile);
+        this.configurer.getInjectionConfig().getCustomFiles().add(customFile);
         return this;
     }
 
@@ -60,7 +57,7 @@ public class InjectionBuilder {
      * @return this
      */
     public InjectionBuilder customFile(List<CustomFile> customFiles) {
-        this.injectionConfig.getCustomFiles().addAll(customFiles);
+        this.configurer.getInjectionConfig().getCustomFiles().addAll(customFiles);
         return this;
     }
 }

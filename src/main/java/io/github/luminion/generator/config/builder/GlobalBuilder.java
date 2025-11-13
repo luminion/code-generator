@@ -1,6 +1,7 @@
 package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.base.GlobalConfig;
+import io.github.luminion.generator.config.Configurer;
+import lombok.RequiredArgsConstructor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,34 +10,27 @@ import java.util.Date;
  * @author luminion
  * @since 1.0.0
  */
+@RequiredArgsConstructor
 public class GlobalBuilder {
-
-    private final GlobalConfig globalConfig;
-
-    public GlobalBuilder(GlobalConfig globalConfig) {
-        this.globalConfig = globalConfig;
-    }
+    private final Configurer configurer;
 
     /**
      * 作者
      */
     public GlobalBuilder author(String author) {
-        this.globalConfig.setAuthor(author);
+        this.configurer.getGlobalConfig().setAuthor(author);
         return this;
     }
-
-
 
     /**
      * 指定注释日期格式化
      *
      * @param pattern 格式
      * @return this
-     * @since 3.5.0
      */
     public GlobalBuilder commentDatePattern(String pattern) {
         String format = new SimpleDateFormat(pattern).format(new Date());
-        this.globalConfig.setCommentDate(format);
+        this.configurer.getGlobalConfig().setCommentDate(format);
         return this;
     }
 
@@ -47,7 +41,7 @@ public class GlobalBuilder {
      * @since 3.5.0
      */
     public GlobalBuilder enableLombok() {
-        this.globalConfig.setLombok(true);
+        this.configurer.getGlobalConfig().setLombok(true);
         return this;
     }
 
@@ -59,7 +53,7 @@ public class GlobalBuilder {
      */
     @Deprecated
     public GlobalBuilder disableLombok() {
-        this.globalConfig.setLombok(false);
+        this.configurer.getGlobalConfig().setLombok(false);
         return this;
     }
 
@@ -70,7 +64,7 @@ public class GlobalBuilder {
      * @since 3.5.0
      */
     public GlobalBuilder enableChainModel() {
-        this.globalConfig.setChainModel(true);
+        this.configurer.getGlobalConfig().setChainModel(true);
         return this;
     }
 
@@ -80,7 +74,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder enableCommentLink() {
-        this.globalConfig.setCommentLink(true);
+        this.configurer.getGlobalConfig().setCommentLink(true);
         return this;
     }
 
@@ -92,7 +86,7 @@ public class GlobalBuilder {
      */
     @Deprecated
     public GlobalBuilder disableCommentLink() {
-        this.globalConfig.setCommentLink(false);
+        this.configurer.getGlobalConfig().setCommentLink(false);
         return this;
     }
 
@@ -102,7 +96,7 @@ public class GlobalBuilder {
 //     * @return this
 //     */
 //    public GlobalBuilder enableCommentUUID() {
-//        this.globalConfig.setCommentUUID(true);
+//        this.configurer.getGlobalConfig().setCommentUUID(true);
 //        return this;
 //    }
 
@@ -112,7 +106,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder disableValidated() {
-        this.globalConfig.setValidated(false);
+        this.configurer.getGlobalConfig().setValidated(false);
         return this;
     }
 
@@ -120,7 +114,7 @@ public class GlobalBuilder {
      * 使用swagger文档
      */
     public GlobalBuilder enableSwagger() {
-        this.globalConfig.setSwagger(true);
+        this.configurer.getGlobalConfig().setSwagger(true);
         return this;
     }
 
@@ -128,7 +122,7 @@ public class GlobalBuilder {
      * 使用springdoc文档
      */
     public GlobalBuilder enableSpringdoc() {
-        this.globalConfig.setSpringdoc(true);
+        this.configurer.getGlobalConfig().setSpringdoc(true);
         return this;
     }
 
@@ -140,7 +134,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder enableJavaxApi() {
-        this.globalConfig.setJakartaApiPackagePrefix("javax");
+        this.configurer.getGlobalConfig().setJakartaApiPackagePrefix("javax");
         return this;
     }
 
@@ -151,11 +145,11 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder enableEasyExcel() {
-        this.globalConfig.setExcelApiPackagePrefix("com.alibaba.excel");
-        this.globalConfig.setExcelApiClass("EasyExcel");
+        this.configurer.getGlobalConfig().setExcelApiPackagePrefix("com.alibaba.excel");
+        this.configurer.getGlobalConfig().setExcelApiClass("EasyExcel");
         return this;
     }
-    
+
 
     /**
      * 不生成查询方法
@@ -163,7 +157,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder disableQuery() {
-        this.globalConfig.setGenerateQuery(false);
+        this.configurer.getGlobalConfig().setGenerateQuery(false);
         return this;
     }
 
@@ -173,7 +167,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder disableInsert() {
-        this.globalConfig.setGenerateInsert(false);
+        this.configurer.getGlobalConfig().setGenerateInsert(false);
         return this;
     }
 
@@ -183,7 +177,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder disableUpdate() {
-        this.globalConfig.setGenerateUpdate(false);
+        this.configurer.getGlobalConfig().setGenerateUpdate(false);
         return this;
     }
 
@@ -193,7 +187,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder disableDelete() {
-        this.globalConfig.setGenerateDelete(false);
+        this.configurer.getGlobalConfig().setGenerateDelete(false);
         return this;
     }
 
@@ -203,7 +197,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder disableImport() {
-        this.globalConfig.setGenerateImport(false);
+        this.configurer.getGlobalConfig().setGenerateImport(false);
         return this;
     }
 
@@ -213,8 +207,8 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder disableExport() {
-        this.globalConfig.setGenerateExport(false);
+        this.configurer.getGlobalConfig().setGenerateExport(false);
         return this;
     }
-    
+
 }

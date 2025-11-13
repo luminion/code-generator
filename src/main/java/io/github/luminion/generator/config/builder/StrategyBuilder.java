@@ -1,22 +1,19 @@
 package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.po.TableField;
-import io.github.luminion.generator.config.base.StrategyConfig;
+import io.github.luminion.generator.config.Configurer;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiFunction;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
+@RequiredArgsConstructor
 public class StrategyBuilder {
-    private final StrategyConfig strategyConfig;
+    private final Configurer configurer;
 
-    public StrategyBuilder(StrategyConfig config) {
-        this.strategyConfig = config;
-    }
 
     /**
      * 增加过滤表前缀
@@ -36,7 +33,7 @@ public class StrategyBuilder {
      * @since 1.0.0
      */
     public StrategyBuilder addTablePrefix(List<String> tablePrefixList) {
-        this.strategyConfig.getTablePrefix().addAll(tablePrefixList);
+        this.configurer.getStrategyConfig().getTablePrefix().addAll(tablePrefixList);
         return this;
     }
 
@@ -52,7 +49,7 @@ public class StrategyBuilder {
     }
 
     public StrategyBuilder addTableSuffix(List<String> tableSuffixList) {
-        this.strategyConfig.getTableSuffix().addAll(tableSuffixList);
+        this.configurer.getStrategyConfig().getTableSuffix().addAll(tableSuffixList);
         return this;
     }
 
@@ -68,7 +65,7 @@ public class StrategyBuilder {
     }
 
     public StrategyBuilder addFieldPrefix(List<String> fieldPrefix) {
-        this.strategyConfig.getFieldPrefix().addAll(fieldPrefix);
+        this.configurer.getStrategyConfig().getFieldPrefix().addAll(fieldPrefix);
         return this;
     }
 
@@ -84,7 +81,7 @@ public class StrategyBuilder {
     }
 
     public StrategyBuilder addFieldSuffix(List<String> fieldSuffixList) {
-        this.strategyConfig.getFieldSuffix().addAll(fieldSuffixList);
+        this.configurer.getStrategyConfig().getFieldSuffix().addAll(fieldSuffixList);
         return this;
     }
 
@@ -95,17 +92,17 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder addInclude(String... include) {
-        this.strategyConfig.getInclude().addAll(Arrays.asList(include));
+        this.configurer.getStrategyConfig().getInclude().addAll(Arrays.asList(include));
         return this;
     }
 
     public StrategyBuilder addInclude(List<String> includes) {
-        this.strategyConfig.getInclude().addAll(includes);
+        this.configurer.getStrategyConfig().getInclude().addAll(includes);
         return this;
     }
 
     public StrategyBuilder addInclude(String include) {
-        this.strategyConfig.getInclude().addAll(Arrays.asList(include.split(",")));
+        this.configurer.getStrategyConfig().getInclude().addAll(Arrays.asList(include.split(",")));
         return this;
     }
 
@@ -121,12 +118,12 @@ public class StrategyBuilder {
     }
 
     public StrategyBuilder addExclude(List<String> excludeList) {
-        this.strategyConfig.getExclude().addAll(excludeList);
+        this.configurer.getStrategyConfig().getExclude().addAll(excludeList);
         return this;
     }
 
     public StrategyBuilder addExclude(String exclude) {
-        this.strategyConfig.getExclude().addAll(Arrays.asList(exclude.split(",")));
+        this.configurer.getStrategyConfig().getExclude().addAll(Arrays.asList(exclude.split(",")));
         return this;
     }
 
@@ -136,7 +133,7 @@ public class StrategyBuilder {
 //     * @return this
 //     */
 //    public StrategyBuilder likeTable(LikeTable likeTable) {
-//        this.strategyConfig.setLikeTable(likeTable);
+//        this.configurer.getStrategyConfig().setLikeTable(likeTable);
 //        return this;
 //    }
 //
@@ -146,7 +143,7 @@ public class StrategyBuilder {
 //     * @return this
 //     */
 //    public StrategyBuilder notLikeTable(LikeTable notLikeTable) {
-//        this.strategyConfig.setNotLikeTable(notLikeTable);
+//        this.configurer.getStrategyConfig().setNotLikeTable(notLikeTable);
 //        return this;
 //    }
 
@@ -158,7 +155,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder extraFieldSuffix(String suffix, String operator) {
-        this.strategyConfig.getExtraFieldSuffixMap().put(suffix, operator);
+        this.configurer.getStrategyConfig().getExtraFieldSuffixMap().put(suffix, operator);
         return this;
     }
 
@@ -168,7 +165,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder clearExtraFieldSuffix() {
-        this.strategyConfig.getExtraFieldSuffixMap().clear();
+        this.configurer.getStrategyConfig().getExtraFieldSuffixMap().clear();
         return this;
     }
 
@@ -179,7 +176,7 @@ public class StrategyBuilder {
 //     * @return this
 //     */
 //    public StrategyBuilder extraFieldStrategy(BiFunction<String, TableField, Boolean> extraFieldStrategy) {
-//        this.strategyConfig.setExtraFieldProvider(extraFieldStrategy);
+//        this.configurer.getStrategyConfig().setExtraFieldProvider(extraFieldStrategy);
 //        return this;
 //    }
 
@@ -190,7 +187,7 @@ public class StrategyBuilder {
      * @since 3.5.0
      */
     public StrategyBuilder enableCapitalMode() {
-        this.strategyConfig.setCapitalMode(true);
+        this.configurer.getStrategyConfig().setCapitalMode(true);
         return this;
     }
 
@@ -201,7 +198,7 @@ public class StrategyBuilder {
      * @since 3.5.0
      */
     public StrategyBuilder enableSkipView() {
-        this.strategyConfig.setSkipView(true);
+        this.configurer.getStrategyConfig().setSkipView(true);
         return this;
     }
 //
@@ -212,7 +209,7 @@ public class StrategyBuilder {
 //     * @since 3.5.1
 //     */
 //    public StrategyBuilder enableSchema() {
-//        this.strategyConfig.setEnableSchema(true);
+//        this.configurer.getStrategyConfig().setEnableSchema(true);
 //        return this;
 //    }
 
@@ -223,7 +220,7 @@ public class StrategyBuilder {
 //     * @since 3.5.0
 //     */
 //    public StrategyBuilder disableSqlFilter() {
-//        this.strategyConfig.setEnableSqlFilter(false);
+//        this.configurer.getStrategyConfig().setEnableSqlFilter(false);
 //        return this;
 //    }
 }

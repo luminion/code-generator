@@ -1,17 +1,15 @@
 package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.base.ServiceConfig;
+import io.github.luminion.generator.config.Configurer;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
+@RequiredArgsConstructor
 public class ServiceBuilder {
-    private final ServiceConfig config;
-
-    public ServiceBuilder() {
-        this.config = new ServiceConfig();
-    }
+    private final Configurer configurer;
 
     /**
      * Service接口父类
@@ -30,7 +28,7 @@ public class ServiceBuilder {
      * @return this
      */
     public ServiceBuilder superServiceClass(String superServiceClass) {
-        this.config.setSuperServiceClass(superServiceClass);
+        this.configurer.getServiceConfig().setSuperServiceClass(superServiceClass);
         return this;
     }
 
@@ -51,7 +49,7 @@ public class ServiceBuilder {
      * @return this
      */
     public ServiceBuilder superServiceImplClass(String superServiceImplClass) {
-        this.config.setSuperServiceImplClass(superServiceImplClass);
+        this.configurer.getServiceConfig().setSuperServiceImplClass(superServiceImplClass);
         return this;
     }
 }

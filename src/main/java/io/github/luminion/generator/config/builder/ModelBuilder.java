@@ -1,6 +1,7 @@
 package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.base.ModelConfig;
+import io.github.luminion.generator.config.Configurer;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
@@ -8,12 +9,9 @@ import java.util.Arrays;
  * @author luminion
  * @since 1.0.0
  */
+@RequiredArgsConstructor
 public class ModelBuilder {
-    private final ModelConfig modelConfig;
-
-    public ModelBuilder(ModelConfig config) {
-        this.modelConfig = config;
-    }
+    private final Configurer configurer;
 
     /**
      * 查询dto继承实体类
@@ -21,7 +19,7 @@ public class ModelBuilder {
      * @return this
      */
     public ModelBuilder queryDTOExtendsEntity() {
-        this.modelConfig.setQueryDTOExtendsEntity(true);
+        this.configurer.getModelConfig().setQueryDTOExtendsEntity(true);
         return this;
     }
 
@@ -31,7 +29,7 @@ public class ModelBuilder {
      * @return this
      */
     public ModelBuilder queryVOExtendsEntity() {
-        this.modelConfig.setQueryVOExtendsEntity(true);
+        this.configurer.getModelConfig().setQueryVOExtendsEntity(true);
         return this;
     }
 
@@ -41,7 +39,7 @@ public class ModelBuilder {
      * @param fields 字段
      */
     public ModelBuilder addEditExcludeFields(String... fields) {
-        this.modelConfig.getEditExcludeFields().addAll(Arrays.asList(fields));
+        this.configurer.getModelConfig().getEditExcludeFields().addAll(Arrays.asList(fields));
         return this;
     }
 
@@ -51,7 +49,7 @@ public class ModelBuilder {
      * @param columns 列
      */
     public ModelBuilder addEditExcludeColumns(String... columns) {
-        this.modelConfig.getEditExcludeColumns().addAll(Arrays.asList(columns));
+        this.configurer.getModelConfig().getEditExcludeColumns().addAll(Arrays.asList(columns));
         return this;
     }
 }

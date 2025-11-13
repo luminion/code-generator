@@ -1,6 +1,7 @@
 package io.github.luminion.generator.config.builder;
 
-import io.github.luminion.generator.config.base.MapperConfig;
+import io.github.luminion.generator.config.Configurer;
+import lombok.RequiredArgsConstructor;
 
 import java.lang.annotation.Annotation;
 
@@ -8,13 +9,9 @@ import java.lang.annotation.Annotation;
  * @author luminion
  * @since 1.0.0
  */
+@RequiredArgsConstructor
 public class MapperBuilder {
-
-    private final MapperConfig mapperConfig;
-
-    public MapperBuilder(MapperConfig mapperConfig) {
-        this.mapperConfig = mapperConfig;
-    }
+    private final Configurer configurer;
 
     /**
      * 父类Mapper
@@ -23,7 +20,7 @@ public class MapperBuilder {
      * @return this
      */
     public MapperBuilder superClass(String superClass) {
-        this.mapperConfig.setSuperClass(superClass);
+        this.configurer.getMapperConfig().setSuperClass(superClass);
         return this;
     }
 
@@ -46,7 +43,7 @@ public class MapperBuilder {
      * @since 3.5.3
      */
     public MapperBuilder mapperAnnotation(Class<? extends Annotation> annotationClass) {
-        this.mapperConfig.setMapperAnnotationClass(annotationClass);
+        this.configurer.getMapperConfig().setMapperAnnotationClass(annotationClass);
         return this;
     }
 
@@ -57,7 +54,7 @@ public class MapperBuilder {
      * @since 3.5.0
      */
     public MapperBuilder enableBaseResultMap() {
-        this.mapperConfig.setBaseResultMap(true);
+        this.configurer.getMapperConfig().setBaseResultMap(true);
         return this;
     }
 
@@ -68,7 +65,7 @@ public class MapperBuilder {
      * @since 3.5.0
      */
     public MapperBuilder enableBaseColumnList() {
-        this.mapperConfig.setBaseColumnList(true);
+        this.configurer.getMapperConfig().setBaseColumnList(true);
         return this;
     }
 
@@ -79,8 +76,8 @@ public class MapperBuilder {
      * @return this
      * @since 3.5.0
      */
-    public MapperBuilder cache(Class<?> cache) {
-        this.mapperConfig.setCache(cache);
+    public MapperBuilder cache(Class<? extends org.apache.ibatis.cache.Cache> cache) {
+        this.configurer.getMapperConfig().setCache(cache);
         return this;
     }
 
@@ -90,7 +87,7 @@ public class MapperBuilder {
      * @return this
      */
     public MapperBuilder clearSortColumnMap() {
-        this.mapperConfig.getSortColumnMap().clear();
+        this.configurer.getMapperConfig().getSortColumnMap().clear();
         return this;
     }
 
@@ -102,7 +99,7 @@ public class MapperBuilder {
      * @return this
      */
     public MapperBuilder sortColumn(String columnName, boolean isDesc) {
-        this.mapperConfig.getSortColumnMap().put(columnName, isDesc);
+        this.configurer.getMapperConfig().getSortColumnMap().put(columnName, isDesc);
         return this;
     }
 }

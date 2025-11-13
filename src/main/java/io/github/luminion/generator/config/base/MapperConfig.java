@@ -25,6 +25,7 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,7 +49,7 @@ public class MapperConfig implements TemplateRender {
      * Mapper标记注解
      *
      */
-    protected Class<? extends org.apache.ibatis.annotations.Mapper> mapperAnnotationClass = org.apache.ibatis.annotations.Mapper.class;
+    protected Class<? extends Annotation> mapperAnnotationClass = org.apache.ibatis.annotations.Mapper.class;
 //    protected Class<?> mapperAnnotationClass;
 
     /**

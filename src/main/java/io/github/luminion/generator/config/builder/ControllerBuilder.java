@@ -1,20 +1,18 @@
 package io.github.luminion.generator.config.builder;
 
 import io.github.luminion.generator.common.SFunc;
+import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.po.ClassMethodPayload;
-import io.github.luminion.generator.config.base.ControllerConfig;
 import io.github.luminion.generator.util.ReflectUtils;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
+@RequiredArgsConstructor
 public class ControllerBuilder {
-    private final ControllerConfig controllerConfig;
-
-    public ControllerBuilder(ControllerConfig config) {
-        this.controllerConfig = config;
-    }
+    private final Configurer configurer;
 
     /**
      * 父类控制器
@@ -33,7 +31,7 @@ public class ControllerBuilder {
      * @return this
      */
     public ControllerBuilder superClass(String superClass) {
-        this.controllerConfig.setSuperClass(superClass);
+        this.configurer.getControllerConfig().setSuperClass(superClass);
         return this;
     }
 
@@ -44,7 +42,7 @@ public class ControllerBuilder {
      * @since 3.5.0
      */
     public ControllerBuilder disableRestController() {
-        this.controllerConfig.setRestController(false);
+        this.configurer.getControllerConfig().setRestController(false);
         return this;
     }
 
@@ -55,7 +53,7 @@ public class ControllerBuilder {
      * @since 3.5.0
      */
     public ControllerBuilder disableHyphenStyle() {
-        this.controllerConfig.setHyphenStyle(false);
+        this.configurer.getControllerConfig().setHyphenStyle(false);
         return this;
     }
 
@@ -67,7 +65,7 @@ public class ControllerBuilder {
      */
     public ControllerBuilder baseUrl(String url) {
         if (url == null || url.isEmpty()) {
-            this.controllerConfig.setBaseUrl(url);
+            this.configurer.getControllerConfig().setBaseUrl(url);
             return this;
         }
         if (!url.startsWith("/")) {
@@ -76,7 +74,7 @@ public class ControllerBuilder {
         if (url.endsWith("/")) {
             url = url.substring(0, url.length() - 1);
         }
-        this.controllerConfig.setBaseUrl(url); 
+        this.configurer.getControllerConfig().setBaseUrl(url);
         return this;
     }
 
@@ -86,7 +84,7 @@ public class ControllerBuilder {
      * @return this
      */
     public ControllerBuilder enableCrossOrigin() {
-        this.controllerConfig.setCrossOrigin(true);
+        this.configurer.getControllerConfig().setCrossOrigin(true);
         return this;
     }
 
@@ -96,7 +94,7 @@ public class ControllerBuilder {
      * @return this
      */
     public ControllerBuilder disableBatchQueryPost() {
-        this.controllerConfig.setBatchQueryPost(false);
+        this.configurer.getControllerConfig().setBatchQueryPost(false);
         return this;
     }
 
@@ -107,7 +105,7 @@ public class ControllerBuilder {
      * @return this
      */
     public ControllerBuilder enableRestful() {
-        this.controllerConfig.setRestful(true);
+        this.configurer.getControllerConfig().setRestful(true);
         return this;
     }
 
@@ -117,7 +115,7 @@ public class ControllerBuilder {
      * @return this
      */
     public ControllerBuilder disablePathVariable() {
-        this.controllerConfig.setPathVariable(false);
+        this.configurer.getControllerConfig().setPathVariable(false);
         return this;
     }
 
@@ -127,7 +125,7 @@ public class ControllerBuilder {
      * @return this
      */
     public ControllerBuilder disableRequestBody() {
-        this.controllerConfig.setRequestBody(false);
+        this.configurer.getControllerConfig().setRequestBody(false);
         return this;
     }
 
@@ -139,7 +137,7 @@ public class ControllerBuilder {
      */
     public <R> ControllerBuilder returnMethod(SFunc<Object, R> methodReference) {
         ClassMethodPayload methodPayload = ReflectUtils.lambdaMethodInfo(methodReference, Object.class);
-        this.controllerConfig.setReturnMethod(methodPayload);
+        this.configurer.getControllerConfig().setReturnMethod(methodPayload);
         return this;
     }
 
@@ -152,8 +150,8 @@ public class ControllerBuilder {
 //     */
 //    public <T, R> ControllerBuilder pageMethod(SFunc<T, R> methodReference, Class<T> pageClass) {
 //        ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, pageClass);
-//        this.controllerConfig.setPageMethod(payload);
+//        this.configurer.getControllerConfig().setPageMethod(payload);
 //        return this;
 //    }
-    
+
 }
