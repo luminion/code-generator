@@ -28,10 +28,6 @@ public class ClassMethodPayload extends ClassPayload {
         this.isStatic = Modifier.isStatic(method.getModifiers());
         this.isConstructor = method.getName().startsWith("<init>");
     }
-    
-    public boolean isMethodReady(){
-        return methodName != null;
-    }
 
     public ClassMethodPayload(Constructor<?> method) {
         super(method.getDeclaringClass());
@@ -39,6 +35,10 @@ public class ClassMethodPayload extends ClassPayload {
         this.methodGenericTypeCount = method.getTypeParameters().length;
         this.isStatic = Modifier.isStatic(method.getModifiers());
         this.isConstructor = true;
+    }
+
+    public boolean isMethodReady(){
+        return methodName != null;
     }
 
     public String invokeMethodStr(String parametersStr) {

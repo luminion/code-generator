@@ -24,7 +24,7 @@ import java.util.Collection;
  * @author luminion
  * @since 1.0.0
  */
-public interface DatabaseKeyWordsHandler {
+public interface DatabaseKeywordsHandler {
 
     /**
      * 获取关键字

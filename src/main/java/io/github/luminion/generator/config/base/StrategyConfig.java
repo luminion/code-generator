@@ -15,15 +15,15 @@
  */
 package io.github.luminion.generator.config.base;
 
-import io.github.luminion.generator.common.TableColumnTypeToJavaTypeConverter;
-import io.github.luminion.generator.common.DatabaseKeyWordsHandler;
+import io.github.luminion.generator.common.ExtraFieldProvider;
+import io.github.luminion.generator.common.JavaFieldTypeConverter;
+import io.github.luminion.generator.common.DatabaseKeywordsHandler;
 import io.github.luminion.generator.common.ITypeConvertHandler;
 import io.github.luminion.generator.enums.IdType;
 import io.github.luminion.generator.enums.NameConvertType;
 import io.github.luminion.generator.fill.IFill;
-import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.enums.DateType;
-import io.github.luminion.generator.common.support.ExtraFieldStrategy;
+import io.github.luminion.generator.common.support.ExtraFieldProviderDefault;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.util.ReflectUtils;
@@ -32,7 +32,6 @@ import lombok.Data;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -62,12 +61,12 @@ public class StrategyConfig implements TemplateRender {
     /**
      * 类型转换处理
      */
-    protected TableColumnTypeToJavaTypeConverter tableColumnTypeToJavaTypeConverter;
+    protected JavaFieldTypeConverter javaFieldTypeConverter;
 
     /**
      * 关键字处理器
      */
-    protected DatabaseKeyWordsHandler keyWordsHandler;
+    protected DatabaseKeywordsHandler keyWordsHandler;
 
     /**
      * 指定生成的主键的ID类型
@@ -159,7 +158,6 @@ public class StrategyConfig implements TemplateRender {
      */
     protected String tableNamePattern;
 
-
     /**
      * 额外字段后缀
      */
@@ -168,7 +166,7 @@ public class StrategyConfig implements TemplateRender {
     /**
      * 额外字段策略
      */
-    protected BiFunction<String, TableField, Boolean> extraFieldStrategy = new ExtraFieldStrategy();
+    protected ExtraFieldProvider extraFieldProvider = new ExtraFieldProviderDefault();
 
     /**
      * 启用 schema 默认 false

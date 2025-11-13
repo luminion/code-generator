@@ -20,6 +20,10 @@ public class T1 {
         VelocityTemplateEngine templateEngine = new VelocityTemplateEngine(configurer);
         configurer.getStrategyConfig().getInclude().add("sys_user");
         templateEngine.batchOutput().open();
+        
+        /*
+        importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
+         */
     }
     
 }

@@ -179,7 +179,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder extraFieldStrategy(BiFunction<String, TableField, Boolean> extraFieldStrategy) {
-        this.strategyConfig.setExtraFieldStrategy(extraFieldStrategy);
+        this.strategyConfig.setExtraFieldProvider(extraFieldStrategy);
         return this;
     }
 

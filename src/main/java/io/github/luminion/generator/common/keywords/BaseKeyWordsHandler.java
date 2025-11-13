@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.common.keywords;
 
-import io.github.luminion.generator.common.DatabaseKeyWordsHandler;
+import io.github.luminion.generator.common.DatabaseKeywordsHandler;
 
 
 import java.util.*;
@@ -27,7 +27,7 @@ import java.util.*;
  * @author luminion
  * @since 1.0.0
  */
-public abstract class BaseKeyWordsHandler implements DatabaseKeyWordsHandler {
+public abstract class BaseKeyWordsHandler implements DatabaseKeywordsHandler {
 
     public final Set<String> keyWords;
 

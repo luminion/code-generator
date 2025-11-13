@@ -26,6 +26,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -88,11 +89,6 @@ public class ControllerConfig implements TemplateRender {
     protected boolean batchQueryPost = true;
 
     /**
-     * 批量查询body参数是否必填
-     */
-    protected boolean batchQueryRequiredBody = true;
-
-    /**
      * 返回结果方法
      */
     protected ClassMethodPayload returnMethod = new ClassMethodPayload();
@@ -109,13 +105,15 @@ public class ControllerConfig implements TemplateRender {
         Map<String, Boolean> outputClassGenerateMap = outputConfig.getOutputClassGenerateMap();
         Map<String, String> outputClassSimpleNameMap = outputConfig.getOutputClassSimpleNameMap(tableInfo);
         Map<String, String> outputClassClassCanonicalNameMap = outputConfig.getOutputClassCanonicalNameMap(tableInfo);
-        data.put("controllerMappingHyphen", StringUtils.camelToHyphen(tableInfo.getEntityPath()));
         data.put("controllerMappingHyphenStyle", this.hyphenStyle);
         data.put("restControllerStyle", this.restController);
         data.put("superControllerClassPackage", StringUtils.isBlank(superClass) ? null : superClass);
         data.put("superControllerClass", ClassUtils.getSimpleName(this.superClass));
         data.put("primaryKeyPropertyType", "Object");
-        String url = this.hyphenStyle ? StringUtils.camelToHyphen(tableInfo.getEntityPath()) : tableInfo.getEntityPath();
+        String entityName = tableInfo.getEntityName();
+        // 首字母小写
+        String entityPath = entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
+        String url = this.hyphenStyle ? StringUtils.camelToHyphen(entityPath) : entityPath;
         String requestBaseUrl = Stream.of(this.baseUrl, outputConfig.getModuleName(), url)
                 .filter(StringUtils::isNotBlank)
                 .collect(Collectors.joining("/"));
@@ -138,12 +136,11 @@ public class ControllerConfig implements TemplateRender {
             data.put("pageMethodParams", "Long current, Long size");
         }
         String requestBodyStr = "@RequestBody ";
-        String optionalBodyStr = batchQueryRequiredBody ? "@RequestBody " : "@RequestBody ";
         String validatedStr = "@Validated ";
         if (requestBody) {
             data.put("requestBodyStr", requestBodyStr);
             if (batchQueryPost) {
-                data.put("optionalBodyStr", optionalBodyStr);
+                data.put("optionalBodyStr", requestBodyStr);
             }
         }
         TreeSet<String> importPackages = new TreeSet<>();
@@ -231,8 +228,8 @@ public class ControllerConfig implements TemplateRender {
                 importPackages.add(pageMethod.getClassCanonicalName());
                 data.put("pageReturnType", pageMethod.returnGenericTypeStr(outputClassSimpleNameMap.get(OutputFile.queryVO.name())));
             } else {
-                importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
-                data.put("pageReturnType", String.format("IPage<%s>", outputClassSimpleNameMap.get(OutputFile.queryVO.name())));
+                log.warn("PageMethod not set, use Object instead");
+                data.put("pageReturnType", "Object");
             }
         }
         String responseClass = globalConfig.resolveJakartaClassCanonicalName("servlet.http.HttpServletResponse");

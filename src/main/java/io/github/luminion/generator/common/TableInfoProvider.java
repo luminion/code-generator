@@ -21,11 +21,13 @@ import io.github.luminion.generator.po.TableInfo;
 import java.util.List;
 
 /**
+ * 表信息提供者
  * @author nieqiurong 2021/1/6.
  * @author luminion
  * @since 1.0.0
  */
-public interface IDatabaseQuery {
+@FunctionalInterface
+public interface TableInfoProvider {
 
     /**
      * 获取表信息

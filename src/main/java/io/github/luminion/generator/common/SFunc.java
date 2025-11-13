@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.function.Function;
 
 /**
+ * 可序列化获取信息的函数
+ *
  * @author luminion
  * @since 1.0.0
  */

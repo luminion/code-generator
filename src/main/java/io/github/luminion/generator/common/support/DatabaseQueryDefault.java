@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.common.support;
 
-import io.github.luminion.generator.common.IDatabaseQuery;
+import io.github.luminion.generator.common.TableInfoProvider;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.po.TableField;
@@ -48,7 +48,7 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Slf4j
-public class DatabaseQueryDefault implements IDatabaseQuery {
+public class DatabaseQueryDefault implements TableInfoProvider {
     protected final DatabaseQueryMetaDataWrapper databaseMetaDataWrapper;
     protected final StrategyConfig strategyConfig;
     protected final Configurer configurer;
@@ -104,7 +104,7 @@ public class DatabaseQueryDefault implements IDatabaseQuery {
 
     protected void convertTableFields(TableInfo tableInfo) {
         String tableName = tableInfo.getName();
-        tableInfo.setIndexList(getIndex(tableName));
+//        tableInfo.setIndexList(getIndex(tableName));
         Map<String, DatabaseQueryMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
         columnsInfoMap.forEach((k, columnInfo) -> {
             TableField field = new TableField( tableInfo, columnInfo);

@@ -1,6 +1,6 @@
 package io.github.luminion.generator.common.support;
 
-import io.github.luminion.generator.common.JavaFieldType;
+import io.github.luminion.generator.common.JavaFieldProvider;
 import io.github.luminion.generator.enums.FieldType;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.po.TableField;
@@ -16,7 +16,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 public abstract class ColumnTypeToJavaFieldTypeConverterHelper {
-    private static final Map<Integer, JavaFieldType> typeMap = new HashMap<>();
+    private static final Map<Integer, JavaFieldProvider> typeMap = new HashMap<>();
 
     static {
         // byte[]
@@ -60,7 +60,7 @@ public abstract class ColumnTypeToJavaFieldTypeConverterHelper {
     }
 
     
-    public static JavaFieldType getJavaFieldType(TableField.MetaInfo metaInfo, DateType dateType) {
+    public static JavaFieldProvider getJavaFieldType(TableField.MetaInfo metaInfo, DateType dateType) {
         // 是否用包装类??? 可以尝试判断字段是否允许为null来判断是否用包装类
         int typeCode = metaInfo.getJdbcType().TYPE_CODE;
         switch (typeCode) {
@@ -81,14 +81,14 @@ public abstract class ColumnTypeToJavaFieldTypeConverterHelper {
         }
     }
 
-    private static JavaFieldType getBitType(TableField.MetaInfo metaInfo) {
+    private static JavaFieldProvider getBitType(TableField.MetaInfo metaInfo) {
         if (metaInfo.getLength() > 1) {
             return FieldType.BYTE_ARRAY;
         }
         return FieldType.BOOLEAN;
     }
 
-    private static JavaFieldType getNumber(TableField.MetaInfo metaInfo) {
+    private static JavaFieldProvider getNumber(TableField.MetaInfo metaInfo) {
         if (metaInfo.getScale() > 0 || metaInfo.getLength() > 18) {
             return typeMap.get(metaInfo.getJdbcType().TYPE_CODE);
         } else if (metaInfo.getLength() > 9) {
@@ -100,7 +100,7 @@ public abstract class ColumnTypeToJavaFieldTypeConverterHelper {
         }
     }
 
-    private static JavaFieldType getDateType(TableField.MetaInfo metaInfo, DateType dateType) {
+    private static JavaFieldProvider getDateType(TableField.MetaInfo metaInfo, DateType dateType) {
         FieldType javaFieldTypeEnum;
         switch (dateType) {
             case SQL_PACK:
@@ -115,7 +115,7 @@ public abstract class ColumnTypeToJavaFieldTypeConverterHelper {
         return javaFieldTypeEnum;
     }
 
-    private static JavaFieldType getTimeType(TableField.MetaInfo metaInfo, DateType dateType) {
+    private static JavaFieldProvider getTimeType(TableField.MetaInfo metaInfo, DateType dateType) {
         FieldType javaFieldTypeEnum;
         if (dateType == DateType.TIME_PACK) {
             javaFieldTypeEnum = FieldType.LOCAL_TIME;
@@ -125,7 +125,7 @@ public abstract class ColumnTypeToJavaFieldTypeConverterHelper {
         return javaFieldTypeEnum;
     }
 
-    private static JavaFieldType getTimestampType(TableField.MetaInfo metaInfo, DateType dateType) {
+    private static JavaFieldProvider getTimestampType(TableField.MetaInfo metaInfo, DateType dateType) {
         FieldType javaFieldTypeEnum;
         if (dateType == DateType.TIME_PACK) {
             javaFieldTypeEnum = FieldType.LOCAL_DATE_TIME;

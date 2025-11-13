@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
  */
 public class TableInfo {
 
-
     @Getter
     private final Configurer configurer;
     /**
@@ -46,7 +45,7 @@ public class TableInfo {
     private final StrategyConfig strategyConfig;
 
     /**
-     * 是否转换
+     * 表名是否转化
      */
     @Getter
     @Setter
@@ -59,16 +58,16 @@ public class TableInfo {
     private String name;
 
     /**
-     * 表注释
-     */
-    @Getter
-    private String comment;
-
-    /**
      * 实体名称
      */
     @Getter
     private String entityName;
+
+    /**
+     * 表注释
+     */
+    @Getter
+    private String comment;
 
     /**
      * 公共字段
@@ -102,14 +101,13 @@ public class TableInfo {
     @Setter
     private TableField primaryTableField;
 
-    /**
-     * 索引信息
-     *
-     * @since 3.5.10
-     */
-    @Setter
-    @Getter
-    private List<DatabaseQueryMetaDataWrapper.Index> indexList;
+//    /**
+//     * 索引信息
+//     *
+//     */
+//    @Setter
+//    @Getter
+//    private List<DatabaseQueryMetaDataWrapper.Index> indexList;
 
     @Getter
     private final Map<String, TableField> tableFieldMap = new HashMap<>();
@@ -173,12 +171,11 @@ public class TableInfo {
     /**
      * 转换filed实体为 xml mapper 中的 base column 字符串信息
      */
-    public String getFieldNames() {
-        String fieldNames = this.fields.stream()
+    public String getBaseResultColumns() {
+        // 用于base column 
+        return this.fields.stream()
                 .map(TableField::getColumnName)
                 .collect(Collectors.joining(", "));
-        // 用于base column 
-        return fieldNames;
     }
 
     /**
@@ -195,7 +192,7 @@ public class TableInfo {
             for (Map.Entry<String, String> entry : strategyConfig.getExtraFieldSuffixMap().entrySet()) {
                 String suffix = entry.getKey();
                 String sqlOperator = entry.getValue();
-                if (strategyConfig.getExtraFieldStrategy().apply(sqlOperator, field)) {
+                if (strategyConfig.getExtraFieldProvider().apply(sqlOperator, field)) {
                     String suffixPropertyName = field.getPropertyName() + suffix;
                     if (existPropertyNames.contains(suffixPropertyName)) {
                         continue;

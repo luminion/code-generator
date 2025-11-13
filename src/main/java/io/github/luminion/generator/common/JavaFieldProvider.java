@@ -22,7 +22,7 @@ package io.github.luminion.generator.common;
  * @author luminion
  * @since 1.0.0
  */
-public interface JavaFieldType {
+public interface JavaFieldProvider {
 
     /**
      * 获取字段类型(短类名)
