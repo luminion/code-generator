@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.config.base;
+package io.github.luminion.generator.config.model;
 
+import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.config.core.StrategyConfig;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
@@ -36,7 +38,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class EntityConfig implements TemplateRender {
+public class Entity implements TemplateRender {
 
     /**
      * 自定义继承的Entity类全称，带包名
@@ -58,6 +60,11 @@ public class EntityConfig implements TemplateRender {
      * 开启 ActiveRecord 模式（默认 false）
      */
     protected boolean activeRecord;
+    
+    /**
+     * 是否使用mybatis plus
+     */
+    protected boolean mybatisPlus;
 
 
     @Override
@@ -67,25 +74,21 @@ public class EntityConfig implements TemplateRender {
         data.put("entitySerialVersionUID", this.serialUID);
         data.put("entitySerialAnnotation", this.serialAnnotation);
         data.put("superEntityClass", ClassUtils.getSimpleName(this.superClass));
-
         // 导入包
         Set<String> importPackages = this.entityImportPackages(tableInfo);
         Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
         data.put("entityImportPackages4Java", javaPackages);
         data.put("entityImportPackages4Framework", frameworkPackages);
-   
         return data;
     }
 
     /**
      * 导包处理
-     *
-     * @since 3.5.0
      */
     public Set<String> entityImportPackages(TableInfo tableInfo) {
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
-        ModelConfig modelConfig = tableInfo.getConfigurer().getModelConfig();
+        StrategyConfig strategyConfig = tableInfo.getConfigurer().getStrategyConfig();
         TreeSet<String> importPackages = new TreeSet<>();
         if (StringUtils.isNotBlank(this.superClass)) {
             importPackages.add(this.superClass);
@@ -104,11 +107,11 @@ public class EntityConfig implements TemplateRender {
         if (tableInfo.isConvert()) {
             importPackages.add("com.baomidou.mybatisplus.annotation.TableName");
         }
-//        if (null != this.idType && tableInfo.isHavePrimaryKey()) {
-//            // 指定需要 IdType 场景
-//            importPackages.add("com.baomidou.mybatisplus.annotation.IdType");
-//            importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
-//        }
+        if (null != strategyConfig.getIdType() && tableInfo.isHavePrimaryKey()) {
+            // 指定需要 IdType 场景
+            importPackages.add("com.baomidou.mybatisplus.annotation.IdType");
+            importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
+        }
         tableInfo.getFields().forEach(field -> {
             JavaFieldInfo columnType = field.getJavaType();
             if (null != columnType && null != columnType.getPkg()) {
@@ -157,12 +160,6 @@ public class EntityConfig implements TemplateRender {
         if (globalConfig.isSwagger()) {
             importPackages.add("io.swagger.annotations.ApiModel");
             importPackages.add("io.swagger.annotations.ApiModelProperty");
-        }
-        if (globalConfig.isGenerateExport() && modelConfig.isQueryVOExtendsEntity()) {
-            String excelIgnoreUnannotated = globalConfig.resolveExcelClassCanonicalName("annotation.ExcelIgnoreUnannotated");
-            String excelProperty = globalConfig.resolveExcelClassCanonicalName("annotation.ExcelProperty");
-            importPackages.add(excelIgnoreUnannotated);
-            importPackages.add(excelProperty);
         }
         return importPackages;
     }

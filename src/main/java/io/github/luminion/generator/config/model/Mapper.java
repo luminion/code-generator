@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.config.base;
+package io.github.luminion.generator.config.model;
 
+import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.OutputFile;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
@@ -38,7 +39,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class MapperConfig implements TemplateRender {
+public class Mapper implements TemplateRender {
 
     /**
      * 自定义继承的Mapper类全称，带包名

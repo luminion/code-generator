@@ -6,59 +6,19 @@ import io.github.luminion.generator.engine.VelocityTemplateEngine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.File;
 import java.util.Arrays;
-import java.util.function.Consumer;
 
 /**
  * @author luminion
  */
 @RequiredArgsConstructor
 @Slf4j
-public class AbstractGenerator<C> implements LambdaGenerator<C> {
+public abstract class AbstractGenerator<C> implements LambdaGenerator<C> {
     private final Configurer configurer;
 
 
-    @Override
-    public LambdaGenerator<C> controller(Consumer<ControllerBuilder> consumer) {
-        consumer.accept(new ControllerBuilder(this.configurer));
-        return this;
-    }
-
-    @Override
-    public LambdaGenerator<C> service(Consumer<ServiceBuilder> consumer) {
-        consumer.accept(new ServiceBuilder(this.configurer));
-        return this;
-    }
-
-    @Override
-    public LambdaGenerator<C> mapper(Consumer<MapperBuilder> consumer) {
-        consumer.accept(new MapperBuilder(this.configurer));
-        return this;
-    }
-
-    @Override
-    public LambdaGenerator<C> model(Consumer<ModelBuilder> consumer) {
-        consumer.accept(new ModelBuilder(this.configurer));
-        return this;
-    }
-
-    @Override
-    public LambdaGenerator<C> strategy(Consumer<StrategyBuilder> consumer) {
-        consumer.accept(new StrategyBuilder(this.configurer));
-        return this;
-    }
-
-    @Override
-    public LambdaGenerator<C> global(Consumer<GlobalBuilder> consumer) {
-        consumer.accept(new GlobalBuilder(this.configurer));
-        return this;
-    }
-
-    @Override
-    public LambdaGenerator<C> output(Consumer<OutputBuilder> consumer) {
-        consumer.accept(new OutputBuilder(this.configurer));
-        return this;
-    }
+  
     
 
     @Override

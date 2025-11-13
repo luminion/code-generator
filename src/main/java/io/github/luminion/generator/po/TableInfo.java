@@ -15,16 +15,14 @@
  */
 package io.github.luminion.generator.po;
 
-import io.github.luminion.generator.common.NameConverter;
 import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.config.base.StrategyConfig;
+import io.github.luminion.generator.config.core.StrategyConfig;
 import io.github.luminion.generator.enums.NameConvertType;
 import io.github.luminion.generator.common.support.DefaultDatabaseQueryMetaDataWrapper;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 

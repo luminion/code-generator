@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.config.base;
+package io.github.luminion.generator.config.model;
 
+import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.config.core.OutputConfig;
 import io.github.luminion.generator.enums.OutputFile;
 import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.po.ClassPayload;
@@ -41,7 +43,7 @@ import java.util.stream.Stream;
  */
 @Slf4j
 @Data
-public class ControllerConfig implements TemplateRender {
+public class Controller implements TemplateRender {
 
     /**
      * 自定义继承的Controller类全称，带包名

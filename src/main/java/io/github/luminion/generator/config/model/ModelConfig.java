@@ -1,5 +1,6 @@
-package io.github.luminion.generator.config.base;
+package io.github.luminion.generator.config.model;
 
+import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.FieldFill;
 import io.github.luminion.generator.enums.OutputFile;
 import io.github.luminion.generator.po.TableField;
@@ -19,6 +20,29 @@ import java.util.stream.Collectors;
  */
 @Data
 public class ModelConfig implements TemplateRender {
+
+
+    /**
+     * 自定义继承的Entity类全称，带包名
+     */
+    protected String superClass;
+
+    /**
+     * 实体是否生成 serialVersionUID
+     */
+    protected boolean serialUID = true;
+
+    /**
+     * 是否启用 {@link java.io.Serial} (需JAVA 14) 注解
+     *
+     */
+    protected boolean serialAnnotation;
+
+    /**
+     * 开启 ActiveRecord 模式（默认 false）
+     */
+    protected boolean entityActiveRecordModel;
+    
 
     /**
      * 查询dto继承实体类

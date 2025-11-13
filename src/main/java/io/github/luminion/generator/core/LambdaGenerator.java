@@ -10,6 +10,13 @@ import java.util.function.Consumer;
  */
 public interface LambdaGenerator<C> {
 
+    LambdaGenerator<C> global(Consumer<GlobalBuilder> consumer);
+    
+    LambdaGenerator<C> strategy(Consumer<StrategyBuilder> consumer);
+    
+    LambdaGenerator<C> output(Consumer<OutputBuilder> consumer);
+    
+
     LambdaGenerator<C> controller(Consumer<ControllerBuilder> consumer);
 
     LambdaGenerator<C> service(Consumer<ServiceBuilder> consumer);
@@ -17,12 +24,6 @@ public interface LambdaGenerator<C> {
     LambdaGenerator<C> mapper(Consumer<MapperBuilder> consumer);
 
     LambdaGenerator<C> model(Consumer<ModelBuilder> consumer);
-
-    LambdaGenerator<C> strategy(Consumer<StrategyBuilder> consumer);
-
-    LambdaGenerator<C> global(Consumer<GlobalBuilder> consumer);
-
-    LambdaGenerator<C> output(Consumer<OutputBuilder> consumer);
 
     LambdaGenerator<C> special(Consumer<C> consumer);
     

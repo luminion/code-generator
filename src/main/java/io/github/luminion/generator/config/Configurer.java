@@ -15,10 +15,11 @@
  */
 package io.github.luminion.generator.config;
 
-import io.github.luminion.generator.config.base.DataSourceConfig;
+import io.github.luminion.generator.config.core.DataSourceConfig;
+import io.github.luminion.generator.config.model.*;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.support.DefaultDatabaseQuery;
-import io.github.luminion.generator.config.base.*;
+import io.github.luminion.generator.config.core.*;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -56,19 +57,19 @@ public class Configurer {
     /**
      * 实体配置
      */
-    private final EntityConfig entityConfig = new EntityConfig();
+    private final Entity entityConfig = new Entity();
     /**
      * 映射器配置
      */
-    private final MapperConfig mapperConfig = new MapperConfig();
+    private final Mapper mapperConfig = new Mapper();
     /**
      * 服务配置
      */
-    private final ServiceConfig serviceConfig = new ServiceConfig();
+    private final Service serviceConfig = new Service();
     /**
      * 控制器配置
      */
-    private final ControllerConfig controllerConfig = new ControllerConfig();
+    private final Controller controllerConfig = new Controller();
     /**
      * 模型配置
      */

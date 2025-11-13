@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.config.base;
+package io.github.luminion.generator.config.core;
 
-import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.po.ClassPayload;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.TemplateRender;
@@ -146,6 +145,31 @@ public class GlobalConfig implements TemplateRender {
      * 分页类
      */
     protected ClassPayload pageClassPayload = new ClassPayload(List.class);
+
+
+    /**
+     * 生成文件的输出目录
+     */
+    protected String outputDir = System.getProperty("user.dir") + "/src/main/java";
+    /**
+     * 全局文件覆盖
+     */
+    protected boolean outputFileGlobalOverride;
+    /**
+     * 是否打开输出目录
+     */
+    protected boolean outputDirOpen = true;
+
+    /**
+     * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
+     */
+    protected String parentPackage = "io.github.luminion";
+
+    /**
+     * 父包模块名
+     */
+    protected String moduleName = "";
+    
 
 
     /**

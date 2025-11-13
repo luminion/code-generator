@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.config.base;
+package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.config.core.OutputConfig;
 import io.github.luminion.generator.enums.OutputFile;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.TemplateRender;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class ServiceConfig implements TemplateRender {
+public class Service implements TemplateRender {
     /**
      * service层导入的类
      */
