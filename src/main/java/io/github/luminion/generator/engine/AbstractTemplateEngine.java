@@ -153,7 +153,7 @@ public abstract class AbstractTemplateEngine {
         String outDir = getConfigurer().getOutputConfig().getOutputDir();
         if (StringUtils.isBlank(outDir) || !new File(outDir).exists()) {
             System.err.println("未找到输出目录：" + outDir);
-        } else if (getConfigurer().getOutputConfig().isOpen()) {
+        } else if (getConfigurer().getOutputConfig().isOutputDirOpen()) {
             try {
                 RuntimeUtils.openDir(outDir);
             } catch (IOException e) {

@@ -28,6 +28,14 @@ public class OutputConfig implements TemplateRender {
      * 生成文件的输出目录
      */
     protected String outputDir = System.getProperty("user.dir") + "/src/main/java";
+    /**
+     * 全局文件覆盖
+     */
+    protected boolean outputFileGlobalOverride;
+    /**
+     * 是否打开输出目录
+     */
+    protected boolean outputDirOpen = true;
 
     /**
      * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
@@ -39,15 +47,6 @@ public class OutputConfig implements TemplateRender {
      */
     protected String moduleName = "";
 
-    /**
-     * 全局文件覆盖
-     */
-    protected boolean globalFileOverride;
-
-    /**
-     * 是否打开输出目录
-     */
-    protected boolean open = true;
     
     protected TemplateFile entity = new TemplateFile(
             OutputFile.entity.name(),
@@ -122,21 +121,6 @@ public class OutputConfig implements TemplateRender {
             ".java"
     );
 
-    public TemplateFile getInsertDTO() {
-        return insertDTO;
-    }
-
-    public TemplateFile getUpdateDTO() {
-        return updateDTO;
-    }
-
-    public TemplateFile getQueryDTO() {
-        return queryDTO;
-    }
-
-    public TemplateFile getQueryVO() {
-        return queryVO;
-    }
 
     protected Stream<TemplateFile> templateFileStream() {
         return Stream.of(entity, mapper, mapperXml, service, serviceImpl, controller, insertDTO, updateDTO, queryDTO, queryVO);
@@ -237,7 +221,7 @@ public class OutputConfig implements TemplateRender {
                     .setTemplatePath(e.getTemplatePath())
                     .setOutputFileSuffix(e.getOutputFileSuffix())
                     .setOutputDir(fileOutputDir)
-                    .setFileOverride(e.isFileOverride() || this.globalFileOverride);
+                    .setFileOverride(e.isFileOverride() || this.outputFileGlobalOverride);
             return customFile;
         }).collect(Collectors.toList());
     }

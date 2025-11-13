@@ -52,7 +52,7 @@ public class OutputBuilder {
      * @return this
      */
     public OutputBuilder enableGlobalFileOverride() {
-        this.outputConfig.setGlobalFileOverride(true);
+        this.outputConfig.setOutputFileGlobalOverride(true);
         return this;
     }
 
@@ -62,7 +62,7 @@ public class OutputBuilder {
      * @return this
      */
     public OutputBuilder disableOpenOutputDir() {
-        this.outputConfig.setOpen(false);
+        this.outputConfig.setOutputDirOpen(false);
         return this;
     }
 
@@ -74,7 +74,7 @@ public class OutputBuilder {
      */
     @Deprecated
     public OutputBuilder enableOpenOutputDir() {
-        this.outputConfig.setOpen(true);
+        this.outputConfig.setOutputDirOpen(true);
         return this;
     }
 

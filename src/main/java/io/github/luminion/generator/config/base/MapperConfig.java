@@ -48,8 +48,8 @@ public class MapperConfig implements TemplateRender {
      * Mapper标记注解
      *
      */
-//    protected Class<? extends org.apache.ibatis.annotations.Mapper> mapperAnnotationClass = org.apache.ibatis.annotations.Mapper.class;
-    protected Class<?> mapperAnnotationClass;
+    protected Class<? extends org.apache.ibatis.annotations.Mapper> mapperAnnotationClass = org.apache.ibatis.annotations.Mapper.class;
+//    protected Class<?> mapperAnnotationClass;
 
     /**
      * 是否开启BaseResultMap（默认 false）
@@ -70,8 +70,8 @@ public class MapperConfig implements TemplateRender {
      *
      * @since 3.5.0
      */
-//    protected Class<? extends org.apache.ibatis.cache.Cache> cache;
-    protected Class<?> cache;
+    protected Class<? extends org.apache.ibatis.cache.Cache> cache;
+//    protected Class<?> cache;
 
     /**
      * 排序字段map
