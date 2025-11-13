@@ -25,16 +25,18 @@ import lombok.AllArgsConstructor;
  * @since 1.0.0
  */
 @AllArgsConstructor
-public enum OutputFile {
-    entity,
-    service,
-    serviceImpl,
-    mapper,
-    mapperXml,
-    controller,
-    insertDTO,
-    updateDTO,
-    queryDTO,
-    queryVO,
+public enum TemplateFileEnum {
+    CONTROLLER,
+    SERVICE,
+    SERVICE_IMPL,
+    MAPPER,
+    MAPPER_XML,
+    ENTITY,
+    ENTITY_VO,
+    ENTITY_INSERT_DTO,
+    ENTITY_UPDATE_DTO,
+    ENTITY_QUERY_DTO,
+    ENTITY_EXCEL_IMPORT_DTO,
+    ENTITY_EXCEL_EXPORT_DTO,
     ;
 }

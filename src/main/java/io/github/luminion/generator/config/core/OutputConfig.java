@@ -1,10 +1,9 @@
 package io.github.luminion.generator.config.core;
 
 import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.enums.OutputFile;
+import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.CustomFile;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -48,73 +47,73 @@ public class OutputConfig implements TemplateRender {
     protected String moduleName = "";
 
     
-    protected TemplateFile entity = new TemplateFile(
-            OutputFile.entity.name(),
+    protected io.github.luminion.generator.po.TemplateFile entity = new io.github.luminion.generator.po.TemplateFile(
+            TemplateFileEnum.entity.name(),
             "%s",
             "entity",
             "/templates/base/entity.java",
             ".java"
     );
 
-    protected TemplateFile mapper = new TemplateFile(
-            OutputFile.mapper.name(),
+    protected io.github.luminion.generator.po.TemplateFile mapper = new io.github.luminion.generator.po.TemplateFile(
+            TemplateFileEnum.mapper.name(),
             "%sMapper",
             "mapper",
             "/templates/base/mapper.java",
             ".java"
     );
     
-    protected TemplateFile mapperXml = new TemplateFile(
-            OutputFile.mapperXml.name(),
+    protected io.github.luminion.generator.po.TemplateFile mapperXml = new io.github.luminion.generator.po.TemplateFile(
+            TemplateFileEnum.mapperXml.name(),
             "%sMapper",
             "mapper.xml",
             "/templates/base/mapper.xml",
             ".xml"
     );
-    protected TemplateFile service = new TemplateFile(
-            OutputFile.service.name(),
+    protected io.github.luminion.generator.po.TemplateFile service = new io.github.luminion.generator.po.TemplateFile(
+            TemplateFileEnum.service.name(),
             "I%sService",
             "service",
             "/templates/base/service.java",
             ".java"
     );
-    protected TemplateFile serviceImpl = new TemplateFile(
-            OutputFile.serviceImpl.name(),
+    protected io.github.luminion.generator.po.TemplateFile serviceImpl = new io.github.luminion.generator.po.TemplateFile(
+            TemplateFileEnum.serviceImpl.name(),
             "%sServiceImpl",
             "service.impl",
             "/templates/base/serviceImpl.java",
             ".java"
     );
-    protected TemplateFile controller = new TemplateFile(
-            OutputFile.controller.name(),
+    protected io.github.luminion.generator.po.TemplateFile controller = new io.github.luminion.generator.po.TemplateFile(
+            TemplateFileEnum.controller.name(),
             "%sController",
             "controller",
             "/templates/base/controller.java",
             ".java"
     );
-    protected TemplateFile insertDTO = new TemplateFile(
-            OutputFile.insertDTO.name(),
+    protected io.github.luminion.generator.po.TemplateFile insertDTO = new io.github.luminion.generator.po.TemplateFile(
+            TemplateFileEnum.insertDTO.name(),
             "%sInsertDTO",
             "dto",
             "/templates/base/insertDTO.java",
             ".java"
     );
-    protected TemplateFile updateDTO = new TemplateFile(
-            OutputFile.updateDTO.name(),
+    protected io.github.luminion.generator.po.TemplateFile updateDTO = new io.github.luminion.generator.po.TemplateFile(
+            TemplateFileEnum.updateDTO.name(),
             "%sUpdateDTO",
             "dto",
             "/templates/base/updateDTO.java",
             ".java"
     );
-    protected TemplateFile queryDTO = new TemplateFile(
-            OutputFile.queryDTO.name(),
+    protected io.github.luminion.generator.po.TemplateFile queryDTO = new io.github.luminion.generator.po.TemplateFile(
+            TemplateFileEnum.queryDTO.name(),
             "%sQueryDTO",
             "dto",
             "/templates/base/queryDTO.java",
             ".java"
     );
-    protected TemplateFile queryVO = new TemplateFile(
-            OutputFile.queryVO.name(),
+    protected io.github.luminion.generator.po.TemplateFile queryVO = new io.github.luminion.generator.po.TemplateFile(
+            TemplateFileEnum.queryVO.name(),
             "%sQueryVO",
             "vo",
             "/templates/base/queryVO.java",
@@ -122,7 +121,7 @@ public class OutputConfig implements TemplateRender {
     );
 
 
-    protected Stream<TemplateFile> templateFileStream() {
+    protected Stream<io.github.luminion.generator.po.TemplateFile> templateFileStream() {
         return Stream.of(entity, mapper, mapperXml, service, serviceImpl, controller, insertDTO, updateDTO, queryDTO, queryVO);
     }
 
@@ -169,11 +168,11 @@ public class OutputConfig implements TemplateRender {
      * 获取输出文件类规范名称map
      *
      * @param tableInfo 表信息
-     * @see OutputFile#name()
+     * @see TemplateFileEnum#name()
      */
     public Map<String, String> getOutputClassCanonicalNameMap(TableInfo tableInfo) {
         return templateFileStream().collect(Collectors.toMap(
-                TemplateFile::getKey,
+                io.github.luminion.generator.po.TemplateFile::getKey,
                 e -> joinPackage(e.getSubPackage()) + "." + e.convertFormatName(tableInfo)
         ));
     }
@@ -182,11 +181,11 @@ public class OutputConfig implements TemplateRender {
      * 获取类简单名称map
      *
      * @param tableInfo 表信息
-     * @see OutputFile#name() 
+     * @see TemplateFileEnum#name() 
      */
     public Map<String, String> getOutputClassSimpleNameMap(TableInfo tableInfo) {
         return templateFileStream().collect(Collectors.toMap(
-                TemplateFile::getKey,
+                io.github.luminion.generator.po.TemplateFile::getKey,
                 e -> e.convertFormatName(tableInfo)
         ));
     }
@@ -196,21 +195,21 @@ public class OutputConfig implements TemplateRender {
      *
      */
     public Map<String, Boolean> getOutputClassGenerateMap() {
-        return templateFileStream().collect(Collectors.toMap(TemplateFile::getKey, TemplateFile::isGenerate));
+        return templateFileStream().collect(Collectors.toMap(io.github.luminion.generator.po.TemplateFile::getKey, io.github.luminion.generator.po.TemplateFile::isGenerate));
     }
 
     /**
      * 获取包信息
      */
     public Map<String, String> getOutputClassPackageInfoMap() {
-        return templateFileStream().collect(Collectors.toMap(TemplateFile::getKey, e -> joinPackage(e.getSubPackage())));
+        return templateFileStream().collect(Collectors.toMap(io.github.luminion.generator.po.TemplateFile::getKey, e -> joinPackage(e.getSubPackage())));
     }
 
     /**
      * 获取输出文件
      */
     public List<CustomFile> getCustomFiles() {
-        return templateFileStream().filter(TemplateFile::isGenerate).map(e -> {
+        return templateFileStream().filter(io.github.luminion.generator.po.TemplateFile::isGenerate).map(e -> {
             CustomFile customFile = new CustomFile();
             String fileOutputDir = e.getOutputDir();
             if (fileOutputDir == null) {

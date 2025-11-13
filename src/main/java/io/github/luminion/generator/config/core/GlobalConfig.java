@@ -15,15 +15,18 @@
  */
 package io.github.luminion.generator.config.core;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.luminion.generator.enums.*;
 import io.github.luminion.generator.po.ClassPayload;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.po.TemplateFile;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 
@@ -38,69 +41,92 @@ import java.util.Map;
 @Data
 public class GlobalConfig implements TemplateRender {
 
-    /**
-     * 作者
-     */
-    protected String author = "luminion";
-
-
+    //---------------- lombok---------------
 
     /**
-     * 获取注释日期
-     *
-     * @since 3.5.0
+     * 是否为lombok模型（默认 false）
      */
-    protected String commentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    protected boolean lombok = true;
 
     /**
-     * 【实体】是否为lombok模型（默认 false）<br>
-     * <a href="https://projectlombok.org/">document</a>
+     * 是否为链式模型（默认 false）
      */
-    protected boolean lombok;
+    protected boolean lombokChainModel;
+
+    //---------------- 注释文档---------------
 
     /**
-     * 【实体】是否为链式模型（默认 false）
-     *
-     * @since 3.3.2
+     * 文档注释类型
      */
-    protected boolean chainModel;
-
+    protected DocType docType = DocType.JAVA_DOC;
     /**
-     * 开启 swagger 模式（默认 false 与 springdoc 不可同时使用）
+     * doc作者
      */
-    protected boolean swagger;
-
-    public boolean isSwagger() {
-        // springdoc 设置优先于 swagger
-        return !springdoc && swagger;
-    }
-
-    /**
-     * 开启 springdoc 模式（默认 false 与 swagger 不可同时使用）
-     */
-    protected boolean springdoc;
-
+    protected String docAuthor = "luminion";
     /**
      * 文档注释添加相关类链接
      */
-    protected boolean commentLink;
+    protected boolean docLink;
+    /**
+     * 注释日期
+     */
+    protected String docDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+    //---------------- 运行时环境相关--------------
 
     /**
-     * javaEE api包(jakarta或javax)
-     * <p>
-     * 涉及HttpServletRequest,HttpServletResponse,@Resource
+     * java ee api
      */
-    protected String jakartaApiPackagePrefix = "jakarta";
+    protected JavaEEApi javaEE = JavaEEApi.JAKARTA;
+    /**
+     * excel api
+     */
+    protected ExcelApi excelApi = ExcelApi.EASY_EXCEL;
 
     /**
-     * excel注解的包
+     * 外部运行环境
      */
-    protected String excelApiPackagePrefix = "cn.idev.excel";
+    protected RuntimeEnv runtimeEnv = RuntimeEnv.MYBATIS_PLUS;
 
     /**
-     * excel类
+     * 全局分页类
      */
-    protected String excelApiClass = "FastExcel";
+    protected ClassPayload pageClassPayload = new ClassPayload(IPage.class);
+
+    /**
+     * 生成参数校验相关注解
+     */
+    protected boolean paramValidate = true;
+    
+
+    // ----------------输出目录-----------------
+    
+    /**
+     * 生成文件的输出目录
+     */
+    protected String outputDir = System.getProperty("user.dir") + "/src/main/java";
+    
+    /**
+     * 全局文件覆盖
+     */
+    protected boolean outputOverride;
+    
+    /**
+     * 是否打开输出目录
+     */
+    protected boolean outputDirOpen;
+    
+    /**
+     * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
+     */
+    protected String outputParentPackage = "io.github.luminion";
+
+    /**
+     * 父包模块名
+     */
+    protected String outputModule = "";
+    
+   // ----------------生成内容相关-----------------
 
     /**
      * 生成查询相关方法及配套类
@@ -132,72 +158,12 @@ public class GlobalConfig implements TemplateRender {
      */
     protected boolean generateExport = true;
 
-    public boolean isGenerateExport() {
-        return generateExport && generateQuery;
-    }
 
     /**
-     * 参数校验
-     */
-    protected boolean validated = true;
-
-    /**
-     * 分页类
-     */
-    protected ClassPayload pageClassPayload = new ClassPayload(List.class);
-
-
-    /**
-     * 生成文件的输出目录
-     */
-    protected String outputDir = System.getProperty("user.dir") + "/src/main/java";
-    /**
-     * 全局文件覆盖
-     */
-    protected boolean outputFileGlobalOverride;
-    /**
-     * 是否打开输出目录
-     */
-    protected boolean outputDirOpen = true;
-
-    /**
-     * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
-     */
-    protected String parentPackage = "io.github.luminion";
-
-    /**
-     * 父包模块名
-     */
-    protected String moduleName = "";
-    
-
-
-    /**
-     * 解析jakarta类规范名称
-     * <p>
-     * 根据{@link #jakartaApiPackagePrefix}解析
+     * 校验
      *
-     * @param suffix 后缀
+     * @since 1.0.0
      */
-    public String resolveJakartaClassCanonicalName(String suffix) {
-        return jakartaApiPackagePrefix + "." + suffix;
-    }
-
-    /**
-     * 解析excel类规范名称
-     * <p>
-     * 根据{@link #excelApiPackagePrefix}解析
-     *
-     * @param suffix 后缀
-     */
-    public String resolveExcelClassCanonicalName(String suffix) {
-        return excelApiPackagePrefix + "." + suffix;
-    }
-
-    public String resolveExcelClassApiCanonicalName() {
-        return excelApiPackagePrefix + "." + excelApiClass;
-    }
-
     public void validate() {
         if (!generateQuery && generateExport) {
             log.warn("已配置生成导出但未配置生成查询, 导出功能依赖查询功能, 将不会生成导出相关功能!!!");
@@ -208,12 +174,12 @@ public class GlobalConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        data.put("author", this.author);
-        data.put("date", this.getCommentDate());
-        data.put("validated", this.validated);
-        data.put("commentLink", this.commentLink);
+        data.put("author", this.docAuthor);
+        data.put("date", this.getDocDate());
+        data.put("validated", this.paramValidate);
+        data.put("commentLink", this.docLink);
         data.put("lombok", this.lombok);
-        data.put("chainModel", this.chainModel);
+        data.put("chainModel", this.lombokChainModel);
 
         data.put("swagger", this.isSwagger());
         data.put("springdoc", this.springdoc);
@@ -223,8 +189,7 @@ public class GlobalConfig implements TemplateRender {
         data.put("javaApiPackagePrefix", this.jakartaApiPackagePrefix);
         data.put("excelApiPackagePrefix", this.excelApiPackagePrefix);
         data.put("excelApiClass", this.excelApiClass);
-
-
+        
         data.put("generateQuery", this.generateQuery);
         data.put("generateInsert", this.generateInsert);
         data.put("generateUpdate", this.generateUpdate);
@@ -234,4 +199,5 @@ public class GlobalConfig implements TemplateRender {
 
         return data;
     }
+
 }

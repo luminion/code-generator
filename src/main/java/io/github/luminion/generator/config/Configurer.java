@@ -79,8 +79,7 @@ public class Configurer {
      * 配置
      */
     private final List<TableInfo> tableInfo = new ArrayList<>();
-
-
+    
     public Configurer(String url, String username, String password) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
     }
@@ -102,6 +101,16 @@ public class Configurer {
             }
         }
         return tableInfo;
+    }
+
+    /**
+     * 获取解析器
+     *
+     * @return {@link Resolver }
+     * @since 1.0.0
+     */
+    public Resolver getResolver() {
+        return new Resolver(this);
     }
 
 }

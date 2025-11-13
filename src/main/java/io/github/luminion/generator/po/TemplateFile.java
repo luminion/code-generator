@@ -3,6 +3,7 @@ package io.github.luminion.generator.po;
 import lombok.Data;
 
 /**
+ * 对应的某个输出文件
  * @author luminion
  * @since 1.0.0
  */

@@ -16,7 +16,7 @@
 package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.config.core.GlobalConfig;
-import io.github.luminion.generator.enums.OutputFile;
+import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.TemplateRender;
@@ -122,11 +122,11 @@ public class Mapper implements TemplateRender {
             importPackages.add(mapperAnnotationClass.getName());
         }
         Map<String, String> classCanonicalNameMap = tableInfo.getConfigurer().getOutputConfig().getOutputClassCanonicalNameMap(tableInfo);
-        importPackages.add(classCanonicalNameMap.get(OutputFile.entity.name()));
+        importPackages.add(classCanonicalNameMap.get(TemplateFileEnum.entity.name()));
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
         if (globalConfig.isGenerateQuery()) {
             importPackages.add(List.class.getCanonicalName());
-            importPackages.add(classCanonicalNameMap.get(OutputFile.queryVO.name()));
+            importPackages.add(classCanonicalNameMap.get(TemplateFileEnum.queryVO.name()));
             importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
         }
         return importPackages;

@@ -15,14 +15,12 @@
  */
 package io.github.luminion.generator.config.model;
 
+import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.config.core.OutputConfig;
-import io.github.luminion.generator.enums.OutputFile;
-import io.github.luminion.generator.po.ClassMethodPayload;
-import io.github.luminion.generator.po.ClassPayload;
-import io.github.luminion.generator.po.TableField;
-import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.enums.TemplateFileEnum;
+import io.github.luminion.generator.po.*;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -99,21 +97,22 @@ public class Controller implements TemplateRender {
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         OutputConfig outputConfig = tableInfo.getConfigurer().getOutputConfig();
-        Map<String, Boolean> outputClassGenerateMap = outputConfig.getOutputClassGenerateMap();
-        Map<String, String> outputClassSimpleNameMap = outputConfig.getOutputClassSimpleNameMap(tableInfo);
-        Map<String, String> outputClassClassCanonicalNameMap = outputConfig.getOutputClassCanonicalNameMap(tableInfo);
+//        Map<String, Boolean> outputClassGenerateMap = outputConfig.getOutputClassGenerateMap();
+//        Map<String, String> outputClassSimpleNameMap = outputConfig.getOutputClassSimpleNameMap(tableInfo);
+//        Map<String, String> outputClassClassCanonicalNameMap = outputConfig.getOutputClassCanonicalNameMap(tableInfo);
         data.put("controllerMappingHyphenStyle", this.hyphenStyle);
         data.put("restControllerStyle", this.restController);
         data.put("superControllerClassPackage", StringUtils.isBlank(superClass) ? null : superClass);
         data.put("superControllerClass", ClassUtils.getSimpleName(this.superClass));
-        data.put("primaryKeyPropertyType", "Object");
-        String entityName = tableInfo.getEntityName();
+
+
         // 首字母小写
+        String entityName = tableInfo.getEntityName();
         String entityPath = entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
+        // 实体类对应请求路径
         String url = this.hyphenStyle ? StringUtils.camelToHyphen(entityPath) : entityPath;
-        String requestBaseUrl = Stream.of(this.baseUrl, outputConfig.getModuleName(), url)
-                .filter(StringUtils::isNotBlank)
-                .collect(Collectors.joining("/"));
+        // 完整请求路径
+        String requestBaseUrl = Stream.of(this.baseUrl, outputConfig.getModuleName(), url).filter(StringUtils::isNotBlank).collect(Collectors.joining("/"));
         if (!requestBaseUrl.startsWith("/")) {
             requestBaseUrl = "/" + requestBaseUrl;
         }
@@ -122,7 +121,8 @@ public class Controller implements TemplateRender {
         data.put("restful", this.restful);
         data.put("returnMethod", this.returnMethod);
         data.put("batchQueryMethod", batchQueryPost ? "@PostMapping" : "@GetMapping");
-        
+
+        // 路径参数
         if (pathVariable) {
             data.put("idPathParams", "/{id}");
             data.put("idMethodParams", "@PathVariable(\"id\") ");
@@ -131,6 +131,7 @@ public class Controller implements TemplateRender {
         } else {
             data.put("pageMethodParams", "Long current, Long size");
         }
+        // body 参数和校验
         String requestBodyStr = "@RequestBody ";
         String validatedStr = "@Validated ";
         if (requestBody) {
@@ -145,94 +146,84 @@ public class Controller implements TemplateRender {
             importPackages.add(superClass);
         }
         importPackages.add("org.springframework.web.bind.annotation.*");
-        boolean generateAny = globalConfig.isGenerateQuery()
-                || globalConfig.isGenerateExport()
-                || globalConfig.isGenerateImport()
-                || globalConfig.isGenerateInsert()
-                || globalConfig.isGenerateUpdate()
-                || globalConfig.isGenerateDelete();
         if (!restController) {
             importPackages.add("org.springframework.stereotype.Controller");
         }
+
         if (globalConfig.isLombok()) {
             importPackages.add("lombok.RequiredArgsConstructor");
         }
-        if (globalConfig.isSpringdoc()) {
-            importPackages.add("io.swagger.v3.oas.annotations.tags.Tag");
-            if (generateAny) {
+        // doc包
+        switch (globalConfig.getDocType()) {
+            case SPRING_DOC:
+                importPackages.add("io.swagger.v3.oas.annotations.tags.Tag");
                 importPackages.add("io.swagger.v3.oas.annotations.Operation");
-//                importPackages.add("io.swagger.v3.oas.annotations.Parameter");
-//                importPackages.add("io.swagger.v3.oas.annotations.Parameters");
-            }
-        }
-        if (globalConfig.isSwagger()) {
-            importPackages.add("io.swagger.annotations.Api");
-            if (generateAny) {
+                importPackages.add("io.swagger.v3.oas.annotations.Parameter");
+                importPackages.add("io.swagger.v3.oas.annotations.Parameters");
+                break;
+            case SWAGGER:
+                importPackages.add("io.swagger.annotations.Api");
                 importPackages.add("io.swagger.annotations.ApiOperation");
-//                importPackages.add("io.swagger.annotations.ApiParam");
-            }
+                importPackages.add("io.swagger.annotations.ApiParam");
+                break;
         }
-        if (generateAny && returnMethod.isClassReady()) {
+        // 返回类包
+        if (returnMethod.isClassReady()) {
             importPackages.add(returnMethod.getClassCanonicalName());
         }
-        if (outputClassGenerateMap.get(OutputFile.service.name())) {
-            data.put("baseService", outputClassSimpleNameMap.get(OutputFile.service.name()));
-            importPackages.add(outputConfig.getOutputClassCanonicalNameMap(tableInfo).get(OutputFile.service.name()));
+
+        Resolver resolver = tableInfo.getConfigurer().getResolver();
+       
+        if (resolver.isGenerate(TemplateFileEnum.SERVICE)) {
+            data.put("baseService", resolver.getClassSimpleName(TemplateFileEnum.SERVICE));
+            importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.SERVICE));
         } else {
-            data.put("baseService", outputClassSimpleNameMap.get(OutputFile.serviceImpl.name()));
-            importPackages.add(outputConfig.getOutputClassCanonicalNameMap(tableInfo).get(OutputFile.serviceImpl.name()));
-        }
-        
-        String primaryKeyPropertyType = "Object";
-        String primaryKeyPropertyClass = null;
-        TableField primaryTableField = tableInfo.getPrimaryTableField();
-        if (primaryTableField != null) {
-            primaryKeyPropertyType = primaryTableField.getPropertyType();
-            primaryKeyPropertyClass = primaryTableField.getJavaType().getPkg();
-        }
-        data.put("primaryKeyPropertyType", primaryKeyPropertyType);
-        if (globalConfig.isValidated()) {
-            data.put("validatedStr", validatedStr);
-        }
-        // 生成方法
-        if (globalConfig.isGenerateInsert()) {
-            importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.insertDTO.name()));
-            if (globalConfig.isValidated()) {
-                importPackages.add("org.springframework.validation.annotation.Validated");
-            }
-        }
-        if (globalConfig.isGenerateUpdate()) {
-            importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.updateDTO.name()));
-            if (globalConfig.isValidated()) {
-                importPackages.add("org.springframework.validation.annotation.Validated");
-            }
-        }
-        if (globalConfig.isGenerateDelete()) {
-            if (primaryKeyPropertyClass != null) {
-                importPackages.add(primaryKeyPropertyClass);
-            }
+            data.put("baseService", resolver.getClassSimpleName(TemplateFileEnum.SERVICE_IMPL));
+            importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.SERVICE_IMPL));
         }
 
+        data.put("primaryKeyPropertyType", "Object");
+        TableField primaryKeyTableField = tableInfo.getPrimaryKeyTableField();
+        if (primaryKeyTableField != null) {
+            data.put("primaryKeyPropertyType", primaryKeyTableField.getJavaType().getType());
+            importPackages.add(primaryKeyTableField.getJavaType().getPkg());
+        }
+     
+        if (globalConfig.isParamValidate()) {
+            data.put("validatedStr", validatedStr);
+            importPackages.add("org.springframework.validation.annotation.Validated");
+        }
+        
+        
+        if (globalConfig.isGenerateInsert()) {
+            importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.ENTITY_QUERY_DTO));
+        }
+        if (globalConfig.isGenerateUpdate()) {
+            importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.ENTITY_UPDATE_DTO));
+        }
+        if (globalConfig.isGenerateDelete()) {
+            
+        }
         if (globalConfig.isGenerateQuery()) {
             if (primaryKeyPropertyClass != null) {
                 importPackages.add(primaryKeyPropertyClass);
             }
             importPackages.add("java.util.List");
-            importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.queryDTO.name()));
-            importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.queryVO.name()));
+            importPackages.add(outputClassClassCanonicalNameMap.get(TemplateFileEnum.queryDTO.name()));
+            importPackages.add(outputClassClassCanonicalNameMap.get(TemplateFileEnum.queryVO.name()));
             ClassPayload pageClassPayload = globalConfig.getPageClassPayload();
-            if (pageClassPayload !=null && pageClassPayload.isClassReady()) {
+            if (pageClassPayload != null && pageClassPayload.isClassReady()) {
                 importPackages.add(pageClassPayload.getClassCanonicalName());
-                data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(outputClassSimpleNameMap.get(OutputFile.queryVO.name())));
+                data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(outputClassSimpleNameMap.get(TemplateFileEnum.queryVO.name())));
             } else {
                 data.put("pageReturnType", "Object");
             }
         }
-        String responseClass = globalConfig.resolveJakartaClassCanonicalName("servlet.http.HttpServletResponse");
+        String responseClass = globalConfig.getJavaEE().packagePrefix + ".servlet.http.HttpServletResponse";
         if (globalConfig.isGenerateImport()) {
             importPackages.add("org.springframework.web.multipart.MultipartFile");
             importPackages.add("java.io.IOException");
-            importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.insertDTO.name()));
+            importPackages.add(outputClassClassCanonicalNameMap.get(TemplateFileEnum.insertDTO.name()));
             importPackages.add(responseClass);
         }
         if (globalConfig.isGenerateExport()) {
@@ -247,5 +238,5 @@ public class Controller implements TemplateRender {
 
         return data;
     }
-    
+
 }

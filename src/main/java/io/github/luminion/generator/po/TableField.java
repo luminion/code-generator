@@ -131,7 +131,7 @@ public class TableField {
             this.keyFlag = true;
             this.keyIdentityFlag = columnInfo.isAutoIncrement();
             tableInfo.setHavePrimaryKey(true);
-            tableInfo.setPrimaryTableField(this);
+            tableInfo.setPrimaryKeyTableField(this);
             if (this.keyIdentityFlag && strategyConfig.getIdType() != null) {
                 log.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableInfo.getName());
             }
@@ -186,14 +186,7 @@ public class TableField {
         }
   
     }
-
-
-    public String getPropertyType() {
-        if (null != JavaType) {
-            return JavaType.getType();
-        }
-        return null;
-    }
+    
 
     /**
      * 按 JavaBean 规则来生成 get 和 set 方法后面的属性名称

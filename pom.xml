@@ -49,23 +49,16 @@
             <version>9.4.0</version>
             <scope>test</scope>
         </dependency>
-        
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-engine-core</artifactId>
             <version>2.3</version>
         </dependency>
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.5.19</version>
-            <scope>optional</scope>
-        </dependency>
-        <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-extension</artifactId>
-            <version>3.5.0</version>
-            <scope>optional</scope>
+            <artifactId>mybatis-plus-spring</artifactId>
+            <version>3.5.14</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.github.luminion</groupId>

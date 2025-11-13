@@ -18,7 +18,7 @@ public class GlobalBuilder {
      * 作者
      */
     public GlobalBuilder author(String author) {
-        this.configurer.getGlobalConfig().setAuthor(author);
+        this.configurer.getGlobalConfig().setDocAuthor(author);
         return this;
     }
 
@@ -30,7 +30,7 @@ public class GlobalBuilder {
      */
     public GlobalBuilder commentDatePattern(String pattern) {
         String format = new SimpleDateFormat(pattern).format(new Date());
-        this.configurer.getGlobalConfig().setCommentDate(format);
+        this.configurer.getGlobalConfig().setDocDate(format);
         return this;
     }
 
@@ -64,7 +64,7 @@ public class GlobalBuilder {
      * @since 3.5.0
      */
     public GlobalBuilder enableChainModel() {
-        this.configurer.getGlobalConfig().setChainModel(true);
+        this.configurer.getGlobalConfig().setLombokChainModel(true);
         return this;
     }
 
@@ -74,7 +74,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder enableCommentLink() {
-        this.configurer.getGlobalConfig().setCommentLink(true);
+        this.configurer.getGlobalConfig().setDocLink(true);
         return this;
     }
 
@@ -86,7 +86,7 @@ public class GlobalBuilder {
      */
     @Deprecated
     public GlobalBuilder disableCommentLink() {
-        this.configurer.getGlobalConfig().setCommentLink(false);
+        this.configurer.getGlobalConfig().setDocLink(false);
         return this;
     }
 
@@ -106,7 +106,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder disableValidated() {
-        this.configurer.getGlobalConfig().setValidated(false);
+        this.configurer.getGlobalConfig().setParamValidate(false);
         return this;
     }
 

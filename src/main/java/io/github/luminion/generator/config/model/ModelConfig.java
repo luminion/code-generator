@@ -2,7 +2,7 @@ package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.FieldFill;
-import io.github.luminion.generator.enums.OutputFile;
+import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableField.MetaInfo;
 import io.github.luminion.generator.po.TableInfo;
@@ -43,7 +43,6 @@ public class ModelConfig implements TemplateRender {
      */
     protected boolean entityActiveRecordModel;
     
-
     /**
      * 查询dto继承实体类
      */
@@ -113,7 +112,7 @@ public class ModelConfig implements TemplateRender {
             importPackages.add("io.swagger.annotations.ApiModelProperty");
         }
         if (globalConfig.isLombok()) {
-            if (globalConfig.isChainModel()) {
+            if (globalConfig.isLombokChainModel()) {
                 importPackages.add("lombok.experimental.Accessors");
             }
             importPackages.add("lombok.Data");
@@ -207,7 +206,7 @@ public class ModelConfig implements TemplateRender {
         this.resolveDocImportPackages(globalConfig, importPackages);
         importPackages.add(List.class.getCanonicalName());
         if (queryDTOExtendsEntity) {
-            importPackages.add(tableInfo.getConfigurer().getOutputConfig().getOutputClassCanonicalNameMap(tableInfo).get(OutputFile.entity.name()));
+            importPackages.add(tableInfo.getConfigurer().getOutputConfig().getOutputClassCanonicalNameMap(tableInfo).get(TemplateFileEnum.entity.name()));
             if (globalConfig.isLombok()){
                 importPackages.add("lombok.EqualsAndHashCode");
             }
@@ -231,7 +230,7 @@ public class ModelConfig implements TemplateRender {
             importPackages.add(excelIgnoreUnannotated);
         }
         if (queryVOExtendsEntity) {
-            importPackages.add(tableInfo.getConfigurer().getOutputConfig().getOutputClassCanonicalNameMap(tableInfo).get(OutputFile.entity.name()));
+            importPackages.add(tableInfo.getConfigurer().getOutputConfig().getOutputClassCanonicalNameMap(tableInfo).get(TemplateFileEnum.entity.name()));
             if (globalConfig.isLombok()){
                 importPackages.add("lombok.EqualsAndHashCode");
             }

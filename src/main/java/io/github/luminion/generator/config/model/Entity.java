@@ -146,7 +146,7 @@ public class Entity implements TemplateRender {
             importPackages.add("io.swagger.v3.oas.annotations.media.Schema");
         }
         if (globalConfig.isLombok()) {
-            if (globalConfig.isChainModel()) {
+            if (globalConfig.isLombokChainModel()) {
                 importPackages.add("lombok.experimental.Accessors");
             }
             if (this.superClass != null) {

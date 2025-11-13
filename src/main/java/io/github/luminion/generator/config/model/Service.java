@@ -18,7 +18,7 @@ package io.github.luminion.generator.config.model;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.config.core.OutputConfig;
-import io.github.luminion.generator.enums.OutputFile;
+import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.util.ClassUtils;
@@ -84,18 +84,18 @@ public class Service implements TemplateRender {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         OutputConfig outputConfig = configurer.getOutputConfig();
         Map<String, String> outputClassCanonicalNameMap = outputConfig.getOutputClassCanonicalNameMap(tableInfo);
-        importPackages.add(outputClassCanonicalNameMap.get(OutputFile.entity.name()));
+        importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.entity.name()));
         importPackages.add(this.superServiceClass);
         
         // todo sqlBooster
 //        if (globalConfig.isSqlBooster()) {
 //            importPackages.add("io.github.luminion.mybatisplus.enhancer.EnhancedService");
-//            importPackages.add(outputClassCanonicalNameMap.get(OutputFile.queryVO.name()));
+//            importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.queryVO.name()));
         if (1==1){
             
         } else {
             if (globalConfig.isGenerateQuery()) {
-                importPackages.add(outputClassCanonicalNameMap.get(OutputFile.queryVO.name()));
+                importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.queryVO.name()));
                 importPackages.add("java.util.List");
                 importPackages.add("java.io.Serializable");
                 importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
@@ -120,19 +120,19 @@ public class Service implements TemplateRender {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         OutputConfig outputConfig = configurer.getOutputConfig();
         Map<String, String> outputClassCanonicalNameMap = outputConfig.getOutputClassCanonicalNameMap(tableInfo);
-        importPackages.add(outputClassCanonicalNameMap.get(OutputFile.entity.name()));
-        importPackages.add(outputClassCanonicalNameMap.get(OutputFile.mapper.name()));
+        importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.entity.name()));
+        importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.mapper.name()));
         importPackages.add(this.superServiceImplClass);
         importPackages.add("org.springframework.stereotype.Service");
         if (outputConfig.getService().isGenerate()) {
-            importPackages.add(outputClassCanonicalNameMap.get(OutputFile.service.name()));
+            importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.service.name()));
         }
         // 生成项
         if (globalConfig.isGenerateQuery()) {
             importPackages.add("java.util.List");
             importPackages.add("java.io.Serializable");
             importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
-            importPackages.add(outputClassCanonicalNameMap.get(OutputFile.queryVO.name()));
+            importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.queryVO.name()));
         }
         if (globalConfig.isGenerateExport()) {
             importPackages.add("java.io.OutputStream");
@@ -149,7 +149,7 @@ public class Service implements TemplateRender {
         if (false) {
             if (!outputConfig.getService().isGenerate()){
                 importPackages.add("io.github.luminion.mybatisplus.enhancer.EnhancedService");
-                importPackages.add(outputClassCanonicalNameMap.get(OutputFile.queryVO.name()));
+                importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.queryVO.name()));
             }
         } else {
             if (globalConfig.isGenerateQuery()) {
@@ -158,7 +158,7 @@ public class Service implements TemplateRender {
                 importPackages.add("java.util.HashMap");
                 importPackages.add("com.baomidou.mybatisplus.extension.plugins.pagination.Page");
                 importPackages.add("org.apache.ibatis.exceptions.TooManyResultsException");
-                importPackages.add(outputClassCanonicalNameMap.get(OutputFile.queryVO.name()));
+                importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.queryVO.name()));
             }
             if (globalConfig.isGenerateExport()) {
                 importPackages.add(globalConfig.resolveExcelClassApiCanonicalName());
