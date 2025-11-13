@@ -16,7 +16,7 @@
 package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.common.ExtraFieldProvider;
-import io.github.luminion.generator.common.JavaFieldTypeConverter;
+import io.github.luminion.generator.common.JavaFieldProvider;
 import io.github.luminion.generator.common.DatabaseKeywordsHandler;
 import io.github.luminion.generator.common.ITypeConvertHandler;
 import io.github.luminion.generator.enums.IdType;
@@ -61,7 +61,7 @@ public class StrategyConfig implements TemplateRender {
     /**
      * 类型转换处理
      */
-    protected JavaFieldTypeConverter javaFieldTypeConverter;
+    protected JavaFieldProvider javaFieldTypeConverter;
 
     /**
      * 关键字处理器

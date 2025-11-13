@@ -15,10 +15,10 @@
  */
 package io.github.luminion.generator.po;
 
-import io.github.luminion.generator.common.JavaFieldTypeConverter;
+import io.github.luminion.generator.common.JavaFieldProvider;
 import io.github.luminion.generator.common.support.ColumnTypeToJavaFieldTypeConverterHelper;
 import io.github.luminion.generator.config.base.StrategyConfig;
-import io.github.luminion.generator.common.JavaFieldProvider;
+import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.DatabaseKeywordsHandler;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.JdbcType;
@@ -87,7 +87,7 @@ public class TableField {
      * java数据库字段类型
      */
     @Getter
-    private JavaFieldProvider JavaType;
+    private JavaFieldInfo JavaType;
 
     /**
      * 是否做注解转换
@@ -154,8 +154,8 @@ public class TableField {
         String propertyName = NameConvertType.doConvertName(columnName, fieldPrefix, fieldSuffix, converter);
         // 设置字段的元数据信息
         TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo, tableInfo);
-        JavaFieldProvider columnType;
-        JavaFieldTypeConverter javaFieldTypeConverter = strategyConfig.getJavaFieldTypeConverter();
+        JavaFieldInfo columnType;
+        JavaFieldProvider javaFieldTypeConverter = strategyConfig.getJavaFieldTypeConverter();
         if (javaFieldTypeConverter != null) {
             columnType = javaFieldTypeConverter.convert(metaInfo);
         } else {

@@ -192,7 +192,7 @@ public class TableInfo {
             for (Map.Entry<String, String> entry : strategyConfig.getExtraFieldSuffixMap().entrySet()) {
                 String suffix = entry.getKey();
                 String sqlOperator = entry.getValue();
-                if (strategyConfig.getExtraFieldProvider().apply(sqlOperator, field)) {
+                if (strategyConfig.getExtraFieldProvider().whetherGenerate(sqlOperator, field)) {
                     String suffixPropertyName = field.getPropertyName() + suffix;
                     if (existPropertyNames.contains(suffixPropertyName)) {
                         continue;

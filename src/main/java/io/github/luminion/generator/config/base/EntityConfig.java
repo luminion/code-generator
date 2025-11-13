@@ -16,7 +16,7 @@
 package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.JavaFieldProvider;
+import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
@@ -134,7 +134,7 @@ public class EntityConfig implements TemplateRender {
 //            importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
 //        }
         tableInfo.getFields().forEach(field -> {
-            JavaFieldProvider columnType = field.getJavaType();
+            JavaFieldInfo columnType = field.getJavaType();
             if (null != columnType && null != columnType.getPkg()) {
                 importPackages.add(columnType.getPkg());
             }

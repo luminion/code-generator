@@ -2,7 +2,7 @@ package io.github.luminion.generator.common.support;
 
 
 import io.github.luminion.generator.common.ExtraFieldProvider;
-import io.github.luminion.generator.common.JavaFieldProvider;
+import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.enums.SqlKeyword;
 import io.github.luminion.generator.po.TableField;
 import lombok.SneakyThrows;
@@ -52,7 +52,7 @@ public class ExtraFieldProviderDefault implements ExtraFieldProvider {
 
     @Override
     @SneakyThrows
-    public Boolean apply(String sqlOperator, TableField tableField) {
+    public Boolean whetherGenerate(String sqlOperator, TableField tableField) {
         String replacedOperator = SqlKeyword.replaceOperator(sqlOperator);
         replacedOperator = replacedOperator.toUpperCase();
         String propertyType = tableField.getPropertyType();
@@ -67,7 +67,7 @@ public class ExtraFieldProviderDefault implements ExtraFieldProvider {
         boolean isIdColumn = tableField.getColumnName().endsWith("id");
 
 
-        JavaFieldProvider javaType = tableField.getJavaType();
+        JavaFieldInfo javaType = tableField.getJavaType();
         boolean isComparable;
         if (javaType.getPkg()==null){
             isComparable = true;

@@ -2,14 +2,13 @@ package io.github.luminion.generator.common;
 
 import io.github.luminion.generator.po.TableField;
 
-import java.util.function.BiFunction;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
 @FunctionalInterface
-public interface ExtraFieldProvider extends BiFunction<String, TableField, Boolean> {
+public interface ExtraFieldProvider {
 
     /**
      * 控制是否生成额外字段
@@ -19,6 +18,5 @@ public interface ExtraFieldProvider extends BiFunction<String, TableField, Boole
      * @return 是否生成额外字段
      * @since 1.0.0
      */
-    @Override
-    Boolean apply(String sqlOperator, TableField tableField);
+    Boolean whetherGenerate(String sqlOperator, TableField tableField);
 }

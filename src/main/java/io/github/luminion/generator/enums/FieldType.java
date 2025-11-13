@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.enums;
 
-import io.github.luminion.generator.common.JavaFieldProvider;
+import io.github.luminion.generator.common.JavaFieldInfo;
 
 
 /**
@@ -24,7 +24,7 @@ import io.github.luminion.generator.common.JavaFieldProvider;
  * @author luminion
  * @since 1.0.0
  */
-public enum FieldType implements JavaFieldProvider {
+public enum FieldType implements JavaFieldInfo {
     // 基本类型
     BASE_BYTE("byte", null),
     BASE_SHORT("short", null),

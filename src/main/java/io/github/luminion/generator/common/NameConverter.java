@@ -9,9 +9,7 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 @FunctionalInterface
-public interface NameConverter extends Function<String, String> {
-
-
+public interface NameConverter {
     /**
      * 名称转化
      *
@@ -19,6 +17,6 @@ public interface NameConverter extends Function<String, String> {
      * @return 转化后的名称
      * @since 1.0.0
      */
-    @Override
-    String apply(String source);
+    String convert(String source);
+    
 }
