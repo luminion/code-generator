@@ -96,15 +96,15 @@ public class GlobalBuilder {
         return this;
     }
 
-    /**
-     * 启用类注释随机UUID
-     *
-     * @return this
-     */
-    public GlobalBuilder enableCommentUUID() {
-        this.globalConfig.setCommentUUID(true);
-        return this;
-    }
+//    /**
+//     * 启用类注释随机UUID
+//     *
+//     * @return this
+//     */
+//    public GlobalBuilder enableCommentUUID() {
+//        this.globalConfig.setCommentUUID(true);
+//        return this;
+//    }
 
     /**
      * 禁用新增和修改的入参校验

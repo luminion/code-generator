@@ -15,6 +15,7 @@
  */
 package io.github.luminion.generator.po;
 
+import io.github.luminion.generator.common.NameConverter;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.enums.NameConvertType;
@@ -118,21 +119,23 @@ public class TableInfo {
     public TableInfo(Configurer configurer, DefaultDatabaseQueryMetaDataWrapper.Table table) {
         this.configurer = configurer;
         this.strategyConfig = configurer.getStrategyConfig();
-        this.name = table.getName();
+        String tableName = table.getName();
+        this.name = tableName;
         String remarks = table.getRemarks();
         if (remarks != null) {
             this.comment = remarks.replaceAll("[\r\n]", "");
         }
         Set<String> tablePrefix = strategyConfig.getTablePrefix();
         Set<String> tableSuffix = strategyConfig.getTableSuffix();
-        Function<String, String> tableNameToEntityName = strategyConfig.getTableNameToEntityName();
-        String entityName = NameConvertType.doConvertName(name, tablePrefix, tableSuffix, tableNameToEntityName);
+        String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(tableName, tablePrefix, tableSuffix);
+        String entityName = strategyConfig.getNameConverter().convertEntityName(removePrefixAndSuffix);
         this.entityName = entityName;
-        if (strategyConfig.startsWithTablePrefix(name) || strategyConfig.isTableFieldAnnotationEnable()) {
-            this.convert = true;
-        } else {
-            this.convert = !entityName.equalsIgnoreCase(name);
-        }
+//        if (strategyConfig.startsWithTablePrefix(name) || strategyConfig.isTableFieldAnnotationEnable()) {
+//            this.convert = true;
+//        } else {
+//            this.convert = !entityName.equalsIgnoreCase(name);
+//        }
+        this.convert = !entityName.equalsIgnoreCase(name);
         this.processExtraField();
     }
 

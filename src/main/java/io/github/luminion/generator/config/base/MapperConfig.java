@@ -47,10 +47,8 @@ public class MapperConfig implements TemplateRender {
     /**
      * Mapper标记注解
      *
-     * @since 3.5.3
-     * @see org.apache.ibatis.annotations.Mapper
      */
-//    protected Class<?> mapperAnnotationClass = ClassUtils.toClass("org.apache.ibatis.annotations.Mapper");
+//    protected Class<? extends org.apache.ibatis.annotations.Mapper> mapperAnnotationClass = org.apache.ibatis.annotations.Mapper.class;
     protected Class<?> mapperAnnotationClass;
 
     /**
@@ -70,9 +68,9 @@ public class MapperConfig implements TemplateRender {
     /**
      * 设置缓存实现类
      *
-     * @see org.apache.ibatis.cache.Cache
      * @since 3.5.0
      */
+//    protected Class<? extends org.apache.ibatis.cache.Cache> cache;
     protected Class<?> cache;
 
     /**

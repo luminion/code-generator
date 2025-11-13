@@ -16,8 +16,10 @@
 package io.github.luminion.generator.po;
 
 import io.github.luminion.generator.common.JavaFieldProvider;
+import io.github.luminion.generator.common.NameConverter;
 import io.github.luminion.generator.common.support.DefaultJavaFieldProvider;
 import io.github.luminion.generator.common.support.DefaultDatabaseQueryMetaDataWrapper;
+import io.github.luminion.generator.common.support.DefaultNameConverter;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.DatabaseKeywordsHandler;
@@ -139,31 +141,31 @@ public class TableField {
         }
         this.name = columnInfo.getName();
         this.columnName = name;
+        // 数据库列关键字转化
         DatabaseKeywordsHandler keyWordsHandler = strategyConfig.getKeyWordsHandler();
         if (keyWordsHandler != null && keyWordsHandler.isKeyWords(columnName)) {
             this.keyWords = true;
             this.columnName = keyWordsHandler.formatColumn(columnName);
         }
+        // 设置字段的元数据信息
+        TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo, tableInfo);
+        this.metaInfo = metaInfo;
         // 注释双引号替换为单引号
         if (columnInfo.getRemarks() != null) {
             this.comment = columnInfo.getRemarks().replace("\"", "'");
         }
-        Function<String, String> converter = strategyConfig.getTableColumnNameToEntityFieldName();
         Set<String> fieldPrefix = strategyConfig.getFieldPrefix();
         Set<String> fieldSuffix = strategyConfig.getFieldSuffix();
-        String propertyName = NameConvertType.doConvertName(columnName, fieldPrefix, fieldSuffix, converter);
-        // 设置字段的元数据信息
-        TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo, tableInfo);
-        JavaFieldInfo columnType;
-        JavaFieldProvider javaFieldTypeConverter = strategyConfig.getJavaFieldTypeConverter();
+        String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(columnName, fieldPrefix, fieldSuffix);
+        String propertyName = strategyConfig.getNameConverter().convertFieldName(removePrefixAndSuffix);
+        this.propertyName = propertyName;
+
+        JavaFieldInfo javaFieldInfo = DefaultJavaFieldProvider.getJavaFieldType(metaInfo, strategyConfig.getDateType());
+        JavaFieldProvider javaFieldTypeConverter = strategyConfig.getJavaFieldProvider();
         if (javaFieldTypeConverter != null) {
-            columnType = javaFieldTypeConverter.convert(metaInfo);
-        } else {
-            DateType dateType = strategyConfig.getDateType();
-            
-            columnType = DefaultJavaFieldProvider.getJavaFieldType(metaInfo,dateType);
+            javaFieldInfo = javaFieldTypeConverter.convert(metaInfo);
         }
-        this.JavaType = columnType;
+        this.JavaType = javaFieldInfo;
         if (strategyConfig.isBooleanColumnRemoveIsPrefix()
                 && "boolean".equalsIgnoreCase(this.getPropertyType())
                 && propertyName.startsWith("is")
@@ -171,8 +173,7 @@ public class TableField {
             this.convert = true;
             this.propertyName = StringUtils.removePrefixAfterPrefixToLower(propertyName, 2);
         }
-        
-        if (NameConvertType.UNDERLINE_TO_CAMEL_CASE.getFunction().equals(strategyConfig.getTableColumnNameToEntityFieldName())) {
+        if (DefaultNameConverter.class.equals(strategyConfig.getNameConverter().getClass())) {
             // 下划线转驼峰策略
             this.convert = !propertyName.equalsIgnoreCase(NameConvertType.underlineToCamel(this.columnName));
         } else {
@@ -186,8 +187,7 @@ public class TableField {
                 this.convert = !"id".equals(propertyName);
             }
         }
-        this.propertyName = propertyName;
-        this.metaInfo = metaInfo;
+  
     }
 
 

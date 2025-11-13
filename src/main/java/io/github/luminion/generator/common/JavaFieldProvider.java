@@ -12,7 +12,7 @@ import io.github.luminion.generator.po.TableField;
 public interface JavaFieldProvider {
 
     /**
-     * 转换
+     * 转为java字段信息
      *
      * @param metaInfo 数据库表字段信息
      * @return 承载java字段信息的实例

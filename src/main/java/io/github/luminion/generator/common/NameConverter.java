@@ -7,15 +7,23 @@ package io.github.luminion.generator.common;
  * @author luminion
  * @since 1.0.0
  */
-@FunctionalInterface
 public interface NameConverter {
     /**
-     * 名称转化
+     * 转化为实体类名
      *
-     * @param source 原名称
-     * @return 转化后的名称
+     * @param tableName 数据库表名
+     * @return 实体类名
      * @since 1.0.0
      */
-    String convert(String source);
+    String convertEntityName(String tableName);
+    
+    /**
+     * 转换字段名
+     *
+     * @param columnName 数据库列名
+     * @return java字段名
+     * @since 1.0.0
+     */
+    String convertFieldName(String columnName);
     
 }

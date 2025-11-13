@@ -15,16 +15,12 @@
  */
 package io.github.luminion.generator.config.base;
 
-import io.github.luminion.generator.common.ExtraFieldProvider;
-import io.github.luminion.generator.common.JavaFieldProvider;
-import io.github.luminion.generator.common.DatabaseKeywordsHandler;
-import io.github.luminion.generator.common.ITypeConvertHandler;
-import io.github.luminion.generator.enums.IdType;
-import io.github.luminion.generator.enums.NameConvertType;
-import io.github.luminion.generator.fill.IFill;
-import io.github.luminion.generator.enums.DateType;
+import io.github.luminion.generator.common.*;
 import io.github.luminion.generator.common.support.DefaultExtraFieldProvider;
-import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.common.support.DefaultNameConverter;
+import io.github.luminion.generator.enums.DateType;
+import io.github.luminion.generator.enums.IdType;
+import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.util.ReflectUtils;
 import io.github.luminion.generator.util.StringUtils;
@@ -32,7 +28,6 @@ import lombok.Data;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import java.util.function.Function;
 
 /**
  * 策略配置项
@@ -43,41 +38,30 @@ import java.util.function.Function;
  */
 @Data
 public class StrategyConfig implements TemplateRender {
+    // ===================字段名转换===================
     /**
-     * 数据库表名转换实体类名
+     * 数据库表明/字段名转化到实体类名/属性名的转化器
      */
-    protected Function<String, String> tableNameToEntityName = NameConvertType.UNDERLINE_TO_PASCAL_CASE.getFunction();
-    
+    protected NameConverter nameConverter = new DefaultNameConverter();
     /**
-     * 数据库列名称转换为属性名的方法
+     * 数据库字段类型转化为java字段类型的方式
      */
-    protected Function<String, String> tableColumnNameToEntityFieldName = NameConvertType.UNDERLINE_TO_CAMEL_CASE.getFunction();
-
+    protected JavaFieldProvider JavaFieldProvider;
     /**
-     * 日期类型
-     */
-    private DateType dateType = DateType.TIME_PACK;
-
-    /**
-     * 类型转换处理
-     */
-    protected JavaFieldProvider javaFieldTypeConverter;
-
-    /**
-     * 关键字处理器
+     * 数据库关键字处理器
      */
     protected DatabaseKeywordsHandler keyWordsHandler;
-
+    
+    // ===================字段类型或特殊字段===================
+    
     /**
      * 指定生成的主键的ID类型
      */
     protected IdType idType;
-
     /**
-     * Boolean类型字段是否移除is前缀（默认 false）<br>
-     * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
+     * java日期类型
      */
-    protected boolean booleanColumnRemoveIsPrefix;
+    private DateType dateType = DateType.TIME_PACK;
     /**
      * 是否生成实体时，生成字段注解（默认 false）
      */
@@ -100,6 +84,11 @@ public class StrategyConfig implements TemplateRender {
      */
     protected String logicDeletePropertyName;
     /**
+     * Boolean类型字段是否移除is前缀（默认 false）<br>
+     * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
+     */
+    protected boolean booleanColumnRemoveIsPrefix;
+    /**
      * 自定义基础的Entity类，公共字段
      */
     protected final Set<String> superEntityColumns = new HashSet<>();
@@ -111,6 +100,21 @@ public class StrategyConfig implements TemplateRender {
      * 表填充字段
      */
     protected final List<IFill> tableFillList = new ArrayList<>();
+
+    // ===================过滤相关===================
+
+    /**
+     * 是否大写命名（默认 false）
+     */
+    protected boolean isCapitalMode;
+    /**
+     * 是否跳过视图（默认 false）
+     */
+    protected boolean skipView;
+    /**
+     * 模糊查询包含的表名, 需要自行拼接(%)
+     */
+    protected String tableNamePattern;
 
     /**
      * 过滤表前缀
@@ -141,22 +145,16 @@ public class StrategyConfig implements TemplateRender {
     protected final Set<String> fieldSuffix = new HashSet<>();
 
     /**
-     * 需要包含的表名，允许正则表达式（与exclude二选一配置）<br/>
-     * 当{@link #enableSqlFilter}为true时，正则表达式无效.
+     * 需要包含的表名（与exclude二选一配置）
      */
     protected final Set<String> include = new HashSet<>();
 
     /**
-     * 需要排除的表名，允许正则表达式<br/>
-     * 当{@link #enableSqlFilter}为true时，正则表达式无效.
+     * 需要排除的表名
      */
     protected final Set<String> exclude = new HashSet<>();
-
-    /**
-     * 模糊查询包含的表名, 需要自行拼接(%)
-     *
-     */
-    protected String tableNamePattern;
+    
+    // ===================额外字段===================
 
     /**
      * 额外字段后缀
@@ -168,47 +166,6 @@ public class StrategyConfig implements TemplateRender {
      */
     protected ExtraFieldProvider extraFieldProvider = new DefaultExtraFieldProvider();
 
-    /**
-     * 启用 schema 默认 false
-     */
-    protected boolean enableSchema;
-
-    /**
-     * 是否大写命名（默认 false）
-     */
-    protected boolean isCapitalMode;
-
-    /**
-     * 是否跳过视图（默认 false）
-     */
-    protected boolean skipView;
-
-    /**
-     * 启用sql过滤，语法不能支持使用sql过滤表的话，可以考虑关闭此开关.
-     *
-     * @since 3.3.1
-     */
-    protected boolean enableSqlFilter = true;
-
-
-    /**
-     * 大写命名、字段符合大写字母数字下划线命名
-     *
-     * @param word 待判断字符串
-     */
-    public boolean isCapitalModeNaming(String word) {
-        return isCapitalMode && StringUtils.isCapitalMode(word);
-    }
-
-    /**
-     * 表名称匹配过滤表前缀
-     *
-     * @param tableName 表名称
-     * @since 3.3.2
-     */
-    public boolean startsWithTablePrefix(String tableName) {
-        return this.tablePrefix.stream().anyMatch(tableName::startsWith);
-    }
 
     /**
      * 验证配置项
@@ -222,11 +179,19 @@ public class StrategyConfig implements TemplateRender {
     }
 
     /**
+     * 表名称匹配过滤表前缀
+     *
+     * @param tableName 表名称
+     */
+    public boolean startsWithTablePrefix(String tableName) {
+        return this.tablePrefix.stream().anyMatch(tableName::startsWith);
+    }
+
+    /**
      * 包含表名匹配
      *
      * @param tableName 表名
      * @return 是否匹配
-     * @since 3.5.0
      */
     public boolean matchIncludeTable(String tableName) {
         return matchTable(tableName, this.include);
@@ -237,7 +202,6 @@ public class StrategyConfig implements TemplateRender {
      *
      * @param tableName 表名
      * @return 是否匹配
-     * @since 3.5.0
      */
     public boolean matchExcludeTable(String tableName) {
         return matchTable(tableName, this.exclude);
@@ -249,7 +213,6 @@ public class StrategyConfig implements TemplateRender {
      * @param tableName   表名
      * @param matchTables 匹配集合
      * @return 是否匹配
-     * @since 3.5.0
      */
     protected boolean matchTable(String tableName, Set<String> matchTables) {
         return matchTables.stream().anyMatch(t -> tableNameMatches(t, tableName));
@@ -299,7 +262,6 @@ public class StrategyConfig implements TemplateRender {
      *
      * @param fieldName 字段名
      * @return 是否匹配
-     * @since 3.5.0
      */
     public boolean matchSuperEntityColumns(String fieldName) {
         // 公共字段判断忽略大小写【 部分数据库大小写不敏感 】
@@ -311,7 +273,6 @@ public class StrategyConfig implements TemplateRender {
      *
      * @param fieldName 字段名
      * @return 是否匹配
-     * @since 3.5.0
      */
     public boolean matchIgnoreColumns(String fieldName) {
         return ignoreColumns.stream().anyMatch(e -> e.equalsIgnoreCase(fieldName));

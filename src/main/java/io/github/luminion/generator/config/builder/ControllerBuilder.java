@@ -100,15 +100,15 @@ public class ControllerBuilder {
         return this;
     }
 
-    /**
-     * 批量查询body参数是否必填
-     *
-     * @return this
-     */
-    public ControllerBuilder disableBatchQueryRequiredBody() {
-        this.controllerConfig.setBatchQueryRequiredBody(false);
-        return this;
-    }
+//    /**
+//     * 批量查询body参数是否必填
+//     *
+//     * @return this
+//     */
+//    public ControllerBuilder disableBatchQueryRequiredBody() {
+//        this.controllerConfig.setBatchQueryRequiredBody(false);
+//        return this;
+//    }
 
     /**
      * 增删查改使用restful风格

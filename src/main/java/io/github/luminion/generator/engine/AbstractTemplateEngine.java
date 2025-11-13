@@ -176,17 +176,8 @@ public abstract class AbstractTemplateEngine {
         
         StrategyConfig strategyConfig = config.getStrategyConfig();
         // 启用 schema 处理逻辑
-        String schemaName = "";
-        if (strategyConfig.isEnableSchema()) {
-            // todo 存在 schemaName 设置拼接 . 组合表名
-            schemaName = config.getDataSourceConfig().getSchemaName();
-//            if (StringUtils.isNotBlank(schemaName)) {
-//                tableInfo.setSchemaName(schemaName);
-//                schemaName += ".";
-//                tableInfo.setConvert(true);
-//            }
-        }
-        objectMap.put("schemaName", schemaName);
+ 
+        objectMap.put("schemaName", config.getDataSourceConfig().getSchemaName());
         objectMap.put("config", config);
         objectMap.put("table", tableInfo);
 

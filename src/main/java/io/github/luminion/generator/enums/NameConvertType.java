@@ -15,6 +15,7 @@
  */
 package io.github.luminion.generator.enums;
 
+import io.github.luminion.generator.common.NameConverter;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -129,27 +130,26 @@ public enum NameConvertType {
 
 
     /**
-     * 去除前缀和后缀, 并转化
+     * 去除前缀和后缀
      *
-     * @param converter 转化器
-     * @param name      姓名
-     * @param prefix    前缀
-     * @param suffix    后缀
+     * @param name   名称
+     * @param prefix 前缀
+     * @param suffix 后缀
      * @return {@link String }
      */
-    public static String doConvertName(String name, Set<String> prefix, Set<String> suffix, Function<String, String> converter) {
-        String propertyName = name;
+    public static String removePrefixAndSuffix(String name, Set<String> prefix, Set<String> suffix) {
+        String result = name;
         // 删除前缀
         if (!prefix.isEmpty()) {
-            propertyName = removePrefix(propertyName, prefix);
+            result = removePrefix(result, prefix);
         }
         // 删除后缀
         if (!suffix.isEmpty()) {
-            propertyName = removeSuffix(propertyName, suffix);
+            result = removeSuffix(result, suffix);
         }
-        if (StringUtils.isBlank(propertyName)) {
+        if (StringUtils.isBlank(result)) {
             throw new IllegalArgumentException(String.format("%s 的名称转换结果为空，请检查是否配置问题", name));
         }
-        return converter.apply(propertyName);
+        return result;
     }
 }

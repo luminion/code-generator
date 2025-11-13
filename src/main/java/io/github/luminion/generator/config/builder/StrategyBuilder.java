@@ -172,16 +172,16 @@ public class StrategyBuilder {
         return this;
     }
 
-    /**
-     * 额外字段策略
-     *
-     * @param extraFieldStrategy 额外字段策略, 3个泛型参数分别为sql运算符,表字段信息,是否生成
-     * @return this
-     */
-    public StrategyBuilder extraFieldStrategy(BiFunction<String, TableField, Boolean> extraFieldStrategy) {
-        this.strategyConfig.setExtraFieldProvider(extraFieldStrategy);
-        return this;
-    }
+//    /**
+//     * 额外字段策略
+//     *
+//     * @param extraFieldStrategy 额外字段策略, 3个泛型参数分别为sql运算符,表字段信息,是否生成
+//     * @return this
+//     */
+//    public StrategyBuilder extraFieldStrategy(BiFunction<String, TableField, Boolean> extraFieldStrategy) {
+//        this.strategyConfig.setExtraFieldProvider(extraFieldStrategy);
+//        return this;
+//    }
 
     /**
      * 开启大写命名
@@ -204,26 +204,26 @@ public class StrategyBuilder {
         this.strategyConfig.setSkipView(true);
         return this;
     }
+//
+//    /**
+//     * 启用 schema
+//     *
+//     * @return this
+//     * @since 3.5.1
+//     */
+//    public StrategyBuilder enableSchema() {
+//        this.strategyConfig.setEnableSchema(true);
+//        return this;
+//    }
 
-    /**
-     * 启用 schema
-     *
-     * @return this
-     * @since 3.5.1
-     */
-    public StrategyBuilder enableSchema() {
-        this.strategyConfig.setEnableSchema(true);
-        return this;
-    }
-
-    /**
-     * 禁用sql过滤
-     *
-     * @return this
-     * @since 3.5.0
-     */
-    public StrategyBuilder disableSqlFilter() {
-        this.strategyConfig.setEnableSqlFilter(false);
-        return this;
-    }
+//    /**
+//     * 禁用sql过滤
+//     *
+//     * @return this
+//     * @since 3.5.0
+//     */
+//    public StrategyBuilder disableSqlFilter() {
+//        this.strategyConfig.setEnableSqlFilter(false);
+//        return this;
+//    }
 }

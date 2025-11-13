@@ -84,14 +84,6 @@ public class GlobalConfig implements TemplateRender {
     protected boolean commentLink;
 
     /**
-     * 注释UUID, 用于避免swagger等文档无法识别模型
-     * <p>
-     * 该属性在{@link TableInfo#setComment(String)} 时自动使用
-     * </p>
-     */
-    protected boolean commentUUID;
-
-    /**
      * javaEE api包(jakarta或javax)
      * <p>
      * 涉及HttpServletRequest,HttpServletResponse,@Resource
