@@ -16,9 +16,9 @@
 package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
-import io.github.luminion.generator.config.core.OutputConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.*;
 import io.github.luminion.generator.util.ClassUtils;
@@ -46,13 +46,7 @@ public class Controller implements TemplateRender {
     /**
      * 模板文件
      */
-    protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.CONTROLLER.name(),
-            "%sController",
-            "controller",
-            "/templates/base/controller.java",
-            ".java"
-    );
+    protected TemplateFile templateFile = new TemplateFile(TemplateFileEnum.CONTROLLER.name(), "%sController", "controller", "/templates/base/controller.java", ".java");
 
     /**
      * 自定义继承的Controller类全称，带包名
@@ -113,10 +107,12 @@ public class Controller implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        OutputConfig outputConfig = tableInfo.getConfigurer().getOutputConfig();
-//        Map<String, Boolean> outputClassGenerateMap = outputConfig.getOutputClassGenerateMap();
-//        Map<String, String> outputClassSimpleNameMap = outputConfig.getOutputClassSimpleNameMap(tableInfo);
-//        Map<String, String> outputClassClassCanonicalNameMap = outputConfig.getOutputClassCanonicalNameMap(tableInfo);
+
+        Configurer configurer = tableInfo.getConfigurer();
+        GlobalConfig globalConfig = configurer.getGlobalConfig();
+        Resolver resolver = configurer.getResolver();
+        TreeSet<String> importPackages = new TreeSet<>();
+
         data.put("controllerMappingHyphenStyle", this.hyphenStyle);
         data.put("restControllerStyle", this.restController);
         data.put("superControllerClassPackage", StringUtils.isBlank(superClass) ? null : superClass);
@@ -129,7 +125,7 @@ public class Controller implements TemplateRender {
         // 实体类对应请求路径
         String url = this.hyphenStyle ? StringUtils.camelToHyphen(entityPath) : entityPath;
         // 完整请求路径
-        String requestBaseUrl = Stream.of(this.baseUrl, outputConfig.getModuleName(), url).filter(StringUtils::isNotBlank).collect(Collectors.joining("/"));
+        String requestBaseUrl = Stream.of(this.baseUrl, globalConfig.getOutputModule(), url).filter(StringUtils::isNotBlank).collect(Collectors.joining("/"));
         if (!requestBaseUrl.startsWith("/")) {
             requestBaseUrl = "/" + requestBaseUrl;
         }
@@ -158,8 +154,6 @@ public class Controller implements TemplateRender {
                 data.put("optionalBodyStr", requestBodyStr);
             }
         }
-        TreeSet<String> importPackages = new TreeSet<>();
-        GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
         if (superClass != null) {
             importPackages.add(superClass);
         }
@@ -167,7 +161,6 @@ public class Controller implements TemplateRender {
         if (!restController) {
             importPackages.add("org.springframework.stereotype.Controller");
         }
-
         if (globalConfig.isLombok()) {
             importPackages.add("lombok.RequiredArgsConstructor");
         }
@@ -190,14 +183,12 @@ public class Controller implements TemplateRender {
             importPackages.add(returnMethod.getClassName());
         }
 
-        Resolver resolver = tableInfo.getConfigurer().getResolver();
-
         if (resolver.isGenerate(TemplateFileEnum.SERVICE)) {
             data.put("baseService", resolver.getClassSimpleName(TemplateFileEnum.SERVICE));
-            importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.SERVICE));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE));
         } else {
             data.put("baseService", resolver.getClassSimpleName(TemplateFileEnum.SERVICE_IMPL));
-            importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.SERVICE_IMPL));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE_IMPL));
         }
 
         data.put("primaryKeyPropertyType", "Object");
@@ -211,15 +202,15 @@ public class Controller implements TemplateRender {
             importPackages.add("org.springframework.validation.annotation.Validated");
         }
         if (globalConfig.isGenerateInsert()) {
-            importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.ENTITY_INSERT_DTO));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO));
         }
         if (globalConfig.isGenerateUpdate()) {
-            importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.ENTITY_UPDATE_DTO));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO));
         }
         if (globalConfig.isGenerateQuery()) {
             importPackages.add("java.util.List");
-            importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.ENTITY_QUERY_DTO));
-            importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.ENTITY_VO));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO));
             if (pageMethod != null && pageMethod.isClassReady()) {
                 importPackages.add(pageMethod.getClassName());
                 data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_VO)));
@@ -234,12 +225,12 @@ public class Controller implements TemplateRender {
             importPackages.add("org.springframework.web.multipart.MultipartFile");
             importPackages.add("java.io.IOException");
             importPackages.add(responseClass);
-            importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.ENTITY_EXCEL_IMPORT_DTO));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_IMPORT_DTO));
         }
         if (globalConfig.isGenerateExport()) {
             importPackages.add("java.io.IOException");
             importPackages.add(responseClass);
-            importPackages.add(resolver.getClassCanonicalName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO));
         }
         Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
