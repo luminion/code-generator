@@ -93,7 +93,7 @@ public class Resolver {
      * @return {@link String }
      * @since 1.0.0
      */
-    public String getClassCanonicalName(TemplateFileEnum templateFileEnum) {
+    public String getClassName(TemplateFileEnum templateFileEnum) {
         // todo 获取对应的文件输出信息
         return "";
     }
