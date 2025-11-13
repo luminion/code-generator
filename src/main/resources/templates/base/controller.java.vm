@@ -240,7 +240,7 @@ public class ${controller} {
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr(${pageReturnType})} selectPage($!{requestBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
-        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
+        return ${returnMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")};
     }
 #end
 #if(${generateImport})

@@ -17,6 +17,7 @@ package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.enums.OutputFile;
 import io.github.luminion.generator.po.ClassMethodPayload;
+import io.github.luminion.generator.po.ClassPayload;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.TemplateRender;
@@ -26,7 +27,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -93,11 +93,6 @@ public class ControllerConfig implements TemplateRender {
      */
     protected ClassMethodPayload returnMethod = new ClassMethodPayload();
 
-    /**
-     * 分页结果方法
-     */
-    protected ClassMethodPayload pageMethod = new ClassMethodPayload();
-
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
@@ -124,7 +119,6 @@ public class ControllerConfig implements TemplateRender {
         data.put("crossOrigin", this.crossOrigin);
         data.put("restful", this.restful);
         data.put("returnMethod", this.returnMethod);
-        data.put("pageMethod", this.pageMethod);
         data.put("batchQueryMethod", batchQueryPost ? "@PostMapping" : "@GetMapping");
         
         if (pathVariable) {
@@ -224,11 +218,11 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add("java.util.List");
             importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.queryDTO.name()));
             importPackages.add(outputClassClassCanonicalNameMap.get(OutputFile.queryVO.name()));
-            if (pageMethod.isMethodReady()) {
-                importPackages.add(pageMethod.getClassCanonicalName());
-                data.put("pageReturnType", pageMethod.returnGenericTypeStr(outputClassSimpleNameMap.get(OutputFile.queryVO.name())));
+            ClassPayload pageClassPayload = globalConfig.getPageClassPayload();
+            if (pageClassPayload !=null && pageClassPayload.isClassReady()) {
+                importPackages.add(pageClassPayload.getClassCanonicalName());
+                data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(outputClassSimpleNameMap.get(OutputFile.queryVO.name())));
             } else {
-                log.warn("PageMethod not set, use Object instead");
                 data.put("pageReturnType", "Object");
             }
         }

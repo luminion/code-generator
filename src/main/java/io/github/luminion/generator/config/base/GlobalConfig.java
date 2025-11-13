@@ -15,6 +15,7 @@
  */
 package io.github.luminion.generator.config.base;
 
+import io.github.luminion.generator.po.ClassPayload;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.TemplateRender;
 import lombok.Data;
@@ -138,6 +139,11 @@ public class GlobalConfig implements TemplateRender {
      * 参数校验
      */
     protected boolean validated = true;
+
+    /**
+     * 分页类
+     */
+    protected ClassPayload pageClassPayload;
 
 
     /**
