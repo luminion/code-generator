@@ -36,9 +36,9 @@ import java.util.*;
  * @author luminion
  * @since 1.0.0
  */
-public class DatabaseQueryMetaDataWrapper {
+public class DefaultDatabaseQueryMetaDataWrapper {
 
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseQueryMetaDataWrapper.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultDatabaseQueryMetaDataWrapper.class);
 
     @Getter
     private final Connection connection;
@@ -51,7 +51,7 @@ public class DatabaseQueryMetaDataWrapper {
     // 暂时只支持一种
     private final String schema;
 
-    public DatabaseQueryMetaDataWrapper(Connection connection, String schemaName) {
+    public DefaultDatabaseQueryMetaDataWrapper(Connection connection, String schemaName) {
         try {
             if (null == connection) {
                 throw new RuntimeException("数据库连接不能为空");
@@ -79,24 +79,24 @@ public class DatabaseQueryMetaDataWrapper {
         return getColumnsInfo(this.catalog, this.schema, tableNamePattern, queryPrimaryKey);
     }
 
-    public List<Index> getIndex(String tableName) {
-        List<Index> indexList = new ArrayList<>();
-        try (ResultSet resultSet = databaseMetaData.getIndexInfo(catalog, schema, tableName, false, false)) {
-            // clickhouse v2驱动没实现返回了个null
-            if (resultSet != null) {
-                while (resultSet.next()) {
-                    Index index = new Index(resultSet);
-                    // skip function index
-                    if (StringUtils.isNotBlank(index.getColumnName())) {
-                        indexList.add(index);
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            logger.error("读取{}索引信息出现错误:", tableName, e);
-        }
-        return indexList;
-    }
+//    public List<Index> getIndex(String tableName) {
+//        List<Index> indexList = new ArrayList<>();
+//        try (ResultSet resultSet = databaseMetaData.getIndexInfo(catalog, schema, tableName, false, false)) {
+//            // clickhouse v2驱动没实现返回了个null
+//            if (resultSet != null) {
+//                while (resultSet.next()) {
+//                    Index index = new Index(resultSet);
+//                    // skip function index
+//                    if (StringUtils.isNotBlank(index.getColumnName())) {
+//                        indexList.add(index);
+//                    }
+//                }
+//            }
+//        } catch (SQLException e) {
+//            logger.error("读取{}索引信息出现错误:", tableName, e);
+//        }
+//        return indexList;
+//    }
 
     /**
      * 获取表字段信息
@@ -244,42 +244,42 @@ public class DatabaseQueryMetaDataWrapper {
 
     }
 
-    @Getter
-    @ToString
-    public static class Index {
-
-        /**
-         * 索引名
-         */
-        private final String name;
-
-        /**
-         * 是否唯一索引
-         */
-        private final boolean unique;
-
-        /**
-         * 索引字段
-         */
-        private final String columnName;
-
-        /**
-         * 排序方式 (A OR D OR null)
-         */
-        private final String ascOrDesc;
-
-        private final int cardinality;
-
-        private final int ordinalPosition;
-
-        public Index(ResultSet resultSet) throws SQLException {
-            this.unique = !resultSet.getBoolean("NON_UNIQUE");
-            this.name = resultSet.getString("INDEX_NAME");
-            this.columnName = resultSet.getString("COLUMN_NAME");
-            this.ascOrDesc = resultSet.getString("ASC_OR_DESC");
-            this.cardinality = resultSet.getInt("CARDINALITY");
-            this.ordinalPosition = resultSet.getInt("ORDINAL_POSITION");
-        }
-
-    }
+//    @Getter
+//    @ToString
+//    public static class Index {
+//
+//        /**
+//         * 索引名
+//         */
+//        private final String name;
+//
+//        /**
+//         * 是否唯一索引
+//         */
+//        private final boolean unique;
+//
+//        /**
+//         * 索引字段
+//         */
+//        private final String columnName;
+//
+//        /**
+//         * 排序方式 (A OR D OR null)
+//         */
+//        private final String ascOrDesc;
+//
+//        private final int cardinality;
+//
+//        private final int ordinalPosition;
+//
+//        public Index(ResultSet resultSet) throws SQLException {
+//            this.unique = !resultSet.getBoolean("NON_UNIQUE");
+//            this.name = resultSet.getString("INDEX_NAME");
+//            this.columnName = resultSet.getString("COLUMN_NAME");
+//            this.ascOrDesc = resultSet.getString("ASC_OR_DESC");
+//            this.cardinality = resultSet.getInt("CARDINALITY");
+//            this.ordinalPosition = resultSet.getInt("ORDINAL_POSITION");
+//        }
+//
+//    }
 }

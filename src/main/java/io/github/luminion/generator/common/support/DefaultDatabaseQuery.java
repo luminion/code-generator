@@ -48,16 +48,16 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Slf4j
-public class DatabaseQueryDefault implements TableInfoProvider {
-    protected final DatabaseQueryMetaDataWrapper databaseMetaDataWrapper;
+public class DefaultDatabaseQuery implements TableInfoProvider {
+    protected final DefaultDatabaseQueryMetaDataWrapper databaseMetaDataWrapper;
     protected final StrategyConfig strategyConfig;
     protected final Configurer configurer;
 
-    public DatabaseQueryDefault(Configurer configurer) {
+    public DefaultDatabaseQuery(Configurer configurer) {
         this.configurer = configurer;
         this.strategyConfig = configurer.getStrategyConfig();
         DataSourceConfig dataSourceConfig = configurer.getDataSourceConfig();
-        this.databaseMetaDataWrapper = new DatabaseQueryMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchemaName());
+        this.databaseMetaDataWrapper = new DefaultDatabaseQueryMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchemaName());
     }
 
     @Override
@@ -67,7 +67,7 @@ public class DatabaseQueryDefault implements TableInfoProvider {
             boolean isExclude = !strategyConfig.getExclude().isEmpty();
             //所有的表信息
             List<TableInfo> tableList = new ArrayList<>();
-            List<DatabaseQueryMetaDataWrapper.Table> tables = this.getTables();
+            List<DefaultDatabaseQueryMetaDataWrapper.Table> tables = this.getTables();
             //需要反向生成或排除的表信息
             List<TableInfo> includeTableList = new ArrayList<>();
             List<TableInfo> excludeTableList = new ArrayList<>();
@@ -94,7 +94,7 @@ public class DatabaseQueryDefault implements TableInfoProvider {
         }
     }
 
-    protected List<DatabaseQueryMetaDataWrapper.Table> getTables() {
+    protected List<DefaultDatabaseQueryMetaDataWrapper.Table> getTables() {
         // 是否跳过视图
         boolean skipView = strategyConfig.isSkipView();
         // 获取表过滤
@@ -105,20 +105,20 @@ public class DatabaseQueryDefault implements TableInfoProvider {
     protected void convertTableFields(TableInfo tableInfo) {
         String tableName = tableInfo.getName();
 //        tableInfo.setIndexList(getIndex(tableName));
-        Map<String, DatabaseQueryMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
+        Map<String, DefaultDatabaseQueryMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
         columnsInfoMap.forEach((k, columnInfo) -> {
             TableField field = new TableField( tableInfo, columnInfo);
             tableInfo.addField(field);
         });
     }
 
-    protected Map<String, DatabaseQueryMetaDataWrapper.Column> getColumnsInfo(String tableName) {
+    protected Map<String, DefaultDatabaseQueryMetaDataWrapper.Column> getColumnsInfo(String tableName) {
         return databaseMetaDataWrapper.getColumnsInfo(tableName, true);
     }
 
-    protected List<DatabaseQueryMetaDataWrapper.Index> getIndex(String tableName) {
-        return databaseMetaDataWrapper.getIndex(tableName);
-    }
+//    protected List<DefaultDatabaseQueryMetaDataWrapper.Index> getIndex(String tableName) {
+//        return databaseMetaDataWrapper.getIndex(tableName);
+//    }
 
     protected void filter(List<TableInfo> tableList, List<TableInfo> includeTableList, List<TableInfo> excludeTableList) {
         boolean isInclude = !strategyConfig.getInclude().isEmpty();

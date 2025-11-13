@@ -15,9 +15,8 @@ import java.util.Map;
  * @author luminion
  * @since 1.0.0
  */
-public abstract class ColumnTypeToJavaFieldTypeConverterHelper {
+public abstract class DefaultJavaFieldProvider {
     private static final Map<Integer, JavaFieldInfo> typeMap = new HashMap<>();
-
     static {
         // byte[]
         typeMap.put(Types.BINARY, FieldType.BYTE_ARRAY);

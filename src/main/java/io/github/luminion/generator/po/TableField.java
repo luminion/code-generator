@@ -16,7 +16,8 @@
 package io.github.luminion.generator.po;
 
 import io.github.luminion.generator.common.JavaFieldProvider;
-import io.github.luminion.generator.common.support.ColumnTypeToJavaFieldTypeConverterHelper;
+import io.github.luminion.generator.common.support.DefaultJavaFieldProvider;
+import io.github.luminion.generator.common.support.DefaultDatabaseQueryMetaDataWrapper;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.DatabaseKeywordsHandler;
@@ -25,7 +26,6 @@ import io.github.luminion.generator.enums.JdbcType;
 import io.github.luminion.generator.enums.NameConvertType;
 import io.github.luminion.generator.fill.Column;
 import io.github.luminion.generator.fill.Property;
-import io.github.luminion.generator.common.support.DatabaseQueryMetaDataWrapper;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.ToString;
@@ -126,7 +126,7 @@ public class TableField {
 
 
     public TableField(TableInfo tableInfo,
-                      DatabaseQueryMetaDataWrapper.Column columnInfo) {
+                      DefaultDatabaseQueryMetaDataWrapper.Column columnInfo) {
         this.strategyConfig = tableInfo.getConfigurer().getStrategyConfig();
         if (columnInfo.isPrimaryKey()) {
             this.keyFlag = true;
@@ -161,7 +161,7 @@ public class TableField {
         } else {
             DateType dateType = strategyConfig.getDateType();
             
-            columnType = ColumnTypeToJavaFieldTypeConverterHelper.getJavaFieldType(metaInfo,dateType);
+            columnType = DefaultJavaFieldProvider.getJavaFieldType(metaInfo,dateType);
         }
         this.JavaType = columnType;
         if (strategyConfig.isBooleanColumnRemoveIsPrefix()
@@ -343,7 +343,7 @@ public class TableField {
          */
         private boolean generatedColumn;
 
-        public MetaInfo(DatabaseQueryMetaDataWrapper.Column column, TableInfo tableInfo) {
+        public MetaInfo(DefaultDatabaseQueryMetaDataWrapper.Column column, TableInfo tableInfo) {
             if (column != null) {
                 this.tableName = tableInfo.getName();
                 this.columnName = column.getName();

@@ -1,6 +1,5 @@
 package io.github.luminion.generator.common;
 
-import java.util.function.Function;
 
 /**
  * 名称转换器

@@ -23,7 +23,7 @@ import io.github.luminion.generator.enums.IdType;
 import io.github.luminion.generator.enums.NameConvertType;
 import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.enums.DateType;
-import io.github.luminion.generator.common.support.ExtraFieldProviderDefault;
+import io.github.luminion.generator.common.support.DefaultExtraFieldProvider;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.util.ReflectUtils;
@@ -166,7 +166,7 @@ public class StrategyConfig implements TemplateRender {
     /**
      * 额外字段策略
      */
-    protected ExtraFieldProvider extraFieldProvider = new ExtraFieldProviderDefault();
+    protected ExtraFieldProvider extraFieldProvider = new DefaultExtraFieldProvider();
 
     /**
      * 启用 schema 默认 false

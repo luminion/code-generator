@@ -16,7 +16,7 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-public class ExtraFieldProviderDefault implements ExtraFieldProvider {
+public class DefaultExtraFieldProvider implements ExtraFieldProvider {
     private static final List<String> ALLOW_COMPARE = Arrays.asList(
             "Byte"
             , "Short"

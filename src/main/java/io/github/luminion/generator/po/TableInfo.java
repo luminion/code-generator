@@ -18,7 +18,7 @@ package io.github.luminion.generator.po;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.enums.NameConvertType;
-import io.github.luminion.generator.common.support.DatabaseQueryMetaDataWrapper;
+import io.github.luminion.generator.common.support.DefaultDatabaseQueryMetaDataWrapper;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -107,7 +107,7 @@ public class TableInfo {
 //     */
 //    @Setter
 //    @Getter
-//    private List<DatabaseQueryMetaDataWrapper.Index> indexList;
+//    private List<DefaultDatabaseQueryMetaDataWrapper.Index> indexList;
 
     @Getter
     private final Map<String, TableField> tableFieldMap = new HashMap<>();
@@ -115,7 +115,7 @@ public class TableInfo {
     @Getter
     private String schemaName;
 
-    public TableInfo(Configurer configurer, DatabaseQueryMetaDataWrapper.Table table) {
+    public TableInfo(Configurer configurer, DefaultDatabaseQueryMetaDataWrapper.Table table) {
         this.configurer = configurer;
         this.strategyConfig = configurer.getStrategyConfig();
         this.name = table.getName();
