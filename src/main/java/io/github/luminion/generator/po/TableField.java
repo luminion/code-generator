@@ -25,7 +25,7 @@ import io.github.luminion.generator.enums.JdbcType;
 import io.github.luminion.generator.enums.NameConvertStrategy;
 import io.github.luminion.generator.fill.Column;
 import io.github.luminion.generator.fill.Property;
-import io.github.luminion.generator.jdbc.DatabaseMetaDataWrapper;
+import io.github.luminion.generator.common.support.DatabaseQueryMetaDataWrapper;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.ToString;
@@ -128,7 +128,7 @@ public class TableField {
 
 
     public TableField(TableInfo tableInfo,
-                      DatabaseMetaDataWrapper.Column columnInfo) {
+                      DatabaseQueryMetaDataWrapper.Column columnInfo) {
         this.strategyConfig = tableInfo.getConfigurer().getStrategyConfig();
         if (columnInfo.isPrimaryKey()) {
             this.keyFlag = true;
@@ -345,7 +345,7 @@ public class TableField {
          */
         private boolean generatedColumn;
 
-        public MetaInfo(DatabaseMetaDataWrapper.Column column, TableInfo tableInfo) {
+        public MetaInfo(DatabaseQueryMetaDataWrapper.Column column, TableInfo tableInfo) {
             if (column != null) {
                 this.tableName = tableInfo.getName();
                 this.columnName = column.getName();

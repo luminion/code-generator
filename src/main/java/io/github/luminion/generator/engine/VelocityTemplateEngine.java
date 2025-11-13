@@ -42,7 +42,6 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         try {
             Class.forName("org.apache.velocity.util.DuckType");
         } catch (ClassNotFoundException e) {
-            // velocity1.x的生成格式错乱 https://github.com/baomidou/generator/issues/5
             log.warn("Velocity 1.x is outdated, please upgrade to 2.x or later.");
         }
     }

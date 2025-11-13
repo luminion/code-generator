@@ -30,7 +30,7 @@ import java.util.Map;
  * @author luminion
  * @since 1.0.0
  */
-public interface ConfigRender extends Serializable {
+public interface TemplateRender extends Serializable {
 
     @SneakyThrows
     default Map<String, Object> renderData(TableInfo tableInfo) {

@@ -18,7 +18,7 @@ package io.github.luminion.generator.config.base;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.OutputFile;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.ConfigRender;
+import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.util.ClassUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class ServiceConfig implements ConfigRender {
+public class ServiceConfig implements TemplateRender {
     /**
      * service层导入的类
      */

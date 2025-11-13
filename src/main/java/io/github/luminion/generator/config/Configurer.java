@@ -17,7 +17,7 @@ package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.jdbc.DefaultQuery;
+import io.github.luminion.generator.common.support.DatabaseQueryDefault;
 import io.github.luminion.generator.config.base.*;
 import lombok.Getter;
 
@@ -33,7 +33,6 @@ import java.util.List;
  */
 @Getter
 public class Configurer {
-
     /**
      * 数据库配置信息
      */
@@ -91,7 +90,7 @@ public class Configurer {
         getOutputConfig().processOutput(this);
         if (this.tableInfo.isEmpty()){
             try {
-                DefaultQuery defaultQuery = new DefaultQuery(this);
+                DatabaseQueryDefault defaultQuery = new DatabaseQueryDefault(this);
                 // 设置表信息
                 List<TableInfo> tableInfos = defaultQuery.queryTables();
                 if (!tableInfos.isEmpty()) {

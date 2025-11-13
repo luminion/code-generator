@@ -18,7 +18,7 @@ package io.github.luminion.generator.config.base;
 import io.github.luminion.generator.enums.OutputFile;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.ConfigRender;
+import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class MapperConfig implements ConfigRender {
+public class MapperConfig implements TemplateRender {
 
     /**
      * 自定义继承的Mapper类全称，带包名
@@ -84,7 +84,7 @@ public class MapperConfig implements ConfigRender {
     @Override
     @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = ConfigRender.super.renderData(tableInfo);
+        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         boolean enableCache = this.cache != null;
         data.put("enableCache", enableCache);
         data.put("mapperAnnotation", mapperAnnotationClass != null);

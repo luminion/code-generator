@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.jdbc;
+package io.github.luminion.generator.common;
 
 import io.github.luminion.generator.po.TableInfo;
 

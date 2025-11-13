@@ -24,7 +24,7 @@ import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.ExtraFieldStrategy;
-import io.github.luminion.generator.common.ConfigRender;
+import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.util.ReflectUtils;
 import io.github.luminion.generator.util.StringUtils;
@@ -43,7 +43,7 @@ import java.util.function.Function;
  * @since 1.0.0
  */
 @Data
-public class StrategyConfig implements ConfigRender {
+public class StrategyConfig implements TemplateRender {
     /**
      * 数据库表名转换实体类名
      */
@@ -321,7 +321,7 @@ public class StrategyConfig implements ConfigRender {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = ConfigRender.super.renderData(tableInfo);
+        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         data.put("idType", idType == null ? null : idType.toString());
         data.put("logicDeleteFieldName", this.logicDeleteColumnName);
         data.put("versionFieldName", this.versionColumnName);

@@ -17,7 +17,7 @@ package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.po.CustomFile;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.ConfigRender;
+import io.github.luminion.generator.common.TemplateRender;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,7 +36,7 @@ import java.util.function.BiConsumer;
  */
 @Slf4j
 @Data
-public class InjectionConfig implements ConfigRender {
+public class InjectionConfig implements TemplateRender {
 
     /**
      * 输出文件之前消费者

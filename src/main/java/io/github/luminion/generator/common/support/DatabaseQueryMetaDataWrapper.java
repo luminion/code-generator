@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.jdbc;
+package io.github.luminion.generator.common.support;
 
 import io.github.luminion.generator.enums.JdbcType;
 import io.github.luminion.generator.util.StringUtils;
@@ -36,9 +36,9 @@ import java.util.*;
  * @author luminion
  * @since 1.0.0
  */
-public class DatabaseMetaDataWrapper {
+public class DatabaseQueryMetaDataWrapper {
 
-    private static final Logger logger = LoggerFactory.getLogger(DatabaseMetaDataWrapper.class);
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseQueryMetaDataWrapper.class);
 
     @Getter
     private final Connection connection;
@@ -51,7 +51,7 @@ public class DatabaseMetaDataWrapper {
     // 暂时只支持一种
     private final String schema;
 
-    public DatabaseMetaDataWrapper(Connection connection, String schemaName) {
+    public DatabaseQueryMetaDataWrapper(Connection connection, String schemaName) {
         try {
             if (null == connection) {
                 throw new RuntimeException("数据库连接不能为空");

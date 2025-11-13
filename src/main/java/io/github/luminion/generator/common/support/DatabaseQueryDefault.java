@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.jdbc;
+package io.github.luminion.generator.common.support;
 
+import io.github.luminion.generator.common.IDatabaseQuery;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.po.TableField;
@@ -47,16 +48,16 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Slf4j
-public class DefaultQuery implements IDatabaseQuery {
-    protected final DatabaseMetaDataWrapper databaseMetaDataWrapper;
+public class DatabaseQueryDefault implements IDatabaseQuery {
+    protected final DatabaseQueryMetaDataWrapper databaseMetaDataWrapper;
     protected final StrategyConfig strategyConfig;
     protected final Configurer configurer;
 
-    public DefaultQuery(Configurer configurer) {
+    public DatabaseQueryDefault(Configurer configurer) {
         this.configurer = configurer;
         this.strategyConfig = configurer.getStrategyConfig();
         DataSourceConfig dataSourceConfig = configurer.getDataSourceConfig();
-        this.databaseMetaDataWrapper = new DatabaseMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchemaName());
+        this.databaseMetaDataWrapper = new DatabaseQueryMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchemaName());
     }
 
     @Override
@@ -66,7 +67,7 @@ public class DefaultQuery implements IDatabaseQuery {
             boolean isExclude = !strategyConfig.getExclude().isEmpty();
             //所有的表信息
             List<TableInfo> tableList = new ArrayList<>();
-            List<DatabaseMetaDataWrapper.Table> tables = this.getTables();
+            List<DatabaseQueryMetaDataWrapper.Table> tables = this.getTables();
             //需要反向生成或排除的表信息
             List<TableInfo> includeTableList = new ArrayList<>();
             List<TableInfo> excludeTableList = new ArrayList<>();
@@ -93,7 +94,7 @@ public class DefaultQuery implements IDatabaseQuery {
         }
     }
 
-    protected List<DatabaseMetaDataWrapper.Table> getTables() {
+    protected List<DatabaseQueryMetaDataWrapper.Table> getTables() {
         // 是否跳过视图
         boolean skipView = strategyConfig.isSkipView();
         // 获取表过滤
@@ -104,18 +105,18 @@ public class DefaultQuery implements IDatabaseQuery {
     protected void convertTableFields(TableInfo tableInfo) {
         String tableName = tableInfo.getName();
         tableInfo.setIndexList(getIndex(tableName));
-        Map<String, DatabaseMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
+        Map<String, DatabaseQueryMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
         columnsInfoMap.forEach((k, columnInfo) -> {
             TableField field = new TableField( tableInfo, columnInfo);
             tableInfo.addField(field);
         });
     }
 
-    protected Map<String, DatabaseMetaDataWrapper.Column> getColumnsInfo(String tableName) {
+    protected Map<String, DatabaseQueryMetaDataWrapper.Column> getColumnsInfo(String tableName) {
         return databaseMetaDataWrapper.getColumnsInfo(tableName, true);
     }
 
-    protected List<DatabaseMetaDataWrapper.Index> getIndex(String tableName) {
+    protected List<DatabaseQueryMetaDataWrapper.Index> getIndex(String tableName) {
         return databaseMetaDataWrapper.getIndex(tableName);
     }
 

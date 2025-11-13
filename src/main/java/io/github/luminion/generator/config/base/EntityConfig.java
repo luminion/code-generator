@@ -17,7 +17,7 @@ package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.JavaFieldType;
-import io.github.luminion.generator.common.ConfigRender;
+import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class EntityConfig implements ConfigRender {
+public class EntityConfig implements TemplateRender {
 
     /**
      * 自定义继承的Entity类全称，带包名
@@ -79,7 +79,7 @@ public class EntityConfig implements ConfigRender {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = ConfigRender.super.renderData(tableInfo);
+        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         data.put("activeRecord", this.activeRecord);
         data.put("entitySerialVersionUID", this.serialVersionUID);
         data.put("entitySerialAnnotation", this.serialAnnotation);
