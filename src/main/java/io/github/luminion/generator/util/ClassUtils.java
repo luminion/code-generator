@@ -23,12 +23,23 @@ import lombok.SneakyThrows;
  * @since 1.0.0
  */
 public abstract class ClassUtils {
-    
+
     @SneakyThrows
     public static Class<?> toClass(String className) {
         return Class.forName(className);
     }
-    
+
+
+    /**
+     * 获取包名
+     *
+     * @param className className 全类名
+     * @return ignore
+     */
+    public static String getPackage(String className) {
+        return StringUtils.isBlank(className) ? null : className.substring(0, className.lastIndexOf("."));
+    }
+
     /**
      * 获取类名
      *

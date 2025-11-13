@@ -1,5 +1,6 @@
 package io.github.luminion.generator.po;
 
+import io.github.luminion.generator.util.ClassUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import java.util.Collections;
 
 /**
  * 类承载信息
+ *
  * @author luminion
  * @since 1.0.0
  */
@@ -20,10 +22,16 @@ public class ClassPayload {
     protected String classCanonicalName;
     protected int classGenericTypeCount;
 
+    public ClassPayload(String className) {
+        this.classPackage = ClassUtils.getPackage(className);
+        this.classSimpleName = ClassUtils.getSimpleName(className);
+        this.classCanonicalName = className;
+    }
+
     public ClassPayload(String classPackage, String classSimpleName) {
         this.classPackage = classPackage;
         this.classSimpleName = classSimpleName;
-        this.classCanonicalName = classPackage+"."+classSimpleName;
+        this.classCanonicalName = classPackage + "." + classSimpleName;
     }
 
     public ClassPayload(Class<?> clazz) {
@@ -43,7 +51,7 @@ public class ClassPayload {
 
     public String returnGenericTypeStr(String... genericTypeStr) {
         if (classSimpleName == null) {
-            return genericTypeStr!=null && genericTypeStr.length == 1 ? genericTypeStr[0] : "Object";
+            return genericTypeStr != null && genericTypeStr.length == 1 ? genericTypeStr[0] : "Object";
         }
         if (classGenericTypeCount == 0) {
             return classSimpleName;
@@ -56,8 +64,6 @@ public class ClassPayload {
         }
         return String.format("%s<%s>", classSimpleName, String.join(", ", Collections.nCopies(classGenericTypeCount, "?")));
     }
-
-
 
 
 }

@@ -100,15 +100,6 @@ public class ControllerBuilder {
         return this;
     }
 
-//    /**
-//     * 批量查询body参数是否必填
-//     *
-//     * @return this
-//     */
-//    public ControllerBuilder disableBatchQueryRequiredBody() {
-//        this.controllerConfig.setBatchQueryRequiredBody(false);
-//        return this;
-//    }
 
     /**
      * 增删查改使用restful风格
@@ -152,16 +143,17 @@ public class ControllerBuilder {
         return this;
     }
 
-    /**
-     * 指定controller返回的分页包装类及方法
-     *
-     * @param methodReference 方法参考
-     * @return this
-     */
-    public <T, R> ControllerBuilder pageMethod(SFunc<T, R> methodReference, Class<T> output) {
-        ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, output);
-        this.controllerConfig.setPageMethod(payload);
-        return this;
-    }
+//    /**
+//     * 指定controller返回的分页包装类及方法
+//     *
+//     * @param methodReference 包装方法, 接手的其中一个参数参数类型需要为分页对象
+//     * @param pageClass 返回的分页类
+//     * @return this
+//     */
+//    public <T, R> ControllerBuilder pageMethod(SFunc<T, R> methodReference, Class<T> pageClass) {
+//        ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, pageClass);
+//        this.controllerConfig.setPageMethod(payload);
+//        return this;
+//    }
     
 }

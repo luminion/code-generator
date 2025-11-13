@@ -1,7 +1,9 @@
 package io.github.luminion.generator.po;
 
+import io.github.luminion.generator.util.ClassUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -20,6 +22,17 @@ public class ClassMethodPayload extends ClassPayload {
     protected boolean isStatic;
     protected boolean isConstructor;
     protected boolean isGenericMethod;
+    
+    @SneakyThrows
+    public ClassMethodPayload(String className, String methodName, Class<?> methodParameterClass){
+        super(className);
+        this.methodName = methodName;
+        Class<?> aClass = Class.forName(className);
+        Method method = aClass.getMethod(methodName, methodParameterClass);
+        this.methodGenericTypeCount = method.getGenericParameterTypes().length;
+        this.isStatic = Modifier.isStatic(method.getModifiers());
+        this.isConstructor = method.getName().startsWith("<init>");
+    }
 
     public ClassMethodPayload(Method method) {
         super(method.getDeclaringClass());
