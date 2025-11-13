@@ -108,7 +108,6 @@ public class DataSourceConfig {
      * 获取数据库默认schema
      *
      * @return 默认schema
-     * @since 3.5.0
      */
     protected String getDefaultSchema() {
         DbType dbType = getDbType();

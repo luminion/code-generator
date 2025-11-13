@@ -46,51 +46,27 @@ public class EntityConfig implements TemplateRender {
     /**
      * 实体是否生成 serialVersionUID
      */
-    protected boolean serialVersionUID = true;
+    protected boolean serialUID = true;
 
     /**
      * 是否启用 {@link java.io.Serial} (需JAVA 14) 注解
      *
-     * @since 3.5.11
      */
     protected boolean serialAnnotation;
 
     /**
-     * 【实体】是否生成字段常量（默认 false）<br>
-     * -----------------------------------<br>
-     * public static final String ID = "test_id";
-     */
-    protected boolean columnConstant;
-
-    /**
-     * 是否生成实体时，生成字段注解（默认 false）
-     */
-    protected boolean tableFieldAnnotationEnable;
-
-    /**
      * 开启 ActiveRecord 模式（默认 false）
-     *
-     * @since 3.5.0
      */
     protected boolean activeRecord;
-
-
 
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         data.put("activeRecord", this.activeRecord);
-        data.put("entitySerialVersionUID", this.serialVersionUID);
+        data.put("entitySerialVersionUID", this.serialUID);
         data.put("entitySerialAnnotation", this.serialAnnotation);
-        data.put("entityColumnConstant", this.columnConstant);
         data.put("superEntityClass", ClassUtils.getSimpleName(this.superClass));
-        GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
-        ModelConfig modelConfig = tableInfo.getConfigurer().getModelConfig();
-
-        boolean excelImport = globalConfig.isGenerateImport() && modelConfig.isQueryDTOExtendsEntity();
-        boolean excelExport = globalConfig.isGenerateExport() && modelConfig.isQueryVOExtendsEntity();
-        data.put("excelOnEntity", excelImport || excelExport);
 
         // 导入包
         Set<String> importPackages = this.entityImportPackages(tableInfo);
@@ -119,7 +95,7 @@ public class EntityConfig implements TemplateRender {
                 importPackages.add("com.baomidou.mybatisplus.extension.activerecord.Model");
             }
         }
-        if (this.serialVersionUID || this.activeRecord) {
+        if (this.serialUID || this.activeRecord) {
             importPackages.add(Serializable.class.getCanonicalName());
             if (this.serialAnnotation) {
                 importPackages.add("java.io.Serial");
