@@ -48,9 +48,9 @@ public class Controller implements TemplateRender {
      */
     protected TemplateFile templateFile = new TemplateFile(
             TemplateFileEnum.CONTROLLER.name(),
-            "%s",
-            "entity",
-            "/templates/base/entity.java",
+            "%sController",
+            "controller",
+            "/templates/base/controller.java",
             ".java"
     );
 
