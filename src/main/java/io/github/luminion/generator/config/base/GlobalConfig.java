@@ -15,6 +15,7 @@
  */
 package io.github.luminion.generator.config.base;
 
+import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.po.ClassPayload;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.TemplateRender;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 
@@ -143,7 +145,7 @@ public class GlobalConfig implements TemplateRender {
     /**
      * 分页类
      */
-    protected ClassPayload pageClassPayload;
+    protected ClassPayload pageClassPayload = new ClassPayload(List.class);
 
 
     /**
