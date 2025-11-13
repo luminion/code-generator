@@ -120,110 +120,110 @@ public class OutputConfig implements TemplateRender {
             ".java"
     );
 
+//
+//    protected Stream<io.github.luminion.generator.po.TemplateFile> templateFileStream() {
+//        return Stream.of(entity, mapper, mapperXml, service, serviceImpl, controller, insertDTO, updateDTO, queryDTO, queryVO);
+//    }
 
-    protected Stream<io.github.luminion.generator.po.TemplateFile> templateFileStream() {
-        return Stream.of(entity, mapper, mapperXml, service, serviceImpl, controller, insertDTO, updateDTO, queryDTO, queryVO);
-    }
+//    /**
+//     * 父包名
+//     */
+//    public String getParentPackage() {
+//        if (StringUtils.isNotBlank(moduleName)) {
+//            return parentPackage + "." + moduleName;
+//        }
+//        return parentPackage;
+//    }
+//
+//    /**
+//     * 连接父子包名
+//     *
+//     * @param subPackage 子包名
+//     * @return 连接后的包名
+//     */
+//    public String joinPackage(String subPackage) {
+//        String parent = getParentPackage();
+//        return StringUtils.isBlank(parent) ? subPackage : (parent + "." + subPackage);
+//    }
+//
+//    /**
+//     * 连接路径字符串
+//     *
+//     * @param parentDir   路径常量字符串
+//     * @param packageName 包名
+//     * @return 连接后的路径
+//     */
+//    public String joinPath(String parentDir, String packageName) {
+//        if (StringUtils.isBlank(parentDir)) {
+//            parentDir = System.getProperty("java.io.tmpdir");
+//        }
+//        if (!StringUtils.endsWith(parentDir, File.separator)) {
+//            parentDir += File.separator;
+//        }
+//        packageName = packageName.replaceAll("\\.", "\\" + File.separator);
+//        return parentDir + packageName;
+//    }
 
-    /**
-     * 父包名
-     */
-    public String getParentPackage() {
-        if (StringUtils.isNotBlank(moduleName)) {
-            return parentPackage + "." + moduleName;
-        }
-        return parentPackage;
-    }
+//    /**
+//     * 获取输出文件类规范名称map
+//     *
+//     * @param tableInfo 表信息
+//     * @see TemplateFileEnum#name()
+//     */
+//    public Map<String, String> getOutputClassCanonicalNameMap(TableInfo tableInfo) {
+//        return templateFileStream().collect(Collectors.toMap(
+//                io.github.luminion.generator.po.TemplateFile::getKey,
+//                e -> joinPackage(e.getSubPackage()) + "." + e.convertFormatName(tableInfo)
+//        ));
+//    }
+//
+//    /**
+//     * 获取类简单名称map
+//     *
+//     * @param tableInfo 表信息
+//     * @see TemplateFileEnum#name() 
+//     */
+//    public Map<String, String> getOutputClassSimpleNameMap(TableInfo tableInfo) {
+//        return templateFileStream().collect(Collectors.toMap(
+//                io.github.luminion.generator.po.TemplateFile::getKey,
+//                e -> e.convertFormatName(tableInfo)
+//        ));
+//    }
+//
+//    /**
+//     * 获取类生成信息
+//     *
+//     */
+//    public Map<String, Boolean> getOutputClassGenerateMap() {
+//        return templateFileStream().collect(Collectors.toMap(io.github.luminion.generator.po.TemplateFile::getKey, io.github.luminion.generator.po.TemplateFile::isGenerate));
+//    }
+//
+//    /**
+//     * 获取包信息
+//     */
+//    public Map<String, String> getOutputClassPackageInfoMap() {
+//        return templateFileStream().collect(Collectors.toMap(io.github.luminion.generator.po.TemplateFile::getKey, e -> joinPackage(e.getSubPackage())));
+//    }
 
-    /**
-     * 连接父子包名
-     *
-     * @param subPackage 子包名
-     * @return 连接后的包名
-     */
-    public String joinPackage(String subPackage) {
-        String parent = getParentPackage();
-        return StringUtils.isBlank(parent) ? subPackage : (parent + "." + subPackage);
-    }
-
-    /**
-     * 连接路径字符串
-     *
-     * @param parentDir   路径常量字符串
-     * @param packageName 包名
-     * @return 连接后的路径
-     */
-    public String joinPath(String parentDir, String packageName) {
-        if (StringUtils.isBlank(parentDir)) {
-            parentDir = System.getProperty("java.io.tmpdir");
-        }
-        if (!StringUtils.endsWith(parentDir, File.separator)) {
-            parentDir += File.separator;
-        }
-        packageName = packageName.replaceAll("\\.", "\\" + File.separator);
-        return parentDir + packageName;
-    }
-
-    /**
-     * 获取输出文件类规范名称map
-     *
-     * @param tableInfo 表信息
-     * @see TemplateFileEnum#name()
-     */
-    public Map<String, String> getOutputClassCanonicalNameMap(TableInfo tableInfo) {
-        return templateFileStream().collect(Collectors.toMap(
-                io.github.luminion.generator.po.TemplateFile::getKey,
-                e -> joinPackage(e.getSubPackage()) + "." + e.convertFormatName(tableInfo)
-        ));
-    }
-
-    /**
-     * 获取类简单名称map
-     *
-     * @param tableInfo 表信息
-     * @see TemplateFileEnum#name() 
-     */
-    public Map<String, String> getOutputClassSimpleNameMap(TableInfo tableInfo) {
-        return templateFileStream().collect(Collectors.toMap(
-                io.github.luminion.generator.po.TemplateFile::getKey,
-                e -> e.convertFormatName(tableInfo)
-        ));
-    }
-
-    /**
-     * 获取类生成信息
-     *
-     */
-    public Map<String, Boolean> getOutputClassGenerateMap() {
-        return templateFileStream().collect(Collectors.toMap(io.github.luminion.generator.po.TemplateFile::getKey, io.github.luminion.generator.po.TemplateFile::isGenerate));
-    }
-
-    /**
-     * 获取包信息
-     */
-    public Map<String, String> getOutputClassPackageInfoMap() {
-        return templateFileStream().collect(Collectors.toMap(io.github.luminion.generator.po.TemplateFile::getKey, e -> joinPackage(e.getSubPackage())));
-    }
-
-    /**
-     * 获取输出文件
-     */
-    public List<CustomFile> getCustomFiles() {
-        return templateFileStream().filter(io.github.luminion.generator.po.TemplateFile::isGenerate).map(e -> {
-            CustomFile customFile = new CustomFile();
-            String fileOutputDir = e.getOutputDir();
-            if (fileOutputDir == null) {
-                String joinPackage = joinPackage(e.getSubPackage());
-                fileOutputDir = joinPath(outputDir, joinPackage);
-            }
-            customFile.setFormatNameFunction(e::convertFormatName)
-                    .setTemplatePath(e.getTemplatePath())
-                    .setOutputFileSuffix(e.getOutputFileSuffix())
-                    .setOutputDir(fileOutputDir)
-                    .setFileOverride(e.isFileOverride() || this.outputFileGlobalOverride);
-            return customFile;
-        }).collect(Collectors.toList());
-    }
+//    /**
+//     * 获取输出文件
+//     */
+//    public List<CustomFile> getCustomFiles() {
+//        return templateFileStream().filter(io.github.luminion.generator.po.TemplateFile::isGenerate).map(e -> {
+//            CustomFile customFile = new CustomFile();
+//            String fileOutputDir = e.getOutputDir();
+//            if (fileOutputDir == null) {
+//                String joinPackage = joinPackage(e.getSubPackage());
+//                fileOutputDir = joinPath(outputDir, joinPackage);
+//            }
+//            customFile.setFormatNameFunction(e::convertFormatName)
+//                    .setTemplatePath(e.getTemplatePath())
+//                    .setOutputFileSuffix(e.getOutputFileSuffix())
+//                    .setOutputDir(fileOutputDir)
+//                    .setFileOverride(e.isFileOverride() || this.outputFileGlobalOverride);
+//            return customFile;
+//        }).collect(Collectors.toList());
+//    }
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
