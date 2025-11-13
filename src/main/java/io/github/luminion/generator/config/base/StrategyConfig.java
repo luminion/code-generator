@@ -19,11 +19,11 @@ import io.github.luminion.generator.common.TableColumnTypeToJavaTypeConverter;
 import io.github.luminion.generator.common.DatabaseKeyWordsHandler;
 import io.github.luminion.generator.common.ITypeConvertHandler;
 import io.github.luminion.generator.enums.IdType;
-import io.github.luminion.generator.enums.NameConvertStrategy;
+import io.github.luminion.generator.enums.NameConvertType;
 import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.enums.DateType;
-import io.github.luminion.generator.enums.ExtraFieldStrategy;
+import io.github.luminion.generator.common.support.ExtraFieldStrategy;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.util.ReflectUtils;
@@ -47,12 +47,12 @@ public class StrategyConfig implements TemplateRender {
     /**
      * 数据库表名转换实体类名
      */
-    protected Function<String, String> tableNameToEntityName = NameConvertStrategy.UNDERLINE_TO_PASCAL_CASE.getFunction();
+    protected Function<String, String> tableNameToEntityName = NameConvertType.UNDERLINE_TO_PASCAL_CASE.getFunction();
     
     /**
      * 数据库列名称转换为属性名的方法
      */
-    protected Function<String, String> tableColumnNameToEntityFieldName = NameConvertStrategy.UNDERLINE_TO_CAMEL_CASE.getFunction();
+    protected Function<String, String> tableColumnNameToEntityFieldName = NameConvertType.UNDERLINE_TO_CAMEL_CASE.getFunction();
 
     /**
      * 日期类型
@@ -288,7 +288,7 @@ public class StrategyConfig implements TemplateRender {
 //            if (tableField != null && StringUtils.isNotBlank(tableField.value())) {
 //                return tableField.value();
 //            }
-//            if (null == columnNaming || columnNaming == NameConvertStrategy.no_change) {
+//            if (null == columnNaming || columnNaming == NameConvertType.no_change) {
 //                return field.getName();
 //            }
 //            return StringUtils.camelToUnderline(field.getName());

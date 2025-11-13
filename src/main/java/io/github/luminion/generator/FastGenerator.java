@@ -3,7 +3,7 @@
 //import com.baomidou.mybatisplus.annotation.IdType;
 //import io.github.luminion.generator.config.Configurer;
 //import io.github.luminion.generator.config.rules.DateType;
-//import io.github.luminion.generator.config.rules.JavaFieldTypeEnum;
+//import io.github.luminion.generator.config.rules.FieldType;
 //import io.github.luminion.generator.config.support.*;
 //import io.github.luminion.generator.engine.VelocityTemplateEngine;
 //import lombok.extern.slf4j.Slf4j;
@@ -54,10 +54,10 @@
 //                .datasource(e -> e
 //                        .typeConvertHandler((globalConfig, typeRegistry, metaInfo) -> {
 //                            if (JdbcType.TINYINT == metaInfo.getJdbcType()) {
-//                                return JavaFieldTypeEnum.INTEGER;
+//                                return FieldType.INTEGER;
 //                            }
 //                            if (JdbcType.SMALLINT == metaInfo.getJdbcType()) {
-//                                return JavaFieldTypeEnum.INTEGER;
+//                                return FieldType.INTEGER;
 //                            }
 //                            return typeRegistry.getColumnType(metaInfo);
 //                        })

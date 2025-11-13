@@ -1,4 +1,4 @@
-package io.github.luminion.generator.enums;
+package io.github.luminion.generator.common.support;
 
 
 import io.github.luminion.generator.po.TableField;

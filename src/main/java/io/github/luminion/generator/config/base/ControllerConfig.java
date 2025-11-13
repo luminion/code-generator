@@ -195,7 +195,7 @@ public class ControllerConfig implements TemplateRender {
         TableField primaryTableField = tableInfo.getPrimaryTableField();
         if (primaryTableField != null) {
             primaryKeyPropertyType = primaryTableField.getPropertyType();
-            primaryKeyPropertyClass = primaryTableField.getColumnType().getPkg();
+            primaryKeyPropertyClass = primaryTableField.getJavaType().getPkg();
         }
         data.put("primaryKeyPropertyType", primaryKeyPropertyType);
         if (globalConfig.isValidated()) {

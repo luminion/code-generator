@@ -22,7 +22,7 @@ import io.github.luminion.generator.common.JavaFieldType;
 import io.github.luminion.generator.common.DatabaseKeyWordsHandler;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.JdbcType;
-import io.github.luminion.generator.enums.NameConvertStrategy;
+import io.github.luminion.generator.enums.NameConvertType;
 import io.github.luminion.generator.fill.Column;
 import io.github.luminion.generator.fill.Property;
 import io.github.luminion.generator.common.support.DatabaseQueryMetaDataWrapper;
@@ -49,17 +49,58 @@ public class TableField {
     @Getter
     private final StrategyConfig strategyConfig;
 
+  
+
+    /**
+     * 数据库字段名称
+     */
+    @Getter
+    private String name;
+    /**
+     * 是否关键字
+     *
+     * @since 3.3.2
+     */
+    @Getter
+    private boolean keyWords;
+    
+    /**
+     * 数据库字段（关键字含转义符号）
+     */
+    @Getter
+    private String columnName;
+    /**
+     * 字段元数据信息
+     *
+     * @since 3.5.0
+     */
+    @Getter
+    private MetaInfo metaInfo;
+
+    /**
+     * java属性名称
+     */
+    @Getter
+    private String propertyName;
+
+    /**
+     * java数据库字段类型
+     */
+    @Getter
+    private JavaFieldType JavaType;
+
     /**
      * 是否做注解转换
      */
     @Getter
     private boolean convert;
-    
+
     /**
      * 是否主键
      */
     @Getter
     private boolean keyFlag;
+
 
     /**
      * 主键是否为自增类型
@@ -68,63 +109,20 @@ public class TableField {
     private boolean keyIdentityFlag;
 
     /**
-     * 字段名称
-     */
-    @Getter
-    private String name;
-
-    /**
-     * 属性名称
-     */
-    @Getter
-    private String propertyName;
-
-    /**
-     * 字段类型
-     */
-    @Getter
-    private JavaFieldType columnType;
-
-    /**
      * 字段注释
      */
     @Getter
     private String comment;
-
     /**
      * 填充
      */
     private String fill;
-
-    /**
-     * 是否关键字
-     *
-     * @since 3.3.2
-     */
-    @Getter
-    private boolean keyWords;
-
-    /**
-     * 数据库字段（关键字含转义符号）
-     *
-     * @since 3.3.2
-     */
-    @Getter
-    private String columnName;
-
     /**
      * 自定义查询字段列表
      */
     @Getter
     private Map<String, Object> customMap;
 
-    /**
-     * 字段元数据信息
-     *
-     * @since 3.5.0
-     */
-    @Getter
-    private MetaInfo metaInfo;
 
 
     public TableField(TableInfo tableInfo,
@@ -153,7 +151,7 @@ public class TableField {
         Function<String, String> converter = strategyConfig.getTableColumnNameToEntityFieldName();
         Set<String> fieldPrefix = strategyConfig.getFieldPrefix();
         Set<String> fieldSuffix = strategyConfig.getFieldSuffix();
-        String propertyName = NameConvertStrategy.doConvertName(columnName, fieldPrefix, fieldSuffix, converter);
+        String propertyName = NameConvertType.doConvertName(columnName, fieldPrefix, fieldSuffix, converter);
         // 设置字段的元数据信息
         TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo, tableInfo);
         JavaFieldType columnType;
@@ -165,7 +163,7 @@ public class TableField {
             
             columnType = ColumnTypeToJavaFieldTypeConverterHelper.getJavaFieldType(metaInfo,dateType);
         }
-        this.columnType = columnType;
+        this.JavaType = columnType;
         if (strategyConfig.isBooleanColumnRemoveIsPrefix()
                 && "boolean".equalsIgnoreCase(this.getPropertyType())
                 && propertyName.startsWith("is")
@@ -174,9 +172,9 @@ public class TableField {
             this.propertyName = StringUtils.removePrefixAfterPrefixToLower(propertyName, 2);
         }
         
-        if (NameConvertStrategy.UNDERLINE_TO_CAMEL_CASE.getFunction().equals(strategyConfig.getTableColumnNameToEntityFieldName())) {
+        if (NameConvertType.UNDERLINE_TO_CAMEL_CASE.getFunction().equals(strategyConfig.getTableColumnNameToEntityFieldName())) {
             // 下划线转驼峰策略
-            this.convert = !propertyName.equalsIgnoreCase(NameConvertStrategy.underlineToCamel(this.columnName));
+            this.convert = !propertyName.equalsIgnoreCase(NameConvertType.underlineToCamel(this.columnName));
         } else {
             this.convert = !propertyName.equalsIgnoreCase(this.columnName);
         }
@@ -194,8 +192,8 @@ public class TableField {
 
 
     public String getPropertyType() {
-        if (null != columnType) {
-            return columnType.getType();
+        if (null != JavaType) {
+            return JavaType.getType();
         }
         return null;
     }

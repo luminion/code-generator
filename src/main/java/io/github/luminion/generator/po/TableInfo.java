@@ -17,7 +17,7 @@ package io.github.luminion.generator.po;
 
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.base.StrategyConfig;
-import io.github.luminion.generator.enums.NameConvertStrategy;
+import io.github.luminion.generator.enums.NameConvertType;
 import io.github.luminion.generator.common.support.DatabaseQueryMetaDataWrapper;
 import lombok.Getter;
 import lombok.Setter;
@@ -128,7 +128,7 @@ public class TableInfo {
         Set<String> tablePrefix = strategyConfig.getTablePrefix();
         Set<String> tableSuffix = strategyConfig.getTableSuffix();
         Function<String, String> tableNameToEntityName = strategyConfig.getTableNameToEntityName();
-        String entityName = NameConvertStrategy.doConvertName(name, tablePrefix, tableSuffix, tableNameToEntityName);
+        String entityName = NameConvertType.doConvertName(name, tablePrefix, tableSuffix, tableNameToEntityName);
         this.entityName = entityName;
         if (strategyConfig.startsWithTablePrefix(name) || strategyConfig.isTableFieldAnnotationEnable()) {
             this.convert = true;

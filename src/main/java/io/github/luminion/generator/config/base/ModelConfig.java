@@ -117,7 +117,7 @@ public class ModelConfig implements TemplateRender {
             if (FieldFill.INSERT.name().equals(field.getFill()) || FieldFill.INSERT_UPDATE.name().equals(field.getFill())) {
                 continue;
             }
-            Optional.ofNullable(field.getColumnType().getPkg()).ifPresent(importPackages::add);
+            Optional.ofNullable(field.getJavaType().getPkg()).ifPresent(importPackages::add);
             MetaInfo metaInfo = field.getMetaInfo();
             boolean isString = "String".equals(field.getPropertyType());
             boolean notnullFlag = !metaInfo.isNullable() && metaInfo.getDefaultValue() == null;
@@ -160,7 +160,7 @@ public class ModelConfig implements TemplateRender {
             if (field.isKeyFlag()){
                 importPackages.add(notNull);
             }
-            Optional.ofNullable(field.getColumnType().getPkg()).ifPresent(importPackages::add);
+            Optional.ofNullable(field.getJavaType().getPkg()).ifPresent(importPackages::add);
             boolean notnullFlag = field.isKeyFlag() || field.isVersionField();
             boolean isString = "String".equals(field.getPropertyType());
             if (notnullFlag) {
@@ -192,7 +192,7 @@ public class ModelConfig implements TemplateRender {
             if (field.isLogicDeleteField()) {
                 continue;
             }
-            Optional.ofNullable(field.getColumnType().getPkg()).ifPresent(importPackages::add);
+            Optional.ofNullable(field.getJavaType().getPkg()).ifPresent(importPackages::add);
         }
 
         return importPackages;
@@ -216,7 +216,7 @@ public class ModelConfig implements TemplateRender {
                 if (field.isLogicDeleteField()) {
                     continue;
                 }
-                Optional.ofNullable(field.getColumnType().getPkg()).ifPresent(importPackages::add);
+                Optional.ofNullable(field.getJavaType().getPkg()).ifPresent(importPackages::add);
             }
             if (globalConfig.isGenerateExport()) {
                 String excelProperty = globalConfig.resolveExcelClassCanonicalName("annotation.ExcelProperty");

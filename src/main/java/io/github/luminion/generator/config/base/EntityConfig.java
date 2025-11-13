@@ -134,7 +134,7 @@ public class EntityConfig implements TemplateRender {
 //            importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
 //        }
         tableInfo.getFields().forEach(field -> {
-            JavaFieldType columnType = field.getColumnType();
+            JavaFieldType columnType = field.getJavaType();
             if (null != columnType && null != columnType.getPkg()) {
                 importPackages.add(columnType.getPkg());
             }
