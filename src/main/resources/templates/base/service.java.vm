@@ -9,7 +9,7 @@ import ${pkg};
 
 #end
 #foreach($pkg in ${serviceImportPackages4Java})
-import ${pkg};
+import ${pkg};import java.io.Serializable;
 #end
 
 /**
@@ -23,14 +23,13 @@ public interface ${service} extends ${superServiceClass}<${entity}>, EnhancedSer
 #else
 public interface ${service} extends ${superServiceClass}<${entity}> {
 #end
-#if(!${enhancer})
     #if(${generateInsert})
 
-    Object insertByDTO(Object insertDTO);
+    Serializable insertByDTO(${insertDTO} insertDTO);
     #end
     #if(${generateUpdate})
 
-    boolean updateByDTO(Object updateDTO);
+    boolean updateByDTO(${updateDTO} updateDTO);
     #end
     #if(${generateQuery})
 
@@ -50,6 +49,5 @@ public interface ${service} extends ${superServiceClass}<${entity}> {
 
     int excelImport(InputStream is, Class<?> clazz);
     #end
-#end
 }
 
