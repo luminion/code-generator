@@ -75,6 +75,7 @@ public class ServiceConfig implements TemplateRender {
         switch (globalConfig.getRuntimeEnv()) {
             case SQL_BOOSTER_MY_BATIS_PLUS:
                 this.superClass = BoosterMpService.class.getName();
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(globalConfig.getPageClassPayload().getClassName());
@@ -82,9 +83,26 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add("java.util.List");
                     importPackages.add("java.io.Serializable");
                 }
+                if (globalConfig.isGenerateInsert()) {
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
+                }
+                if (globalConfig.isGenerateUpdate()) {
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
+                }
+                if (globalConfig.isGenerateDelete()) {
+                    importPackages.add("java.io.Serializable");
+                }
+                if (globalConfig.isGenerateImport()) {
+                    importPackages.add("java.io.InputStream");
+                    importPackages.add("java.io.OutputStream");
+                }
+                if (globalConfig.isGenerateExport()) {
+                    importPackages.add("java.io.OutputStream");
+                }
                 break;
             case MYBATIS_PLUS:
                 this.superClass = IService.class.getName();
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(globalConfig.getPageClassPayload().getClassName());
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
@@ -92,31 +110,30 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add("java.util.List");
                     importPackages.add("java.io.Serializable");
                 }
+                if (globalConfig.isGenerateInsert()) {
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
+                }
+                if (globalConfig.isGenerateUpdate()) {
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
+                }
+                if (globalConfig.isGenerateDelete()) {
+                    importPackages.add("java.io.Serializable");
+                }
+                if (globalConfig.isGenerateImport()) {
+                    importPackages.add("java.io.InputStream");
+                    importPackages.add("java.io.OutputStream");
+                }
+                if (globalConfig.isGenerateExport()) {
+                    importPackages.add("java.io.OutputStream");
+                }
             default:
                throw new RuntimeException("暂不支持的运行环境");
         }
-
-        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
+        
         data.put("superServiceClassPackage", this.superClass);
         data.put("superServiceClass", ClassUtils.getSimpleName(this.superClass));
         importPackages.add(this.superClass);
-        // 生成相关
-        if (globalConfig.isGenerateInsert()) {
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
-        }
-        if (globalConfig.isGenerateUpdate()) {
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
-        }
-        if (globalConfig.isGenerateDelete()) {
-            importPackages.add("java.io.Serializable");
-        }
-        if (globalConfig.isGenerateImport()) {
-            importPackages.add("java.io.InputStream");
-            importPackages.add("java.io.OutputStream");
-        }
-        if (globalConfig.isGenerateExport()) {
-            importPackages.add("java.io.OutputStream");
-        }
+
         Collection<String> serviceImportPackages4Java = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> serviceImportPackages4Framework = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
         data.put("serviceImportPackages4Java", serviceImportPackages4Java);
@@ -124,6 +141,5 @@ public class ServiceConfig implements TemplateRender {
 
         return data;
     }
-
 
 }
