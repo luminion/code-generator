@@ -183,12 +183,12 @@ public class Controller implements TemplateRender {
             importPackages.add(returnMethod.getClassName());
         }
 
-        if (resolver.isGenerate(TemplateFileEnum.SERVICE)) {
-            data.put("baseService", resolver.getClassSimpleName(TemplateFileEnum.SERVICE));
-            importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE));
+        if (resolver.isGenerate(TemplateFileEnum.SERVICE, tableInfo)) {
+            data.put("baseService", resolver.getClassSimpleName(TemplateFileEnum.SERVICE, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE, tableInfo));
         } else {
-            data.put("baseService", resolver.getClassSimpleName(TemplateFileEnum.SERVICE_IMPL));
-            importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE_IMPL));
+            data.put("baseService", resolver.getClassSimpleName(TemplateFileEnum.SERVICE_IMPL, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE_IMPL, tableInfo));
         }
 
         data.put("primaryKeyPropertyType", "Object");
@@ -202,22 +202,22 @@ public class Controller implements TemplateRender {
             importPackages.add("org.springframework.validation.annotation.Validated");
         }
         if (globalConfig.isGenerateInsert()) {
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
         }
         if (globalConfig.isGenerateUpdate()) {
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
         }
         if (globalConfig.isGenerateQuery()) {
             importPackages.add("java.util.List");
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO));
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO, tableInfo));
             if (pageMethod != null && pageMethod.isClassReady()) {
                 importPackages.add(pageMethod.getClassName());
-                data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_VO)));
+                data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_VO, tableInfo)));
             } else {
                 ClassPayload pageClassPayload = globalConfig.getPageClassPayload();
                 importPackages.add(pageClassPayload.getClassName());
-                data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_VO)));
+                data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_VO, tableInfo)));
             }
         }
         String responseClass = globalConfig.getJavaEE().packagePrefix + ".servlet.http.HttpServletResponse";
@@ -225,12 +225,12 @@ public class Controller implements TemplateRender {
             importPackages.add("org.springframework.web.multipart.MultipartFile");
             importPackages.add("java.io.IOException");
             importPackages.add(responseClass);
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_IMPORT_DTO));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_IMPORT_DTO, tableInfo));
         }
         if (globalConfig.isGenerateExport()) {
             importPackages.add("java.io.IOException");
             importPackages.add(responseClass);
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO, tableInfo));
         }
         Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());

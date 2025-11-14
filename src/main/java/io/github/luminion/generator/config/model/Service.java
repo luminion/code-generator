@@ -75,28 +75,28 @@ public class Service implements TemplateRender {
         Resolver resolver = configurer.getResolver();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
 
-        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY));
+        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY,tableInfo));
         switch (globalConfig.getRuntimeEnv()) {
             case MYBATIS_PLUS:
                 break;
             case SQL_BOOSTER_MY_BATIS_PLUS:
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO));
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO,tableInfo));
                 break;
         }
 
         if (this.overrideMethods) {
             if (globalConfig.isGenerateInsert()) {
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO));
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO,tableInfo));
             }
             if (globalConfig.isGenerateUpdate()) {
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO));
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO,tableInfo));
             }
             if (globalConfig.isGenerateDelete()) {
                 importPackages.add("java.io.Serializable");
             }
             if (globalConfig.isGenerateQuery()) {
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO));
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO));
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO,tableInfo));
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO,tableInfo));
                 importPackages.add("java.util.List");
                 importPackages.add("java.io.Serializable");
                 importPackages.add(globalConfig.getPageClassPayload().getClassName());

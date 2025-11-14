@@ -16,6 +16,7 @@
 package io.github.luminion.generator.po;
 
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.StrategyConfig;
 import io.github.luminion.generator.enums.NameConvertType;
 import io.github.luminion.generator.common.support.DefaultDatabaseQueryMetaDataWrapper;
@@ -214,6 +215,10 @@ public class TableInfo {
 
     public TableField getField(String name) {
         return tableFieldMap.get(name);
+    }
+    
+    public Resolver getResolver() {
+        return configurer.getResolver();
     }
 
 }

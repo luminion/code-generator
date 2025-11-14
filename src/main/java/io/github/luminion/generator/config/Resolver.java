@@ -1,6 +1,7 @@
 package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.enums.TemplateFileEnum;
+import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.NonNull;
@@ -50,17 +51,6 @@ public class Resolver {
         String parent = getParentPackage();
         return StringUtils.isBlank(parent) ? subPackage : (parent + "." + subPackage);
     }
-    
-    /**
-     * 获取模板文件
-     *
-     * @return {@link List }<{@link TemplateFile }>
-     * @since 1.0.0
-     */
-    public List<TemplateFile> getTemplateFiles() {
-        // todo 获取对应的文件输出信息
-        return new ArrayList<>();
-    }
 
     /**
      * 是否生成指定模板文件
@@ -69,7 +59,7 @@ public class Resolver {
      * @return {@link TemplateFileEnum }
      * @since 1.0.0
      */
-    public boolean isGenerate(TemplateFileEnum templateFileEnum) {
+    public boolean isGenerate(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
         // todo 获取对应的文件输出信息
         return false;
     }
@@ -81,7 +71,7 @@ public class Resolver {
      * @return {@link String }
      * @since 1.0.0
      */
-    public String getClassSimpleName(TemplateFileEnum templateFileEnum) {
+    public String getClassSimpleName(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
         // todo 获取对应的文件输出信息
         return "";
     }
@@ -93,7 +83,7 @@ public class Resolver {
      * @return {@link String }
      * @since 1.0.0
      */
-    public String getClassName(TemplateFileEnum templateFileEnum) {
+    public String getClassName(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
         // todo 获取对应的文件输出信息
         return "";
     }

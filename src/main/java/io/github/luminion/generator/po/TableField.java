@@ -83,6 +83,12 @@ public class TableField {
     private String propertyName;
 
     /**
+     * java属性类型
+     */
+    @Getter
+    private String propertyType;
+
+    /**
      * java数据库字段类型
      */
     @Getter
@@ -163,6 +169,7 @@ public class TableField {
             javaFieldInfo = javaFieldTypeConverter.convert(metaInfo);
         }
         this.JavaType = javaFieldInfo;
+        this.propertyType = javaFieldInfo.getType();
         if (strategyConfig.isBooleanColumnRemoveIsPrefix()
                 && "boolean".equalsIgnoreCase(this.getPropertyType())
                 && propertyName.startsWith("is")
