@@ -9,16 +9,14 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public enum ExcelApi {
-    
-    
-    EASY_EXCEL("javax"),
-
-
-    FAST_EXCEL("jakarta"),
-
+    // 主入口
+    EASY_EXCEL("com.alibaba.excel","EasyExcel"),
+    FAST_EXCEL("cn.idev.excel","FastExcel"),
     ;
     @Getter
     public final String packagePrefix;
+    @Getter
+    public final String mainEntrance;
 
 
 
