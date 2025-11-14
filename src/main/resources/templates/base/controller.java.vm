@@ -75,7 +75,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Serializable")} insert($!{requiredBodyStr}$!{validatedStr}${insertDTO} insertDTO) {
+    public ${returnMethod.returnGenericTypeStr("Serializable")} insertByDTO($!{requiredBodyStr}$!{validatedStr}${insertDTO} insertDTO) {
         return ${returnMethod.invokeMethodStr("baseService.insertByDTO(insertDTO)")};
     }
 #end
@@ -101,7 +101,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Boolean")} update($!{requiredBodyStr}$!{validatedStr}${updateDTO} updateDTO) {
+    public ${returnMethod.returnGenericTypeStr("Boolean")} updateByDTO($!{requiredBodyStr}$!{validatedStr}${updateDTO} updateDTO) {
         return ${returnMethod.invokeMethodStr("baseService.updateByDTO(updateDTO)")};
     }
 #end
@@ -127,7 +127,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Boolean")} delete($!{idMethodParams}${primaryKeyPropertyType} id) {
+    public ${returnMethod.returnGenericTypeStr("Boolean")} removeById($!{idMethodParams}${primaryKeyPropertyType} id) {
         return ${returnMethod.invokeMethodStr("baseService.removeById(id)")};
     }
 #end
@@ -153,7 +153,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("${queryVO}")} selectId($!{idMethodParams}${primaryKeyPropertyType} id) {
+    public ${returnMethod.returnGenericTypeStr("${queryVO}")} voById($!{idMethodParams}${primaryKeyPropertyType} id) {
         return ${returnMethod.invokeMethodStr("baseService.voById(id)")};
     }
 
@@ -173,7 +173,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} selectList($!{optionalBodyStr}${queryDTO} queryDTO) {
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} voList($!{optionalBodyStr}${queryDTO} queryDTO) {
         return ${returnMethod.invokeMethodStr("baseService.voList(queryDTO)")};
     }
     
@@ -195,7 +195,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} selectPage($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
+    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPage($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
     }
 #end
