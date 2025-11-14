@@ -206,7 +206,7 @@ public class GlobalBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder disableInsert(boolean enable) {
+    public GlobalBuilder generateInsert(boolean enable) {
         this.configurer.getGlobalConfig().setGenerateInsert(enable);
         return this;
     }
@@ -217,7 +217,7 @@ public class GlobalBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder disableUpdate(boolean enable) {
+    public GlobalBuilder generateUpdate(boolean enable) {
         this.configurer.getGlobalConfig().setGenerateUpdate(enable);
         return this;
     }
@@ -228,7 +228,7 @@ public class GlobalBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder disableDelete(boolean enable) {
+    public GlobalBuilder generateDelete(boolean enable) {
         this.configurer.getGlobalConfig().setGenerateDelete(enable);
         return this;
     }
@@ -239,7 +239,7 @@ public class GlobalBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder disableImport(boolean enable) {
+    public GlobalBuilder generateImport(boolean enable) {
         this.configurer.getGlobalConfig().setGenerateImport(enable);
         return this;
     }
@@ -250,7 +250,7 @@ public class GlobalBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder disableExport(boolean enable) {
+    public GlobalBuilder generateExport(boolean enable) {
         this.configurer.getGlobalConfig().setGenerateExport(enable);
         return this;
     }
