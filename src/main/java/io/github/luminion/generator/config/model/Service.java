@@ -15,16 +15,17 @@
  */
 package io.github.luminion.generator.config.model;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
-import io.github.luminion.generator.config.core.OutputConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService;
+import io.github.luminion.sqlbooster.model.api.Wrapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -56,7 +57,7 @@ public class Service implements TemplateRender {
     /**
      * 自定义继承的Service类全称，带包名
      */
-    protected String superClass = "com.baomidou.mybatisplus.extension.service.IService";
+    protected String superClass;
 
     /**
      * 展示重写的方法
@@ -67,49 +68,55 @@ public class Service implements TemplateRender {
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
         Set<String> importPackages = new TreeSet<>();
-        data.put("superServiceClassPackage", this.superClass);
-        data.put("superServiceClass", ClassUtils.getSimpleName(this.superClass));
-        importPackages.add(this.superClass);
-
         Configurer configurer = tableInfo.getConfigurer();
         Resolver resolver = configurer.getResolver();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
 
-        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY,tableInfo));
         switch (globalConfig.getRuntimeEnv()) {
-            case MYBATIS_PLUS:
-                break;
             case SQL_BOOSTER_MY_BATIS_PLUS:
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO,tableInfo));
+                this.superClass = BoosterMpService.class.getName();
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO, tableInfo));
+                if (globalConfig.isGenerateQuery()) {
+                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
+                    importPackages.add(Wrapper.class.getName());
+                    importPackages.add("java.util.List");
+                    importPackages.add("java.io.Serializable");
+                }
                 break;
+            case MYBATIS_PLUS:
+                this.superClass = IService.class.getName();
+                if (globalConfig.isGenerateQuery()) {
+                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO, tableInfo));
+                    importPackages.add("java.util.List");
+                    importPackages.add("java.io.Serializable");
+                }
+            default:
+               throw new RuntimeException("暂不支持的运行环境");
         }
 
-        if (this.overrideMethods) {
-            if (globalConfig.isGenerateInsert()) {
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO,tableInfo));
-            }
-            if (globalConfig.isGenerateUpdate()) {
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO,tableInfo));
-            }
-            if (globalConfig.isGenerateDelete()) {
-                importPackages.add("java.io.Serializable");
-            }
-            if (globalConfig.isGenerateQuery()) {
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO,tableInfo));
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO,tableInfo));
-                importPackages.add("java.util.List");
-                importPackages.add("java.io.Serializable");
-                importPackages.add(globalConfig.getPageClassPayload().getClassName());
-            }
-            if (globalConfig.isGenerateImport()) {
-                importPackages.add("java.io.InputStream");
-                importPackages.add("java.io.OutputStream");
-            }
-            if (globalConfig.isGenerateExport()) {
-                importPackages.add("java.io.OutputStream");
-            }
+        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
+        data.put("superServiceClassPackage", this.superClass);
+        data.put("superServiceClass", ClassUtils.getSimpleName(this.superClass));
+        importPackages.add(this.superClass);
+        // 生成相关
+        if (globalConfig.isGenerateInsert()) {
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
         }
-
+        if (globalConfig.isGenerateUpdate()) {
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
+        }
+        if (globalConfig.isGenerateDelete()) {
+            importPackages.add("java.io.Serializable");
+        }
+        if (globalConfig.isGenerateImport()) {
+            importPackages.add("java.io.InputStream");
+            importPackages.add("java.io.OutputStream");
+        }
+        if (globalConfig.isGenerateExport()) {
+            importPackages.add("java.io.OutputStream");
+        }
         Collection<String> serviceImportPackages4Java = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> serviceImportPackages4Framework = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
         data.put("serviceImportPackages4Java", serviceImportPackages4Java);
