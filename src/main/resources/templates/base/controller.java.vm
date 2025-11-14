@@ -254,12 +254,12 @@ public class ${controller} {
      * @param size 每页大小
      */
     #end
-    ${batchQueryMethod}("/excel/export$!{pagePathParams}")
-    public void excelExport($!{optionalBodyStr}${queryDTO} queryDTO, ${pageMethodParams}, HttpServletResponse response) throws IOException {
+    ${batchQueryMethod}("/excel/export")
+    public void excelExport($!{optionalBodyStr}${queryDTO} queryDTO, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        baseService.excelExport(queryDTO, current, size, response.getOutputStream());
+        baseService.excelExport(queryDTO, response.getOutputStream());
     }
 #end
 }

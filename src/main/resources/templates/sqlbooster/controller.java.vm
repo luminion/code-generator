@@ -297,13 +297,13 @@ public class ${controller} {
      * @param size 每页大小
      */
     #end
-    ${batchQueryMethod}("/excel/export$!{pagePathParams}")
-    public void excelExport($!{optionalBodyStr}${queryDTO} queryDTO, ${pageMethodParams}, HttpServletResponse response) throws IOException {
+    ${batchQueryMethod}("/excel/export")
+    public void excelExport($!{optionalBodyStr}${queryDTO} queryDTO, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
         SqlHelper<${entity}> sqlHelper = SqlHelper.of(baseService).merge(queryDTO)
-        baseService.excelExport(sqlHelper, current, size, response.getOutputStream());
+        baseService.excelExport(sqlHelper, response.getOutputStream());
     }
     
     #if(${springdoc})
@@ -319,12 +319,12 @@ public class ${controller} {
      * @param size 每页大小
      */
     #end
-    @PostMapping("/excel/export/booster$!{pagePathParams}")
-    public void excelExport($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, ${pageMethodParams}, HttpServletResponse response) throws IOException {
+    @PostMapping("/excel/export/booster")
+    public void excelExport($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        baseService.excelExport(sqlHelper, current, size, response.getOutputStream());
+        baseService.excelExport(sqlHelper, response.getOutputStream());
     }
 #end
 }
