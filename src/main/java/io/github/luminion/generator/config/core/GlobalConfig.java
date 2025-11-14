@@ -65,13 +65,13 @@ public class GlobalConfig implements TemplateRender {
      */
     protected String docAuthor = System.getProperty("user.name");
     /**
-     * 文档注释添加相关类链接
-     */
-    protected boolean docLink;
-    /**
      * 注释日期
      */
     protected String docDate = LocalDate.now().toString();
+    /**
+     * 文档注释添加相关类链接
+     */
+    protected boolean docLink = true;
 
     //---------------- 运行时环境相关--------------
 
@@ -93,11 +93,7 @@ public class GlobalConfig implements TemplateRender {
      * 全局分页类
      */
     protected ClassPayload pageClassPayload = new ClassPayload();
-
-    /**
-     * 生成参数校验相关注解
-     */
-    protected boolean validated;
+    
 
     // ----------------输出目录及包相关-----------------
 
@@ -108,7 +104,7 @@ public class GlobalConfig implements TemplateRender {
     /**
      * 是否打开输出目录
      */
-    protected boolean outputDirOpen;
+    protected boolean openOutputDir;
 
     /**
      * 输出文件覆盖(全局)
@@ -126,6 +122,11 @@ public class GlobalConfig implements TemplateRender {
     protected String parentPackageModule = "";
 
     // ----------------生成内容相关-----------------
+
+    /**
+     * 生成参数校验相关注解
+     */
+    protected boolean validated;
 
     /**
      * 生成查询相关方法及配套类
@@ -150,19 +151,15 @@ public class GlobalConfig implements TemplateRender {
     /**
      * 生成导入方法及配套类(需允许新增)
      */
-    protected boolean generateImport = true;
+    protected boolean generateImport = false;
 
     /**
      * 生成导出方法(需允许查询)
      */
-    protected boolean generateExport = true;
+    protected boolean generateExport = false;
 
-    /**
-     * 校验
-     *
-     * @since 1.0.0
-     */
-    public void validate() {
+    @Override
+    public void validate(TableInfo TableInfo) {
         switch (runtimeEnv) {
             case MYBATIS_PLUS:
                 this.pageClassPayload = new ClassPayload(IPage.class);

@@ -32,6 +32,24 @@ import java.util.Map;
  */
 public interface TemplateRender extends Serializable {
 
+
+    /**
+     * 验证配置项
+     *
+     * @param TableInfo 表信息
+     * @since 1.0.0
+     */
+    default void validate(TableInfo TableInfo) {
+        
+    }
+
+    /**
+     * 渲染数据
+     *
+     * @param tableInfo 表信息
+     * @return {@link Map }<{@link String }, {@link Object }>
+     * @since 1.0.0
+     */
     @SneakyThrows
     default Map<String, Object> renderData(TableInfo tableInfo) {
         // 添加自定义配置字段信息
