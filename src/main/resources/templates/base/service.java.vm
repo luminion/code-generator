@@ -18,7 +18,7 @@ import ${pkg};
  * @author ${docAuthor}
  * @since ${docDate}
  */
-public interface ${service} extends ${superServiceClass}<${entity}> {
+public interface ${service} extends ${serviceSuperClassSimpleName}<${entity}> {
 
     #if(${generateInsert})
 
@@ -43,9 +43,9 @@ public interface ${service} extends ${superServiceClass}<${entity}> {
     #end
     #if(${generateImport})
 
-    void excelTemplate(OutputStream os, Class<?> clazz);
+    void excelTemplate(OutputStream os);
 
-    int excelImport(InputStream is, Class<?> clazz);
+    int excelImport(InputStream is);
     #end
     #if(${generateExport})
 

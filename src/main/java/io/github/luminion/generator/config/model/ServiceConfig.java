@@ -74,12 +74,12 @@ public class ServiceConfig implements TemplateRender {
 
         switch (globalConfig.getRuntimeEnv()) {
             case SQL_BOOSTER_MY_BATIS_PLUS:
-                this.superClass = BoosterMpService.class.getName();
+                this.superClass = "io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService";
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(globalConfig.getPageClassPayload().getClassName());
-                    importPackages.add(Wrapper.class.getName());
+                    importPackages.add("io.github.luminion.sqlbooster.model.api.Wrapper");
                     importPackages.add("java.util.List");
                     importPackages.add("java.io.Serializable");
                 }
@@ -101,23 +101,24 @@ public class ServiceConfig implements TemplateRender {
                 }
                 break;
             case MYBATIS_PLUS:
-                this.superClass = IService.class.getName();
+                this.superClass = "com.baomidou.mybatisplus.extension.service.IService";
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
-                if (globalConfig.isGenerateQuery()) {
-                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
-                    importPackages.add("java.util.List");
-                    importPackages.add("java.io.Serializable");
-                }
                 if (globalConfig.isGenerateInsert()) {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
+                    importPackages.add("java.io.Serializable");
                 }
                 if (globalConfig.isGenerateUpdate()) {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
                 }
                 if (globalConfig.isGenerateDelete()) {
                     importPackages.add("java.io.Serializable");
+                }
+                if (globalConfig.isGenerateQuery()) {
+                    importPackages.add("java.io.Serializable");
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+                    importPackages.add("java.util.List");
+                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
                 }
                 if (globalConfig.isGenerateImport()) {
                     importPackages.add("java.io.InputStream");
@@ -127,12 +128,13 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add("java.io.OutputStream");
                 }
             default:
-               throw new RuntimeException("暂不支持的运行环境");
+                throw new RuntimeException("暂不支持的运行环境");
         }
-        
-        data.put("superServiceClassPackage", this.superClass);
-        data.put("superServiceClass", ClassUtils.getSimpleName(this.superClass));
-        importPackages.add(this.superClass);
+    
+        if (superClass != null) {
+            data.put("serviceSuperClassSimpleName", ClassUtils.getSimpleName(this.superClass));
+            importPackages.add(this.superClass);
+        }
 
         Collection<String> serviceImportPackages4Java = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> serviceImportPackages4Framework = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
