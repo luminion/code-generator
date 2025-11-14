@@ -64,14 +64,14 @@ public class ServiceImplConfig implements TemplateRender {
      * 自定义继承的ServiceImpl类全称，带包名
      */
     protected String superClass = "com.baomidou.mybatisplus.extension.service.impl.ServiceImplConfig";
-    
+
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
         data.put("superServiceImplClassPackage", this.superClass);
         data.put("superServiceImplClass", ClassUtils.getSimpleName(this.superClass));
-        
+
         Set<String> importPackages = new TreeSet<>();
         Configurer configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
@@ -102,11 +102,11 @@ public class ServiceImplConfig implements TemplateRender {
                 throw new RuntimeException("暂不支持的运行环境");
         }
         importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
-        
+
         importPackages.add(this.superClass);
         importPackages.add("org.springframework.stereotype.ServiceConfig");
-        if (outputConfig.getService().isGenerate()) {
-            importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.service.name()));
+        if (resolver.isGenerate(TemplateFileEnum.SERVICE, tableInfo)) {
+            importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE, tableInfo));
         }
         // 生成项
         if (globalConfig.isGenerateQuery()) {
@@ -128,7 +128,7 @@ public class ServiceImplConfig implements TemplateRender {
         // todo sqlBooster
 //        if (globalConfig.isSqlBooster()) {
         if (false) {
-            if (!outputConfig.getService().isGenerate()){
+            if (!outputConfig.getService().isGenerate()) {
                 importPackages.add("io.github.luminion.mybatisplus.enhancer.EnhancedService");
                 importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.queryVO.name()));
             }
@@ -162,17 +162,17 @@ public class ServiceImplConfig implements TemplateRender {
                 importPackages.add("org.springframework.beans.BeanUtils");
             }
         }
-        
+
         Collection<String> serviceImplImportPackages4Java = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> serviceImplImportPackages4Framework = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
         data.put("serviceImplImportPackages4Java", serviceImplImportPackages4Java);
         data.put("serviceImplImportPackages4Framework", serviceImplImportPackages4Framework);
         return data;
     }
-    
+
 
     private Set<String> serviceImplImportPackages(TableInfo tableInfo) {
-        
+
         return importPackages;
     }
 
