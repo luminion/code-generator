@@ -16,17 +16,18 @@
 package io.github.luminion.generator.config.core;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.luminion.generator.enums.*;
+import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.enums.DocType;
+import io.github.luminion.generator.enums.ExcelApi;
+import io.github.luminion.generator.enums.JavaEEApi;
+import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.po.ClassPayload;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.po.TemplateFile;
-import io.github.luminion.generator.util.StringUtils;
+import io.github.luminion.sqlbooster.core.Page;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Map;
 
 
@@ -62,7 +63,7 @@ public class GlobalConfig implements TemplateRender {
     /**
      * doc作者
      */
-    protected String docAuthor = "luminion";
+    protected String docAuthor = System.getProperty("user.name");
     /**
      * 文档注释添加相关类链接
      */
@@ -70,14 +71,14 @@ public class GlobalConfig implements TemplateRender {
     /**
      * 注释日期
      */
-    protected String docDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    protected String docDate = LocalDate.now().toString();
 
     //---------------- 运行时环境相关--------------
 
     /**
      * java ee api
      */
-    protected JavaEEApi javaEE = JavaEEApi.JAKARTA;
+    protected JavaEEApi javaEEApi = JavaEEApi.JAKARTA;
     /**
      * excel api
      */
@@ -91,42 +92,40 @@ public class GlobalConfig implements TemplateRender {
     /**
      * 全局分页类
      */
-    protected ClassPayload pageClassPayload = new ClassPayload(IPage.class);
+    protected ClassPayload pageClassPayload = new ClassPayload();
 
     /**
      * 生成参数校验相关注解
      */
-    protected boolean paramValidate = true;
-    
+    protected boolean validated;
 
-    // ----------------输出目录-----------------
-    
+    // ----------------输出目录及包相关-----------------
+
     /**
      * 生成文件的输出目录
      */
     protected String outputDir = System.getProperty("user.dir") + "/src/main/java";
-    
-    /**
-     * 全局文件覆盖
-     */
-    protected boolean outputOverride;
-    
     /**
      * 是否打开输出目录
      */
     protected boolean outputDirOpen;
+
+    /**
+     * 输出文件覆盖(全局)
+     */
+    protected boolean fileOverride;
     
     /**
      * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
      */
-    protected String outputParentPackage = "io.github.luminion";
+    protected String parentPackage = "com.example";
 
     /**
      * 父包模块名
      */
-    protected String outputModule = "";
-    
-   // ----------------生成内容相关-----------------
+    protected String parentPackageModule = "";
+
+    // ----------------生成内容相关-----------------
 
     /**
      * 生成查询相关方法及配套类
@@ -158,13 +157,23 @@ public class GlobalConfig implements TemplateRender {
      */
     protected boolean generateExport = true;
 
-
     /**
      * 校验
      *
      * @since 1.0.0
      */
     public void validate() {
+        switch (runtimeEnv) {
+            case MYBATIS_PLUS:
+                this.pageClassPayload = new ClassPayload(IPage.class);
+                break;
+            case SQL_BOOSTER_MY_BATIS:
+            case SQL_BOOSTER_MY_BATIS_PLUS:
+                this.pageClassPayload = new ClassPayload(Page.class);
+            default:
+                throw new IllegalArgumentException("暂不支持的运行环境:" + runtimeEnv);
+        }
+
         if (!generateQuery && generateExport) {
             log.warn("已配置生成导出但未配置生成查询, 导出功能依赖查询功能, 将不会生成导出相关功能!!!");
             generateExport = false;
@@ -176,20 +185,24 @@ public class GlobalConfig implements TemplateRender {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         data.put("author", this.docAuthor);
         data.put("date", this.getDocDate());
-        data.put("validated", this.paramValidate);
+        data.put("validated", this.validated);
         data.put("commentLink", this.docLink);
         data.put("lombok", this.lombok);
         data.put("chainModel", this.lombokChainModel);
 
-        data.put("swagger", this.isSwagger());
-        data.put("springdoc", this.springdoc);
-        //  todo sqlBooster
-//        data.put("sqlBooster", this.sqlBooster);
+        switch (this.docType) {
+            case SPRING_DOC:
+                data.put("springdoc", true);
+                break;
+            case SWAGGER:
+                data.put("swagger", true);
+                break;
+        }
 
-        data.put("javaApiPackagePrefix", this.jakartaApiPackagePrefix);
-        data.put("excelApiPackagePrefix", this.excelApiPackagePrefix);
-        data.put("excelApiClass", this.excelApiClass);
-        
+        data.put("javaApiPackagePrefix", javaEEApi.getPackagePrefix());
+        data.put("excelApiPackagePrefix", excelApi.getPackagePrefix());
+        data.put("excelApiClass", excelApi.getMainEntrance());
+
         data.put("generateQuery", this.generateQuery);
         data.put("generateInsert", this.generateInsert);
         data.put("generateUpdate", this.generateUpdate);
