@@ -77,12 +77,6 @@ public class ServiceConfig implements TemplateRender {
                 this.superClass = "io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService";
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
-                if (globalConfig.isGenerateQuery()) {
-                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
-                    importPackages.add("io.github.luminion.sqlbooster.model.api.Wrapper");
-                    importPackages.add("java.util.List");
-                    importPackages.add("java.io.Serializable");
-                }
                 if (globalConfig.isGenerateInsert()) {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
                 }
@@ -92,11 +86,18 @@ public class ServiceConfig implements TemplateRender {
                 if (globalConfig.isGenerateDelete()) {
                     importPackages.add("java.io.Serializable");
                 }
+                if (globalConfig.isGenerateQuery()) {
+                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
+                    importPackages.add("io.github.luminion.sqlbooster.model.api.Wrapper");
+                    importPackages.add("java.util.List");
+                    importPackages.add("java.io.Serializable");
+                }
                 if (globalConfig.isGenerateImport()) {
                     importPackages.add("java.io.InputStream");
                     importPackages.add("java.io.OutputStream");
                 }
                 if (globalConfig.isGenerateExport()) {
+                    importPackages.add("io.github.luminion.sqlbooster.model.api.Wrapper");
                     importPackages.add("java.io.OutputStream");
                 }
                 break;
@@ -125,6 +126,7 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add("java.io.OutputStream");
                 }
                 if (globalConfig.isGenerateExport()) {
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
                     importPackages.add("java.io.OutputStream");
                 }
             default:
