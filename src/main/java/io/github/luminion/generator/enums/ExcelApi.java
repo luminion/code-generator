@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ExcelApi {
     // 主入口
-    EASY_EXCEL("com.alibaba.excel","EasyExcel"),
-    FAST_EXCEL("cn.idev.excel","FastExcel"),
+    EASY_EXCEL("com.alibaba.excel.","EasyExcel"),
+    FAST_EXCEL("cn.idev.excel.","FastExcel"),
     ;
     @Getter
     public final String packagePrefix;

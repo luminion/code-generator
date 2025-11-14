@@ -13,12 +13,12 @@ public enum JavaEEApi {
     /**
      * 使用javax.
      */
-    JAVAX("javax"),
+    JAVAX("javax."),
 
     /**
      * springboot3.0+默认
      */
-    JAKARTA("jakarta"),
+    JAKARTA("jakarta."),
     
     ;
     @Getter

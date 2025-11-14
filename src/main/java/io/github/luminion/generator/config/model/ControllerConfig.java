@@ -191,12 +191,15 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE_IMPL, tableInfo));
         }
 
-        data.put("primaryKeyPropertyType", "Object");
-        TableField primaryKeyTableField = tableInfo.getPrimaryKeyTableField();
-        if (primaryKeyTableField != null) {
-            data.put("primaryKeyPropertyType", primaryKeyTableField.getJavaType().getType());
-            importPackages.add(primaryKeyTableField.getJavaType().getPkg());
+        if (globalConfig.isGenerateQuery() || globalConfig.isGenerateDelete()) {
+            data.put("primaryKeyPropertyType", "Object");
+            TableField primaryKeyTableField = tableInfo.getPrimaryKeyTableField();
+            if (primaryKeyTableField != null) {
+                data.put("primaryKeyPropertyType", primaryKeyTableField.getJavaType().getType());
+                importPackages.add(primaryKeyTableField.getJavaType().getPkg());
+            }
         }
+
         if (globalConfig.isValidated()) {
             data.put("validatedStr", validatedStr);
             importPackages.add("org.springframework.validation.annotation.Validated");

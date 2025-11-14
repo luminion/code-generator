@@ -22,6 +22,7 @@ import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.config.core.OutputConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
+import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.ClassUtils;
@@ -97,70 +98,48 @@ public class ServiceImplConfig implements TemplateRender {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO, tableInfo));
                     importPackages.add("java.util.List");
                     importPackages.add("java.io.Serializable");
+                    importPackages.add("com.baomidou.mybatisplus.extension.plugins.pagination.Page");
                 }
             default:
                 throw new RuntimeException("暂不支持的运行环境");
         }
-        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
 
+
+        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
         importPackages.add(this.superClass);
-        importPackages.add("org.springframework.stereotype.ServiceConfig");
+        importPackages.add("org.springframework.stereotype.Service");
         if (resolver.isGenerate(TemplateFileEnum.SERVICE, tableInfo)) {
             importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE, tableInfo));
         }
-        // 生成项
-        if (globalConfig.isGenerateQuery()) {
-            importPackages.add("java.util.List");
+
+        if (globalConfig.isGenerateInsert()) {
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
+            importPackages.add("org.springframework.beans.BeanUtils");
             importPackages.add("java.io.Serializable");
-            importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
-            importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.queryVO.name()));
         }
-        if (globalConfig.isGenerateExport()) {
-            importPackages.add("java.io.OutputStream");
-        }
-        if (globalConfig.isGenerateImport()) {
-            importPackages.add("java.io.InputStream");
-            importPackages.add("java.io.OutputStream");
+        if (globalConfig.isGenerateUpdate()) {
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
+            importPackages.add("org.springframework.beans.BeanUtils");
         }
         if (globalConfig.isGenerateDelete()) {
             importPackages.add("java.io.Serializable");
         }
-        // todo sqlBooster
-//        if (globalConfig.isSqlBooster()) {
-        if (false) {
-            if (!outputConfig.getService().isGenerate()) {
-                importPackages.add("io.github.luminion.mybatisplus.enhancer.EnhancedService");
-                importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.queryVO.name()));
-            }
-        } else {
-            if (globalConfig.isGenerateQuery()) {
-//                importPackages.add("com.baomidou.mybatisplus.core.metadata.TableInfo");
-                importPackages.add("com.baomidou.mybatisplus.core.metadata.TableInfoHelper");
-                importPackages.add("java.util.HashMap");
-                importPackages.add("com.baomidou.mybatisplus.extension.plugins.pagination.Page");
-                importPackages.add("org.apache.ibatis.exceptions.TooManyResultsException");
-                importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.queryVO.name()));
-            }
-            if (globalConfig.isGenerateExport()) {
-                importPackages.add(globalConfig.resolveExcelClassApiCanonicalName());
-                importPackages.add("java.util.Arrays");
-                importPackages.add(globalConfig.resolveExcelClassCanonicalName("write.style.column.LongestMatchColumnWidthStyleStrategy"));
-            }
-            if (globalConfig.isGenerateImport()) {
-                importPackages.add(globalConfig.resolveExcelClassApiCanonicalName());
-                importPackages.add("java.util.List");
-                importPackages.add("java.util.Collections");
-                importPackages.add("java.util.stream.Collectors");
-                importPackages.add("org.springframework.beans.BeanUtils");
-            }
-            if (globalConfig.isGenerateInsert()) {
-                importPackages.add("com.baomidou.mybatisplus.core.metadata.TableInfo");
-                importPackages.add("com.baomidou.mybatisplus.core.metadata.TableInfoHelper");
-                importPackages.add("org.springframework.beans.BeanUtils");
-            }
-            if (globalConfig.isGenerateUpdate()) {
-                importPackages.add("org.springframework.beans.BeanUtils");
-            }
+        if (globalConfig.isGenerateExport()) {
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO, tableInfo));
+            String mainEntrance = globalConfig.getExcelApi().getMainEntrance();
+            String packagePrefix = globalConfig.getExcelApi().getPackagePrefix();
+            importPackages.add(packagePrefix + mainEntrance);
+            importPackages.add(packagePrefix + "write.style.column.LongestMatchColumnWidthStyleStrategy");
+            importPackages.add("java.io.OutputStream");
+        }
+        if (globalConfig.isGenerateImport()) {
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_IMPORT_DTO, tableInfo));
+            importPackages.add("java.io.InputStream");
+            importPackages.add("java.io.OutputStream");
+            importPackages.add("java.util.List");
+            importPackages.add("java.util.Collections");
+            importPackages.add("java.util.stream.Collectors");
+            importPackages.add("org.springframework.beans.BeanUtils");
         }
 
         Collection<String> serviceImplImportPackages4Java = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
