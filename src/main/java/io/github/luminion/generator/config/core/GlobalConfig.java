@@ -159,7 +159,7 @@ public class GlobalConfig implements TemplateRender {
     protected boolean generateExport = false;
 
     @Override
-    public void validate(TableInfo TableInfo) {
+    public void init() {
         switch (runtimeEnv) {
             case MYBATIS_PLUS:
                 this.pageClassPayload = new ClassPayload(IPage.class);

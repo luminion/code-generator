@@ -170,7 +170,7 @@ public class StrategyConfig implements TemplateRender {
     /**
      * 验证配置项
      */
-    public void validate() {
+    public void init() {
         boolean isInclude = !this.include.isEmpty();
         boolean isExclude = !this.exclude.isEmpty();
         if (isInclude && isExclude) {

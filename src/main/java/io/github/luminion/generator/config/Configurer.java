@@ -90,8 +90,8 @@ public class Configurer {
     }
 
     public List<TableInfo> getTableInfo() {
-        getStrategyConfig().validate();
-        getGlobalConfig().validate();
+        getStrategyConfig().init();
+        getGlobalConfig().init();
         getOutputConfig().processOutput(this);
         if (this.tableInfo.isEmpty()){
             try {

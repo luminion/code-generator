@@ -39,7 +39,7 @@ public interface TemplateRender extends Serializable {
      * @param TableInfo 表信息
      * @since 1.0.0
      */
-    default void validate(TableInfo TableInfo) {
+    default void init() {
         
     }
 
