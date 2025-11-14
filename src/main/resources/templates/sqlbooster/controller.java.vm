@@ -74,7 +74,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Serializable")} insert($!{requiredBodyStr}$!{validatedStr}${insertDTO} insertDTO) {
+    public ${returnMethod.returnGenericTypeStr("Serializable")} insertByDTO($!{requiredBodyStr}$!{validatedStr}${insertDTO} insertDTO) {
         return ${returnMethod.invokeMethodStr("baseService.insertByDTO(insertDTO)")};
     }
 #end
@@ -100,7 +100,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Boolean")} update($!{requiredBodyStr}$!{validatedStr}${updateDTO} updateDTO) {
+    public ${returnMethod.returnGenericTypeStr("Boolean")} updateByDTO($!{requiredBodyStr}$!{validatedStr}${updateDTO} updateDTO) {
         return ${returnMethod.invokeMethodStr("baseService.updateByDTO(updateDTO)")};
     }
 #end
@@ -126,7 +126,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Boolean")} delete($!{idMethodParams}${primaryKeyPropertyType} id) {
+    public ${returnMethod.returnGenericTypeStr("Boolean")} removeById($!{idMethodParams}${primaryKeyPropertyType} id) {
         return ${returnMethod.invokeMethodStr("baseService.removeById(id)")};
     }
 #end
@@ -152,7 +152,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("${queryVO}")} selectId($!{idMethodParams}${primaryKeyPropertyType} id) {
+    public ${returnMethod.returnGenericTypeStr("${queryVO}")} voById($!{idMethodParams}${primaryKeyPropertyType} id) {
         return ${returnMethod.invokeMethodStr("baseService.voById(id)")};
     }
 
@@ -172,11 +172,10 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} selectList($!{optionalBodyStr}${queryDTO} queryDTO) {
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} voList($!{optionalBodyStr}${queryDTO} queryDTO) {
         SqlHelper<${entity}> sqlHelper = SqlHelper.of(baseService).merge(queryDTO)
         return ${returnMethod.invokeMethodStr("baseService.voList(sqlHelper)")};
     }
-#if(${sqlBooster})
 
     #if(${springdoc})
     @Operation(summary = "列表查询-动态条件")
@@ -190,15 +189,14 @@ public class ${controller} {
      * @return 查询结果
      */
     #end
-    @PostMapping("/booster/list")
+    @PostMapping("/list/booster")
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} boosterList($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper) {
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} voListBooster($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper) {
         return ${returnMethod.invokeMethodStr("baseService.voList(sqlHelper)")};
     }
-#end
-    
+
     #if(${springdoc})
     @Operation(summary = "分页查询")
     #elseif(${swagger})
@@ -217,10 +215,10 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} selectPage($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
-        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
+    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPage($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
+        SqlHelper<${entity}> sqlHelper = SqlHelper.of(baseService).merge(queryDTO)
+        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlHelper, current, size)")})};
     }
-#if(${sqlBooster})
 
     #if(${springdoc})
     @Operation(summary = "分页查询-动态条件")
@@ -236,14 +234,13 @@ public class ${controller} {
      * @return 查询结果
      */
     #end
-    @PostMapping("/booster/page/$!{pagePathParams}")
+    @PostMapping("/page/booster$!{pagePathParams}")
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} boosterPage($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, $!{pageMethodParams}) {
+    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPageBooster($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, $!{pageMethodParams}) {
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlHelper, current, size)")})};
     }
-#end
 #end
 #if(${generateImport})
 
@@ -305,9 +302,9 @@ public class ${controller} {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        baseService.excelExport(queryDTO, current, size, response.getOutputStream());
+        SqlHelper<${entity}> sqlHelper = SqlHelper.of(baseService).merge(queryDTO)
+        baseService.excelExport(sqlHelper, current, size, response.getOutputStream());
     }
-#if(${sqlBooster})
     
     #if(${springdoc})
     @Operation(summary = "excel文件导出-动态条件")
@@ -322,13 +319,12 @@ public class ${controller} {
      * @param size 每页大小
      */
     #end
-    @PostMapping("/booster/excel/export$!{pagePathParams}")
+    @PostMapping("/excel/export/booster$!{pagePathParams}")
     public void excelExport($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, ${pageMethodParams}, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        baseService.excelExport(queryDTO, current, size, response.getOutputStream());
+        baseService.excelExport(sqlHelper, current, size, response.getOutputStream());
     }
-#end
 #end
 }
