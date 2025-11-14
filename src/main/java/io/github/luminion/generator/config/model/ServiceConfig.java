@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class Service implements TemplateRender {
+public class ServiceConfig implements TemplateRender {
 
     /**
      * 模板文件

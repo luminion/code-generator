@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  */
 @Slf4j
 @Data
-public class Controller implements TemplateRender {
+public class ControllerConfig implements TemplateRender {
 
     /**
      * 模板文件
@@ -159,7 +159,7 @@ public class Controller implements TemplateRender {
         }
         importPackages.add("org.springframework.web.bind.annotation.*");
         if (!restController) {
-            importPackages.add("org.springframework.stereotype.Controller");
+            importPackages.add("org.springframework.stereotype.ControllerConfig");
         }
         if (globalConfig.isLombok()) {
             importPackages.add("lombok.RequiredArgsConstructor");

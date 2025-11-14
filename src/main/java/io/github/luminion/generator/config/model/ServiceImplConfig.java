@@ -15,14 +15,19 @@
  */
 package io.github.luminion.generator.config.model;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.config.core.OutputConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.ClassUtils;
+import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService;
+import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpServiceImpl;
+import io.github.luminion.sqlbooster.model.api.Wrapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,7 +43,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class ServiceImpl implements TemplateRender {
+public class ServiceImplConfig implements TemplateRender {
     /**
      * 模板文件
      */
@@ -58,7 +63,8 @@ public class ServiceImpl implements TemplateRender {
     /**
      * 自定义继承的ServiceImpl类全称，带包名
      */
-    protected String superClass = "com.baomidou.mybatisplus.extension.service.impl.ServiceImpl";
+    protected String superClass = "com.baomidou.mybatisplus.extension.service.impl.ServiceImplConfig";
+    
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
@@ -69,12 +75,36 @@ public class ServiceImpl implements TemplateRender {
         Set<String> importPackages = new TreeSet<>();
         Configurer configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        OutputConfig outputConfig = configurer.getOutputConfig();
-        Map<String, String> outputClassCanonicalNameMap = outputConfig.getOutputClassCanonicalNameMap(tableInfo);
-        importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.entity.name()));
-        importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.mapper.name()));
+        Resolver resolver = tableInfo.getResolver();
+
+        switch (globalConfig.getRuntimeEnv()) {
+            case SQL_BOOSTER_MY_BATIS_PLUS:
+                this.superClass = BoosterMpServiceImpl.class.getName();
+                importPackages.add(resolver.getClassName(TemplateFileEnum.MAPPER, tableInfo));
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO, tableInfo));
+                if (globalConfig.isGenerateQuery()) {
+                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
+                    importPackages.add(Wrapper.class.getName());
+                    importPackages.add("java.util.List");
+                    importPackages.add("java.io.Serializable");
+                }
+                break;
+            case MYBATIS_PLUS:
+                this.superClass = IService.class.getName();
+                if (globalConfig.isGenerateQuery()) {
+                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO, tableInfo));
+                    importPackages.add("java.util.List");
+                    importPackages.add("java.io.Serializable");
+                }
+            default:
+                throw new RuntimeException("暂不支持的运行环境");
+        }
+        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
+        
         importPackages.add(this.superClass);
-        importPackages.add("org.springframework.stereotype.Service");
+        importPackages.add("org.springframework.stereotype.ServiceConfig");
         if (outputConfig.getService().isGenerate()) {
             importPackages.add(outputClassCanonicalNameMap.get(TemplateFileEnum.service.name()));
         }

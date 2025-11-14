@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class Entity implements TemplateRender {
+public class EntityConfig implements TemplateRender {
 
     /**
      * 自定义继承的Entity类全称，带包名

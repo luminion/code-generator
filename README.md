@@ -125,7 +125,7 @@ public static void main(String[] args) {
             // Service配置
             .service(e -> e
                     .superServiceClass("com.baomidou.mybatisplus.extension.service.IService")
-                    .superServiceImplClass("com.baomidou.mybatisplus.extension.service.impl.ServiceImpl")
+                    .superServiceImplClass("com.baomidou.mybatisplus.extension.service.impl.ServiceImplConfig")
             )
             // Controller配置
             .controller(e -> e

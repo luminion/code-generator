@@ -2,7 +2,7 @@
 //
 //import io.github.luminion.generator.config.enums.IdType;
 //import io.github.luminion.generator.config.rules.NameConvertType;
-//import io.github.luminion.generator.config.base.Entity;
+//import io.github.luminion.generator.config.base.EntityConfig;
 //import io.github.luminion.generator.config.fill.IFill;
 //import io.github.luminion.generator.util.ClassUtils;
 //import io.github.luminion.generator.util.StringUtils;
@@ -18,9 +18,9 @@
 // */
 //@Slf4j
 //public class EntityBuilder {
-//    private final Entity entityConfig;
+//    private final EntityConfig entityConfig;
 //
-//    public EntityBuilder(Entity entityConfig) {
+//    public EntityBuilder(EntityConfig entityConfig) {
 //        this.entityConfig = entityConfig;
 //    }
 //

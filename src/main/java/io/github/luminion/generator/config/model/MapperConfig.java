@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class Mapper implements TemplateRender {
+public class MapperConfig implements TemplateRender {
 
     /**
      * 自定义继承的Mapper类全称，带包名

@@ -54,22 +54,31 @@ public class Configurer {
      * 注入配置信息
      */
     private final InjectionConfig injectionConfig = new InjectionConfig();
-    /**
-     * 实体配置
-     */
-    private final Entity entityConfig = new Entity();
-    /**
-     * 映射器配置
-     */
-    private final Mapper mapperConfig = new Mapper();
-    /**
-     * 服务配置
-     */
-    private final Service serviceConfig = new Service();
+
+    //====================模型配置====================
+
     /**
      * 控制器配置
      */
-    private final Controller controllerConfig = new Controller();
+    private final ControllerConfig controllerConfig = new ControllerConfig();
+    /**
+     * 服务配置
+     */
+    private final ServiceConfig serviceConfig = new ServiceConfig();
+    /**
+     * 服务实现配置
+     */
+    private final ServiceImplConfig serviceImplConfig = new ServiceImplConfig();
+    /**
+     * 映射器配置
+     */
+    private final MapperConfig mapperConfig = new MapperConfig();
+    /**
+     * 实体配置
+     */
+    private final EntityConfig entityConfig = new EntityConfig();
+
+    
     /**
      * 模型配置
      */
