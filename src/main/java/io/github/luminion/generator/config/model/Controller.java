@@ -125,7 +125,7 @@ public class Controller implements TemplateRender {
         // 实体类对应请求路径
         String url = this.hyphenStyle ? StringUtils.camelToHyphen(entityPath) : entityPath;
         // 完整请求路径
-        String requestBaseUrl = Stream.of(this.baseUrl, globalConfig.getOutputModule(), url).filter(StringUtils::isNotBlank).collect(Collectors.joining("/"));
+        String requestBaseUrl = Stream.of(this.baseUrl, globalConfig.getParentPackageModule(), url).filter(StringUtils::isNotBlank).collect(Collectors.joining("/"));
         if (!requestBaseUrl.startsWith("/")) {
             requestBaseUrl = "/" + requestBaseUrl;
         }
@@ -197,7 +197,7 @@ public class Controller implements TemplateRender {
             data.put("primaryKeyPropertyType", primaryKeyTableField.getJavaType().getType());
             importPackages.add(primaryKeyTableField.getJavaType().getPkg());
         }
-        if (globalConfig.isParamValidate()) {
+        if (globalConfig.isValidated()) {
             data.put("validatedStr", validatedStr);
             importPackages.add("org.springframework.validation.annotation.Validated");
         }
@@ -220,7 +220,7 @@ public class Controller implements TemplateRender {
                 data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_VO, tableInfo)));
             }
         }
-        String responseClass = globalConfig.getJavaEE().packagePrefix + ".servlet.http.HttpServletResponse";
+        String responseClass = globalConfig.getJavaEEApi().packagePrefix + ".servlet.http.HttpServletResponse";
         if (globalConfig.isGenerateImport()) {
             importPackages.add("org.springframework.web.multipart.MultipartFile");
             importPackages.add("java.io.IOException");

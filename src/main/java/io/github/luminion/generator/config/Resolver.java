@@ -6,9 +6,7 @@ import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.NonNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,8 +31,8 @@ public class Resolver {
      * @since 1.0.0
      */
     public String getParentPackage() {
-        String outputModule = configurer.getGlobalConfig().getOutputModule();
-        String outputParentPackage = configurer.getGlobalConfig().getOutputParentPackage();
+        String outputModule = configurer.getGlobalConfig().getParentPackageModule();
+        String outputParentPackage = configurer.getGlobalConfig().getParentPackage();
         if (StringUtils.isNotBlank(outputModule)) {
             return outputParentPackage + "." + outputModule;
         }
