@@ -9,20 +9,17 @@ import ${pkg};
 
 #end
 #foreach($pkg in ${serviceImportPackages4Java})
-import ${pkg};import java.io.Serializable;
+import ${pkg};
 #end
 
 /**
  * $!{table.comment} 服务类
  *
- * @author ${author}
- * @since ${date}
+ * @author ${docAuthor}
+ * @since ${docDate}
  */
-#if(${enhancer})
-public interface ${service} extends ${superServiceClass}<${entity}>, EnhancedService<${queryVO}> {
-#else
 public interface ${service} extends ${superServiceClass}<${entity}> {
-#end
+
     #if(${generateInsert})
 
     Serializable insertByDTO(${insertDTO} insertDTO);
@@ -31,23 +28,28 @@ public interface ${service} extends ${superServiceClass}<${entity}> {
 
     boolean updateByDTO(${updateDTO} updateDTO);
     #end
+    #if(${generateDelete})
+    
+    @Override
+    boolean removeById(Serializable id);
+    #end
     #if(${generateQuery})
 
     ${queryVO} voById(Serializable id);
 
-    List<${queryVO}> voList(Object queryDTO);
+    List<${queryVO}> voList(${queryDTO} queryDTO);
 
-    IPage<${queryVO}> voPage(Object queryDTO, Long current, Long size);
-    #end
-    #if(${generateExport})
-
-    void excelExport(Object queryDTO, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields);
+    IPage<${queryVO}> voPage(${queryDTO} queryDTO, Long current, Long size);
     #end
     #if(${generateImport})
 
     void excelTemplate(OutputStream os, Class<?> clazz);
 
     int excelImport(InputStream is, Class<?> clazz);
+    #end
+    #if(${generateExport})
+
+    void excelExport(${queryDTO} queryDTO, OutputStream os);
     #end
 }
 
