@@ -85,7 +85,7 @@ public class ControllerBuilder {
      * @return this
      */
     public ControllerBuilder superClass(@NonNull String className) {
-        this.configurer.getControllerConfig().setSuperClass(className);
+        this.configurer.getControllerConfig().setSuperClassName(className);
         return this;
     }
 

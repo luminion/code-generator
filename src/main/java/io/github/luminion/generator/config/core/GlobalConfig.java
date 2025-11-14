@@ -162,11 +162,10 @@ public class GlobalConfig implements TemplateRender {
     public void init() {
         switch (runtimeEnv) {
             case MYBATIS_PLUS:
-                this.pageClassPayload = new ClassPayload(IPage.class);
+                this.pageClassPayload = new ClassPayload("com.baomidou.mybatisplus.core.metadata.IPage");
                 break;
-            case SQL_BOOSTER_MY_BATIS:
             case SQL_BOOSTER_MY_BATIS_PLUS:
-                this.pageClassPayload = new ClassPayload(Page.class);
+                this.pageClassPayload = new ClassPayload("io.github.luminion.sqlbooster.core.Page");
             default:
                 throw new IllegalArgumentException("暂不支持的运行环境:" + runtimeEnv);
         }
@@ -180,12 +179,12 @@ public class GlobalConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        data.put("author", this.docAuthor);
-        data.put("date", this.getDocDate());
+        data.put("docAuthor", this.docAuthor);
+        data.put("docDate", this.docDate);
         data.put("validated", this.validated);
-        data.put("commentLink", this.docLink);
+        data.put("docLink", this.docLink);
         data.put("lombok", this.lombok);
-        data.put("chainModel", this.lombokChainModel);
+        data.put("lombokChainModel", this.lombokChainModel);
 
         switch (this.docType) {
             case SPRING_DOC:
@@ -194,6 +193,12 @@ public class GlobalConfig implements TemplateRender {
             case SWAGGER:
                 data.put("swagger", true);
                 break;
+        }
+        switch (this.runtimeEnv){
+            case SQL_BOOSTER_MY_BATIS_PLUS:
+                data.put("sqlBooster", true);
+            case MYBATIS_PLUS:
+            default:
         }
 
         data.put("javaApiPackagePrefix", javaEEApi.getPackagePrefix());

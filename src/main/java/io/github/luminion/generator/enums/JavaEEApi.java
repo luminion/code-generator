@@ -22,7 +22,7 @@ public enum JavaEEApi {
     
     ;
     @Getter
-    public final String packagePrefix; 
+    private final String packagePrefix; 
 
     
 }

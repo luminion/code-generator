@@ -19,10 +19,12 @@ import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.*;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
+import io.github.luminion.sqlbooster.model.sql.helper.SqlHelper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,7 +53,7 @@ public class ControllerConfig implements TemplateRender {
     /**
      * 自定义继承的Controller类全称，带包名
      */
-    protected String superClass;
+    protected String superClassName;
 
     /**
      * 生成 @RestController控制器
@@ -112,13 +114,18 @@ public class ControllerConfig implements TemplateRender {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         Resolver resolver = configurer.getResolver();
         TreeSet<String> importPackages = new TreeSet<>();
+        // spring组件
+        importPackages.add("org.springframework.web.bind.annotation.*");
 
-        data.put("controllerMappingHyphenStyle", this.hyphenStyle);
-        data.put("restControllerStyle", this.restController);
-        data.put("superControllerClassPackage", StringUtils.isBlank(superClass) ? null : superClass);
-        data.put("superControllerClass", ClassUtils.getSimpleName(this.superClass));
-
-
+        // 类注解
+        data.put("crossOrigin", this.crossOrigin);
+        data.put("restController", this.restController);
+        if (!restController) {
+            importPackages.add("org.springframework.stereotype.Controller");
+        }
+        if (globalConfig.isLombok()) {
+            importPackages.add("lombok.RequiredArgsConstructor");
+        }
         // 首字母小写
         String entityName = tableInfo.getEntityName();
         String entityPath = entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
@@ -130,41 +137,9 @@ public class ControllerConfig implements TemplateRender {
             requestBaseUrl = "/" + requestBaseUrl;
         }
         data.put("requestBaseUrl", requestBaseUrl);
-        data.put("crossOrigin", this.crossOrigin);
-        data.put("restful", this.restful);
-        data.put("returnMethod", this.returnMethod);
-        data.put("pageMethod", this.pageMethod);
-        data.put("batchQueryMethod", batchQueryPost ? "@PostMapping" : "@GetMapping");
 
-        // 路径参数
-        if (pathVariable) {
-            data.put("idPathParams", "/{id}");
-            data.put("idMethodParams", "@PathVariable(\"id\") ");
-            data.put("pagePathParams", "/{current}/{size}");
-            data.put("pageMethodParams", "@PathVariable(\"current\") Long current, @PathVariable(\"size\") Long size");
-        } else {
-            data.put("pageMethodParams", "Long current, Long size");
-        }
-        // body 参数和校验
-        String requestBodyStr = "@RequestBody ";
-        String validatedStr = "@Validated ";
-        if (requestBody) {
-            data.put("requestBodyStr", requestBodyStr);
-            if (batchQueryPost) {
-                data.put("optionalBodyStr", requestBodyStr);
-            }
-        }
-        if (superClass != null) {
-            importPackages.add(superClass);
-        }
-        importPackages.add("org.springframework.web.bind.annotation.*");
-        if (!restController) {
-            importPackages.add("org.springframework.stereotype.ControllerConfig");
-        }
-        if (globalConfig.isLombok()) {
-            importPackages.add("lombok.RequiredArgsConstructor");
-        }
-        // doc包
+
+        // 文档类型
         switch (globalConfig.getDocType()) {
             case SPRING_DOC:
                 importPackages.add("io.swagger.v3.oas.annotations.tags.Tag");
@@ -178,11 +153,12 @@ public class ControllerConfig implements TemplateRender {
                 importPackages.add("io.swagger.annotations.ApiParam");
                 break;
         }
-        // 返回类包
-        if (returnMethod.isClassReady()) {
-            importPackages.add(returnMethod.getClassName());
-        }
 
+        // 类信息
+        if (superClassName != null) {
+            data.put("controllerSuperClassSimpleName", ClassUtils.getSimpleName(this.superClassName));
+            importPackages.add(this.superClassName);
+        }
         if (resolver.isGenerate(TemplateFileEnum.SERVICE, tableInfo)) {
             data.put("baseService", resolver.getClassSimpleName(TemplateFileEnum.SERVICE, tableInfo));
             importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE, tableInfo));
@@ -191,50 +167,112 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE_IMPL, tableInfo));
         }
 
-        if (globalConfig.isGenerateQuery() || globalConfig.isGenerateDelete()) {
-            data.put("primaryKeyPropertyType", "Object");
-            TableField primaryKeyTableField = tableInfo.getPrimaryKeyTableField();
-            if (primaryKeyTableField != null) {
-                data.put("primaryKeyPropertyType", primaryKeyTableField.getJavaType().getType());
-                importPackages.add(primaryKeyTableField.getJavaType().getPkg());
-            }
+        // restful样式
+        data.put("restful", this.restful);
+
+        // 返回类包
+        if (returnMethod.isClassReady()) {
+            importPackages.add(returnMethod.getClassName());
+        }
+        // 返回值
+        data.put("returnMethod", this.returnMethod);
+        data.put("pageMethod", this.pageMethod);
+        // 批量查询方法
+        data.put("batchQueryMethod", batchQueryPost ? "@PostMapping" : "@GetMapping");
+        // 路径参数
+        if (pathVariable) {
+            data.put("idPathParams", "/{id}");
+            data.put("idMethodParams", "@PathVariable(\"id\") ");
+            data.put("pagePathParams", "/{current}/{size}");
+            data.put("pageMethodParams", "@PathVariable(\"current\") Long current, @PathVariable(\"size\") Long size");
+        } else {
+            data.put("pageMethodParams", "Long current, Long size");
         }
 
+        // requestBody
+        String requestBodyStr = "@RequestBody ";
+        if (requestBody) {
+            data.put("requestBodyStr", requestBodyStr);
+            if (batchQueryPost) {
+                data.put("optionalBodyStr", requestBodyStr);
+            }
+        }
+        // 参数校验
         if (globalConfig.isValidated()) {
+            String validatedStr = "@Validated ";
             data.put("validatedStr", validatedStr);
             importPackages.add("org.springframework.validation.annotation.Validated");
         }
+
+
+        // 新增
         if (globalConfig.isGenerateInsert()) {
+            importPackages.add("java.io.Serializable");
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
         }
+
+        // 修改
         if (globalConfig.isGenerateUpdate()) {
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
         }
+
+        // 删除
+        if (globalConfig.isGenerateDelete()) {
+            if (tableInfo.isHavePrimaryKey()) {
+                TableField primaryKeyTableField = tableInfo.getPrimaryKeyTableField();
+                data.put("primaryKeyPropertyType", primaryKeyTableField.getJavaType().getType());
+                importPackages.add(primaryKeyTableField.getJavaType().getPkg());
+            } else {
+                log.warn("{}表无主键, 不生成根据id删除", tableInfo.getName());
+            }
+        }
+
+        // 查询
         if (globalConfig.isGenerateQuery()) {
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+            
+            // 根据id查询
+            if (tableInfo.isHavePrimaryKey()) {
+                TableField primaryKeyTableField = tableInfo.getPrimaryKeyTableField();
+                data.put("primaryKeyPropertyType", primaryKeyTableField.getJavaType().getType());
+                importPackages.add(primaryKeyTableField.getJavaType().getPkg());
+            } else {
+                log.warn("{}表无主键, 不生成根据id查询", tableInfo.getName());
+            }
+            
             importPackages.add("java.util.List");
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO, tableInfo));
+            
+            if (RuntimeEnv.SQL_BOOSTER_MY_BATIS_PLUS.equals(globalConfig.getRuntimeEnv())){
+                importPackages.add("io.github.luminion.sqlbooster.model.sql.helper.SqlHelper");
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
+            }
+            
             if (pageMethod != null && pageMethod.isClassReady()) {
                 importPackages.add(pageMethod.getClassName());
-                data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_VO, tableInfo)));
+                data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
             } else {
                 ClassPayload pageClassPayload = globalConfig.getPageClassPayload();
                 importPackages.add(pageClassPayload.getClassName());
-                data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_VO, tableInfo)));
+                data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
             }
         }
-        String responseClass = globalConfig.getJavaEEApi().packagePrefix + ".servlet.http.HttpServletResponse";
+        String responseClass = globalConfig.getJavaEEApi().getPackagePrefix() + "servlet.http.HttpServletResponse";
+        
+        // 导入
         if (globalConfig.isGenerateImport()) {
-            importPackages.add("org.springframework.web.multipart.MultipartFile");
-            importPackages.add("java.io.IOException");
+            // 导入需要下载导入模板, 导入response
             importPackages.add(responseClass);
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_IMPORT_DTO, tableInfo));
+            importPackages.add("java.io.IOException");
+            importPackages.add("org.springframework.web.multipart.MultipartFile");
         }
+        
+        // 导出
         if (globalConfig.isGenerateExport()) {
             importPackages.add("java.io.IOException");
             importPackages.add(responseClass);
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO, tableInfo));
         }
+
         Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
         data.put("controllerImportPackages4Java", javaPackages);

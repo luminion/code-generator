@@ -20,13 +20,10 @@ import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
-import io.github.luminion.generator.config.core.OutputConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
-import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.ClassUtils;
-import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService;
 import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpServiceImpl;
 import io.github.luminion.sqlbooster.model.api.Wrapper;
 import lombok.Data;
@@ -82,7 +79,7 @@ public class ServiceImplConfig implements TemplateRender {
             case SQL_BOOSTER_MY_BATIS_PLUS:
                 this.superClass = BoosterMpServiceImpl.class.getName();
                 importPackages.add(resolver.getClassName(TemplateFileEnum.MAPPER, tableInfo));
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO, tableInfo));
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(globalConfig.getPageClassPayload().getClassName());
                     importPackages.add(Wrapper.class.getName());
@@ -95,7 +92,7 @@ public class ServiceImplConfig implements TemplateRender {
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(globalConfig.getPageClassPayload().getClassName());
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                     importPackages.add("java.util.List");
                     importPackages.add("java.io.Serializable");
                     importPackages.add("com.baomidou.mybatisplus.extension.plugins.pagination.Page");
@@ -147,12 +144,6 @@ public class ServiceImplConfig implements TemplateRender {
         data.put("serviceImplImportPackages4Java", serviceImplImportPackages4Java);
         data.put("serviceImplImportPackages4Framework", serviceImplImportPackages4Framework);
         return data;
-    }
-
-
-    private Set<String> serviceImplImportPackages(TableInfo tableInfo) {
-
-        return importPackages;
     }
 
 }

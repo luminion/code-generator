@@ -15,13 +15,13 @@ import ${pkg};
 /**
  * $!{table.comment} 前端控制器
  *
- * @author ${author}
-#if(${commentLink})
+ * @author ${docAuthor}
+#if(${docLink})
  * @see ${class.entity}
  * @see ${class.mapper}
  * @see ${class.serviceImpl}
 #end
- * @since ${date}
+ * @since ${docDate}
  */
 #if(${crossOrigin})
 @CrossOrigin
@@ -40,8 +40,8 @@ import ${pkg};
 #elseif(${swagger})
 @Api(tags = "$!{table.comment}")
 #end
-#if(${superControllerClass})
-public class ${controller} extends ${superControllerClass} {
+#if(${controllerSuperClassSimpleName})
+public class ${controller} extends ${controllerSuperClassSimpleName} {
 #else
 public class ${controller} {
 #end
@@ -75,7 +75,7 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Object")} insert($!{requiredBodyStr}$!{validatedStr}${insertDTO} insertDTO) {
+    public ${returnMethod.returnGenericTypeStr("Serializable")} insert($!{requiredBodyStr}$!{validatedStr}${insertDTO} insertDTO) {
         return ${returnMethod.invokeMethodStr("baseService.insertByDTO(insertDTO)")};
     }
 #end
@@ -113,7 +113,7 @@ public class ${controller} {
     @ApiOperation(value = "删除")
     #else
     /**
-     * 删除
+     * 根据id删除
      *
      * @param id 主键id
      * @return 是否成功
@@ -190,11 +190,11 @@ public class ${controller} {
      * @return 查询结果
      */
     #end
-    @PostMapping("/dynamic/list")
+    @PostMapping("/booster/list")
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} dynamicList($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper) {
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} boosterList($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper) {
         return ${returnMethod.invokeMethodStr("baseService.voList(sqlHelper)")};
     }
 #end
@@ -209,7 +209,7 @@ public class ${controller} {
      *
      * @param queryDTO 查询条件
      * @param current 页码
-     * @param size 每页大小(-1为全部)
+     * @param size 每页大小
      * @return 查询结果
      */
     #end
@@ -217,7 +217,6 @@ public class ${controller} {
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-##    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} selectPage($!{mapRequestParam}$!{optionalBodyStr}${controllerQueryParam} queryDTO, $!{pageMethodParams}) {
     public ${returnMethod.returnGenericTypeStr(${pageReturnType})} selectPage($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
     }
@@ -233,15 +232,15 @@ public class ${controller} {
      *
      * @param sqlHelper 条件构造器
      * @param current 页码
-     * @param size 每页大小(-1为全部)
+     * @param size 每页大小
      * @return 查询结果
      */
     #end
-    @PostMapping("/dynamic/page/$!{pagePathParams}")
+    @PostMapping("/booster/page/$!{pagePathParams}")
     #if(!${restControllerStyle})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} dynamicPage($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, $!{pageMethodParams}) {
+    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} boosterPage($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, $!{pageMethodParams}) {
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlHelper, current, size)")})};
     }
 #end
@@ -262,7 +261,7 @@ public class ${controller} {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        baseService.excelTemplate(response.getOutputStream(), ${insertDTO}.class);
+        baseService.excelTemplate(response.getOutputStream());
     }
 
     #if(${springdoc})
@@ -283,7 +282,7 @@ public class ${controller} {
     #end
     public ${returnMethod.returnGenericTypeStr("Integer")} excelImport(@RequestParam("excel") MultipartFile excel) throws IOException {
         if (excel == null || excel.isEmpty()) return ${returnMethod.invokeMethodStr(0)};
-        return ${returnMethod.invokeMethodStr("baseService.excelImport(excel.getInputStream(), ${insertDTO}.class)")};
+        return ${returnMethod.invokeMethodStr("baseService.excelImport(excel.getInputStream())")};
     }
 #end
 #if(${generateExport})
@@ -298,7 +297,7 @@ public class ${controller} {
      * 
      * @param queryDTO 查询条件
      * @param current 页码
-     * @param size 每页大小(-1为全部)
+     * @param size 每页大小
      */
     #end
     ${batchQueryMethod}("/excel/export$!{pagePathParams}")
@@ -306,7 +305,7 @@ public class ${controller} {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        baseService.excelExport(queryDTO, response.getOutputStream(), ${queryVO}.class, current, size);
+        baseService.excelExport(queryDTO, current, size, response.getOutputStream());
     }
 #if(${sqlBooster})
     
@@ -320,17 +319,16 @@ public class ${controller} {
      * 
      * @param sqlHelper 条件构造器
      * @param current 页码
-     * @param size 每页大小(-1为全部)
+     * @param size 每页大小
      */
     #end
-    @PostMapping("/dynamic/excel/export$!{pagePathParams}")
+    @PostMapping("/booster/excel/export$!{pagePathParams}")
     public void excelExport($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, ${pageMethodParams}, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        baseService.excelExport(sqlHelper, response.getOutputStream(), ${queryVO}.class, current, size);
+        baseService.excelExport(queryDTO, current, size, response.getOutputStream());
     }
 #end
 #end
 }
-

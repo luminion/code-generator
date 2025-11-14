@@ -76,7 +76,7 @@ public class ServiceConfig implements TemplateRender {
             case SQL_BOOSTER_MY_BATIS_PLUS:
                 this.superClass = BoosterMpService.class.getName();
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO, tableInfo));
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(globalConfig.getPageClassPayload().getClassName());
                     importPackages.add(Wrapper.class.getName());
@@ -106,7 +106,7 @@ public class ServiceConfig implements TemplateRender {
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(globalConfig.getPageClassPayload().getClassName());
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_VO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                     importPackages.add("java.util.List");
                     importPackages.add("java.io.Serializable");
                 }
