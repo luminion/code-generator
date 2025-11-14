@@ -69,10 +69,11 @@ public class ControllerBuilder {
     /**
      * 生成时覆盖已存在的文件
      *
+     * @param enable 是否启用
      * @return this
      */
-    public ControllerBuilder fileOverrideOn() {
-        this.configurer.getControllerConfig().getTemplateFile().setFileOverride(true);
+    public ControllerBuilder fileOverride(boolean enable) {
+        this.configurer.getControllerConfig().getTemplateFile().setFileOverride(enable);
         return this;
     }
 
@@ -91,22 +92,24 @@ public class ControllerBuilder {
     /**
      * 使用@RestController
      *
+     * @param enable 是否启用
      * @return this
      * @since 3.5.0
      */
-    public ControllerBuilder restControllerOff() {
-        this.configurer.getControllerConfig().setRestController(false);
+    public ControllerBuilder restController(boolean enable) {
+        this.configurer.getControllerConfig().setRestController(enable);
         return this;
     }
 
     /**
      * 驼峰转连字符
      *
+     * @param enable 是否启用
      * @return this
      * @since 3.5.0
      */
-    public ControllerBuilder hyphenStyleOff() {
-        this.configurer.getControllerConfig().setHyphenStyle(false);
+    public ControllerBuilder hyphenStyle(boolean enable) {
+        this.configurer.getControllerConfig().setHyphenStyle(enable);
         return this;
     }
 
@@ -134,10 +137,11 @@ public class ControllerBuilder {
     /**
      * 跨域注解@CrossOrigin
      *
+     * @param enable 是否启用
      * @return this
      */
-    public ControllerBuilder crossOriginOn() {
-        this.configurer.getControllerConfig().setCrossOrigin(true);
+    public ControllerBuilder crossOrigin(boolean enable) {
+        this.configurer.getControllerConfig().setCrossOrigin(enable);
         return this;
     }
 
@@ -145,40 +149,44 @@ public class ControllerBuilder {
     /**
      * 增删查改使用restful风格
      *
+     * @param enable 是否启用
      * @return this
      */
-    public ControllerBuilder restfulOn() {
-        this.configurer.getControllerConfig().setRestful(true);
+    public ControllerBuilder restful(boolean enable) {
+        this.configurer.getControllerConfig().setRestful(enable);
         return this;
     }
 
     /**
      * 请求路径参数@PathVariable
      *
+     * @param enable 是否启用
      * @return this
      */
-    public ControllerBuilder pathVariableOff() {
-        this.configurer.getControllerConfig().setPathVariable(false);
+    public ControllerBuilder pathVariable(boolean enable) {
+        this.configurer.getControllerConfig().setPathVariable(enable);
         return this;
     }
 
     /**
      * 请求体参数@RequestBody
      *
+     * @param enable 是否启用
      * @return this
      */
-    public ControllerBuilder requestBodyOff() {
-        this.configurer.getControllerConfig().setRequestBody(false);
+    public ControllerBuilder requestBody(boolean enable) {
+        this.configurer.getControllerConfig().setRequestBody(enable);
         return this;
     }
 
     /**
      * 批量数据查询使用post请求(list/page/excelExport)
      *
+     * @param enable 是否启用
      * @return this
      */
-    public ControllerBuilder batchQueryPostOff() {
-        this.configurer.getControllerConfig().setBatchQueryPost(false);
+    public ControllerBuilder batchQueryPost(boolean enable) {
+        this.configurer.getControllerConfig().setBatchQueryPost(enable);
         return this;
     }
 
