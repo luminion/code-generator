@@ -1,13 +1,18 @@
 package io.github.luminion.generator.config;
 
+import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
+import io.github.luminion.generator.po.CustomFile;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.NonNull;
 
+import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 用于为其他配置提供使用方法
@@ -40,6 +45,24 @@ public class Resolver {
     }
 
     /**
+     * 连接路径字符串
+     *
+     * @param parentDir   路径常量字符串
+     * @param packageName 包名
+     * @return 连接后的路径
+     */
+    public String joinPath(String parentDir, String packageName) {
+        if (StringUtils.isBlank(parentDir)) {
+            parentDir = System.getProperty("java.io.tmpdir");
+        }
+        if (!StringUtils.endsWith(parentDir, File.separator)) {
+            parentDir += File.separator;
+        }
+        packageName = packageName.replaceAll("\\.", "\\" + File.separator);
+        return parentDir + packageName;
+    }
+
+    /**
      * 连接父子包名
      *
      * @param subPackage 子包名
@@ -58,8 +81,8 @@ public class Resolver {
      * @since 1.0.0
      */
     public boolean isGenerate(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
-        // todo 获取对应的文件输出信息
-        return false;
+        TemplateFile templateFile = this.templateFileMap.get(templateFileEnum);
+        return templateFile.isGenerate();
     }
 
     /**
@@ -70,8 +93,8 @@ public class Resolver {
      * @since 1.0.0
      */
     public String getClassSimpleName(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
-        // todo 获取对应的文件输出信息
-        return "";
+        TemplateFile templateFile = this.templateFileMap.get(templateFileEnum);
+        return templateFile.convertFormatName(tableInfo);
     }
 
     /**
@@ -82,8 +105,35 @@ public class Resolver {
      * @since 1.0.0
      */
     public String getClassName(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
-        // todo 获取对应的文件输出信息
-        return "";
+        TemplateFile templateFile = this.templateFileMap.get(templateFileEnum);
+        return this.joinPackage(templateFile.getSubPackage()) + "." + templateFile.convertFormatName(tableInfo);
+    }
+
+
+    /**
+     * 获取应当输出的所有文件
+     *
+     * @return {@link List<CustomFile> }
+     * @since 1.0.0
+     */
+    public List<CustomFile> getCustomFiles() {
+        GlobalConfig globalConfig = configurer.getGlobalConfig();
+        return this.templateFileMap.values()
+                .stream().filter(TemplateFile::isGenerate)
+                .map(e -> {
+                    CustomFile customFile = new CustomFile();
+                    String fileOutputDir = e.getOutputDir();
+                    if (fileOutputDir == null) {
+                        String joinPackage = joinPackage(e.getSubPackage());
+                        fileOutputDir = joinPath(e.getOutputDir(), joinPackage);
+                    }
+                    customFile.setFormatNameFunction(e::convertFormatName)
+                            .setTemplatePath(e.getTemplatePath())
+                            .setOutputFileSuffix(e.getOutputFileSuffix())
+                            .setOutputDir(fileOutputDir)
+                            .setFileOverride(e.isFileOverride() || globalConfig.isFileOverride());
+                    return customFile;
+                }).collect(Collectors.toList());
     }
 
 
