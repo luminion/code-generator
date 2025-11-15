@@ -56,67 +56,18 @@
     </sql>
 #end
 #if(${generateQuery})
-
-    <sql id="conditions">
-        <if test="param1 != null">
-    #foreach($field in ${table.fields})
-        #if(${field.logicDeleteField})
-        #else
-            <if test="param1.${field.propertyName} != null">
-                AND a.${field.columnName} = #{param1.${field.propertyName}}
-            </if>
-        #end
-    #end
-    #if(${table.extraFields.size()}>0)
-            <!-- 额外后缀查询条件 -->
-    #end
-    #foreach($field in ${table.extraFields})
-        #if(${field.sqlOperator}=="IN" || ${field.sqlOperator}=="NOT IN")
-            <if test="param1.${field.propertyName} != null and param1.${field.propertyName}.size()>0">
-                AND a.${field.columnName} ${field.sqlOperatorXml}
-                <foreach collection="param1.${field.propertyName}" open="("  close=")" separator="," item="item">
-                    #{item}
-                </foreach>
-            </if>
-        #elseif(${field.sqlOperator}=="IS NULL" || ${field.sqlOperator}=="IS NOT NULL")
-            <if test="param1.${field.propertyName} != null">
-                AND a.${field.columnName} ${field.sqlOperatorXml}
-            </if>
-        #elseif(${field.sqlOperator}=="&")
-            <if test="param1.${field.propertyName} != null">
-                AND a.${field.columnName} &amp; #{param1.${field.propertyName}} > 0
-            </if>
-        #elseif(${field.sqlOperator}=="!&")
-            <if test="param1.${field.propertyName} != null">
-                AND a.${field.columnName} &amp; #{param1.${field.propertyName}} = 0
-            </if>
-        #elseif(${field.sqlOperator}=="LIKE" || ${field.sqlOperator}=="NOT LIKE")
-            <if test="param1.${field.propertyName} != null">
-                <bind name="${field.propertyName}" value="'%' + param1.${field.propertyName} + '%'"/>
-                AND a.${field.columnName} ${field.sqlOperatorXml} #{${field.propertyName}}
-            </if>
-        #else
-            <if test="param1.${field.propertyName} != null">
-                AND a.${field.columnName} ${field.sqlOperatorXml} #{param1.${field.propertyName}}
-            </if>
-        #end
-    #end
-        </if>
-    </sql>
-
-#end
-#if(${generateQuery})
+    
     #if(${baseResultMap})
-    <select id="selectByXml" resultMap="voResultMap">
+    <select id="selectByBooster" resultMap="voResultMap">
     #else
-    <select id="selectByXml" resultType="${class.queryVO}">
+    <select id="selectByBooster" resultType="${class.queryVO}">
     #end
         SELECT
         a.*
         FROM
         ${schemaName}${table.name} a
         <where>
-            <include refid="conditions"/>
+            <include refid="sqlbooster.conditions"/>
             #foreach($field in ${table.fields})
                 #if(${field.logicDeleteField})
                     #if(${field.metaInfo.defaultValue})
@@ -129,7 +80,10 @@
             #end
         </where>
         #if(${orderColumnSql})
-            ORDER BY ${orderColumnSql}
+        <trim prefix="ORDER BY" prefixOverrides=",">
+            <include refid="sqlbooster.sorts"/>
+            , ${orderColumnSql}
+        </trim>
         #end
     </select>
 

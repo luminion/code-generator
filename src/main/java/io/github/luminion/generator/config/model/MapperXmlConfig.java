@@ -81,7 +81,7 @@ public class MapperXmlConfig implements TemplateRender {
                     .filter(e -> existColumnNames.contains(e.getKey()))
                     .map(e -> String.format("a.%s%s", e.getKey(), e.getValue() ? " DESC" : ""))
                     .reduce((e1, e2) -> e1 + ", " + e2)
-                    .ifPresent(e -> data.put("orderBySql", e));
+                    .ifPresent(e -> data.put("orderColumnSql", e));
         }
 
         return data;

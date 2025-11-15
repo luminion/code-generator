@@ -22,6 +22,8 @@ import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.util.ClassUtils;
+import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpMapper;
+import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +88,7 @@ public class MapperConfig implements TemplateRender {
         Configurer configurer = tableInfo.getConfigurer();
         Resolver resolver = configurer.getResolver();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-
+        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
         switch (globalConfig.getRuntimeEnv()) {
             case MYBATIS_PLUS:
                 if (globalConfig.isGenerateQuery()) {
@@ -95,11 +97,15 @@ public class MapperConfig implements TemplateRender {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                     importPackages.add(globalConfig.getPageClassPayload().getClassName());
                 }
+                break;
             case SQL_BOOSTER_MY_BATIS_PLUS:
+                this.superClass = "io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpMapper";
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+                    importPackages.add("io.github.luminion.sqlbooster.model.api.Wrapper");
                     importPackages.add(List.class.getName());
                 }
+                break;
             default:
                 throw new RuntimeException("未定义的运行环境");
         }
@@ -111,7 +117,6 @@ public class MapperConfig implements TemplateRender {
             importPackages.add(superClass);
             data.put("mapperSuperClassSimpleName", ClassUtils.getSimpleName(this.superClass));
         }
-        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
 
         Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());

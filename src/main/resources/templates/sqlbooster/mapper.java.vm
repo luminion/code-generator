@@ -1,0 +1,30 @@
+package ${package.mapper};
+#if($mapperImportPackages4Framework.size()>0)
+
+#end
+#foreach($pkg in ${mapperImportPackages4Framework})
+import ${pkg};
+#end
+#if($mapperImportPackages4Java.size()>0)
+
+#end
+#foreach($pkg in ${mapperImportPackages4Java})
+import ${pkg};
+#end
+
+/**
+ * $!{table.comment} Mapper接口
+ *
+ * @author ${docAuthor}
+ * @since ${docDate}
+ */
+#if(${mapperAnnotationClass})
+@${mapperAnnotationClassSimpleName}
+#end
+public interface ${mapper} extends ${mapperSuperClassSimpleName}<${entity}, ${entityVO}> {
+#if(${generateQuery})
+    
+    @Override
+    List<${queryVO}> selectByBooster(Wrapper wrapper, Object page);
+#end
+}
