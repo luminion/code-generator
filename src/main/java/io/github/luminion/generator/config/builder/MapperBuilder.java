@@ -77,7 +77,7 @@ public class MapperBuilder {
      * @since 3.5.0
      */
     public MapperBuilder cache(Class<? extends org.apache.ibatis.cache.Cache> cache) {
-        this.configurer.getMapperConfig().setCache(cache);
+        this.configurer.getMapperConfig().setCacheClass(cache);
         return this;
     }
 

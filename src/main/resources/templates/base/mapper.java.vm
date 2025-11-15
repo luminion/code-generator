@@ -15,36 +15,15 @@ import ${pkg};
 /**
  * $!{table.comment} Mapper接口
  *
- * @author ${author}
-#if(${commentLink})
- * @see ${class.queryDTO}
-#end
- * @since ${date}
+ * @author ${docAuthor}
+ * @since ${docDate}
  */
 #if(${mapperAnnotationClass})
-@${mapperAnnotationClass.simpleName}
+@${mapperAnnotationClassSimpleName}
 #end
-#if(${sqlBooster})
-public interface ${mapper} extends ${superMapperClass}<${entity}>, EnhancedMapper<${queryVO}> {
-#else
-public interface ${mapper} extends ${superMapperClass}<${entity}> {
-#end
+public interface ${mapper} extends ${mapperSuperClassSimpleName}<${entity}> {
 #if(${generateQuery})
-
-    #if(${sqlBooster})
-    @Override
-    #end
-    List<${queryVO}> voQueryByXml(Object queryDTO, IPage<${queryVO}> page);
-
-    #if(${sqlBooster})
-    @Override
-    #end
-    default List<${queryVO}> voQuery(Object queryDTO, IPage<${queryVO}> page) {
-        #if(${sqlBooster})
-        return EnhancedMapper.super.voQuery(queryDTO, page);
-        #else
-        return this.voQueryByXml(queryDTO, page);      
-        #end
-    }
+    
+    List<${queryVO}> selectByXml(${queryDTO} queryDTO, IPage<${queryVO}> page);
 #end
 }

@@ -15,18 +15,17 @@
  */
 package io.github.luminion.generator.config.model;
 
+import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
-import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.util.ClassUtils;
-import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.annotation.Annotation;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,30 +49,27 @@ public class MapperConfig implements TemplateRender {
      * Mapper标记注解
      *
      */
-    protected Class<? extends Annotation> mapperAnnotationClass = org.apache.ibatis.annotations.Mapper.class;
-//    protected Class<?> mapperAnnotationClass;
+//    protected Class<? extends Annotation> mapperAnnotationClass = org.apache.ibatis.annotations.Mapper.class;
+    protected String mapperAnnotationClass = "org.apache.ibatis.annotations.Mapper";
 
     /**
      * 是否开启BaseResultMap（默认 false）
      *
-     * @since 3.5.0
      */
     protected boolean baseResultMap;
 
     /**
      * 是否开启baseColumnList（默认 false）
      *
-     * @since 3.5.0
      */
     protected boolean baseColumnList;
 
     /**
      * 设置缓存实现类
      *
-     * @since 3.5.0
      */
-    protected Class<? extends org.apache.ibatis.cache.Cache> cache;
-//    protected Class<?> cache;
+//    protected Class<? extends org.apache.ibatis.cache.Cache> cache;
+    protected String cacheClass;
 
     /**
      * 排序字段map
@@ -85,51 +81,44 @@ public class MapperConfig implements TemplateRender {
     @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        boolean enableCache = this.cache != null;
-        data.put("enableCache", enableCache);
-        data.put("mapperAnnotation", mapperAnnotationClass != null);
-        data.put("mapperAnnotationClass", mapperAnnotationClass);
-        data.put("baseResultMap", this.baseResultMap);
-        data.put("baseColumnList", this.baseColumnList);
-        data.put("superMapperClassPackage", this.superClass);
-        if (enableCache) {
-            data.put("cache", cache);
-            data.put("cacheClassName", cache.getName());
-        }
-        data.put("superMapperClass", ClassUtils.getSimpleName(this.superClass));
-        // 排序字段sql
-        List<TableField> sortFields = tableInfo.getFields();
-        List<String> existColumnNames = sortFields.stream().map(TableField::getColumnName).collect(Collectors.toList());
-        if (sortColumnMap != null && !sortColumnMap.isEmpty()) {
-            sortColumnMap.entrySet().stream().filter(e -> existColumnNames.contains(e.getKey())).map(e -> String.format("a.%s%s", e.getKey(), e.getValue() ? " DESC" : "")).reduce((e1, e2) -> e1 + ", " + e2).ifPresent(e -> data.put("orderBySql", e));
-        }
+        Set<String> importPackages = new TreeSet<>();
 
-        Set<String> mapperImportPackages = this.mapperImportPackages(tableInfo);
-        Collection<String> javaPackages = mapperImportPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
-        Collection<String> frameworkPackages = mapperImportPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
+        Configurer configurer = tableInfo.getConfigurer();
+        Resolver resolver = configurer.getResolver();
+        GlobalConfig globalConfig = configurer.getGlobalConfig();
+
+        switch (globalConfig.getRuntimeEnv()) {
+            case MYBATIS_PLUS:
+                if (globalConfig.isGenerateQuery()) {
+                    importPackages.add(List.class.getName());
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
+                }
+            case SQL_BOOSTER_MY_BATIS_PLUS:
+                if (globalConfig.isGenerateQuery()) {
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+                    importPackages.add(List.class.getName());
+                }
+            default:
+                throw new RuntimeException("未定义的运行环境");
+        }
+        if (mapperAnnotationClass != null) {
+            data.put("mapperAnnotationClass", mapperAnnotationClass);
+            data.put("mapperAnnotationClassSimpleName", mapperAnnotationClass);
+        }
+        if (superClass != null) {
+            importPackages.add(superClass);
+            data.put("mapperSuperClassSimpleName", ClassUtils.getSimpleName(this.superClass));
+        }
+        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
+
+        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
+        Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
         data.put("mapperImportPackages4Java", javaPackages);
         data.put("mapperImportPackages4Framework", frameworkPackages);
 
         return data;
-    }
-
-    public Set<String> mapperImportPackages(TableInfo tableInfo) {
-        Set<String> importPackages = new TreeSet<>();
-        if (StringUtils.isNotBlank(superClass)) {
-            importPackages.add(superClass);
-        }
-        if (mapperAnnotationClass != null) {
-            importPackages.add(mapperAnnotationClass.getName());
-        }
-        Map<String, String> classCanonicalNameMap = tableInfo.getConfigurer().getOutputConfig().getOutputClassCanonicalNameMap(tableInfo);
-        importPackages.add(classCanonicalNameMap.get(TemplateFileEnum.entity.name()));
-        GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
-        if (globalConfig.isGenerateQuery()) {
-            importPackages.add(List.class.getCanonicalName());
-            importPackages.add(classCanonicalNameMap.get(TemplateFileEnum.queryVO.name()));
-            importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
-        }
-        return importPackages;
     }
 
 }

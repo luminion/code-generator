@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${class.mapper}">
-
-#if(${enableCache})
+#if(${mapperCacheClass})
+    
     <!-- 开启二级缓存 -->
-    <cache type="${cacheClassName}"/>
-
+    <cache type="${mapperCacheClass}"/>
 #end
 #if(${baseResultMap})
+
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="${class.entity}">
     #foreach($field in ${table.fields})
@@ -44,9 +44,9 @@
         #end
     #end
     </resultMap>
-
 #end
 #if(${baseColumnList})
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
     #foreach($field in ${table.commonFields})
@@ -54,10 +54,10 @@
     #end
         ${table.fieldNames}
     </sql>
-
 #end
-#if(!${enhancer} && ${generateQuery})
-    <sql id="queryFragment">
+#if(${generateQuery})
+
+    <sql id="conditions">
         <if test="param1 != null">
     #foreach($field in ${table.fields})
         #if(${field.logicDeleteField})
@@ -82,9 +82,18 @@
             <if test="param1.${field.propertyName} != null">
                 AND a.${field.columnName} ${field.sqlOperatorXml}
             </if>
-        #elseif(${field.sqlOperator}=="&>" || ${field.sqlOperator}=="&=")
+        #elseif(${field.sqlOperator}=="&")
             <if test="param1.${field.propertyName} != null">
-                AND a.${field.columnName} &amp; #{param1.${field.propertyName}} ${field.sqlOperatorXml} 0
+                AND a.${field.columnName} &amp; #{param1.${field.propertyName}} > 0
+            </if>
+        #elseif(${field.sqlOperator}=="!&")
+            <if test="param1.${field.propertyName} != null">
+                AND a.${field.columnName} &amp; #{param1.${field.propertyName}} = 0
+            </if>
+        #elseif(${field.sqlOperator}=="LIKE" || ${field.sqlOperator}=="NOT LIKE")
+            <if test="param1.${field.propertyName} != null">
+                <bind name="${field.propertyName}" value="'%' + param1.${field.propertyName} + '%'"/>
+                AND a.${field.columnName} ${field.sqlOperatorXml} #{${field.propertyName}}
             </if>
         #else
             <if test="param1.${field.propertyName} != null">
@@ -98,20 +107,16 @@
 #end
 #if(${generateQuery})
     #if(${baseResultMap})
-    <select id="voQueryByXml" resultMap="voResultMap">
+    <select id="selectByXml" resultMap="voResultMap">
     #else
-    <select id="voQueryByXml" resultType="${class.queryVO}">
+    <select id="selectByXml" resultType="${class.queryVO}">
     #end
         SELECT
         a.*
         FROM
         ${schemaName}${table.name} a
         <where>
-        #if(${sqlBooster})
-            <include refid="io.github.luminion.mybatisplus.sqlBooster.EnhancedMapper.queryFragment"/>
-        #else
-            <include refid="queryFragment"/>
-        #end
+            <include refid="conditions"/>
             #foreach($field in ${table.fields})
                 #if(${field.logicDeleteField})
                     #if(${field.metaInfo.defaultValue})
@@ -123,14 +128,9 @@
                 #end
             #end
         </where>
-        <trim prefix="ORDER BY" prefixOverrides=",">
-        #if(${sqlBooster})
-            <include refid="io.github.luminion.mybatisplus.enhancer.EnhancedMapper.sortFragment"/>
+        #if(${orderBySql})
+            ORDER BY ${orderBySql}
         #end
-            #if(${orderBySql})
-            , ${orderBySql}
-            #end
-        </trim>
     </select>
 
 #end
