@@ -26,13 +26,14 @@ public class TemplateFile {
      */
     protected String templatePath;
     /**
-     * 输出文件路径
-     */
-    protected String outputDir;
-    /**
      * 输出文件后缀
      */
     protected String outputFileSuffix;
+
+    /**
+     * 输出文件路径
+     */
+    protected String outputDir;
     /**
      * 文件覆盖
      */

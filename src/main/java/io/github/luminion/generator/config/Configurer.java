@@ -57,7 +57,7 @@ public class Configurer {
      */
     private final InjectionConfig injectionConfig = new InjectionConfig();
 
-    //====================模型配置====================
+    //====================模型配置--开始====================
 
     /**
      * 控制器配置
@@ -76,15 +76,43 @@ public class Configurer {
      */
     private final MapperConfig mapperConfig = new MapperConfig();
     /**
+     * 映射器XML配置
+     */
+    private final MapperXmlConfig mapperXmlConfig = new MapperXmlConfig();
+    /**
      * 实体配置
      */
     private final EntityConfig entityConfig = new EntityConfig();
-
     
     /**
-     * 模型配置
+     * 查询DTO配置
      */
-    private final ModelConfig modelConfig = new ModelConfig();
+    private final EntityQueryDTOConfig entityQueryDTOConfig = new EntityQueryDTOConfig();
+    /**
+     * 查询VO配置
+     */
+    private final EntityQueryVOConfig entityQueryVOConfig = new EntityQueryVOConfig();
+
+    /**
+     * 新增DTO配置
+     */
+    private final EntityInsertDTOConfig entityInsertDTOConfig = new EntityInsertDTOConfig();
+    /**
+     * 修改DTO配置
+     */
+    private final EntityUpdateDTOConfig entityUpdateDTOConfig = new EntityUpdateDTOConfig();
+
+    /**
+     * Excel导入DTO配置
+     */
+    private final EntityExcelImportDTOConfig entityExcelImportDTOConfig = new EntityExcelImportDTOConfig();
+    /**
+     * Excel导出DTO配置
+     */
+    private final EntityExcelExportDTOConfig entityExcelExportDTOConfig = new EntityExcelExportDTOConfig();
+
+    //====================模型配置--结束====================
+
     /**
      * 数据库表信息
      * 配置
@@ -131,7 +159,6 @@ public class Configurer {
         }
         return resolver;
     }
-
     
     /**
      * 获取输出的模板参数
@@ -139,16 +166,18 @@ public class Configurer {
      * @return {@link Map }
      * @since 1.0.0
      */
-    public Map<Object, Object> getTemplateParamsMap() {
+    public Map<Object, Object> renderMap(TableInfo tableInfo) {
         HashMap<Object, Object> result = new HashMap<>();
-
         Resolver resolver = getResolver();
-
-        resolver.get
-        map.putAll(this.getOutputClassSimpleNameMap(tableInfo));
-        map.put("package", this.getOutputClassPackageInfoMap());
-        map.put("class", this.getOutputClassCanonicalNameMap(tableInfo));
-        map.put("generate", this.getOutputClassGenerateMap());
+        
+        // 类名
+        result.putAll(resolver.getOutputClassSimpleNameMap(tableInfo));
+        // 类包
+        result.put("package", resolver.getOutputClassPackageInfoMap());
+        // 类全名
+        result.put("class", resolver.getOutputClassNameMap(tableInfo));
+        // 类是否生成
+        result.put("generate", resolver.getOutputClassGenerateMap());
         
         return result;
     }

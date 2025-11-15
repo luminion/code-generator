@@ -26,6 +26,20 @@ public class Resolver {
 
     public Resolver(@NonNull Configurer configurer) {
         this.configurer = configurer;
+        this.templateFileMap.put(TemplateFileEnum.CONTROLLER,configurer.getControllerConfig().getTemplateFile());
+        this.templateFileMap.put(TemplateFileEnum.SERVICE,configurer.getServiceConfig().getTemplateFile());
+        this.templateFileMap.put(TemplateFileEnum.SERVICE_IMPL,configurer.getServiceImplConfig().getTemplateFile());
+        this.templateFileMap.put(TemplateFileEnum.MAPPER,configurer.getMapperConfig().getTemplateFile());
+        this.templateFileMap.put(TemplateFileEnum.MAPPER_XML,configurer.getMapperConfig().getTemplateFile());
+        this.templateFileMap.put(TemplateFileEnum.ENTITY,configurer.getEntityConfig().getTemplateFile());
+        
+        this.templateFileMap.put(TemplateFileEnum.ENTITY_QUERY_DTO,configurer.getEntityQueryDTOConfig().getTemplateFile());
+        this.templateFileMap.put(TemplateFileEnum.ENTITY_QUERY_VO,configurer.getEntityQueryVOConfig().getTemplateFile());
+        this.templateFileMap.put(TemplateFileEnum.ENTITY_INSERT_DTO,configurer.getEntityInsertDTOConfig().getTemplateFile());
+        this.templateFileMap.put(TemplateFileEnum.ENTITY_UPDATE_DTO,configurer.getEntityUpdateDTOConfig().getTemplateFile());
+        this.templateFileMap.put(TemplateFileEnum.ENTITY_EXCEL_IMPORT_DTO,configurer.getEntityExcelImportDTOConfig().getTemplateFile());
+        this.templateFileMap.put(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO,configurer.getEntityExcelExportDTOConfig().getTemplateFile());
+        
         // 将模板文件添加进map
     }
 
@@ -111,76 +125,89 @@ public class Resolver {
 
 
     /**
-     * 获取应当输出的所有文件
+     * 获取应当生成的所有文件
      *
-     * @return {@link List<CustomFile> }
+     * @return 文件列表
      * @since 1.0.0
      */
-    public List<CustomFile> getCustomFiles() {
+    public List<TemplateFile> getTemplateFiles() {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         return this.templateFileMap.values()
                 .stream().filter(TemplateFile::isGenerate)
-                .map(e -> {
-                    CustomFile customFile = new CustomFile();
+                .peek(e -> {
                     String fileOutputDir = e.getOutputDir();
                     if (fileOutputDir == null) {
                         String joinPackage = joinPackage(e.getSubPackage());
                         fileOutputDir = joinPath(e.getOutputDir(), joinPackage);
+                        e.setOutputDir(fileOutputDir);
                     }
-                    customFile.setFormatNameFunction(e::convertFormatName)
-                            .setTemplatePath(e.getTemplatePath())
-                            .setOutputFileSuffix(e.getOutputFileSuffix())
-                            .setOutputDir(fileOutputDir)
-                            .setFileOverride(e.isFileOverride() || globalConfig.isFileOverride());
-                    return customFile;
+                    e.setFileOverride(e.isFileOverride() || globalConfig.isFileOverride());
                 }).collect(Collectors.toList());
     }
 
 
     /**
-     * 获取输出类生成映射
-     *
-     * @return 
+     * 获取指定文件是否生成的映射
+     * <p> 
+     * key {@link TemplateFileEnum#getKey()}
+     * value 是否生成
+     * @return map
      */
     public Map<String, Boolean> getOutputClassGenerateMap() {
-        return null;
-    }
-
-    /**
-     * 获取输出类名称映射
-     *
-     * @param templateFileEnum 模板文件枚举
-     * @param tableInfo        表信息
-     * @return {@link Map }<{@link String }, {@link String }>
-     */
-    public Map<String, String> getOutputClassNameMap(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
-
-        return null;
-    }
-
-    /**
-     * 获取输出类简单名称映射
-     *
-     * @param templateFileEnum 模板文件枚举
-     * @param tableInfo        表信息
-     * @return 
-     */
-    public Map<String, String> getOutputClassSimpleNameMap(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
-
-        return null;
+        return templateFileMap.entrySet().stream()
+                .collect(Collectors.toMap(
+                        e -> e.getValue().getKey(),
+                        e -> e.getValue().isGenerate()
+                ));
     }
 
     /**
      * 获取输出类包信息映射
-     *
-     * @param templateFileEnum 模板文件枚举
-     * @param tableInfo        表信息
-     * @return 
+     * <p> 
+     * key {@link TemplateFileEnum#getKey()}
+     * value 包名(不含类名)
+     * @return map
      */
-    public Map<String, String> getOutputClassPackageInfoMap(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
-
-        return null;
+    public Map<String, String> getOutputClassPackageInfoMap() {
+        return templateFileMap.entrySet().stream()
+                .collect(Collectors.toMap(
+                        e -> e.getValue().getKey(),
+                        e -> joinPackage(e.getValue().getSubPackage())
+                ));
     }
+
+    /**
+     * 获取输出类名称映射
+     * <p> 
+     * key {@link TemplateFileEnum#getKey()}
+     * value 完整类名(含包名)
+     * @param tableInfo 表信息
+     * @return map
+     */
+    public Map<String, String> getOutputClassNameMap(TableInfo tableInfo) {
+        templateFileMap.entrySet().stream()
+                .collect(Collectors.toMap(
+                        e -> e.getValue().getKey(),
+                        e -> joinPackage(e.getValue().getSubPackage()) + "." + e.getValue().convertFormatName(tableInfo)
+                ));
+    }
+
+    /**
+     * 获取输出类简单名称映射
+     * key {@link TemplateFileEnum#getKey()}
+     * value 声明类名(不含包)
+     * @param tableInfo 表信息
+     * @return map
+     */
+    public Map<String, String> getOutputClassSimpleNameMap(TableInfo tableInfo) {
+        templateFileMap.entrySet().stream()
+                .collect(Collectors.toMap(
+                        e -> e.getValue().getKey(),
+                        e -> e.getValue().convertFormatName(tableInfo)
+                ));
+    }
+
+
 
 
 }
