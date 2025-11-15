@@ -23,7 +23,9 @@ import io.github.luminion.generator.config.core.*;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 配置汇总 传递给文件生成工具
@@ -130,4 +132,24 @@ public class Configurer {
         return resolver;
     }
 
+    
+    /**
+     * 获取输出的模板参数
+     *
+     * @return {@link Map }
+     * @since 1.0.0
+     */
+    public Map<Object, Object> getTemplateParamsMap() {
+        HashMap<Object, Object> result = new HashMap<>();
+
+        Resolver resolver = getResolver();
+
+        resolver.get
+        map.putAll(this.getOutputClassSimpleNameMap(tableInfo));
+        map.put("package", this.getOutputClassPackageInfoMap());
+        map.put("class", this.getOutputClassCanonicalNameMap(tableInfo));
+        map.put("generate", this.getOutputClassGenerateMap());
+        
+        return result;
+    }
 }

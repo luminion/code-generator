@@ -34,6 +34,7 @@ public enum TemplateFileEnum {
     MAPPER_XML("mapperXml"),
     
     ENTITY("entity"),
+    
     ENTITY_QUERY_DTO("queryDTO"),
     ENTITY_QUERY_VO("queryVO"),
     ENTITY_INSERT_DTO("insertDTO"),

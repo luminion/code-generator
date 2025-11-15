@@ -45,10 +45,10 @@ public class EntityConfig implements TemplateRender {
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.MAPPER.getKey(),
-            "%sMapper",
-            "mapper",
-            "/templates/base/mapper.java",
+            TemplateFileEnum.ENTITY.getKey(),
+            "%s",
+            "entity",
+            "/templates/base/entity.java",
             ".java"
     );
 

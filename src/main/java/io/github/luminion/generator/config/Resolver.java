@@ -137,4 +137,50 @@ public class Resolver {
     }
 
 
+    /**
+     * 获取输出类生成映射
+     *
+     * @return 
+     */
+    public Map<String, Boolean> getOutputClassGenerateMap() {
+        return null;
+    }
+
+    /**
+     * 获取输出类名称映射
+     *
+     * @param templateFileEnum 模板文件枚举
+     * @param tableInfo        表信息
+     * @return {@link Map }<{@link String }, {@link String }>
+     */
+    public Map<String, String> getOutputClassNameMap(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
+
+        return null;
+    }
+
+    /**
+     * 获取输出类简单名称映射
+     *
+     * @param templateFileEnum 模板文件枚举
+     * @param tableInfo        表信息
+     * @return 
+     */
+    public Map<String, String> getOutputClassSimpleNameMap(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
+
+        return null;
+    }
+
+    /**
+     * 获取输出类包信息映射
+     *
+     * @param templateFileEnum 模板文件枚举
+     * @param tableInfo        表信息
+     * @return 
+     */
+    public Map<String, String> getOutputClassPackageInfoMap(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
+
+        return null;
+    }
+
+
 }
