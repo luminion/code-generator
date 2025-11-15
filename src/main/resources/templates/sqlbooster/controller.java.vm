@@ -52,86 +52,8 @@ public class ${controller} {
         this.baseService = baseService;
     }
 #end
-#if(${generateInsert})
-
-    #if(${springdoc})
-    @Operation(summary = "新增")
-    #elseif(${swagger})
-    @ApiOperation(value = "新增")
-    #else
-    /**
-     * 新增
-     *
-     * @param insertDTO 新增入参对象
-     * @return 新增后的数据id
-     */
-    #end
-    #if(${restful})
-    @PostMapping("")
-    #else
-    @PostMapping("/insert")
-    #end
-    #if(!${restControllerStyle})
-    @ResponseBody
-    #end
-    public ${returnMethod.returnGenericTypeStr("Serializable")} insertByDTO($!{requiredBodyStr}$!{validatedStr}${insertDTO} insertDTO) {
-        return ${returnMethod.invokeMethodStr("baseService.insertByDTO(insertDTO)")};
-    }
-#end
-#if(${generateUpdate})
-
-    #if(${springdoc})
-    @Operation(summary = "修改")
-    #elseif(${swagger})
-    @ApiOperation(value = "修改")
-    #else
-    /**
-     * 修改
-     *
-     * @param updateDTO 修改入参对象
-     * @return 是否成功
-     */
-    #end
-    #if(${restful})
-    @PutMapping("")
-    #else
-    @PostMapping("/update")
-    #end
-    #if(!${restControllerStyle})
-    @ResponseBody
-    #end
-    public ${returnMethod.returnGenericTypeStr("Boolean")} updateByDTO($!{requiredBodyStr}$!{validatedStr}${updateDTO} updateDTO) {
-        return ${returnMethod.invokeMethodStr("baseService.updateByDTO(updateDTO)")};
-    }
-#end
-#if(${generateDelete})
-
-    #if(${springdoc})
-    @Operation(summary = "删除")
-    #elseif(${swagger})
-    @ApiOperation(value = "删除")
-    #else
-    /**
-     * 根据id删除
-     *
-     * @param id 主键id
-     * @return 是否成功
-     */
-    #end
-    #if(${restful})
-    @DeleteMapping("$!{idPathParams}")
-    #else
-    @PostMapping("/delete$!{idPathParams}")
-    #end
-    #if(!${restControllerStyle})
-    @ResponseBody
-    #end
-    public ${returnMethod.returnGenericTypeStr("Boolean")} removeById($!{idMethodParams}${primaryKeyPropertyType} id) {
-        return ${returnMethod.invokeMethodStr("baseService.removeById(id)")};
-    }
-#end
 #if(${generateQuery})
-    
+
     #if(${springdoc})
     @Operation(summary = "根据id查询详情")
     #elseif(${swagger})
@@ -240,6 +162,84 @@ public class ${controller} {
     #end
     public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPageBooster($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, $!{pageMethodParams}) {
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlHelper, current, size)")})};
+    }
+#end
+#if(${generateInsert})
+
+    #if(${springdoc})
+    @Operation(summary = "新增")
+    #elseif(${swagger})
+    @ApiOperation(value = "新增")
+    #else
+    /**
+     * 新增
+     *
+     * @param insertDTO 新增入参对象
+     * @return 新增后的数据id
+     */
+    #end
+    #if(${restful})
+    @PostMapping("")
+    #else
+    @PostMapping("/insert")
+    #end
+    #if(!${restControllerStyle})
+    @ResponseBody
+    #end
+    public ${returnMethod.returnGenericTypeStr("Serializable")} insertByDTO($!{requiredBodyStr}$!{validatedStr}${insertDTO} insertDTO) {
+        return ${returnMethod.invokeMethodStr("baseService.insertByDTO(insertDTO)")};
+    }
+#end
+#if(${generateUpdate})
+
+    #if(${springdoc})
+    @Operation(summary = "修改")
+    #elseif(${swagger})
+    @ApiOperation(value = "修改")
+    #else
+    /**
+     * 修改
+     *
+     * @param updateDTO 修改入参对象
+     * @return 是否成功
+     */
+    #end
+    #if(${restful})
+    @PutMapping("")
+    #else
+    @PostMapping("/update")
+    #end
+    #if(!${restControllerStyle})
+    @ResponseBody
+    #end
+    public ${returnMethod.returnGenericTypeStr("Boolean")} updateByDTO($!{requiredBodyStr}$!{validatedStr}${updateDTO} updateDTO) {
+        return ${returnMethod.invokeMethodStr("baseService.updateByDTO(updateDTO)")};
+    }
+#end
+#if(${generateDelete})
+
+    #if(${springdoc})
+    @Operation(summary = "删除")
+    #elseif(${swagger})
+    @ApiOperation(value = "删除")
+    #else
+    /**
+     * 根据id删除
+     *
+     * @param id 主键id
+     * @return 是否成功
+     */
+    #end
+    #if(${restful})
+    @DeleteMapping("$!{idPathParams}")
+    #else
+    @PostMapping("/delete$!{idPathParams}")
+    #end
+    #if(!${restControllerStyle})
+    @ResponseBody
+    #end
+    public ${returnMethod.returnGenericTypeStr("Boolean")} removeById($!{idMethodParams}${primaryKeyPropertyType} id) {
+        return ${returnMethod.invokeMethodStr("baseService.removeById(id)")};
     }
 #end
 #if(${generateImport})

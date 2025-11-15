@@ -24,6 +24,23 @@ public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity
 #else
 public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity}, ${queryVO}> {
 #end
+#if(${generateQuery})
+
+    @Override
+    public ${queryVO} voById(Serializable id) { 
+        return super.voById(id);
+    }
+
+    @Override
+    public List<${queryVO}> voList(Wrapper wrapper) {
+        return super.voList(wrapper);
+    }
+
+    @Override
+    public Page<${queryVO}> voPage(Wrapper wrapper, long current, long size) {
+        return super.voPage(wrapper, current, size);
+    }
+#end
 #if(${generateInsert})
 
     #if(${generate.service})
@@ -60,23 +77,6 @@ public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity
         #else
         throw new IllegalStateException("can't find id property");
         #end
-    }
-#end
-#if(${generateQuery})
-    
-    @Override
-    public ${queryVO} voById(Serializable id) { 
-        return super.voById(id);
-    }
-
-    @Override
-    public List<${queryVO}> voList(Wrapper wrapper) {
-        return super.voList(wrapper);
-    }
-
-    @Override
-    public Page<${queryVO}> voPage(Wrapper wrapper, long current, long size) {
-        return super.voPage(wrapper, current, size);
     }
 #end
 #if(${generateImport})

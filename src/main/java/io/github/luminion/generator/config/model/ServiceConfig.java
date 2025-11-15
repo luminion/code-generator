@@ -44,7 +44,7 @@ public class ServiceConfig implements TemplateRender {
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.SERVICE.name(),
+            TemplateFileEnum.SERVICE.getKey(),
             "%sService",
             "service",
             "/templates/base/service.java",

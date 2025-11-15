@@ -28,7 +28,7 @@ public class MapperXmlConfig implements TemplateRender {
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.MAPPER_XML.name(),
+            TemplateFileEnum.MAPPER_XML.getKey(),
             "%sMapper",
             "mapper.xml",
             "/templates/base/mapper.xml",

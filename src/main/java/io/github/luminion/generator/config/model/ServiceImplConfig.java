@@ -23,7 +23,6 @@ import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.ClassUtils;
-import io.github.luminion.sqlbooster.model.api.Wrapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,7 +43,7 @@ public class ServiceImplConfig implements TemplateRender {
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.SERVICE_IMPL.name(),
+            TemplateFileEnum.SERVICE_IMPL.getKey(),
             "%sServiceImpl",
             "service.impl",
             "/templates/base/serviceImpl.java",

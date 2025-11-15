@@ -17,9 +17,11 @@ package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.config.core.StrategyConfig;
+import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -39,6 +41,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @Data
 public class EntityConfig implements TemplateRender {
+    /**
+     * 模板文件
+     */
+    protected TemplateFile templateFile = new TemplateFile(
+            TemplateFileEnum.MAPPER.getKey(),
+            "%sMapper",
+            "mapper",
+            "/templates/base/mapper.java",
+            ".java"
+    );
 
     /**
      * 自定义继承的Entity类全称，带包名

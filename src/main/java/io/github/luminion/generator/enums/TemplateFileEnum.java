@@ -16,6 +16,7 @@
 package io.github.luminion.generator.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * 输出文件类型
@@ -26,17 +27,20 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public enum TemplateFileEnum {
-    CONTROLLER,
-    SERVICE,
-    SERVICE_IMPL,
-    MAPPER,
-    MAPPER_XML,
-    ENTITY,
-    ENTITY_QUERY_DTO,
-    ENTITY_QUERY_VO,
-    ENTITY_INSERT_DTO,
-    ENTITY_UPDATE_DTO,
-    ENTITY_EXCEL_IMPORT_DTO,
-    ENTITY_EXCEL_EXPORT_DTO,
+    CONTROLLER("controller"),
+    SERVICE("service"),
+    SERVICE_IMPL("serviceImpl"),
+    MAPPER("mapper"),
+    MAPPER_XML("mapperXml"),
+    
+    ENTITY("entity"),
+    ENTITY_QUERY_DTO("queryDTO"),
+    ENTITY_QUERY_VO("queryVO"),
+    ENTITY_INSERT_DTO("insertDTO"),
+    ENTITY_UPDATE_DTO("updateDTO"),
+    ENTITY_EXCEL_IMPORT_DTO("excelImportDTO"),
+    ENTITY_EXCEL_EXPORT_DTO("excelExportDTO"),
     ;
+    @Getter
+    private final String key;
 }
