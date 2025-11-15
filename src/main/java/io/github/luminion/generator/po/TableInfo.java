@@ -99,7 +99,7 @@ public class TableInfo {
      */
     @Getter
     @Setter
-    private TableField primaryKeyTableField;
+    private TableField primaryKeyField;
 
 //    /**
 //     * 索引信息

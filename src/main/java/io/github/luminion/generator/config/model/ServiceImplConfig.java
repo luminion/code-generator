@@ -16,6 +16,7 @@
 package io.github.luminion.generator.config.model;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
@@ -67,8 +68,6 @@ public class ServiceImplConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
-        data.put("superServiceImplClassPackage", this.superClass);
-        data.put("superServiceImplClass", ClassUtils.getSimpleName(this.superClass));
 
         Set<String> importPackages = new TreeSet<>();
         Configurer configurer = tableInfo.getConfigurer();
@@ -77,8 +76,7 @@ public class ServiceImplConfig implements TemplateRender {
 
         switch (globalConfig.getRuntimeEnv()) {
             case SQL_BOOSTER_MY_BATIS_PLUS:
-                this.superClass = BoosterMpServiceImpl.class.getName();
-                importPackages.add(resolver.getClassName(TemplateFileEnum.MAPPER, tableInfo));
+                this.superClass = "io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpServiceImpl";
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(globalConfig.getPageClassPayload().getClassName());
@@ -88,23 +86,27 @@ public class ServiceImplConfig implements TemplateRender {
                 }
                 break;
             case MYBATIS_PLUS:
-                this.superClass = IService.class.getName();
+                this.superClass = "com.baomidou.mybatisplus.extension.service.impl.ServiceImpl";
                 if (globalConfig.isGenerateQuery()) {
-                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
+                    importPackages.add("java.io.Serializable");
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                     importPackages.add("java.util.List");
-                    importPackages.add("java.io.Serializable");
+                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
                     importPackages.add("com.baomidou.mybatisplus.extension.plugins.pagination.Page");
                 }
             default:
                 throw new RuntimeException("暂不支持的运行环境");
         }
-
-
-        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
-        importPackages.add(this.superClass);
+        // 类注解及信息
         importPackages.add("org.springframework.stereotype.Service");
+        if (superClass != null) {
+            importPackages.add(this.superClass);
+            data.put("serviceImplSuperClass", ClassUtils.getSimpleName(this.superClass));
+        }
+        importPackages.add(resolver.getClassName(TemplateFileEnum.MAPPER, tableInfo));
+        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
+
         if (resolver.isGenerate(TemplateFileEnum.SERVICE, tableInfo)) {
             importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE, tableInfo));
         }
@@ -121,22 +123,25 @@ public class ServiceImplConfig implements TemplateRender {
         if (globalConfig.isGenerateDelete()) {
             importPackages.add("java.io.Serializable");
         }
-        if (globalConfig.isGenerateExport()) {
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO, tableInfo));
-            String mainEntrance = globalConfig.getExcelApi().getMainEntrance();
-            String packagePrefix = globalConfig.getExcelApi().getPackagePrefix();
-            importPackages.add(packagePrefix + mainEntrance);
-            importPackages.add(packagePrefix + "write.style.column.LongestMatchColumnWidthStyleStrategy");
-            importPackages.add("java.io.OutputStream");
-        }
+        String excelMain = globalConfig.getExcelApi().getMainEntrance();
+        String excelPackagePrefix = globalConfig.getExcelApi().getPackagePrefix();
+        String excelClass = excelPackagePrefix + excelMain;
         if (globalConfig.isGenerateImport()) {
+            importPackages.add(excelClass);
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_IMPORT_DTO, tableInfo));
-            importPackages.add("java.io.InputStream");
             importPackages.add("java.io.OutputStream");
-            importPackages.add("java.util.List");
             importPackages.add("java.util.Collections");
+            importPackages.add("java.io.InputStream");
+            importPackages.add("java.util.List");
             importPackages.add("java.util.stream.Collectors");
             importPackages.add("org.springframework.beans.BeanUtils");
+        }
+
+        if (globalConfig.isGenerateExport()) {
+            importPackages.add(excelClass);
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO, tableInfo));
+            importPackages.add(excelPackagePrefix + "write.style.column.LongestMatchColumnWidthStyleStrategy");
+            importPackages.add("java.io.OutputStream");
         }
 
         Collection<String> serviceImplImportPackages4Java = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());

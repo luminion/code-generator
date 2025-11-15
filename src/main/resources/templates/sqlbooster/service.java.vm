@@ -34,7 +34,7 @@ public interface ${service} extends ${serviceSuperClassSimpleName}<${entity}, ${
     boolean removeById(Serializable id);
     #end
     #if(${generateQuery})
-        
+
     @Override
     ${queryVO} voById(Serializable id);
 
@@ -42,7 +42,7 @@ public interface ${service} extends ${serviceSuperClassSimpleName}<${entity}, ${
     List<${queryVO}> voList(Wrapper wrapper);
 
     @Override
-    Page<${queryVO}> voPage(Wrapper wrapper, Long current, Long size);
+    Page<${queryVO}> voPage(Wrapper wrapper, long current, long size);
     #end
     #if(${generateImport})
 

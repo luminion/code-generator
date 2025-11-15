@@ -15,17 +15,14 @@
  */
 package io.github.luminion.generator.config.model;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.ClassUtils;
-import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService;
-import io.github.luminion.sqlbooster.model.api.Wrapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 

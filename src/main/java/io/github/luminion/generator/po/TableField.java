@@ -137,7 +137,7 @@ public class TableField {
             this.keyFlag = true;
             this.keyIdentityFlag = columnInfo.isAutoIncrement();
             tableInfo.setHavePrimaryKey(true);
-            tableInfo.setPrimaryKeyTableField(this);
+            tableInfo.setPrimaryKeyField(this);
             if (this.keyIdentityFlag && strategyConfig.getIdType() != null) {
                 log.warn("当前表[{}]的主键为自增主键，会导致全局主键的ID类型设置失效!", tableInfo.getName());
             }

@@ -39,7 +39,7 @@ public interface ${service} extends ${serviceSuperClassSimpleName}<${entity}> {
 
     List<${queryVO}> voList(${queryDTO} queryDTO);
 
-    IPage<${queryVO}> voPage(${queryDTO} queryDTO, Long current, Long size);
+    IPage<${queryVO}> voPage(${queryDTO} queryDTO, long current, long size);
     #end
     #if(${generateImport})
 

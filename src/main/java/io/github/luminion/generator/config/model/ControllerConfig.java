@@ -24,7 +24,6 @@ import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.*;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
-import io.github.luminion.sqlbooster.model.sql.helper.SqlHelper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -219,7 +218,7 @@ public class ControllerConfig implements TemplateRender {
         // 删除
         if (globalConfig.isGenerateDelete()) {
             if (tableInfo.isHavePrimaryKey()) {
-                TableField primaryKeyTableField = tableInfo.getPrimaryKeyTableField();
+                TableField primaryKeyTableField = tableInfo.getPrimaryKeyField();
                 data.put("primaryKeyPropertyType", primaryKeyTableField.getJavaType().getType());
                 importPackages.add(primaryKeyTableField.getJavaType().getPkg());
             } else {
@@ -233,7 +232,7 @@ public class ControllerConfig implements TemplateRender {
             
             // 根据id查询
             if (tableInfo.isHavePrimaryKey()) {
-                TableField primaryKeyTableField = tableInfo.getPrimaryKeyTableField();
+                TableField primaryKeyTableField = tableInfo.getPrimaryKeyField();
                 data.put("primaryKeyPropertyType", primaryKeyTableField.getJavaType().getType());
                 importPackages.add(primaryKeyTableField.getJavaType().getPkg());
             } else {

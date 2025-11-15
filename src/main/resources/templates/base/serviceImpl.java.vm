@@ -15,157 +15,115 @@ import ${pkg};
 /**
  * $!{table.comment} 服务实现类
  *
- * @author ${author}
- * @since ${date}
+ * @author ${docAuthor}
+ * @since ${docDate}
  */
 @Service
 #if(${generate.service})
 public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity}> implements ${service} {
-#elseif(${enhancer})
-public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity}> implements EnhancedService<${queryVO}> {
 #else
 public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity}> {
 #end
 #if(${generateInsert})
 
-    #if(${generate.service} || ${enhancer})
+    #if(${generate.service})
     @Override
     #end
-    public Object insertByDTO(Object insertDTO) {
-//        ${insertDTO} dto = (${insertDTO}) insertDTO;
-        #if(${enhancer})
-        return ${enhanceMethod}.insertByDTO(insertDTO);    
-        #else
+    public Serializable insertByDTO(${insertDTO} insertDTO) {
         ${entity} entity = new ${entity}();
         BeanUtils.copyProperties(insertDTO, entity);
         super.save(entity);
-        TableInfo tableInfo = TableInfoHelper.getTableInfo(getEntityClass());
-        return tableInfo.getPropertyValue(entity, tableInfo.getKeyProperty());
+        #if(${table.havePrimaryKey})
+        return entity.get${table.primaryKeyField.capitalName}();
+        #else
+        return null;
         #end
     }
 #end
 #if(${generateUpdate})
 
-    #if(${generate.service} || ${enhancer})
+    #if(${generate.service})
     @Override
     #end
-    public boolean updateByDTO(Object updateDTO) {
-//        ${updateDTO} dto = (${updateDTO}) updateDTO;
-        #if(${enhancer})
-        return ${enhanceMethod}.updateByDTO(updateDTO);
-        #else
+    public boolean updateByDTO(${updateDTO} updateDTO) {
         ${entity} entity = new ${entity}();
         BeanUtils.copyProperties(updateDTO, entity);
         return super.updateById(entity);
-        #end
     }
 #end
 #if(${generateDelete})
 
     @Override
     public boolean removeById(Serializable id) {
+        #if(${table.primaryKeyField})
         return super.removeById(id);
+        #else
+        throw new IllegalStateException("can't find id property");
+        #end
     }
 #end
 #if(${generateQuery})
     
-    #if(${generate.service} || ${enhancer})
+    #if(${generate.service})
     @Override
     #end
-    public ${queryVO} voById(Serializable id) {
-        #if(${enhancer})
-        return ${enhanceMethod}.voById(id);
+    public ${queryVO} voById(Serializable id) { 
+        #if(${table.primaryKeyField})
+        ${queryDTO} queryDTO = new ${queryDTO}()
+        queryDTO.set${table.primaryKeyField.capitalName}((${table.primaryKeyField.propertyType})id);
+        return this.voList(queryDTO).stream().findFirst().orElse(null);
         #else
-        HashMap<String, Object> map = new HashMap<>();
-        map.put(TableInfoHelper.getTableInfo(getEntityClass()).getKeyProperty(), id);
-        IPage<${queryVO}> page = new Page<>(1L, 1L);
-        List<${queryVO}> vs = getBaseMapper().voQuery(map, page);
-        if (vs == null || vs.isEmpty()) {
-            return null;
-        }
-        if (page.getTotal() > 1) {
-            throw new TooManyResultsException("Expected one result (or null) , but found:" + page.getTotal());
-        }
-        return vs.get(0);
+        throw new IllegalStateException("can't find id property");
         #end
     }
 
-    #if(${generate.service} || ${enhancer})
+    #if(${generate.service})
     @Override
     #end
-    public List<${queryVO}> voList(Object queryDTO) {
-        #if(${enhancer})
-        return ${enhanceMethod}.voList(queryDTO);
-        #else
-        return getBaseMapper().voQuery(queryDTO, null);
-        #end
+    public List<${queryVO}> voList(${queryDTO} queryDTO) {
+        return getBaseMapper().selectByXml(queryDTO, null);
     }
 
-    #if(${generate.service} || ${enhancer})
+    #if(${generate.service})
     @Override
     #end
-    public IPage<${queryVO}> voPage(Object queryDTO, Long current, Long size) {
-        #if(${enhancer})
-        return ${enhanceMethod}.voPage(queryDTO, current, size);
-        #else
-        if (current == null || current < 1) current = 1L;
-        if (size == null) size = 10L;
+    public IPage<${queryVO}> voPage(${queryDTO} queryDTO, long current, long size) {
         Page<${queryVO}> page = new Page<>(current, size);
-        List<${queryVO}> voList = getBaseMapper().voQuery(queryDTO, page);
+        List<${queryVO}> voList = getBaseMapper().selectByXml(queryDTO, page);
         page.setRecords(voList);
         return page;
-        #end
     }
 #end
 #if(${generateImport})
 
-    #if(${generate.service} || ${enhancer})
+    #if(${generate.service})
     @Override
     #end
-    public void excelTemplate(OutputStream os, Class<?> clazz) {
-        #if(${enhancer})
-        ${enhanceMethod}.excelTemplate(os, clazz);
-        #else
-        ${excelApiClass}.write(os, clazz).sheet().doWrite(Collections.emptyList());
-        #end
+    public void excelTemplate(OutputStream os) {
+        ${excelApiClass}.write(os, ${class.excelImportDTO}).sheet().doWrite(Collections.emptyList());
     }
 
-    #if(${generate.service} || ${enhancer})
+    #if(${generate.service})
     @Override
     #end
-    public int excelImport(InputStream is, Class<?> clazz) {
-        #if(${enhancer})
-//        List<${insertDTO}> dataList = ${excelApiClass}.read(is).head(clazz).sheet().doReadSync();
-        return ${enhanceMethod}.excelImport(is, clazz);
-        #else
-        List<?> dataList = ${excelApiClass}.read(is).head(clazz).sheet().doReadSync();
-        List<${entity}> entityList = dataList.stream().map(insertDTO -> {
-//            ${insertDTO} dto = (${insertDTO}) insertDTO;
+    public int excelImport(InputStream is) {
+        List<${excelImportDTO}> dataList = ${excelApiClass}.read(is).head(${class.excelImportDTO}).sheet().doReadSync();
+        List<${entity}> entityList = dataList.stream().map(excelImportDTO -> {
             ${entity} entity = new ${entity}();
-            BeanUtils.copyProperties(insertDTO, entity);
+            BeanUtils.copyProperties(excelImportDTO, entity);
             return entity;
         }).collect(Collectors.toList());
         super.saveBatch(entityList);
         return entityList.size();
-        #end
     }
 #end
 #if(${generateExport})
 
-    #if(${generate.service} || ${enhancer})
+    #if(${generate.service})
     @Override
     #end
-    public void excelExport(Object queryDTO, OutputStream os, Class<?> clazz, Long current, Long size, String... includeFields) {
-        #if(${enhancer})
-        ${enhanceMethod}.excelExport(queryDTO, os, clazz, current, size, includeFields);
-        #else
-        List<${queryVO}> voList = this.voPage(queryDTO, current, size).getRecords();
-        ${excelApiClass}.write(os, clazz)
-                .includeColumnFieldNames(Arrays.asList(includeFields))
-                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
-                .sheet()
-                .doWrite(voList);
-        #end
+    public void excelExport(${queryDTO} queryDTO, OutputStream os) {
+        ${excelApiClass}.write(os, ${class.excelExportDTO}).sheet().doWrite(this.voList(queryDTO));
     }
 #end
 }
