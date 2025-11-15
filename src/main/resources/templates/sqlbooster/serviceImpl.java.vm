@@ -20,9 +20,9 @@ import ${pkg};
  */
 @Service
 #if(${generate.service})
-public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity}> implements ${service} {
+public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity}, ${queryVO}> implements ${service} {
 #else
-public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity}> {
+public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity}, ${queryVO}> {
 #end
 #if(${generateInsert})
 
@@ -64,34 +64,19 @@ public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity
 #end
 #if(${generateQuery})
     
-    #if(${generate.service})
     @Override
-    #end
     public ${queryVO} voById(Serializable id) { 
-        #if(${table.primaryKeyField})
-        ${queryDTO} queryDTO = new ${queryDTO}()
-        queryDTO.set${table.primaryKeyField.capitalName}((${table.primaryKeyField.propertyType})id);
-        return this.voList(queryDTO).stream().findFirst().orElse(null);
-        #else
-        throw new IllegalStateException("can't find id property");
-        #end
+        return super.voById(id);
     }
 
-    #if(${generate.service})
     @Override
-    #end
-    public List<${queryVO}> voList(${queryDTO} queryDTO) {
-        return getBaseMapper().selectByXml(queryDTO, null);
+    public List<${queryVO}> voList(Wrapper wrapper) {
+        return super.voList(wrapper);
     }
 
-    #if(${generate.service})
     @Override
-    #end
-    public IPage<${queryVO}> voPage(${queryDTO} queryDTO, long current, long size) {
-        Page<${queryVO}> page = new Page<>(current, size);
-        List<${queryVO}> voList = getBaseMapper().selectByXml(queryDTO, page);
-        page.setRecords(voList);
-        return page;
+    public Page<${queryVO}> voPage(Wrapper wrapper, long current, long size) {
+        return super.voPage(wrapper, current, size);
     }
 #end
 #if(${generateImport})
@@ -122,8 +107,8 @@ public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity
     #if(${generate.service})
     @Override
     #end
-    public void excelExport(${queryDTO} queryDTO, OutputStream os) {
-        ${excelApiClass}.write(os, ${class.excelExportDTO}).sheet().doWrite(this.voList(queryDTO));
+    public void excelExport(Wrapper wrapper, OutputStream os) {
+        ${excelApiClass}.write(os, ${class.excelExportDTO}).sheet().doWrite(this.voList(wrapper));
     }
 #end
 }

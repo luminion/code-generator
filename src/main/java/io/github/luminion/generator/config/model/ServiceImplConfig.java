@@ -15,8 +15,6 @@
  */
 package io.github.luminion.generator.config.model;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
@@ -25,7 +23,6 @@ import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.ClassUtils;
-import io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpServiceImpl;
 import io.github.luminion.sqlbooster.model.api.Wrapper;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -80,9 +77,10 @@ public class ServiceImplConfig implements TemplateRender {
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(globalConfig.getPageClassPayload().getClassName());
-                    importPackages.add(Wrapper.class.getName());
-                    importPackages.add("java.util.List");
                     importPackages.add("java.io.Serializable");
+                    importPackages.add("io.github.luminion.sqlbooster.model.api.Wrapper");
+                    importPackages.add("java.util.List");
+              
                 }
                 break;
             case MYBATIS_PLUS:
