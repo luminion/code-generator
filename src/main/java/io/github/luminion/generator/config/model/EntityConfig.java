@@ -67,11 +67,11 @@ public class EntityConfig implements TemplateRender {
     protected boolean serialAnnotation = true;
 
     /**
-     * 开启 ActiveRecord 模式（默认 false）
+     * 开启 ActiveRecord 模式
      */
     protected boolean activeRecord;
     /**
-     * 是否生成实体时，生成字段注解（默认 false）
+     * 是否生成实体时，生成字段注解
      */
     protected boolean tableFieldAnnotation;
 
