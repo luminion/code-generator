@@ -1,18 +1,12 @@
 package io.github.luminion.generator.config.core;
 
+import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.TemplateFileEnum;
-import io.github.luminion.generator.po.CustomFile;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
-import java.io.File;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 输出文件配置

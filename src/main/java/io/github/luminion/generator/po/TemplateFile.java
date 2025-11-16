@@ -59,5 +59,21 @@ public class TemplateFile {
     public String convertFormatName(TableInfo tableInfo) {
         return String.format(nameFormat, tableInfo.getEntityName());
     }
+
+    public boolean validate() {
+        if (templatePath == null) {
+            throw new IllegalArgumentException("模板路径不能为空");
+        }
+        if (outputDir == null) {
+            throw new IllegalArgumentException("文件输出文件夹不能为空");
+        }
+        if (nameFormat == null) {
+            throw new IllegalArgumentException("文件名称格式化函数不能为空");
+        }
+        if (outputFileSuffix == null) {
+            throw new IllegalArgumentException("文件名称后缀不能为空");
+        }
+        return true;
+    }
     
 }
