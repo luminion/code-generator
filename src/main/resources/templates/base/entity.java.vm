@@ -15,19 +15,19 @@ import ${pkg};
 /**
  * $!{table.comment}
  *
- * @author ${author}
-#if(${commentLink})
+ * @author ${docAuthor}
+#if(${docLink})
  * @see ${class.mapper}
  * @see ${class.serviceImpl}
 #end
- * @since ${date}
+ * @since ${docDate}
  */
 #if(${lombok})
 @Data
     #if(${chainModel})
 @Accessors(chain = true)
     #end
-    #if(${superEntityClass}||${activeRecord})
+    #if(${entitySuperClass}||${activeRecord})
 @EqualsAndHashCode(callSuper = true)
     #end
 #end
@@ -39,11 +39,8 @@ import ${pkg};
 #elseif(${swagger})
 @ApiModel(description = "$!{table.comment}")
 #end
-#if($generateExport && $queryVOExtendsEntity)
-@ExcelIgnoreUnannotated
-#end
-#if(${superEntityClass})
-public class ${entity} extends ${superEntityClass}#if(${activeRecord})<${entity}>#end {
+#if(${entitySuperClassSimpleName})
+public class ${entity} extends ${entitySuperClassSimpleName} {
 #elseif(${activeRecord})
 public class ${entity} extends Model<${entity}> {
 #elseif(${entitySerialVersionUID})
@@ -51,14 +48,14 @@ public class ${entity} implements Serializable {
 #else
 public class ${entity} {
 #end
-#if(${entitySerialVersionUID})
+#if(${entitySerialUID})
 
     #if(${entitySerialAnnotation})
     @Serial
     #end
     private static final long serialVersionUID = 1L;
 #end
-## ----------  BEGIN 字段循环遍历  ----------
+## ----------BEGIN 字段循环遍历----------
 #foreach($field in ${table.fields})
 
     #if(${field.keyFlag})
@@ -80,16 +77,16 @@ public class ${entity} {
     @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
         #elseif(!$null.isNull(${idType}) && "$!idType" != "")
     @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
-        #elseif(${field.convert})
+        #elseif(${field.convert} || ${entityTableFieldAnnotation})
     @TableId("${field.annotationColumnName}")
         #end
     #elseif(${field.fill})
-        #if(${field.convert})
+        #if(${field.convert} || ${entityTableFieldAnnotation})
     @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
         #else
     @TableField(fill = FieldFill.${field.fill})
         #end
-    #elseif(${field.convert})
+    #elseif(${field.convert} || ${entityTableFieldAnnotation})
     @TableField("${field.annotationColumnName}")
     #end
     #if(${field.versionField})
@@ -98,12 +95,10 @@ public class ${entity} {
     #if(${field.logicDeleteField})
     @TableLogic
     #end
-    #if($generateExport && $queryVOExtendsEntity && !${field.logicDeleteField})
-    @ExcelProperty(value = "${field.comment}")
-    #end
     private ${field.propertyType} ${field.propertyName};
 #end
-## ----------  END 字段循环遍历  ----------
+## ----------END 字段循环遍历----------
+## ----------BEGIN getter/setter----------
 #if(!${lombok})
 #foreach($field in ${table.fields})
   #if(${field.propertyType.equals("boolean")})
@@ -127,15 +122,8 @@ public class ${entity} {
   #end
     }
 #end
-## --foreach end---
 #end
-## --end of #if(!${lombok})--
-#if(${entityColumnConstant})
-  #foreach($field in ${table.fields})
-
-    public static final String ${field.name.toUpperCase()} = "${field.name}";
-  #end
-#end
+## ----------  END getter/setter  ----------
 #if(${activeRecord})
 
     @Override

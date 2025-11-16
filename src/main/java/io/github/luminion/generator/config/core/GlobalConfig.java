@@ -15,7 +15,6 @@
  */
 package io.github.luminion.generator.config.core;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.enums.DocType;
 import io.github.luminion.generator.enums.ExcelApi;
@@ -23,7 +22,6 @@ import io.github.luminion.generator.enums.JavaEEApi;
 import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.po.ClassPayload;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.sqlbooster.core.Page;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,9 +48,9 @@ public class GlobalConfig implements TemplateRender {
     protected boolean lombok = true;
 
     /**
-     * 是否为链式模型（默认 false）
+     * 是否为链式模型setter（默认 false）
      */
-    protected boolean lombokChainModel;
+    protected boolean chainModel;
 
     //---------------- 注释文档---------------
 
@@ -184,7 +182,7 @@ public class GlobalConfig implements TemplateRender {
         data.put("validated", this.validated);
         data.put("docLink", this.docLink);
         data.put("lombok", this.lombok);
-        data.put("lombokChainModel", this.lombokChainModel);
+        data.put("lombokChainModel", this.chainModel);
 
         switch (this.docType) {
             case SPRING_DOC:

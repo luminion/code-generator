@@ -27,8 +27,6 @@ public enum IdType {
     /**
      * 分配ID (主键类型为number或string）,
      * 默认实现类 (雪花算法)
-     *
-     * @since 3.3.0
      */
     ASSIGN_ID(3),
     /**

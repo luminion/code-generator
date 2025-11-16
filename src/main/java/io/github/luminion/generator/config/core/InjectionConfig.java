@@ -15,9 +15,9 @@
  */
 package io.github.luminion.generator.config.core;
 
+import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.po.CustomFile;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.TemplateRender;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 

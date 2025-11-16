@@ -16,7 +16,6 @@
 package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.config.core.GlobalConfig;
-import io.github.luminion.generator.config.core.StrategyConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.JavaFieldInfo;
@@ -27,7 +26,6 @@ import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -63,55 +61,49 @@ public class EntityConfig implements TemplateRender {
     protected boolean serialUID = true;
 
     /**
-     * 是否启用 {@link java.io.Serial} (需JAVA 14) 注解
+     * 是否启用java.io.Serial (需JAVA 14) 注解
      *
      */
-    protected boolean serialAnnotation;
+    protected boolean serialAnnotation = true;
 
     /**
      * 开启 ActiveRecord 模式（默认 false）
      */
     protected boolean activeRecord;
-    
     /**
-     * 是否使用mybatis plus
+     * 是否生成实体时，生成字段注解（默认 false）
      */
-    protected boolean mybatisPlus;
+    protected boolean tableFieldAnnotation;
 
+    @Override
+    public void init() {
+        if (this.superClass!=null && this.activeRecord){
+            log.warn("继承和父类和activeRecord同时开启,activeRecord将失效!!!");
+        }
+    }
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         data.put("activeRecord", this.activeRecord);
-        data.put("entitySerialVersionUID", this.serialUID);
+        data.put("entitySerialUID", this.serialUID);
         data.put("entitySerialAnnotation", this.serialAnnotation);
-        data.put("superEntityClass", ClassUtils.getSimpleName(this.superClass));
-        // 导入包
-        Set<String> importPackages = this.entityImportPackages(tableInfo);
-        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
-        Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("entityImportPackages4Java", javaPackages);
-        data.put("entityImportPackages4Framework", frameworkPackages);
-        return data;
-    }
-
-    /**
-     * 导包处理
-     */
-    public Set<String> entityImportPackages(TableInfo tableInfo) {
+        data.put("entitySuperClassSimpleName", ClassUtils.getSimpleName(this.superClass));
+        data.put("entityTableFieldAnnotation", this.tableFieldAnnotation);
+        
+        Set<String> importPackages = new TreeSet<>();
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
-        StrategyConfig strategyConfig = tableInfo.getConfigurer().getStrategyConfig();
-        TreeSet<String> importPackages = new TreeSet<>();
+
+        if (this.activeRecord) {
+            // 无父类开启 AR 模式
+            importPackages.add("com.baomidou.mybatisplus.extension.activerecord.Model");
+        }
+    
         if (StringUtils.isNotBlank(this.superClass)) {
             importPackages.add(this.superClass);
-        } else {
-            if (this.activeRecord) {
-                // 无父类开启 AR 模式
-                importPackages.add("com.baomidou.mybatisplus.extension.activerecord.Model");
-            }
         }
         if (this.serialUID || this.activeRecord) {
-            importPackages.add(Serializable.class.getCanonicalName());
+            importPackages.add("java.io.Serializable");
             if (this.serialAnnotation) {
                 importPackages.add("java.io.Serial");
             }
@@ -119,10 +111,10 @@ public class EntityConfig implements TemplateRender {
         if (tableInfo.isConvert()) {
             importPackages.add("com.baomidou.mybatisplus.annotation.TableName");
         }
-        if (null != strategyConfig.getIdType() && tableInfo.isHavePrimaryKey()) {
-            // 指定需要 IdType 场景
-            importPackages.add("com.baomidou.mybatisplus.annotation.IdType");
-            importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
+        if (this.tableFieldAnnotation){
+            if (tableInfo.isHavePrimaryKey()){
+                
+            }
         }
         tableInfo.getFields().forEach(field -> {
             JavaFieldInfo columnType = field.getJavaType();
@@ -132,7 +124,7 @@ public class EntityConfig implements TemplateRender {
             if (field.isKeyFlag()) {
                 // 主键
                 if (field.isConvert() || field.isKeyIdentityFlag()) {
-                    importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
+                    importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
                 }
                 // 自增
                 if (field.isKeyIdentityFlag()) {
@@ -154,11 +146,8 @@ public class EntityConfig implements TemplateRender {
                 importPackages.add("com.baomidou.mybatisplus.annotation.TableLogic");
             }
         });
-        if (globalConfig.isSpringdoc()) {
-            importPackages.add("io.swagger.v3.oas.annotations.media.Schema");
-        }
         if (globalConfig.isLombok()) {
-            if (globalConfig.isLombokChainModel()) {
+            if (globalConfig.isChainModel()) {
                 importPackages.add("lombok.experimental.Accessors");
             }
             if (this.superClass != null) {
@@ -169,11 +158,23 @@ public class EntityConfig implements TemplateRender {
             }
             importPackages.add("lombok.Data");
         }
-        if (globalConfig.isSwagger()) {
-            importPackages.add("io.swagger.annotations.ApiModel");
-            importPackages.add("io.swagger.annotations.ApiModelProperty");
+        
+        switch (globalConfig.getDocType()){
+            case SPRING_DOC:
+                importPackages.add("io.swagger.v3.oas.annotations.media.Schema");
+                break;
+            case SWAGGER:
+                importPackages.add("io.swagger.annotations.ApiModel");
+                importPackages.add("io.swagger.annotations.ApiModelProperty");
+                break;
         }
-        return importPackages;
+        
+        // 导入包
+        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
+        Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
+        data.put("entityImportPackages4Java", javaPackages);
+        data.put("entityImportPackages4Framework", frameworkPackages);
+        return data;
     }
 
 }

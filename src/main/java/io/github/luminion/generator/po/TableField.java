@@ -183,13 +183,8 @@ public class TableField {
         } else {
             this.convert = !propertyName.equalsIgnoreCase(this.columnName);
         }
-        
-        if (strategyConfig.isTableFieldAnnotationEnable()) {
-            this.convert = true;
-        } else {
-            if (this.keyFlag) {
-                this.convert = !"id".equals(propertyName);
-            }
+        if (this.keyFlag) {
+            this.convert = !"id".equals(propertyName);
         }
   
     }
@@ -234,10 +229,8 @@ public class TableField {
      * @return 是否为乐观锁字段
      */
     public boolean isVersionField() {
-        String propertyName = strategyConfig.getVersionPropertyName();
         String columnName = strategyConfig.getVersionColumnName();
-        return StringUtils.isNotBlank(propertyName) && this.propertyName.equals(propertyName)
-                || StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
+        return  StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
     }
 
     /**
@@ -246,10 +239,8 @@ public class TableField {
      * @return 是否为逻辑删除字段
      */
     public boolean isLogicDeleteField() {
-        String propertyName = strategyConfig.getLogicDeletePropertyName();
         String columnName = strategyConfig.getLogicDeleteColumnName();
-        return StringUtils.isNotBlank(propertyName) && this.propertyName.equals(propertyName)
-                || StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
+        return StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
     }
 
 
@@ -327,8 +318,6 @@ public class TableField {
 
         /**
          * 类型名称(可用做额外判断处理,例如在pg下,json,uuid,jsonb,tsquery这种都认为是OHTER 1111)
-         *
-         * @since 3.5.3
          */
         @Getter
         private String typeName;

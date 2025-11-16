@@ -38,7 +38,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder lombokChainModel(boolean enable) {
-        this.configurer.getGlobalConfig().setLombokChainModel(enable);
+        this.configurer.getGlobalConfig().setChainModel(enable);
         return this;
     }
 

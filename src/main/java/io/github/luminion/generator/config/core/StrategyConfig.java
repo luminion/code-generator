@@ -57,32 +57,20 @@ public class StrategyConfig implements TemplateRender {
     /**
      * 指定生成的主键的ID类型
      */
-    protected IdType idType;
+    protected IdType idType = IdType.ASSIGN_ID;
     /**
      * java日期类型
      */
     private DateType dateType = DateType.TIME_PACK;
-    /**
-     * 是否生成实体时，生成字段注解（默认 false）
-     */
-    protected boolean tableFieldAnnotationEnable;
+
     /**
      * 乐观锁字段名称(数据库字段)
      */
     protected String versionColumnName;
     /**
-     * 乐观锁属性名称(实体字段)
-     */
-    protected String versionPropertyName;
-    /**
      * 逻辑删除字段名称(数据库字段)
      */
     protected String logicDeleteColumnName;
-
-    /**
-     * 逻辑删除属性名称(实体字段)
-     */
-    protected String logicDeletePropertyName;
     /**
      * Boolean类型字段是否移除is前缀（默认 false）<br>
      * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
