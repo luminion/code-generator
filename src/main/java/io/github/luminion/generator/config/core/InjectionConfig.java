@@ -16,8 +16,8 @@
 package io.github.luminion.generator.config.core;
 
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.po.CustomFile;
 import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.po.TemplateFile;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,31 +39,20 @@ import java.util.function.BiConsumer;
 public class InjectionConfig implements TemplateRender {
 
     /**
-     * 输出文件之前消费者
+     * 设置参数消费者
      */
     protected BiConsumer<TableInfo, Map<String, Object>> beforeOutputFileBiConsumer;
 
     /**
-     * 自定义配置 Map 对象
-     */
-    protected Map<String, Object> customMap = new HashMap<>();
-
-    /**
      * 自定义模板文件列表
      *
-     * @since 3.5.3
      */
-    protected final List<CustomFile> customFiles = new ArrayList<>();
+    protected final List<TemplateFile> customFiles = new ArrayList<>();
 
     /**
      * 输出文件前
      */
     public void beforeOutputFile(TableInfo tableInfo, Map<String, Object> objectMap) {
-        if (!customMap.isEmpty()) {
-            objectMap.putAll(customMap);
-            //增加一个兼容兼容取值,推荐还是直接取值外置key即可,例如abc取值${abc}而不需要${cfg.abc}
-            objectMap.put("cfg", customMap);
-        }
         if (null != beforeOutputFileBiConsumer) {
             beforeOutputFileBiConsumer.accept(tableInfo, objectMap);
         }

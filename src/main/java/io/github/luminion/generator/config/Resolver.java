@@ -2,7 +2,6 @@ package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
-import io.github.luminion.generator.po.CustomFile;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.StringUtils;
@@ -22,25 +21,52 @@ import java.util.stream.Collectors;
  */
 public class Resolver {
     private final Configurer configurer;
-    private final Map<TemplateFileEnum, TemplateFile> templateFileMap = new HashMap<>();
+    private final Map<String, TemplateFile> templateFileMap = new HashMap<>();
 
     public Resolver(@NonNull Configurer configurer) {
         this.configurer = configurer;
-        this.templateFileMap.put(TemplateFileEnum.CONTROLLER,configurer.getControllerConfig().getTemplateFile());
-        this.templateFileMap.put(TemplateFileEnum.SERVICE,configurer.getServiceConfig().getTemplateFile());
-        this.templateFileMap.put(TemplateFileEnum.SERVICE_IMPL,configurer.getServiceImplConfig().getTemplateFile());
-        this.templateFileMap.put(TemplateFileEnum.MAPPER,configurer.getMapperConfig().getTemplateFile());
-        this.templateFileMap.put(TemplateFileEnum.MAPPER_XML,configurer.getMapperConfig().getTemplateFile());
-        this.templateFileMap.put(TemplateFileEnum.ENTITY,configurer.getEntityConfig().getTemplateFile());
+        // controller
+        TemplateFile controller = configurer.getControllerConfig().getTemplateFile();
+        templateFileMap.put(controller.getKey(), controller);
         
-        this.templateFileMap.put(TemplateFileEnum.ENTITY_QUERY_DTO,configurer.getEntityQueryDTOConfig().getTemplateFile());
-        this.templateFileMap.put(TemplateFileEnum.ENTITY_QUERY_VO,configurer.getEntityQueryVOConfig().getTemplateFile());
-        this.templateFileMap.put(TemplateFileEnum.ENTITY_INSERT_DTO,configurer.getEntityInsertDTOConfig().getTemplateFile());
-        this.templateFileMap.put(TemplateFileEnum.ENTITY_UPDATE_DTO,configurer.getEntityUpdateDTOConfig().getTemplateFile());
-        this.templateFileMap.put(TemplateFileEnum.ENTITY_EXCEL_IMPORT_DTO,configurer.getEntityExcelImportDTOConfig().getTemplateFile());
-        this.templateFileMap.put(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO,configurer.getEntityExcelExportDTOConfig().getTemplateFile());
+        //  service
+        TemplateFile service = configurer.getServiceConfig().getTemplateFile();
+        templateFileMap.put(service.getKey(), service);
+        TemplateFile serviceImpl = configurer.getServiceImplConfig().getTemplateFile();
+        templateFileMap.put(serviceImpl.getKey(), serviceImpl);
         
+        // mapper
+        TemplateFile mapper = configurer.getMapperConfig().getTemplateFile();
+        templateFileMap.put(mapper.getKey(), mapper);
+        TemplateFile mapperXml = configurer.getMapperXmlConfig().getTemplateFile();
+        templateFileMap.put(mapperXml.getKey(), mapperXml);
+        
+        // entity
+        TemplateFile entity = configurer.getEntityConfig().getTemplateFile();
+        templateFileMap.put(entity.getKey(), entity);
+        
+        // query
+        TemplateFile entityQueryDTO = configurer.getEntityQueryDTOConfig().getTemplateFile();
+        templateFileMap.put(entityQueryDTO.getKey(), entityQueryDTO);
+        TemplateFile entityQueryVO = configurer.getEntityQueryVOConfig().getTemplateFile();
+        templateFileMap.put(entityQueryVO.getKey(), entityQueryVO);
+        
+        // inset/update
+        TemplateFile entityInsertDTO = configurer.getEntityInsertDTOConfig().getTemplateFile();
+        templateFileMap.put(entityInsertDTO.getKey(), entityInsertDTO);
+        TemplateFile entityUpdateDTO = configurer.getEntityUpdateDTOConfig().getTemplateFile();
+        templateFileMap.put(entityUpdateDTO.getKey(), entityUpdateDTO);
+        
+        // excel
+        TemplateFile entityExcelImportDTO = configurer.getEntityExcelImportDTOConfig().getTemplateFile();
+        templateFileMap.put(entityExcelImportDTO.getKey(), entityExcelImportDTO);
+        TemplateFile entityExcelExportDTO = configurer.getEntityExcelExportDTOConfig().getTemplateFile();
+        templateFileMap.put(entityExcelExportDTO.getKey(), entityExcelExportDTO);
+
         // 将模板文件添加进map
+        for (TemplateFile customFile : configurer.getInjectionConfig().getCustomFiles()) {
+            this.templateFileMap.put(customFile.getKey(), customFile);
+        }
     }
 
     /**
@@ -95,7 +121,7 @@ public class Resolver {
      * @since 1.0.0
      */
     public boolean isGenerate(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
-        TemplateFile templateFile = this.templateFileMap.get(templateFileEnum);
+        TemplateFile templateFile = this.templateFileMap.get(templateFileEnum.getKey());
         return templateFile.isGenerate();
     }
 
@@ -107,7 +133,7 @@ public class Resolver {
      * @since 1.0.0
      */
     public String getClassSimpleName(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
-        TemplateFile templateFile = this.templateFileMap.get(templateFileEnum);
+        TemplateFile templateFile = this.templateFileMap.get(templateFileEnum.getKey());
         return templateFile.convertFormatName(tableInfo);
     }
 
@@ -119,7 +145,7 @@ public class Resolver {
      * @since 1.0.0
      */
     public String getClassName(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
-        TemplateFile templateFile = this.templateFileMap.get(templateFileEnum);
+        TemplateFile templateFile = this.templateFileMap.get(templateFileEnum.getKey());
         return this.joinPackage(templateFile.getSubPackage()) + "." + templateFile.convertFormatName(tableInfo);
     }
 
@@ -148,9 +174,10 @@ public class Resolver {
 
     /**
      * 获取指定文件是否生成的映射
-     * <p> 
+     * <p>
      * key {@link TemplateFileEnum#getKey()}
      * value 是否生成
+     *
      * @return map
      */
     public Map<String, Boolean> getOutputClassGenerateMap() {
@@ -163,9 +190,10 @@ public class Resolver {
 
     /**
      * 获取输出类包信息映射
-     * <p> 
+     * <p>
      * key {@link TemplateFileEnum#getKey()}
      * value 包名(不含类名)
+     *
      * @return map
      */
     public Map<String, String> getOutputClassPackageInfoMap() {
@@ -178,14 +206,15 @@ public class Resolver {
 
     /**
      * 获取输出类名称映射
-     * <p> 
+     * <p>
      * key {@link TemplateFileEnum#getKey()}
      * value 完整类名(含包名)
+     *
      * @param tableInfo 表信息
      * @return map
      */
     public Map<String, String> getOutputClassNameMap(TableInfo tableInfo) {
-        templateFileMap.entrySet().stream()
+        return templateFileMap.entrySet().stream()
                 .collect(Collectors.toMap(
                         e -> e.getValue().getKey(),
                         e -> joinPackage(e.getValue().getSubPackage()) + "." + e.getValue().convertFormatName(tableInfo)
@@ -196,18 +225,17 @@ public class Resolver {
      * 获取输出类简单名称映射
      * key {@link TemplateFileEnum#getKey()}
      * value 声明类名(不含包)
+     *
      * @param tableInfo 表信息
      * @return map
      */
     public Map<String, String> getOutputClassSimpleNameMap(TableInfo tableInfo) {
-        templateFileMap.entrySet().stream()
+        return templateFileMap.entrySet().stream()
                 .collect(Collectors.toMap(
                         e -> e.getValue().getKey(),
                         e -> e.getValue().convertFormatName(tableInfo)
                 ));
     }
-
-
 
 
 }
