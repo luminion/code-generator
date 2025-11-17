@@ -23,16 +23,16 @@ import ${pkg};
 #end
  * @since ${docDate}
  */
+#if(${springdoc})
+@Schema(description = "$!{table.comment}-导出DTO")
+#elseif(${swagger})
+@ApiModel(description = "$!{table.comment}-导出DTO")
+#end
 #if(${lombok})
 @Data
 ##    #if(${chainModel})
 ##@Accessors(chain = true)
 ##    #end
-#end
-#if(${springdoc})
-@Schema(description = "$!{table.comment}-导出DTO")
-#elseif(${swagger})
-@ApiModel(description = "$!{table.comment}-导出DTO")
 #end
 @ExcelIgnoreUnannotated
 #if(${excelExportDTOSuperClass})
