@@ -27,6 +27,6 @@ public interface LambdaGenerator<C> {
 //
 //    LambdaGenerator<C> special(Consumer<C> consumer);
 //    
-//    void execute(String... tables);
+    void execute(String... tables);
 
 }

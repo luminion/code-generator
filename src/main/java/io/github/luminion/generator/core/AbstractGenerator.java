@@ -39,7 +39,7 @@ public abstract class AbstractGenerator<C> implements LambdaGenerator<C> {
                         "\"`-0-0-'\"`-0-0-'\"`-0-0-'\"`-0-0-'./o--000'\"`-0-0-'./o--000'\"`-0-0-'\"`-0-0-'\"`-0-0-'\"`-0-0-'./o--000'\"`-0-0-'\"`-0-0-'\"`-0-0-' ";
         System.out.println(banner);
         System.out.println("execute success! check files in following folder:");
-        String path = configurer.getOutputConfig().getOutputDir();
+        String path = configurer.getGlobalConfig().getOutputDir();
         System.out.println(new File(path).getAbsolutePath());
     }
 }
