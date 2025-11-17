@@ -1,15 +1,25 @@
 package io.github.luminion.generator.config.model;
 
+import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
+import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
+import io.github.luminion.generator.util.ClassUtils;
 import lombok.Data;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
 @Data
-public class EntityExcelExportDTOConfig {
+public class EntityExcelExportDTOConfig implements TemplateRender {
     /**
      * 模板文件
      */
@@ -20,4 +30,71 @@ public class EntityExcelExportDTOConfig {
             "/templates/base/entityExcelExportDTO.java",
             ".java"
     );
+
+    /**
+     * 自定义继承的Entity类全称，带包名
+     */
+    protected String superClass;
+
+    /**
+     * 实体是否生成 serialVersionUID
+     */
+    protected boolean serialUID = true;
+
+    /**
+     * 是否启用java.io.Serial (需JAVA 14) 注解
+     *
+     */
+    protected boolean serialAnnotation = true;
+
+    @Override
+    public Map<String, Object> renderData(TableInfo tableInfo) {
+        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
+        GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
+        
+        Set<String> importPackages = new TreeSet<>();
+        if (superClass!=null){
+            data.put("entityExcelExportDTOSuperClassSimpleName", ClassUtils.getSimpleName(this.superClass));
+            importPackages.add(this.superClass);
+        }
+        if (this.serialUID) {
+            importPackages.add("java.io.Serializable");
+            if (this.serialAnnotation) {
+                importPackages.add("java.io.Serial");
+            }
+        }
+
+        if (globalConfig.isLombok()) {
+            if (globalConfig.isChainModel()) {
+                importPackages.add("lombok.experimental.Accessors");
+            }
+            if (this.superClass != null) {
+                importPackages.add("lombok.EqualsAndHashCode");
+            }
+            if (superClass!=null){
+                importPackages.add("lombok.EqualsAndHashCode");
+            }
+            importPackages.add("lombok.Data");
+        }
+
+        switch (globalConfig.getDocType()){
+            case SPRING_DOC:
+                importPackages.add("io.swagger.v3.oas.annotations.media.Schema");
+                break;
+            case SWAGGER:
+                importPackages.add("io.swagger.annotations.ApiModel");
+                importPackages.add("io.swagger.annotations.ApiModelProperty");
+                break;
+        }
+        String excelIgnoreUnannotated = globalConfig.getExcelApi().packagePrefix + "annotation.ExcelIgnoreUnannotated";
+        String excelProperty = globalConfig.getExcelApi().packagePrefix + "annotation.ExcelProperty";
+
+
+        // 导入包
+        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
+        Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
+        data.put("entityExcelExportDTOImportPackages4Java", javaPackages);
+        data.put("entityExcelExportDTOImportPackages4Framework", frameworkPackages);
+        return data;
+    }
 }

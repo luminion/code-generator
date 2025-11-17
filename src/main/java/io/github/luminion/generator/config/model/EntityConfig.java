@@ -88,19 +88,17 @@ public class EntityConfig implements TemplateRender {
         data.put("activeRecord", this.activeRecord);
         data.put("entitySerialUID", this.serialUID);
         data.put("entitySerialAnnotation", this.serialAnnotation);
-        data.put("entitySuperClassSimpleName", ClassUtils.getSimpleName(this.superClass));
         data.put("entityTableFieldAnnotation", this.tableFieldAnnotation);
         
         Set<String> importPackages = new TreeSet<>();
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
 
-        if (this.activeRecord) {
+        if (StringUtils.isNotBlank(this.superClass)) {
+            data.put("entitySuperClassSimpleName", ClassUtils.getSimpleName(this.superClass));
+            importPackages.add(this.superClass);
+        }else{
             // 无父类开启 AR 模式
             importPackages.add("com.baomidou.mybatisplus.extension.activerecord.Model");
-        }
-    
-        if (StringUtils.isNotBlank(this.superClass)) {
-            importPackages.add(this.superClass);
         }
         if (this.serialUID || this.activeRecord) {
             importPackages.add("java.io.Serializable");
@@ -110,11 +108,6 @@ public class EntityConfig implements TemplateRender {
         }
         if (tableInfo.isConvert()) {
             importPackages.add("com.baomidou.mybatisplus.annotation.TableName");
-        }
-        if (this.tableFieldAnnotation){
-            if (tableInfo.isHavePrimaryKey()){
-                
-            }
         }
         tableInfo.getFields().forEach(field -> {
             JavaFieldInfo columnType = field.getJavaType();
@@ -130,7 +123,7 @@ public class EntityConfig implements TemplateRender {
                 if (field.isKeyIdentityFlag()) {
                     importPackages.add("com.baomidou.mybatisplus.annotation.IdType");
                 }
-            } else if (field.isConvert()) {
+            } else if (field.isConvert() || this.tableFieldAnnotation) {
                 // 普通字段
                 importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
             }
