@@ -29,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,10 +49,10 @@ public class ControllerConfig implements TemplateRender {
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.CONTROLLER.getKey(), 
-            "%sController", 
-            "controller", 
-            "/templates/base/controller.java", 
+            TemplateFileEnum.CONTROLLER.getKey(),
+            "%sController",
+            "controller",
+            "/templates/base/controller.java",
             ".java");
 
     /**
@@ -113,36 +114,64 @@ public class ControllerConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-
         Configurer configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         Resolver resolver = configurer.getResolver();
+
+        data.put("crossOrigin", this.crossOrigin);
+        data.put("restController", this.restController);
+        data.put("controllerSuperClass", ClassUtils.getSimpleName(this.superClass));
+        // 首字母小写
+        String entityName = tableInfo.getEntityName();
+        String entityPath = entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
+        String url = this.hyphenStyle ? StringUtils.camelToHyphen(entityPath) : entityPath;
+        String requestBaseUrl = Stream.of(this.baseUrl, globalConfig.getParentPackageModule(), url).filter(StringUtils::isNotBlank).collect(Collectors.joining("/"));
+        if (!requestBaseUrl.startsWith("/")) {
+            requestBaseUrl = "/" + requestBaseUrl;
+        }
+        data.put("requestBaseUrl", requestBaseUrl);
+        data.put("restful", this.restful);
+        boolean isGenerateService = resolver.isGenerate(TemplateFileEnum.SERVICE, tableInfo);
+        data.put("baseService", isGenerateService ?
+                resolver.getClassSimpleName(TemplateFileEnum.SERVICE, tableInfo) :
+                resolver.getClassSimpleName(TemplateFileEnum.SERVICE_IMPL, tableInfo)
+        );
+        data.put("returnMethod", this.returnMethod);
+        data.put("pageMethod", this.pageMethod);
+        data.put("batchQueryMethod", batchQueryPost ? "@PostMapping" : "@GetMapping");
+        // 路径参数
+        if (pathVariable) {
+            data.put("idPathParams", "/{id}");
+            data.put("idMethodParams", "@PathVariable(\"id\") ");
+            data.put("pagePathParams", "/{current}/{size}");
+            data.put("pageMethodParams", "@PathVariable(\"current\") Long current, @PathVariable(\"size\") Long size");
+        } else {
+            data.put("pageMethodParams", "Long current, Long size");
+        }
+        data.put("validatedStr", globalConfig.isValidated() ? "@Validated" : null);
+        String requestBodyStr = requestBody ? "@RequestBody " : null;
+        data.put("requestBodyStr", requestBodyStr);
+        data.put("optionalBodyStr", batchQueryPost ? requestBodyStr : null);
+        Optional.ofNullable(tableInfo.getPrimaryKeyField())
+                .ifPresent(e -> data.put("primaryKeyPropertyType", e.getJavaType().getType()));
+        if (pageMethod != null && pageMethod.isClassReady()) {
+            data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
+        } else {
+            ClassPayload pageClassPayload = globalConfig.getPageClassPayload();
+            data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
+        }
+        
+
+        // ======================导包======================
         TreeSet<String> importPackages = new TreeSet<>();
         // spring组件
         importPackages.add("org.springframework.web.bind.annotation.*");
-
-        // 类注解
-        data.put("crossOrigin", this.crossOrigin);
-        data.put("restController", this.restController);
         if (!restController) {
             importPackages.add("org.springframework.stereotype.Controller");
         }
         if (globalConfig.isLombok()) {
             importPackages.add("lombok.RequiredArgsConstructor");
         }
-        // 首字母小写
-        String entityName = tableInfo.getEntityName();
-        String entityPath = entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
-        // 实体类对应请求路径
-        String url = this.hyphenStyle ? StringUtils.camelToHyphen(entityPath) : entityPath;
-        // 完整请求路径
-        String requestBaseUrl = Stream.of(this.baseUrl, globalConfig.getParentPackageModule(), url).filter(StringUtils::isNotBlank).collect(Collectors.joining("/"));
-        if (!requestBaseUrl.startsWith("/")) {
-            requestBaseUrl = "/" + requestBaseUrl;
-        }
-        data.put("requestBaseUrl", requestBaseUrl);
-
-
         // 文档类型
         switch (globalConfig.getDocType()) {
             case SPRING_DOC:
@@ -157,74 +186,36 @@ public class ControllerConfig implements TemplateRender {
                 importPackages.add("io.swagger.annotations.ApiParam");
                 break;
         }
-
         // 类信息
         if (superClass != null) {
-            data.put("controllerSuperClass", ClassUtils.getSimpleName(this.superClass));
             importPackages.add(this.superClass);
         }
-        if (resolver.isGenerate(TemplateFileEnum.SERVICE, tableInfo)) {
-            data.put("baseService", resolver.getClassSimpleName(TemplateFileEnum.SERVICE, tableInfo));
+        if (isGenerateService) {
             importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE, tableInfo));
         } else {
-            data.put("baseService", resolver.getClassSimpleName(TemplateFileEnum.SERVICE_IMPL, tableInfo));
             importPackages.add(resolver.getClassName(TemplateFileEnum.SERVICE_IMPL, tableInfo));
         }
-
-        // restful样式
-        data.put("restful", this.restful);
-
         // 返回类包
         if (returnMethod.isClassReady()) {
             importPackages.add(returnMethod.getClassName());
         }
-        // 返回值
-        data.put("returnMethod", this.returnMethod);
-        data.put("pageMethod", this.pageMethod);
-        // 批量查询方法
-        data.put("batchQueryMethod", batchQueryPost ? "@PostMapping" : "@GetMapping");
-        // 路径参数
-        if (pathVariable) {
-            data.put("idPathParams", "/{id}");
-            data.put("idMethodParams", "@PathVariable(\"id\") ");
-            data.put("pagePathParams", "/{current}/{size}");
-            data.put("pageMethodParams", "@PathVariable(\"current\") Long current, @PathVariable(\"size\") Long size");
-        } else {
-            data.put("pageMethodParams", "Long current, Long size");
-        }
-
-        // requestBody
-        String requestBodyStr = "@RequestBody ";
-        if (requestBody) {
-            data.put("requestBodyStr", requestBodyStr);
-            if (batchQueryPost) {
-                data.put("optionalBodyStr", requestBodyStr);
-            }
-        }
         // 参数校验
         if (globalConfig.isValidated()) {
-            String validatedStr = "@Validated ";
-            data.put("validatedStr", validatedStr);
             importPackages.add("org.springframework.validation.annotation.Validated");
         }
-
-
         // 新增
         if (globalConfig.isGenerateInsert()) {
             importPackages.add("java.io.Serializable");
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
         }
-
         // 修改
         if (globalConfig.isGenerateUpdate()) {
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
         }
-
         // 删除
         if (globalConfig.isGenerateDelete()) {
             if (tableInfo.isHavePrimaryKey()) {
                 TableField primaryKeyTableField = tableInfo.getPrimaryKeyField();
-                data.put("primaryKeyPropertyType", primaryKeyTableField.getJavaType().getType());
                 importPackages.add(primaryKeyTableField.getJavaType().getPkg());
             } else {
                 log.warn("{}表无主键, 不生成根据id删除", tableInfo.getName());
@@ -234,24 +225,21 @@ public class ControllerConfig implements TemplateRender {
         // 查询
         if (globalConfig.isGenerateQuery()) {
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
-            
             // 根据id查询
             if (tableInfo.isHavePrimaryKey()) {
                 TableField primaryKeyTableField = tableInfo.getPrimaryKeyField();
-                data.put("primaryKeyPropertyType", primaryKeyTableField.getJavaType().getType());
                 importPackages.add(primaryKeyTableField.getJavaType().getPkg());
             } else {
                 log.warn("{}表无主键, 不生成根据id查询", tableInfo.getName());
             }
-            
             importPackages.add("java.util.List");
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-            
-            if (RuntimeEnv.SQL_BOOSTER_MY_BATIS_PLUS.equals(globalConfig.getRuntimeEnv())){
+
+            if (RuntimeEnv.SQL_BOOSTER_MY_BATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
                 importPackages.add("io.github.luminion.sqlbooster.model.sql.helper.SqlHelper");
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
             }
-            
+
             if (pageMethod != null && pageMethod.isClassReady()) {
                 importPackages.add(pageMethod.getClassName());
                 data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
@@ -262,7 +250,7 @@ public class ControllerConfig implements TemplateRender {
             }
         }
         String responseClass = globalConfig.getJavaEEApi().getPackagePrefix() + "servlet.http.HttpServletResponse";
-        
+
         // 导入
         if (globalConfig.isGenerateImport()) {
             // 导入需要下载导入模板, 导入response
@@ -270,17 +258,22 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add("java.io.IOException");
             importPackages.add("org.springframework.web.multipart.MultipartFile");
         }
-        
+
         // 导出
         if (globalConfig.isGenerateExport()) {
             importPackages.add("java.io.IOException");
             importPackages.add(responseClass);
         }
+        if (pageMethod != null && pageMethod.isClassReady()) {
+            importPackages.add(pageMethod.getClassName());
+        } else {
+            importPackages.add(globalConfig.getPageClassPayload().getClassName());
+        }
 
-        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("controllerImportPackages4Java", javaPackages);
-        data.put("controllerImportPackages4Framework", frameworkPackages);
+        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
+        data.put("controllerFrameworkPkg", frameworkPackages);
+        data.put("controllerJavaPkg", javaPackages);
 
         return data;
     }

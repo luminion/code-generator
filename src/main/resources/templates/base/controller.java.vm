@@ -1,14 +1,14 @@
 package ${package.controller};
-#if($controllerImportPackages4Framework.size()>0)
+#if($controllerFrameworkPkg.size()>0)
 
 #end
-#foreach($pkg in ${controllerImportPackages4Framework})
+#foreach($pkg in ${controllerFrameworkPkg})
 import ${pkg};
 #end
-#if($controllerImportPackages4Java.size()>0)
+#if($controllerJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${controllerImportPackages4Java})
+#foreach($pkg in ${controllerJavaPkg})
 import ${pkg};
 #end
 
@@ -23,6 +23,11 @@ import ${pkg};
 #end
  * @since ${date}
  */
+#if(${springdoc})
+@Tag(name= "$!{table.comment}", description = "$!{table.comment}")
+#elseif(${swagger})
+@Api(tags = "$!{table.comment}")
+#end
 #if(${crossOrigin})
 @CrossOrigin
 #end
@@ -35,13 +40,8 @@ import ${pkg};
 #if(${lombok})
 @RequiredArgsConstructor
 #end
-#if(${springdoc})
-@Tag(name= "$!{table.comment}", description = "$!{table.comment}")
-#elseif(${swagger})
-@Api(tags = "$!{table.comment}")
-#end
-#if(${controllerSuperClassSimpleName})
-public class ${controller} extends ${controllerSuperClassSimpleName} {
+#if(${controllerSuperClass})
+public class ${controller} extends ${controllerSuperClass} {
 #else
 public class ${controller} {
 #end
