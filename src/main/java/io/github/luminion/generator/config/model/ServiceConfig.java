@@ -68,6 +68,7 @@ public class ServiceConfig implements TemplateRender {
         Configurer configurer = tableInfo.getConfigurer();
         Resolver resolver = configurer.getResolver();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
+        data.put("serviceSuperClass", ClassUtils.getSimpleName(this.superClass));
 
         switch (globalConfig.getRuntimeEnv()) {
             case SQL_BOOSTER_MY_BATIS_PLUS:
@@ -131,15 +132,16 @@ public class ServiceConfig implements TemplateRender {
         }
     
         if (superClass != null) {
-            data.put("serviceSuperClassSimpleName", ClassUtils.getSimpleName(this.superClass));
+          
             importPackages.add(this.superClass);
         }
 
-        Collection<String> serviceImportPackages4Java = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
+        
         Collection<String> serviceImportPackages4Framework = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("serviceImportPackages4Java", serviceImportPackages4Java);
-        data.put("serviceImportPackages4Framework", serviceImportPackages4Framework);
-
+        Collection<String> serviceImportPackages4Java = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
+        data.put("serviceFrameworkPkg", serviceImportPackages4Framework);
+        data.put("serviceJavaPkg", serviceImportPackages4Java);
+        
         return data;
     }
 

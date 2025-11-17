@@ -1,14 +1,14 @@
 package ${package.service};
-#if($serviceImportPackages4Framework.size()>0)
+#if($serviceFrameworkPkg.size()>0)
 
 #end
-#foreach($pkg in ${serviceImportPackages4Framework})
+#foreach($pkg in ${serviceFrameworkPkg})
 import ${pkg};
 #end
-#if($serviceImportPackages4Java.size()>0)
+#if($serviceJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${serviceImportPackages4Java})
+#foreach($pkg in ${serviceJavaPkg})
 import ${pkg};
 #end
 
@@ -18,7 +18,7 @@ import ${pkg};
  * @author ${author}
  * @since ${date}
  */
-public interface ${service} extends ${serviceSuperClassSimpleName}<${entity}> {
+public interface ${service} extends ${serviceSuperClass}<${entity}> {
     #if(${generateQuery})
 
     ${queryVO} voById(Serializable id);
