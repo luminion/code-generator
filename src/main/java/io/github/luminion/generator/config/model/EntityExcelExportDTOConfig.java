@@ -41,49 +41,27 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
     protected String superClass;
 
 
+    @Override
+    public void init() {
+        TemplateRender.super.init();
+    }
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
         Set<String> importPackages = new TreeSet<>();
-
         if (superClass != null) {
             data.put("excelExportDTOSuperClass", ClassUtils.getSimpleName(this.superClass));
             importPackages.add(this.superClass);
         }
-        if (globalConfig.isSerializableUID()) {
-            importPackages.add("java.io.Serializable");
-            if (globalConfig.isSerializableAnnotation()) {
-                importPackages.add("java.io.Serial");
-            }
-        }
-
-        if (globalConfig.isLombok()) {
-            if (globalConfig.isChainModel()) {
-                log.info("excel导出, 自动忽略chainModel, (在Excel框架中, 链式setter存在无法赋值的情况)");
-            }
-            if (this.superClass != null) {
-                importPackages.add("lombok.EqualsAndHashCode");
-            }
-            if (superClass != null) {
-                importPackages.add("lombok.EqualsAndHashCode");
-            }
-            importPackages.add("lombok.Data");
-        }
-
-        switch (globalConfig.getDocType()) {
-            case SPRING_DOC:
-                importPackages.add("io.swagger.v3.oas.annotations.media.Schema");
-                break;
-            case SWAGGER:
-                importPackages.add("io.swagger.annotations.ApiModel");
-                importPackages.add("io.swagger.annotations.ApiModelProperty");
-                break;
-        }
-        String excelIgnoreUnannotated = globalConfig.getExcelApi().packagePrefix + "annotation.ExcelIgnoreUnannotated";
-        String excelProperty = globalConfig.getExcelApi().packagePrefix + "annotation.ExcelProperty";
+        
+        // excel包
+        String excelIgnoreUnannotated = globalConfig.getExcelApi().getPackagePrefix() + "annotation.ExcelIgnoreUnannotated";
+        String excelProperty = globalConfig.getExcelApi().getPackagePrefix() + "annotation.ExcelProperty";
         importPackages.add(excelIgnoreUnannotated);
+        
+        // 属性过滤
         importPackages.add(excelProperty);
         for (TableField field : tableInfo.getFields()) {
             if (field.isLogicDeleteField()) {
@@ -95,11 +73,16 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
             }
         }
 
+        // 全局包
+        importPackages.addAll(globalConfig.getModelSerializableImportPackages());
+//        importPackages.addAll(globalConfig.getModelDocImportPackages());
+        importPackages.addAll(globalConfig.getModelLombokImportPackages());
+
         // 导入包
-        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("excelExportDTOJavaPkg", javaPackages);
+        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         data.put("excelExportDTOFramePkg", frameworkPackages);
+        data.put("excelExportDTOJavaPkg", javaPackages);
         return data;
     }
 }

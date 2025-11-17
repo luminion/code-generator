@@ -14,9 +14,9 @@ public enum ExcelApi {
     FAST_EXCEL("cn.idev.excel.","FastExcel"),
     ;
     @Getter
-    public final String packagePrefix;
+    private final String packagePrefix;
     @Getter
-    public final String mainEntrance;
+    private final String mainEntrance;
 
 
 

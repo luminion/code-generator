@@ -23,11 +23,11 @@ import ${pkg};
 #end
  * @since ${date}
  */
-#if(${springdoc})
-@Schema(description = "$!{table.comment}-导出DTO")
-#elseif(${swagger})
-@ApiModel(description = "$!{table.comment}-导出DTO")
-#end
+###if(${springdoc})
+##@Schema(description = "$!{table.comment}-导出DTO")
+###elseif(${swagger})
+##@ApiModel(description = "$!{table.comment}-导出DTO")
+###end
 #if(${lombok})
 @Data
 ##    #if(${chainModel})
@@ -37,12 +37,12 @@ import ${pkg};
 @ExcelIgnoreUnannotated
 #if(${excelExportDTOSuperClass})
 public class ${excelExportDTO} extends ${excelExportDTOSuperClass} {
-#elseif(${excelExportDTOSerial})
+#elseif(${serializableUID})
 public class ${excelExportDTO} implements Serializable {
 #end
-#if(${excelExportDTOSerial})
+#if(${serializableUID})
 
-    #if(${excelExportDTOSerialAnnotation})
+    #if(${serializableAnnotation})
     @Serial
     #end
     private static final long serialVersionUID = 1L;
@@ -52,24 +52,24 @@ public class ${excelExportDTO} implements Serializable {
 #if(${field.logicDeleteField})
 #else
 
-    #if("$!field.comment" != "")
-        #if(${springdoc})
-    @Schema(description = "${field.comment}")
-        #elseif(${swagger})
-    @ApiModelProperty("${field.comment}")
-        #else
-    /**
-     * ${field.comment}
-     */
-        #end
-    #end
+##    #if("$!field.comment" != "")
+##        #if(${springdoc})
+##    @Schema(description = "${field.comment}")
+##        #elseif(${swagger})
+##    @ApiModelProperty("${field.comment}")
+##        #else
+##    /**
+##     * ${field.comment}
+##     */
+##        #end
+##    #end
     @ExcelProperty(value = "${field.comment}")
     private ${field.propertyType} ${field.propertyName};
 #end
 #end
 ## ----------  END 字段循环遍历  ----------
 ## ----------BEGIN getter/setter----------
-#if(!${lombok} && !${queryVOExtendsEntity})
+#if(!${lombok})
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #else
