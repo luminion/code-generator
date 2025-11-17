@@ -76,7 +76,7 @@ public class EntityConfig implements TemplateRender {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
         data.put("activeRecord", this.activeRecord);
-        
+
         if (this.tableFieldAnnotation) {
             data.put("tableFieldAnnotation", this.tableFieldAnnotation);
             importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
@@ -136,6 +136,35 @@ public class EntityConfig implements TemplateRender {
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
         data.put("entityJavaPkg", javaPackages);
         data.put("entityFramePkg", frameworkPackages);
+
+        // 注解
+        TreeSet<String> annotations = new TreeSet<>();
+        String comment = Optional.ofNullable(tableInfo.getComment()).orElse("");
+        String tableName = tableInfo.getName();
+        String schemaName = Optional.ofNullable(tableInfo.getSchemaName()).orElse("");
+        switch (globalConfig.getDocType()) {
+            case SPRING_DOC:
+                annotations.add(String.format("@Schema(description = \"%s\")", comment));
+                break;
+            case SWAGGER:
+                annotations.add(String.format("@ApiModel(description = \"%s\")", comment));
+                break;
+        }
+        if (globalConfig.isLombok()) {
+            annotations.add("@Data");
+            if (globalConfig.isChainModel()) {
+                annotations.add("@Accessors(chain = true)");
+            }
+            if (this.superClass != null || this.activeRecord) {
+                annotations.add("@EqualsAndHashCode(callSuper = true)");
+            }
+        }
+        if (tableInfo.isConvert()) {
+            annotations.add(String.format("@TableName(\"%s%s\")", schemaName, tableName));
+        }
+
+        data.put("entityAnnotations", annotations);
+
         return data;
     }
 
