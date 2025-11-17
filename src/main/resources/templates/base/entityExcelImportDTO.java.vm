@@ -22,26 +22,18 @@ import ${pkg};
 #end
  * @since ${date}
  */
-#if(${springdoc})
-@Schema(description = "$!{table.comment}-导入DTO")
-#elseif(${swagger})
-@ApiModel(description = "$!{table.comment}-导入DTO")
-#end
 #if(${lombok})
 @Data
-    #if(${chainModel})
-@Accessors(chain = true)
-    #end
 #end
 @ExcelIgnoreUnannotated
 #if(${excelImportDTOSuperClass})
 public class ${excelImportDTO} extends ${excelImportDTOSuperClass} {
-#elseif(${excelImportDTOSerial})
+#elseif(${serializableUID})
 public class ${excelImportDTO} implements Serializable {
 #end
-#if(${excelImportDTOSerial})
+#if(${serializableUID})
 
-    #if(${excelImportDTOSerialAnnotation})
+    #if(${serializableAnnotation})
     @Serial
     #end
     private static final long serialVersionUID = 1L;

@@ -77,6 +77,7 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
         importPackages.addAll(globalConfig.getModelSerializableImportPackages());
 //        importPackages.addAll(globalConfig.getModelDocImportPackages());
         importPackages.addAll(globalConfig.getModelLombokImportPackages());
+        importPackages.remove("lombok.experimental.Accessors");
 
         // 导入包
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());

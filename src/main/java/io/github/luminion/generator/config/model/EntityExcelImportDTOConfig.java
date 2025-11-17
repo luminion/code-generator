@@ -59,43 +59,31 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
             data.put("excelImportDTOSuperClass", ClassUtils.getSimpleName(this.superClass));
             importPackages.add(this.superClass);
         }
-        if (this.serialUID) {
-            data.put("excelImportDTOSerial", true);
-            importPackages.add("java.io.Serializable");
-            if (this.serialAnnotation) {
-                data.put("excelImportDTOSerialAnnotation", true);
-                importPackages.add("java.io.Serial");
-            }
-        }
 
-        if (globalConfig.isLombok()) {
-            if (globalConfig.isChainModel()) {
-                importPackages.add("lombok.experimental.Accessors");
-            }
-            if (this.superClass != null) {
-                importPackages.add("lombok.EqualsAndHashCode");
-            }
-            if (superClass != null) {
-                importPackages.add("lombok.EqualsAndHashCode");
-            }
-            importPackages.add("lombok.Data");
-        }
-
-        switch (globalConfig.getDocType()) {
-            case SPRING_DOC:
-                importPackages.add("io.swagger.v3.oas.annotations.media.Schema");
-                break;
-            case SWAGGER:
-                importPackages.add("io.swagger.annotations.ApiModel");
-                importPackages.add("io.swagger.annotations.ApiModelProperty");
-                break;
-        }
-        String excelIgnoreUnannotated = globalConfig.getExcelApi().packagePrefix + "annotation.ExcelIgnoreUnannotated";
-        String excelProperty = globalConfig.getExcelApi().packagePrefix + "annotation.ExcelProperty";
+        // excel包
+        String excelIgnoreUnannotated = globalConfig.getExcelApi().getPackagePrefix() + "annotation.ExcelIgnoreUnannotated";
+        String excelProperty = globalConfig.getExcelApi().getPackagePrefix() + "annotation.ExcelProperty";
         importPackages.add(excelIgnoreUnannotated);
+
+        // 属性过滤
         importPackages.add(excelProperty);
+        Set<String> editExcludeColumns = tableInfo.getConfigurer().getStrategyConfig().getEditExcludeColumns();
         for (TableField field : tableInfo.getFields()) {
             if (field.isLogicDeleteField()) {
+                continue;
+            }
+            if (field.isKeyFlag()) {
+                continue;
+            }
+            if (field.isVersionField()) {
+                continue;
+            }
+            if (field.getFill() != null &&
+                    ("INSERT".equals(field.getFill()) || "INSERT_UPDATE".equals(field.getFill()))
+            ) {
+                continue;
+            }
+            if (editExcludeColumns.contains(field.getColumnName())) {
                 continue;
             }
             JavaFieldInfo columnType = field.getJavaType();
@@ -104,6 +92,13 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
             }
         }
 
+        // 全局包
+        importPackages.addAll(globalConfig.getModelSerializableImportPackages());
+//        importPackages.addAll(globalConfig.getModelDocImportPackages());
+        importPackages.addAll(globalConfig.getModelLombokImportPackages());
+        importPackages.remove("lombok.experimental.Accessors");
+
+
         // 导入包
         Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
@@ -111,5 +106,5 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
         data.put("excelImportDTOFramePkg", frameworkPackages);
         return data;
     }
-    
+
 }
