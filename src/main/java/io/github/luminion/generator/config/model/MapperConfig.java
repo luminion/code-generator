@@ -47,31 +47,6 @@ public class MapperConfig implements TemplateRender {
 //    protected Class<? extends Annotation> mapperAnnotationClass = org.apache.ibatis.annotations.Mapper.class;
     protected String mapperAnnotationClass = "org.apache.ibatis.annotations.Mapper";
 
-    /**
-     * 是否开启BaseResultMap（默认 false）
-     *
-     */
-    protected boolean baseResultMap;
-
-    /**
-     * 是否开启baseColumnList（默认 false）
-     *
-     */
-    protected boolean baseColumnList;
-
-    /**
-     * 设置缓存实现类
-     *
-     */
-//    protected Class<? extends org.apache.ibatis.cache.Cache> cache;
-    protected String cacheClass;
-
-    /**
-     * 排序字段map
-     * 字段名 -> 是否倒序
-     */
-    protected Map<String, Boolean> sortColumnMap = new LinkedHashMap<>();
-
     @Override
     @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
@@ -103,18 +78,20 @@ public class MapperConfig implements TemplateRender {
                 throw new RuntimeException("未定义的运行环境");
         }
         if (mapperAnnotationClass != null) {
-            data.put("mapperAnnotationClass", mapperAnnotationClass);
-            data.put("mapperAnnotationClassSimpleName", mapperAnnotationClass);
+            data.put("mapperAnnotationClass", ClassUtils.getSimpleName(mapperAnnotationClass));
+            importPackages.add(mapperAnnotationClass);
         }
         if (superClass != null) {
             importPackages.add(superClass);
-            data.put("mapperSuperClassSimpleName", ClassUtils.getSimpleName(this.superClass));
+            data.put("mapperSuperClass", ClassUtils.getSimpleName(this.superClass));
         }
 
-        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
+
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("mapperImportPackages4Java", javaPackages);
-        data.put("mapperImportPackages4Framework", frameworkPackages);
+        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
+        data.put("mapperFrameworkPkg", frameworkPackages);
+        data.put("mapperJavaPkg", javaPackages);
+
 
         return data;
     }

@@ -1,14 +1,14 @@
 package ${package.mapper};
-#if($mapperImportPackages4Framework.size()>0)
+#if($mapperFrameworkPkg.size()>0)
 
 #end
-#foreach($pkg in ${mapperImportPackages4Framework})
+#foreach($pkg in ${mapperFrameworkPkg})
 import ${pkg};
 #end
-#if($mapperImportPackages4Java.size()>0)
+#if($mapperJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${mapperImportPackages4Java})
+#foreach($pkg in ${mapperJavaPkg})
 import ${pkg};
 #end
 
@@ -21,7 +21,7 @@ import ${pkg};
 #if(${mapperAnnotationClass})
 @${mapperAnnotationClassSimpleName}
 #end
-public interface ${mapper} extends ${mapperSuperClassSimpleName}<${entity}> {
+public interface ${mapper} extends ${mapperSuperClass}<${entity}> {
 #if(${generateQuery})
     
     List<${queryVO}> selectByXml(${queryDTO} queryDTO, IPage<${queryVO}> page);
