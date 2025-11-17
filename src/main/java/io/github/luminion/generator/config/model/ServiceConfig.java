@@ -56,11 +56,6 @@ public class ServiceConfig implements TemplateRender {
      */
     protected String superClass;
 
-    /**
-     * 展示重写的方法
-     */
-    protected boolean overrideMethods = true;
-
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
@@ -68,7 +63,7 @@ public class ServiceConfig implements TemplateRender {
         Configurer configurer = tableInfo.getConfigurer();
         Resolver resolver = configurer.getResolver();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        data.put("serviceSuperClass", ClassUtils.getSimpleName(this.superClass));
+      
 
         switch (globalConfig.getRuntimeEnv()) {
             case SQL_BOOSTER_MY_BATIS_PLUS:
@@ -130,9 +125,10 @@ public class ServiceConfig implements TemplateRender {
             default:
                 throw new RuntimeException("暂不支持的运行环境");
         }
-    
+
+
+        data.put("serviceSuperClass", ClassUtils.getSimpleName(this.superClass));
         if (superClass != null) {
-          
             importPackages.add(this.superClass);
         }
 
