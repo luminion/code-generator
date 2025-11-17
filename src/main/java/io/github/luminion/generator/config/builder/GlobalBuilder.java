@@ -62,8 +62,8 @@ public class GlobalBuilder {
      * @return this
      * @since 1.0.0
      */
-    public GlobalBuilder docAuthor(@NonNull String author) {
-        this.configurer.getGlobalConfig().setDocAuthor(author);
+    public GlobalBuilder author(@NonNull String author) {
+        this.configurer.getGlobalConfig().setAuthor(author);
         return this;
     }
 
@@ -74,9 +74,9 @@ public class GlobalBuilder {
      * @return this
      * @since 1.0.0
      */
-    public GlobalBuilder docDate(@NonNull String pattern) {
+    public GlobalBuilder date(@NonNull String pattern) {
         String format = new SimpleDateFormat(pattern).format(new Date());
-        this.configurer.getGlobalConfig().setDocDate(format);
+        this.configurer.getGlobalConfig().setDate(format);
         return this;
     }
 

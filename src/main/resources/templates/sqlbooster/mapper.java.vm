@@ -15,8 +15,8 @@ import ${pkg};
 /**
  * $!{table.comment} Mapper接口
  *
- * @author ${docAuthor}
- * @since ${docDate}
+ * @author ${author}
+ * @since ${date}
  */
 #if(${mapperAnnotationClass})
 @${mapperAnnotationClassSimpleName}

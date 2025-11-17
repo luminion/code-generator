@@ -40,16 +40,7 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
      */
     protected String superClass;
 
-    /**
-     * 实体是否生成 serialVersionUID
-     */
-    protected boolean serialUID = true;
 
-    /**
-     * 是否启用java.io.Serial (需JAVA 14) 注解
-     *
-     */
-    protected boolean serialAnnotation = true;
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
@@ -61,11 +52,9 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
             data.put("excelExportDTOSuperClass", ClassUtils.getSimpleName(this.superClass));
             importPackages.add(this.superClass);
         }
-        if (this.serialUID) {
-            data.put("excelExportDTOSerial", true);
+        if (globalConfig.isSerializableUID()) {
             importPackages.add("java.io.Serializable");
-            if (this.serialAnnotation) {
-                data.put("excelExportDTOSerialAnnotation", true);
+            if (globalConfig.isSerializableAnnotation()) {
                 importPackages.add("java.io.Serial");
             }
         }

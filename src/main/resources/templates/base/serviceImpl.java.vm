@@ -15,8 +15,8 @@ import ${pkg};
 /**
  * $!{table.comment} 服务实现类
  *
- * @author ${docAuthor}
- * @since ${docDate}
+ * @author ${author}
+ * @since ${date}
  */
 @Service
 #if(${generate.service})

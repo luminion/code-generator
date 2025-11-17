@@ -27,6 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -59,17 +61,18 @@ public class GlobalConfig implements TemplateRender {
      */
     protected DocType docType = DocType.JAVA_DOC;
     /**
-     * doc作者
-     */
-    protected String docAuthor = System.getProperty("user.name");
-    /**
-     * 注释日期
-     */
-    protected String docDate = LocalDate.now().toString();
-    /**
      * 文档注释添加相关类链接
      */
     protected boolean docLink = true;
+    /**
+     * doc作者
+     */
+    protected String author = System.getProperty("user.name");
+    /**
+     * 注释日期
+     */
+    protected String date = LocalDate.now().toString();
+
 
     //---------------- 运行时环境相关--------------
 
@@ -91,7 +94,18 @@ public class GlobalConfig implements TemplateRender {
      * 全局分页类
      */
     protected ClassPayload pageClassPayload = new ClassPayload();
-    
+
+    /**
+     * 实体是否生成 serialVersionUID
+     */
+    protected boolean serializableUID = true;
+
+    /**
+     * 实体是否启用java.io.Serial (需JAVA 14) 注解
+     *
+     */
+    protected boolean serializableAnnotation = true;
+
 
     // ----------------输出目录及包相关-----------------
 
@@ -108,7 +122,7 @@ public class GlobalConfig implements TemplateRender {
      * 输出文件覆盖(全局)
      */
     protected boolean fileOverride;
-    
+
     /**
      * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
      */
@@ -177,8 +191,8 @@ public class GlobalConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        data.put("docAuthor", this.docAuthor);
-        data.put("docDate", this.docDate);
+        data.put("author", this.author);
+        data.put("date", this.date);
         data.put("validated", this.validated);
         data.put("docLink", this.docLink);
         data.put("lombok", this.lombok);
@@ -192,12 +206,14 @@ public class GlobalConfig implements TemplateRender {
                 data.put("swagger", true);
                 break;
         }
-        switch (this.runtimeEnv){
+        switch (this.runtimeEnv) {
             case SQL_BOOSTER_MY_BATIS_PLUS:
                 data.put("sqlBooster", true);
             case MYBATIS_PLUS:
             default:
         }
+        data.put("serializableUID", this.serializableUID);
+        data.put("serializableAnnotation", this.serializableAnnotation);
 
         data.put("javaApiPackagePrefix", javaEEApi.getPackagePrefix());
         data.put("excelApiPackagePrefix", excelApi.getPackagePrefix());
@@ -211,6 +227,54 @@ public class GlobalConfig implements TemplateRender {
         data.put("generateExport", this.generateExport);
 
         return data;
+    }
+
+
+    /**
+     * 获取领域类序列化需要导入的包
+     *
+     * @return 包
+     */
+    public Set<String> getModelSerializableImportPackages() {
+        Set<String> importPackages = new TreeSet<>();
+        if (this.serializableUID) {
+            importPackages.add("java.io.Serializable");
+            if (this.serializableAnnotation) {
+                importPackages.add("java.io.Serial");
+            }
+        }
+        return importPackages;
+    }
+
+
+    /**
+     * 获取领域类文档需要导入的包
+     *
+     * @return 包
+     */
+    public Set<String> getModelDocImportPackages() {
+        Set<String> importPackages = new TreeSet<>();
+        switch (this.docType) {
+            case SPRING_DOC:
+                importPackages.add("io.swagger.v3.oas.annotations.media.Schema");
+                break;
+            case SWAGGER:
+                importPackages.add("io.swagger.annotations.ApiModel");
+                importPackages.add("io.swagger.annotations.ApiModelProperty");
+                break;
+        }
+        return importPackages;
+    }
+
+    public Set<String> getModelLombokImportPackages() {
+        Set<String> importPackages = new TreeSet<>();
+        if (this.lombok) {
+            if (this.chainModel) {
+                importPackages.add("lombok.experimental.Accessors");
+            }
+            importPackages.add("lombok.Data");
+        }
+        return importPackages;
     }
 
 }

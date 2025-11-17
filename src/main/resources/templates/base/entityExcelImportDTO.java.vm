@@ -1,49 +1,57 @@
 package ${package.insertDTO};
-#if($insertDTOImportPackages4Framework.size()>0)
+#if($excelImportDTOFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${insertDTOImportPackages4Framework})
+#foreach($pkg in ${excelImportDTOFramePkg})
 import ${pkg};
 #end
-#if($insertDTOImportPackages4Java.size()>0)
+#if($excelImportDTOJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${insertDTOImportPackages4Java})
+#foreach($pkg in ${excelImportDTOJavaPkg})
 import ${pkg};
 #end
 
 /**
- * $!{table.comment}-新增DTO
+ * $!{table.comment}-导入DTO
  *
  * @author ${author}
-#if(${commentLink})
+#if(${docLink})
  * @see ${class.entity}
  * @see ${class.serviceImpl}
 #end
  * @since ${date}
  */
+#if(${springdoc})
+@Schema(description = "$!{table.comment}-导入DTO")
+#elseif(${swagger})
+@ApiModel(description = "$!{table.comment}-导入DTO")
+#end
 #if(${lombok})
 @Data
     #if(${chainModel})
 @Accessors(chain = true)
     #end
 #end
-#if(${springdoc})
-@Schema(description = "$!{table.comment}-新增DTO")
-#elseif(${swagger})
-@ApiModel(description = "$!{table.comment}-新增DTO")
-#end
-#if(${generateImport})
 @ExcelIgnoreUnannotated
+#if(${excelImportDTOSuperClass})
+public class ${excelImportDTO} extends ${excelImportDTOSuperClass} {
+#elseif(${excelImportDTOSerial})
+public class ${excelImportDTO} implements Serializable {
 #end
-public class ${insertDTO} {
+#if(${excelImportDTOSerial})
+
+    #if(${excelImportDTOSerialAnnotation})
+    @Serial
+    #end
+    private static final long serialVersionUID = 1L;
+#end
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${table.fields})
 #if(${field.keyFlag})
 #elseif(${field.versionField})
 #elseif(${field.logicDeleteField})
 #elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
-#elseif(${editExcludeFields.contains(${field.propertyName})})
 #elseif(${editExcludeColumns.contains(${field.columnName})})
 #else
 
@@ -58,25 +66,12 @@ public class ${insertDTO} {
      */
         #end
     #end
-    #if(${validated})## 参数校验
-        #if(!${field.metaInfo.nullable} && !${field.metaInfo.defaultValue})## 非空
-            #if(${field.propertyType} == "String")
-    @NotBlank(message = "${field.comment}为必填项")
-            #else
-    @NotNull(message = "${field.comment}为必填项")
-            #end
-        #end
-        #if(${field.propertyType} == "String")## 字符串长度
-    @Size(message = "${field.comment}长度不能超过${field.metaInfo.length}", max = ${field.metaInfo.length})
-        #end
-    #end
-    #if(${generateImport})## excel导入
     @ExcelProperty(value = "${field.comment}")
-    #end
     private ${field.propertyType} ${field.propertyName};
 #end
 #end
 ## ----------  END 字段循环遍历  ----------
+## ----------BEGIN getter/setter----------
 #if(!${lombok})
 #foreach($field in ${table.fields})
 #if(${field.keyFlag})
@@ -109,4 +104,5 @@ public class ${insertDTO} {
 #end
 #end
 #end
+## ----------  END getter/setter  ----------
 }

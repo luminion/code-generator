@@ -142,6 +142,11 @@ public class StrategyConfig implements TemplateRender {
      */
     protected final Set<String> exclude = new HashSet<>();
     
+    /**
+     * 新增和修改需要需要排除的字段
+     */
+    protected final Set<String> editExcludeColumns = new HashSet<>();
+    
     // ===================额外字段===================
 
     /**
@@ -216,34 +221,6 @@ public class StrategyConfig implements TemplateRender {
     protected boolean tableNameMatches(String matchTableName, String dbTableName) {
         return matchTableName.equalsIgnoreCase(dbTableName) || StringUtils.matches(matchTableName, dbTableName);
     }
-
-    /**
-     * <p>
-     * 父类 Class 反射属性转换为公共字段
-     * </p>
-     *
-     * @param clazz 实体父类 Class
-     */
-    public void convertSuperEntityColumns(Class<?> clazz) {
-        Map<String, Field> fieldMap = ReflectUtils.fieldMap(clazz);
-        // todo 待完善 原逻辑
-//        List<Field> fields = TableInfoHelper.getAllFields(clazz);
-//        this.superEntityColumns.addAll(fieldMap.values().stream().map(field -> {
-//            TableId tableId = field.getAnnotation(Class.forName());
-//            if (tableId != null && StringUtils.isNotBlank(tableId.value())) {
-//                return tableId.value();
-//            }
-//            TableField tableField = field.getAnnotation(TableField.class);
-//            if (tableField != null && StringUtils.isNotBlank(tableField.value())) {
-//                return tableField.value();
-//            }
-//            if (null == columnNaming || columnNaming == NameConvertType.no_change) {
-//                return field.getName();
-//            }
-//            return StringUtils.camelToUnderline(field.getName());
-//        }).collect(Collectors.toSet()));
-    }
-
 
     /**
      * 匹配父类字段(忽略大小写)

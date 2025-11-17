@@ -14,13 +14,13 @@ import ${pkg};
 /**
  * $!{table.comment} 前端控制器
  *
- * @author ${docAuthor}
+ * @author ${author}
 #if(${docLink})
  * @see ${class.entity}
  * @see ${class.mapper}
  * @see ${class.serviceImpl}
 #end
- * @since ${docDate}
+ * @since ${date}
  */
 #if(${crossOrigin})
 @CrossOrigin
@@ -39,8 +39,8 @@ import ${pkg};
 #elseif(${swagger})
 @Api(tags = "$!{table.comment}")
 #end
-#if(${controllerSuperClassSimpleName})
-public class ${controller} extends ${controllerSuperClassSimpleName} {
+#if(${controllerSuperClass})
+public class ${controller} extends ${controllerSuperClass} {
 #else
 public class ${controller} {
 #end

@@ -15,13 +15,13 @@ import ${pkg};
 /**
  * $!{table.comment}-导出DTO
  *
- * @author ${docAuthor}
+ * @author ${author}
 #if(${docLink})
  * @see ${class.entity}
  * @see ${class.mapper}
  * @see ${class.serviceImpl}
 #end
- * @since ${docDate}
+ * @since ${date}
  */
 #if(${springdoc})
 @Schema(description = "$!{table.comment}-导出DTO")

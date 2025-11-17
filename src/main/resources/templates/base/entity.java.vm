@@ -1,26 +1,26 @@
 package ${package.entity};
-#if($entityImportPackages4Framework.size()>0)
+#if($entityFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${entityImportPackages4Framework})
+#foreach($pkg in ${entityFramePkg})
 import ${pkg};
 #end
-#if($entityImportPackages4Java.size()>0)
+#if($entityJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${entityImportPackages4Java})
+#foreach($pkg in ${entityJavaPkg})
 import ${pkg};
 #end
 
 /**
  * $!{table.comment}
  *
- * @author ${docAuthor}
+ * @author ${author}
 #if(${docLink})
  * @see ${class.mapper}
  * @see ${class.serviceImpl}
 #end
- * @since ${docDate}
+ * @since ${date}
  */
 #if(${springdoc})
 @Schema(description = "$!{table.comment}")
@@ -39,18 +39,18 @@ import ${pkg};
 #if(${table.convert})
 @TableName("${schemaName}${table.name}")
 #end
-#if(${entitySuperClassSimpleName})
-public class ${entity} extends ${entitySuperClassSimpleName} {
+#if(${entitySuperClass})
+public class ${entity} extends ${entitySuperClass} {
 #elseif(${activeRecord})
 public class ${entity} extends Model<${entity}> {
-#elseif(${entitySerialVersionUID})
+#elseif(${serializableUID})
 public class ${entity} implements Serializable {
 #else
 public class ${entity} {
 #end
-#if(${entitySerialUID})
+#if(${serializableUID})
 
-    #if(${entitySerialAnnotation})
+    #if(${serializableAnnotation})
     @Serial
     #end
     private static final long serialVersionUID = 1L;
@@ -77,16 +77,16 @@ public class ${entity} {
     @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
         #elseif(!$null.isNull(${idType}) && "$!idType" != "")
     @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
-        #elseif(${field.convert} || ${entityTableFieldAnnotation})
+        #elseif(${field.convert} || ${tableFieldAnnotation})
     @TableId("${field.annotationColumnName}")
         #end
     #elseif(${field.fill})
-        #if(${field.convert} || ${entityTableFieldAnnotation})
+        #if(${field.convert} || ${tableFieldAnnotation})
     @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
         #else
     @TableField(fill = FieldFill.${field.fill})
         #end
-    #elseif(${field.convert} || ${entityTableFieldAnnotation})
+    #elseif(${field.convert} || ${tableFieldAnnotation})
     @TableField("${field.annotationColumnName}")
     #end
     #if(${field.versionField})

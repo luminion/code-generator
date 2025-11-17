@@ -15,8 +15,8 @@ import ${pkg};
 /**
  * $!{table.comment} 服务类
  *
- * @author ${docAuthor}
- * @since ${docDate}
+ * @author ${author}
+ * @since ${date}
  */
 public interface ${service} extends ${serviceSuperClassSimpleName}<${entity}, ${queryVO}> {
     #if(${generateQuery})

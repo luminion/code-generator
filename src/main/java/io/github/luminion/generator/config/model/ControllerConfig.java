@@ -57,7 +57,7 @@ public class ControllerConfig implements TemplateRender {
     /**
      * 自定义继承的Controller类全称，带包名
      */
-    protected String superClassName;
+    protected String superClass;
 
     /**
      * 生成 @RestController控制器
@@ -159,9 +159,9 @@ public class ControllerConfig implements TemplateRender {
         }
 
         // 类信息
-        if (superClassName != null) {
-            data.put("controllerSuperClassSimpleName", ClassUtils.getSimpleName(this.superClassName));
-            importPackages.add(this.superClassName);
+        if (superClass != null) {
+            data.put("controllerSuperClass", ClassUtils.getSimpleName(this.superClass));
+            importPackages.add(this.superClass);
         }
         if (resolver.isGenerate(TemplateFileEnum.SERVICE, tableInfo)) {
             data.put("baseService", resolver.getClassSimpleName(TemplateFileEnum.SERVICE, tableInfo));
