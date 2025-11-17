@@ -46,7 +46,7 @@ public class ServiceImplConfig implements TemplateRender {
             TemplateFileEnum.SERVICE_IMPL.getKey(),
             "%sServiceImpl",
             "service.impl",
-            "/templates/base/serviceImpl.java",
+            "/templates/mybatisplus/serviceImpl.java",
             ".java"
     );
 

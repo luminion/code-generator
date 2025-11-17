@@ -45,7 +45,7 @@ public class OutputConfig implements TemplateRender {
             TemplateFileEnum.entity.name(),
             "%s",
             "entity",
-            "/templates/base/entity.java",
+            "/templates/mybatisplus/entity.java",
             ".java"
     );
 
@@ -53,7 +53,7 @@ public class OutputConfig implements TemplateRender {
             TemplateFileEnum.mapper.name(),
             "%sMapper",
             "mapper",
-            "/templates/base/mapper.java",
+            "/templates/mybatisplus/mapper.java",
             ".java"
     );
     
@@ -61,56 +61,56 @@ public class OutputConfig implements TemplateRender {
             TemplateFileEnum.mapperXml.name(),
             "%sMapper",
             "mapper.xml",
-            "/templates/base/mapper.xml",
+            "/templates/mybatisplus/mapper.xml",
             ".xml"
     );
     protected io.github.luminion.generator.po.TemplateFile service = new io.github.luminion.generator.po.TemplateFile(
             TemplateFileEnum.service.name(),
             "I%sService",
             "service",
-            "/templates/base/service.java",
+            "/templates/mybatisplus/service.java",
             ".java"
     );
     protected io.github.luminion.generator.po.TemplateFile serviceImpl = new io.github.luminion.generator.po.TemplateFile(
             TemplateFileEnum.serviceImpl.name(),
             "%sServiceImpl",
             "service.impl",
-            "/templates/base/serviceImpl.java",
+            "/templates/mybatisplus/serviceImpl.java",
             ".java"
     );
     protected io.github.luminion.generator.po.TemplateFile controller = new io.github.luminion.generator.po.TemplateFile(
             TemplateFileEnum.controller.name(),
             "%sController",
             "controller",
-            "/templates/base/controller.java",
+            "/templates/mybatisplus/controller.java",
             ".java"
     );
     protected io.github.luminion.generator.po.TemplateFile insertDTO = new io.github.luminion.generator.po.TemplateFile(
             TemplateFileEnum.insertDTO.name(),
             "%sInsertDTO",
             "dto",
-            "/templates/base/insertDTO.java",
+            "/templates/mybatisplus/insertDTO.java",
             ".java"
     );
     protected io.github.luminion.generator.po.TemplateFile updateDTO = new io.github.luminion.generator.po.TemplateFile(
             TemplateFileEnum.updateDTO.name(),
             "%sUpdateDTO",
             "dto",
-            "/templates/base/updateDTO.java",
+            "/templates/mybatisplus/updateDTO.java",
             ".java"
     );
     protected io.github.luminion.generator.po.TemplateFile queryDTO = new io.github.luminion.generator.po.TemplateFile(
             TemplateFileEnum.queryDTO.name(),
             "%sQueryDTO",
             "dto",
-            "/templates/base/queryDTO.java",
+            "/templates/mybatisplus/queryDTO.java",
             ".java"
     );
     protected io.github.luminion.generator.po.TemplateFile queryVO = new io.github.luminion.generator.po.TemplateFile(
             TemplateFileEnum.queryVO.name(),
             "%sQueryVO",
             "vo",
-            "/templates/base/queryVO.java",
+            "/templates/mybatisplus/queryVO.java",
             ".java"
     );
 

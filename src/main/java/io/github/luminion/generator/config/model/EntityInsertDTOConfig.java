@@ -1,6 +1,5 @@
 package io.github.luminion.generator.config.model;
 
-import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
@@ -26,7 +25,7 @@ public class EntityInsertDTOConfig implements TemplateRender {
             TemplateFileEnum.ENTITY_INSERT_DTO.getKey(),
             "%sInsertDTO",
             "dto.command",
-            "/templates/base/entityInsertDTO.java",
+            "/templates/mybatisplus/entityInsertDTO.java",
             ".java"
     );
 

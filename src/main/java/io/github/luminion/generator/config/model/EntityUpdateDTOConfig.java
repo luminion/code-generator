@@ -26,7 +26,7 @@ public class EntityUpdateDTOConfig implements TemplateRender{
             TemplateFileEnum.ENTITY_INSERT_DTO.getKey(),
             "%sUpdateDTO",
             "dto.command",
-            "/templates/base/entityUpdateDTO.java",
+            "/templates/mybatisplus/entityUpdateDTO.java",
             ".java"
     );
 

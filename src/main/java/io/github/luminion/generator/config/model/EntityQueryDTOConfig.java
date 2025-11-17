@@ -18,7 +18,7 @@ public class EntityQueryDTOConfig {
             TemplateFileEnum.ENTITY_QUERY_DTO.getKey(),
             "%sQueryDTO",
             "dto.query",
-            "/templates/base/entityQueryDTO.java",
+            "/templates/mybatisplus/entityQueryDTO.java",
             ".java"
     );
 }

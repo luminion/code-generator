@@ -7,7 +7,6 @@ import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
-import io.github.luminion.generator.util.ClassUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +30,7 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
             TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO.getKey(),
             "%sExcelExportDTO",
             "dto.excel",
-            "/templates/base/entityExcelExportDTO.java",
+            "/templates/mybatisplus/entityExcelExportDTO.java",
             ".java"
     );
 

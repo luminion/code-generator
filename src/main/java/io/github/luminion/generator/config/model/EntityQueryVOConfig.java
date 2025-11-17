@@ -18,7 +18,7 @@ public class EntityQueryVOConfig {
             TemplateFileEnum.ENTITY_QUERY_VO.getKey(),
             "%sQueryVO",
             "vo",
-            "/templates/base/entityQueryVO.java",
+            "/templates/mybatisplus/entityQueryVO.java",
             ".java"
     );
     

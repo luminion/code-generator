@@ -47,7 +47,7 @@ public class ServiceConfig implements TemplateRender {
             TemplateFileEnum.SERVICE.getKey(),
             "%sService",
             "service",
-            "/templates/base/service.java",
+            "/templates/mybatisplus/service.java",
             ".java"
     );
 

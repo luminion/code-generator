@@ -25,7 +25,6 @@ import io.github.luminion.generator.po.*;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
-import lombok.Lombok;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -50,7 +49,7 @@ public class ControllerConfig implements TemplateRender {
             TemplateFileEnum.CONTROLLER.getKey(),
             "%sController",
             "controller",
-            "/templates/base/controller.java",
+            "/templates/mybatisplus/controller.java",
             ".java");
 
     /**
