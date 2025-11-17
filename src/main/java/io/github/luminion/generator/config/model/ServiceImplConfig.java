@@ -51,11 +51,6 @@ public class ServiceImplConfig implements TemplateRender {
     );
 
     /**
-     * 自定义继承的Service类全称，带包名
-     */
-    protected String superServiceClass = "com.baomidou.mybatisplus.extension.service.IService";
-
-    /**
      * 自定义继承的ServiceImpl类全称，带包名
      */
     protected String superClass = "com.baomidou.mybatisplus.extension.service.impl.ServiceImplConfig";
@@ -95,12 +90,14 @@ public class ServiceImplConfig implements TemplateRender {
             default:
                 throw new RuntimeException("暂不支持的运行环境");
         }
-        // 类注解及信息
-        importPackages.add("org.springframework.stereotype.Service");
+    
         if (superClass != null) {
             importPackages.add(this.superClass);
             data.put("serviceImplSuperClass", ClassUtils.getSimpleName(this.superClass));
         }
+
+        // 类注解及信息
+        importPackages.add("org.springframework.stereotype.Service");
         importPackages.add(resolver.getClassName(TemplateFileEnum.MAPPER, tableInfo));
         importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
 
@@ -137,14 +134,15 @@ public class ServiceImplConfig implements TemplateRender {
         if (globalConfig.isGenerateExport()) {
             importPackages.add(excelClass);
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO, tableInfo));
-            importPackages.add(excelPackagePrefix + "write.style.column.LongestMatchColumnWidthStyleStrategy");
+//            importPackages.add(excelPackagePrefix + "write.style.column.LongestMatchColumnWidthStyleStrategy");
             importPackages.add("java.io.OutputStream");
         }
 
         Collection<String> serviceImplImportPackages4Java = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> serviceImplImportPackages4Framework = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("serviceImplImportPackages4Java", serviceImplImportPackages4Java);
-        data.put("serviceImplImportPackages4Framework", serviceImplImportPackages4Framework);
+        data.put("serviceImplFrameworkPkg", serviceImplImportPackages4Framework);
+        data.put("serviceImplJavaPkg", serviceImplImportPackages4Java);
+
         return data;
     }
 

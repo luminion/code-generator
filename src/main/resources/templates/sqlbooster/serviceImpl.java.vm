@@ -1,14 +1,14 @@
 package ${package.serviceImpl};
-#if($serviceImplImportPackages4Framework.size()>0)
+#if($serviceImplFrameworkPkg.size()>0)
 
 #end
-#foreach($pkg in ${serviceImplImportPackages4Framework})
+#foreach($pkg in ${serviceImplFrameworkPkg})
 import ${pkg};
 #end
-#if($serviceImplImportPackages4Java.size()>0)
+#if($serviceImplJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${serviceImplImportPackages4Java})
+#foreach($pkg in ${serviceImplJavaPkg})
 import ${pkg};
 #end
 
@@ -20,9 +20,9 @@ import ${pkg};
  */
 @Service
 #if(${generate.service})
-public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity}, ${queryVO}> implements ${service} {
+public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity}, ${queryVO}> implements ${service} {
 #else
-public class ${serviceImpl} extends ${superServiceImplClass}<${mapper}, ${entity}, ${queryVO}> {
+public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity}, ${queryVO}> {
 #end
 #if(${generateQuery})
 
