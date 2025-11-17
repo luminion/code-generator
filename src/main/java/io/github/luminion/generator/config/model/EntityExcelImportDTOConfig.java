@@ -33,32 +33,11 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
             ".java"
     );
 
-    /**
-     * 自定义继承的Entity类全称，带包名
-     */
-    protected String superClass;
-
-    /**
-     * 实体是否生成 serialVersionUID
-     */
-    protected boolean serialUID = true;
-
-    /**
-     * 是否启用java.io.Serial (需JAVA 14) 注解
-     *
-     */
-    protected boolean serialAnnotation = true;
-
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
         Set<String> importPackages = new TreeSet<>();
-
-        if (superClass != null) {
-            data.put("excelImportDTOSuperClass", ClassUtils.getSimpleName(this.superClass));
-            importPackages.add(this.superClass);
-        }
 
         // excel包
         String excelIgnoreUnannotated = globalConfig.getExcelApi().getPackagePrefix() + "annotation.ExcelIgnoreUnannotated";

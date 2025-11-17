@@ -16,7 +16,7 @@ import ${pkg};
  * $!{table.comment}-VO
  *
  * @author ${author}
-#if(${commentLink})
+#if(${docLink})
  * @see ${class.entity}
  * @see ${class.mapper}
  * @see ${class.serviceImpl}

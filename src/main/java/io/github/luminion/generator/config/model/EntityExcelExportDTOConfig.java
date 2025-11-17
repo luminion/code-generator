@@ -35,12 +35,6 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
             ".java"
     );
 
-    /**
-     * 自定义继承的Entity类全称，带包名
-     */
-    protected String superClass;
-
-
     @Override
     public void init() {
         TemplateRender.super.init();
@@ -51,10 +45,6 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
         Set<String> importPackages = new TreeSet<>();
-        if (superClass != null) {
-            data.put("excelExportDTOSuperClass", ClassUtils.getSimpleName(this.superClass));
-            importPackages.add(this.superClass);
-        }
         
         // excel包
         String excelIgnoreUnannotated = globalConfig.getExcelApi().getPackagePrefix() + "annotation.ExcelIgnoreUnannotated";

@@ -26,11 +26,7 @@ import ${pkg};
 @Data
 #end
 @ExcelIgnoreUnannotated
-#if(${excelImportDTOSuperClass})
-public class ${excelImportDTO} extends ${excelImportDTOSuperClass} {
-#elseif(${serializableUID})
-public class ${excelImportDTO} implements Serializable {
-#end
+public class ${excelImportDTO}#if(${serializableUID}) implements Serializable#end {
 #if(${serializableUID})
 
     #if(${serializableAnnotation})
@@ -70,7 +66,6 @@ public class ${excelImportDTO} implements Serializable {
 #elseif(${field.versionField})
 #elseif(${field.logicDeleteField})
 #elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
-#elseif(${editExcludeFields.contains(${field.propertyName})})
 #elseif(${editExcludeColumns.contains(${field.columnName})})
 #else
     #if(${field.propertyType.equals("boolean")})

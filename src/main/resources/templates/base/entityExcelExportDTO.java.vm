@@ -27,11 +27,7 @@ import ${pkg};
 @Data
 #end
 @ExcelIgnoreUnannotated
-#if(${excelExportDTOSuperClass})
-public class ${excelExportDTO} extends ${excelExportDTOSuperClass} {
-#elseif(${serializableUID})
-public class ${excelExportDTO} implements Serializable {
-#end
+public class ${excelExportDTO}#if(${serializableUID}) implements Serializable#end {
 #if(${serializableUID})
 
     #if(${serializableAnnotation})

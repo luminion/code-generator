@@ -1,6 +1,5 @@
-package io.github.luminion.generator.config.model;
+package io.github.luminion.generator.config.core;
 
-import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.FieldFill;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
@@ -140,20 +139,20 @@ public class ModelConfig implements TemplateRender {
             if (FieldFill.INSERT.name().equals(field.getFill()) || FieldFill.INSERT_UPDATE.name().equals(field.getFill())) {
                 continue;
             }
-            Optional.ofNullable(field.getJavaType().getPkg()).ifPresent(importPackages::add);
-            MetaInfo metaInfo = field.getMetaInfo();
-            boolean isString = "String".equals(field.getPropertyType());
-            boolean notnullFlag = !metaInfo.isNullable() && metaInfo.getDefaultValue() == null;
-            if (notnullFlag) {
-                if (isString) {
-                    importPackages.add(notBlank);
-                } else {
-                    importPackages.add(notNull);
-                }
-            }
-            if (isString) {
-                importPackages.add(size);
-            }
+//            Optional.ofNullable(field.getJavaType().getPkg()).ifPresent(importPackages::add);
+//            MetaInfo metaInfo = field.getMetaInfo();
+//            boolean isString = "String".equals(field.getPropertyType());
+//            boolean notnullFlag = !metaInfo.isNullable() && metaInfo.getDefaultValue() == null;
+//            if (notnullFlag) {
+//                if (isString) {
+//                    importPackages.add(notBlank);
+//                } else {
+//                    importPackages.add(notNull);
+//                }
+//            }
+//            if (isString) {
+//                importPackages.add(size);
+//            }
         }
         this.resolveDocImportPackages(globalConfig, importPackages);
         if (globalConfig.isGenerateImport()) {

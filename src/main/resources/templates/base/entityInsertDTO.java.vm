@@ -1,14 +1,14 @@
 package ${package.insertDTO};
-#if($insertDTOImportPackages4Framework.size()>0)
+#if($insertDTOFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${insertDTOImportPackages4Framework})
+#foreach($pkg in ${insertDTOFramePkg})
 import ${pkg};
 #end
-#if($insertDTOImportPackages4Java.size()>0)
+#if($insertDTOJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${insertDTOImportPackages4Java})
+#foreach($pkg in ${insertDTOJavaPkg})
 import ${pkg};
 #end
 
@@ -16,7 +16,7 @@ import ${pkg};
  * $!{table.comment}-新增DTO
  *
  * @author ${author}
-#if(${commentLink})
+#if(${docLink})
  * @see ${class.entity}
  * @see ${class.serviceImpl}
 #end
@@ -33,17 +33,20 @@ import ${pkg};
 #elseif(${swagger})
 @ApiModel(description = "$!{table.comment}-新增DTO")
 #end
-#if(${generateImport})
-@ExcelIgnoreUnannotated
+public class ${insertDTO}#if(${serializableUID}) implements Serializable#end {
+#if(${serializableUID})
+
+    #if(${serializableAnnotation})
+    @Serial
+    #end
+    private static final long serialVersionUID = 1L;
 #end
-public class ${insertDTO} {
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${table.fields})
 #if(${field.keyFlag})
 #elseif(${field.versionField})
 #elseif(${field.logicDeleteField})
 #elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
-#elseif(${editExcludeFields.contains(${field.propertyName})})
 #elseif(${editExcludeColumns.contains(${field.columnName})})
 #else
 
@@ -70,9 +73,6 @@ public class ${insertDTO} {
     @Size(message = "${field.comment}长度不能超过${field.metaInfo.length}", max = ${field.metaInfo.length})
         #end
     #end
-    #if(${generateImport})## excel导入
-    @ExcelProperty(value = "${field.comment}")
-    #end
     private ${field.propertyType} ${field.propertyName};
 #end
 #end
@@ -83,7 +83,6 @@ public class ${insertDTO} {
 #elseif(${field.versionField})
 #elseif(${field.logicDeleteField})
 #elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
-#elseif(${editExcludeFields.contains(${field.propertyName})})
 #elseif(${editExcludeColumns.contains(${field.columnName})})
 #else
     #if(${field.propertyType.equals("boolean")})

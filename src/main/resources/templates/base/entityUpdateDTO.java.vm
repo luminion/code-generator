@@ -1,14 +1,14 @@
 package ${package.updateDTO};
-#if($updateDTOImportPackages4Framework.size()>0)
+#if($updateDTOFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${updateDTOImportPackages4Framework})
+#foreach($pkg in ${updateDTOFramePkg})
 import ${pkg};
 #end
-#if($updateDTOImportPackages4Java.size()>0)
+#if($updateDTOJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${updateDTOImportPackages4Java})
+#foreach($pkg in ${updateDTOJavaPkg})
 import ${pkg};
 #end
 
@@ -16,7 +16,7 @@ import ${pkg};
  * $!{table.comment}-修改DTO
  *
  * @author ${author}
-#if(${commentLink})
+#if(${docLink})
  * @see ${class.entity}
  * @see ${class.serviceImpl}
 #end
@@ -33,12 +33,18 @@ import ${pkg};
 #elseif(${swagger})
 @ApiModel(description = "$!{table.comment}-修改DTO")
 #end
-public class ${updateDTO} {
+public class ${updateDTO}#if(${serializableUID}) implements Serializable#end {
+#if(${serializableUID})
+
+    #if(${serializableAnnotation})
+    @Serial
+    #end
+    private static final long serialVersionUID = 1L;
+#end
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #elseif(${field.fill} && (${field.fill}=="UPDATE" || ${field.fill}=="INSERT_UPDATE" || ${field.fill}=="INSERT"))
-#elseif(${editExcludeFields.contains(${field.propertyName})})
 #elseif(${editExcludeColumns.contains(${field.columnName})})
 #else
 
@@ -78,7 +84,6 @@ public class ${updateDTO} {
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #elseif(${field.fill} && (${field.fill}=="UPDATE" || ${field.fill}=="INSERT_UPDATE" || ${field.fill}=="INSERT"))
-#elseif(${editExcludeFields.contains(${field.propertyName})})
 #elseif(${editExcludeColumns.contains(${field.columnName})})
 #else
     #if(${field.propertyType.equals("boolean")})
