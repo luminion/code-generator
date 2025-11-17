@@ -23,22 +23,8 @@ import ${pkg};
 #end
  * @since ${date}
  */
-#if(${springdoc})
-@Tag(name= "$!{table.comment}", description = "$!{table.comment}")
-#elseif(${swagger})
-@Api(tags = "$!{table.comment}")
-#end
-#if(${crossOrigin})
-@CrossOrigin
-#end
-#if(${restControllerStyle})
-@RestController
-#else
-@Controller
-#end
-@RequestMapping("$!{requestBaseUrl}")
-#if(${lombok})
-@RequiredArgsConstructor
+#foreach($anno in ${controllerAnnotations})
+${anno}
 #end
 #if(${controllerSuperClass})
 public class ${controller} extends ${controllerSuperClass} {

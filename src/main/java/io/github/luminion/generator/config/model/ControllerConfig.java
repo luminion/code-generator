@@ -25,12 +25,10 @@ import io.github.luminion.generator.po.*;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
+import lombok.Lombok;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -160,7 +158,7 @@ public class ControllerConfig implements TemplateRender {
             ClassPayload pageClassPayload = globalConfig.getPageClassPayload();
             data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
         }
-        
+
 
         // ======================导包======================
         TreeSet<String> importPackages = new TreeSet<>();
@@ -275,6 +273,34 @@ public class ControllerConfig implements TemplateRender {
         data.put("controllerFrameworkPkg", frameworkPackages);
         data.put("controllerJavaPkg", javaPackages);
 
+
+        // 类注解
+        String comment = Optional.ofNullable(tableInfo.getComment()).orElse("");
+        TreeSet<String> annotations = new TreeSet<>();
+        switch (globalConfig.getDocType()) {
+            case SPRING_DOC:
+                annotations.add(String.format("@Tag(name= \"%s\", description = \"%s\")", comment, comment));
+                break;
+            case SWAGGER:
+                annotations.add(String.format("@Api(tags = \"%s\")", comment));
+                break;
+        }
+        if (crossOrigin) {
+            annotations.add("@CrossOrigin");
+        }
+       
+        if (restController) {
+            annotations.add("@RestController");
+        } else {
+            annotations.add("@Controller");
+        }
+        annotations.add(String.format("@RequestMapping(\"%s\")",requestBaseUrl));
+        if (globalConfig.isLombok()){
+            annotations.add("@RequiredArgsConstructor");
+        }
+
+
+        data.put("controllerAnnotations", annotations);
         return data;
     }
 
