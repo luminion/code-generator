@@ -1,14 +1,14 @@
 package ${package.queryDTO};
-#if($queryDTOImportPackages4Framework.size()>0)
+#if($queryDTOFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${queryDTOImportPackages4Framework})
+#foreach($pkg in ${queryDTOFramePkg})
 import ${pkg};
 #end
-#if($queryDTOImportPackages4Java.size()>0)
+#if($queryDTOJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${queryDTOImportPackages4Java})
+#foreach($pkg in ${queryDTOJavaPkg})
 import ${pkg};
 #end
 
@@ -38,9 +38,16 @@ import ${pkg};
 @ApiModel(description = "$!{table.comment}-查询DTO")
 #end
 #if(${queryDTOExtendsEntity})
-public class ${queryDTO} extends ${entity} {
+public class ${queryDTO} extends ${entity}#if(${serializableUID}) implements Serializable#end {
 #else
-public class ${queryDTO} {
+public class ${queryDTO}#if(${serializableUID}) implements Serializable#end {
+#end
+#if(${serializableUID})
+
+    #if(${serializableAnnotation})
+    @Serial
+    #end
+    private static final long serialVersionUID = 1L;
 #end
 ## ----------  BEGIN 字段循环遍历  ----------
 #if(!${queryDTOExtendsEntity})

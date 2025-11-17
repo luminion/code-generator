@@ -1,14 +1,14 @@
 package ${package.queryVO};
-#if($queryVOImportPackages4Framework.size()>0)
+#if($queryVOFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${queryVOImportPackages4Framework})
+#foreach($pkg in ${queryVOFramePkg})
 import ${pkg};
 #end
-#if($queryVOImportPackages4Java.size()>0)
+#if($queryVOJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${queryVOImportPackages4Java})
+#foreach($pkg in ${queryVOJavaPkg})
 import ${pkg};
 #end
 
@@ -37,13 +37,17 @@ import ${pkg};
 #elseif(${swagger})
 @ApiModel(description = "$!{table.comment}-VO")
 #end
-#if(${generateExport})
-@ExcelIgnoreUnannotated
-#end
 #if(${queryVOExtendsEntity})
-public class ${queryVO} extends ${entity} {
+public class ${queryVO} extends ${entity}#if(${serializableUID}) implements Serializable#end {
 #else
-public class ${queryVO} {
+public class ${queryVO}#if(${serializableUID}) implements Serializable#end {
+#end
+#if(${serializableUID})
+
+    #if(${serializableAnnotation})
+    @Serial
+    #end
+    private static final long serialVersionUID = 1L;
 #end
 ## ----------  BEGIN 字段循环遍历  ----------
 #if(!${queryVOExtendsEntity})
@@ -61,9 +65,6 @@ public class ${queryVO} {
      * ${field.comment}
      */
         #end
-    #end
-    #if(${generateExport})## 导出
-    @ExcelProperty(value = "${field.comment}")
     #end
     private ${field.propertyType} ${field.propertyName};
 #end
