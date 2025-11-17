@@ -17,7 +17,7 @@ public class ServiceImplBuilder {
      * <p> 
      * 会使用{@link String#format(String, Object...)}进行转化, 其中会传入当前表转化后的名称,
      * 例如: 表名为user,  %sEntity  -> UserEntity
-     * @param formatPattern 模板文件名
+     * @param nameFormat 格式
      * @return this
      */
     public ServiceImplBuilder nameFormat(@NonNull String nameFormat) {

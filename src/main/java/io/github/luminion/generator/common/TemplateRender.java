@@ -36,7 +36,6 @@ public interface TemplateRender extends Serializable {
     /**
      * 验证配置项
      *
-     * @param TableInfo 表信息
      * @since 1.0.0
      */
     default void init() {
@@ -47,7 +46,7 @@ public interface TemplateRender extends Serializable {
      * 渲染数据
      *
      * @param tableInfo 表信息
-     * @return {@link Map }<{@link String }, {@link Object }>
+     * @return map
      * @since 1.0.0
      */
     @SneakyThrows

@@ -175,7 +175,7 @@ public class Resolver {
     /**
      * 获取指定文件是否生成的映射
      * <p>
-     * key {@link TemplateFileEnum#getKey()}
+     * key {@link TemplateFileEnum}
      * value 是否生成
      *
      * @return map
@@ -191,7 +191,7 @@ public class Resolver {
     /**
      * 获取输出类包信息映射
      * <p>
-     * key {@link TemplateFileEnum#getKey()}
+     * key {@link TemplateFileEnum}
      * value 包名(不含类名)
      *
      * @return map
@@ -207,7 +207,7 @@ public class Resolver {
     /**
      * 获取输出类名称映射
      * <p>
-     * key {@link TemplateFileEnum#getKey()}
+     * key {@link TemplateFileEnum}
      * value 完整类名(含包名)
      *
      * @param tableInfo 表信息
@@ -223,7 +223,7 @@ public class Resolver {
 
     /**
      * 获取输出类简单名称映射
-     * key {@link TemplateFileEnum#getKey()}
+     * key {@link TemplateFileEnum}
      * value 声明类名(不含包)
      *
      * @param tableInfo 表信息
