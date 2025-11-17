@@ -1,52 +1,53 @@
 package ${package.queryVO};
-#if($queryVOImportPackages4Framework.size()>0)
+#if($excelExportDTOFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${queryVOImportPackages4Framework})
+#foreach($pkg in ${excelExportDTOFramePkg})
 import ${pkg};
 #end
-#if($queryVOImportPackages4Java.size()>0)
+#if($excelExportDTOJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${queryVOImportPackages4Java})
+#foreach($pkg in ${excelExportDTOJavaPkg})
 import ${pkg};
 #end
 
 /**
- * $!{table.comment}-VO
+ * $!{table.comment}-导出DTO
  *
- * @author ${author}
-#if(${commentLink})
+ * @author ${docAuthor}
+#if(${docLink})
  * @see ${class.entity}
  * @see ${class.mapper}
  * @see ${class.serviceImpl}
 #end
- * @since ${date}
+ * @since ${docDate}
  */
 #if(${lombok})
 @Data
-    #if(${chainModel})
-@Accessors(chain = true)
-    #end
-    #if(${queryVOExtendsEntity})
-@EqualsAndHashCode(callSuper = true)
-    #end
+##    #if(${chainModel})
+##@Accessors(chain = true)
+##    #end
 #end
 #if(${springdoc})
-@Schema(description = "$!{table.comment}-VO")
+@Schema(description = "$!{table.comment}-导出DTO")
 #elseif(${swagger})
-@ApiModel(description = "$!{table.comment}-VO")
+@ApiModel(description = "$!{table.comment}-导出DTO")
 #end
-#if(${generateExport})
 @ExcelIgnoreUnannotated
+#if(${excelExportDTOSuperClass})
+public class ${excelExportDTO} extends ${excelExportDTOSuperClass} {
+#elseif(${excelExportDTOSerial})
+public class ${excelExportDTO} implements Serializable {
 #end
-#if(${queryVOExtendsEntity})
-public class ${queryVO} extends ${entity} {
-#else
-public class ${queryVO} {
+#if(${excelExportDTOSerial})
+
+    #if(${excelExportDTOSerialAnnotation})
+    @Serial
+    #end
+    private static final long serialVersionUID = 1L;
 #end
 ## ----------  BEGIN 字段循环遍历  ----------
-#if(!${queryVOExtendsEntity})
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #else
@@ -62,14 +63,12 @@ public class ${queryVO} {
      */
         #end
     #end
-    #if(${generateExport})## 导出
     @ExcelProperty(value = "${field.comment}")
-    #end
     private ${field.propertyType} ${field.propertyName};
 #end
 #end
-#end
 ## ----------  END 字段循环遍历  ----------
+## ----------BEGIN getter/setter----------
 #if(!${lombok} && !${queryVOExtendsEntity})
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
@@ -83,19 +82,13 @@ public class ${queryVO} {
     public ${field.propertyType} ${getprefix}${field.capitalName}() {
         return ${field.propertyName};
     }
-
-    #if(${chainModel})
-    public ${queryVO} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
-    #else
+    
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
-    #end
         this.${field.propertyName} = ${field.propertyName};
-     #if(${chainModel})
-        return this;
-    #end
     }
 #end
 #end
 #end
+## ----------  END getter/setter  ----------
 
 }
