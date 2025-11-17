@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.builder;
+package io.github.luminion.generator.config.model.builder;
 
 import io.github.luminion.generator.common.MethodReference;
 import io.github.luminion.generator.config.Configurer;

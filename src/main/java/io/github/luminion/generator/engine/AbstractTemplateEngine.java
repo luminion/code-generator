@@ -17,7 +17,7 @@ package io.github.luminion.generator.engine;
 
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.config.core.StrategyConfig;
+import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.FileUtils;
 import io.github.luminion.generator.util.RuntimeUtils;
 import io.github.luminion.generator.util.StringUtils;
@@ -26,11 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 
 
 /**
@@ -52,25 +49,6 @@ public abstract class AbstractTemplateEngine {
     public AbstractTemplateEngine(Configurer configurer) {
         this.configurer = configurer;
     }
-
-    /**
-     * 输出自定义模板文件
-     *
-     * @param customFiles 自定义模板文件列表
-     * @param tableInfo   表信息
-     * @param objectMap   渲染数据
-     * @since 3.5.3
-     */
-    protected void outputCustomFile(List<CustomFile> customFiles, TableInfo tableInfo, Map<String, Object> objectMap) {
-        customFiles.forEach(file -> {
-            file.validate();
-            String outputDir = file.getOutputDir();
-            Function<TableInfo, String> formatNameFunction = file.getFormatNameFunction();
-            String fileName = outputDir + File.separator + formatNameFunction.apply(tableInfo) + file.getOutputFileSuffix();
-            outputFile(new File(fileName), objectMap, file.getTemplatePath(), file.isFileOverride());
-        });
-    }
-
 
     /**
      * 输出文件
@@ -102,20 +80,17 @@ public abstract class AbstractTemplateEngine {
      */
     public AbstractTemplateEngine batchOutput() {
         try {
-            Configurer config = this.getConfigurer();
-            List<TableInfo> tableInfoList = config.getTableInfo();
+            List<TableInfo> tableInfoList = configurer.getTableInfo();
             tableInfoList.forEach(tableInfo -> {
-                Map<String, Object> objectMap = this.getObjectMap(config, tableInfo);
-                Optional.ofNullable(config.getInjectionConfig()).ifPresent(injectionConfig -> {
-                    // 添加自定义属性
-                    injectionConfig.beforeOutputFile(tableInfo, objectMap);
-                    
-                    // 输出预定义文件
-                    outputCustomFile(config.getOutputConfig().getCustomFiles(), tableInfo, objectMap);
-                    
-                    // 输出自定义文件
-                    outputCustomFile(injectionConfig.getCustomFiles(), tableInfo, objectMap);
-                });
+                Map<String, Object> objectMap = configurer.renderMap(tableInfo);
+                List<TemplateFile> templateFiles = configurer.getTemplateFiles();
+                for (TemplateFile file : templateFiles) {
+                    file.validate();
+                    String outputDir = file.getOutputDir();
+                    String format = String.format(file.getNameFormat(), tableInfo.getEntityName());
+                    String fileName = outputDir + File.separator + format + file.getOutputFileSuffix();
+                    outputFile(new File(fileName), objectMap, file.getTemplatePath(), file.isFileOverride());
+                }
             });
         } catch (Exception e) {
             throw new RuntimeException("无法创建文件，请检查配置信息！", e);
@@ -149,10 +124,10 @@ public abstract class AbstractTemplateEngine {
      * 打开输出目录
      */
     public void open() {
-        String outDir = getConfigurer().getOutputConfig().getOutputDir();
+        String outDir = getConfigurer().getGlobalConfig().getOutputDir();
         if (StringUtils.isBlank(outDir) || !new File(outDir).exists()) {
             System.err.println("未找到输出目录：" + outDir);
-        } else if (getConfigurer().getOutputConfig().isOutputDirOpen()) {
+        } else if (getConfigurer().getGlobalConfig().isOpenOutputDir()) {
             try {
                 RuntimeUtils.openDir(outDir);
             } catch (IOException e) {
@@ -161,55 +136,6 @@ public abstract class AbstractTemplateEngine {
         }
     }
 
-    /**
-     * 渲染对象 MAP 信息
-     *
-     * @param config    配置信息
-     * @param tableInfo 表信息对象
-     * @return ignore
-     */
-    public Map<String, Object> getObjectMap(Configurer config, TableInfo tableInfo) {
-        Map<String, Object> objectMap = new HashMap<>();
-        Map<String, Object> globalMap = config.getGlobalConfig().renderData(tableInfo);
-        objectMap.putAll(globalMap);
-        
-        StrategyConfig strategyConfig = config.getStrategyConfig();
-        // 启用 schema 处理逻辑
- 
-        objectMap.put("schemaName", config.getDataSourceConfig().getSchemaName());
-        objectMap.put("config", config);
-        objectMap.put("table", tableInfo);
-
-        // 策略配置
-        Map<String, Object> strategyData = strategyConfig.renderData(tableInfo);
-        objectMap.putAll(strategyData);
-
-        // 包及输出文件
-        Map<String, Object> outputData = config.getOutputConfig().renderData(tableInfo);
-        objectMap.putAll(outputData);
-        
-        // 实体配置
-        Map<String, Object> entityData = config.getEntityConfig().renderData(tableInfo);
-        objectMap.putAll(entityData);
-        
-        // 模型配置
-        Map<String, Object> modelData = config.getModelConfig().renderData(tableInfo);
-        objectMap.putAll(modelData);
-        
-        // mapper配置
-        Map<String, Object> mapperData = config.getMapperConfig().renderData(tableInfo);
-        objectMap.putAll(mapperData);
-        
-        // service配置
-        Map<String, Object> serviceData = config.getServiceConfig().renderData(tableInfo);
-        objectMap.putAll(serviceData);
-        
-        // controller配置
-        Map<String, Object> controllerData = config.getControllerConfig().renderData(tableInfo);
-        objectMap.putAll(controllerData);
-        
-        return objectMap;
-    }
 
     /**
      * 模板真实文件路径

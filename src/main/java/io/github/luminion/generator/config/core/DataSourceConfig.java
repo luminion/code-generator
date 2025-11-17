@@ -65,6 +65,14 @@ public class DataSourceConfig {
         this.dbType = DatasourceUtils.getDbType(url);
     }
 
+    public DataSourceConfig(String url, String username, String password, String schemaName) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        this.dbType = DatasourceUtils.getDbType(url);
+        this.schemaName = schemaName;
+    }
+
     /**
      * 创建数据库连接对象
      * 这方法建议只调用一次，毕竟只是代码生成，用一个连接就行。

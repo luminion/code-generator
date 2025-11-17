@@ -20,12 +20,14 @@ import io.github.luminion.generator.config.model.*;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.support.DefaultDatabaseQuery;
 import io.github.luminion.generator.config.core.*;
+import io.github.luminion.generator.po.TemplateFile;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * 配置汇总 传递给文件生成工具
@@ -44,10 +46,6 @@ public class Configurer {
      * 全局配置信息
      */
     private final GlobalConfig globalConfig = new GlobalConfig();
-    /**
-     * 输出文件配置
-     */
-    private final OutputConfig outputConfig = new OutputConfig();
     /**
      * 策略配置信息
      */
@@ -83,7 +81,7 @@ public class Configurer {
      * 实体配置
      */
     private final EntityConfig entityConfig = new EntityConfig();
-    
+
     /**
      * 查询DTO配置
      */
@@ -123,7 +121,7 @@ public class Configurer {
      * 解析器
      */
     private Resolver resolver;
-    
+
     public Configurer(String url, String username, String password) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
     }
@@ -131,8 +129,7 @@ public class Configurer {
     public List<TableInfo> getTableInfo() {
         getStrategyConfig().init();
         getGlobalConfig().init();
-        getOutputConfig().processOutput(this);
-        if (this.tableInfo.isEmpty()){
+        if (this.tableInfo.isEmpty()) {
             try {
                 DefaultDatabaseQuery defaultQuery = new DefaultDatabaseQuery(this);
                 // 设置表信息
@@ -154,22 +151,22 @@ public class Configurer {
      * @since 1.0.0
      */
     public Resolver getResolver() {
-        if (resolver==null){
+        if (resolver == null) {
             this.resolver = new Resolver(this);
         }
         return resolver;
     }
-    
+
     /**
      * 获取输出的模板参数
      *
      * @return {@link Map }
      * @since 1.0.0
      */
-    public Map<Object, Object> renderMap(TableInfo tableInfo) {
-        HashMap<Object, Object> result = new HashMap<>();
+    public Map<String, Object> renderMap(TableInfo tableInfo) {
+        HashMap<String, Object> result = new HashMap<>();
         Resolver resolver = getResolver();
-        
+
         // 类名
         result.putAll(resolver.getOutputClassSimpleNameMap(tableInfo));
         // 类包
@@ -178,7 +175,44 @@ public class Configurer {
         result.put("class", resolver.getOutputClassNameMap(tableInfo));
         // 类是否生成
         result.put("generate", resolver.getOutputClassGenerateMap());
+
+        if (dataSourceConfig.getSchemaName() != null) {
+            result.put("schemaName", dataSourceConfig.getSchemaName() + ".");
+        }
+
+
+        result.putAll(globalConfig.renderData(tableInfo));
+        result.putAll(strategyConfig.renderData(tableInfo));
+      
         
+        result.putAll(controllerConfig.renderData(tableInfo));
+        result.putAll(serviceConfig.renderData(tableInfo));
+        result.putAll(serviceImplConfig.renderData(tableInfo));
+        result.putAll(mapperConfig.renderData(tableInfo));
+        result.putAll(mapperXmlConfig.renderData(tableInfo));
+        result.putAll(entityConfig.renderData(tableInfo));
+        
+        result.putAll(entityQueryDTOConfig.renderData(tableInfo));
+        result.putAll(entityQueryVOConfig.renderData(tableInfo));
+        
+        result.putAll(entityInsertDTOConfig.renderData(tableInfo));
+        result.putAll(entityUpdateDTOConfig.renderData(tableInfo));
+        
+        result.putAll(entityExcelImportDTOConfig.renderData(tableInfo));
+        result.putAll(entityExcelExportDTOConfig.renderData(tableInfo));
+        
+        result.put("config", this);
+
+        BiConsumer<TableInfo, Map<String, Object>> consumer = injectionConfig.getBeforeOutputFileBiConsumer();
+        consumer.accept(tableInfo, result);
         return result;
+    }
+    
+    public List<TemplateFile> getTemplateFiles() {
+        Resolver resolver = getResolver();
+        List<TemplateFile> templateFiles = resolver.getTemplateFiles();
+        List<TemplateFile> customFiles = injectionConfig.getCustomFiles();
+        templateFiles.addAll(customFiles);
+        return templateFiles; 
     }
 }

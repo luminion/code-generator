@@ -5,4 +5,5 @@ package io.github.luminion.generator.core.suppport;
  * @since 1.0.0
  */
 public class SqlBoosterGenerator {
+    
 }

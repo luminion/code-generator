@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.builder;
+package io.github.luminion.generator.config.core.builder;
 
 import io.github.luminion.generator.config.Configurer;
 import lombok.RequiredArgsConstructor;
@@ -201,26 +201,5 @@ public class StrategyBuilder {
         this.configurer.getStrategyConfig().setSkipView(true);
         return this;
     }
-//
-//    /**
-//     * 启用 schema
-//     *
-//     * @return this
-//     * @since 3.5.1
-//     */
-//    public StrategyBuilder enableSchema() {
-//        this.configurer.getStrategyConfig().setEnableSchema(true);
-//        return this;
-//    }
 
-//    /**
-//     * 禁用sql过滤
-//     *
-//     * @return this
-//     * @since 3.5.0
-//     */
-//    public StrategyBuilder disableSqlFilter() {
-//        this.configurer.getStrategyConfig().setEnableSqlFilter(false);
-//        return this;
-//    }
 }

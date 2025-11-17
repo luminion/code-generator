@@ -1,7 +1,6 @@
 package io.github.luminion.generator.core;
 
 import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.config.builder.*;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

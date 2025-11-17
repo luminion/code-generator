@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.builder;
+package io.github.luminion.generator.config.model.builder;
 
 import io.github.luminion.generator.config.Configurer;
 import lombok.NonNull;
@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public class ServiceBuilder {
+public class ServiceImplBuilder {
     private final Configurer configurer;
 
     /**
@@ -20,8 +20,8 @@ public class ServiceBuilder {
      * @param formatPattern 模板文件名
      * @return this
      */
-    public ServiceBuilder nameFormat(@NonNull String nameFormat) {
-        this.configurer.getServiceConfig().getTemplateFile().setNameFormat(nameFormat);
+    public ServiceImplBuilder nameFormat(@NonNull String nameFormat) {
+        this.configurer.getServiceImplConfig().getTemplateFile().setNameFormat(nameFormat);
         return this;
     }
 
@@ -32,8 +32,8 @@ public class ServiceBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public ServiceBuilder subPackage(@NonNull String subPackage) {
-        this.configurer.getServiceConfig().getTemplateFile().setSubPackage(subPackage);
+    public ServiceImplBuilder subPackage(@NonNull String subPackage) {
+        this.configurer.getServiceImplConfig().getTemplateFile().setSubPackage(subPackage);
         return this;
     }
 
@@ -45,8 +45,8 @@ public class ServiceBuilder {
      * @param templatePath 模板文件路径
      * @return this
      */
-    public ServiceBuilder templatePath(@NonNull String templatePath) {
-        this.configurer.getServiceConfig().getTemplateFile().setTemplatePath(templatePath);
+    public ServiceImplBuilder templatePath(@NonNull String templatePath) {
+        this.configurer.getServiceImplConfig().getTemplateFile().setTemplatePath(templatePath);
         return this;
     }
 
@@ -57,8 +57,8 @@ public class ServiceBuilder {
      * @param outputDir 输出文件路径
      * @return this
      */
-    public ServiceBuilder outputDir(@NonNull String outputDir) {
-        this.configurer.getServiceConfig().getTemplateFile().setOutputDir(outputDir);
+    public ServiceImplBuilder outputDir(@NonNull String outputDir) {
+        this.configurer.getServiceImplConfig().getTemplateFile().setOutputDir(outputDir);
         return this;
     }
 
@@ -68,8 +68,8 @@ public class ServiceBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public ServiceBuilder fileOverride(boolean enable) {
-        this.configurer.getServiceConfig().getTemplateFile().setFileOverride(enable);
+    public ServiceImplBuilder fileOverride(boolean enable) {
+        this.configurer.getServiceImplConfig().getTemplateFile().setFileOverride(enable);
         return this;
     }
 
