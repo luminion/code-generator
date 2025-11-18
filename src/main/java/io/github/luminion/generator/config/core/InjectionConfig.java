@@ -48,13 +48,4 @@ public class InjectionConfig implements TemplateRender {
      */
     protected final List<TemplateFile> customFiles = new ArrayList<>();
 
-    /**
-     * 输出文件前
-     */
-    public void beforeOutputFile(TableInfo tableInfo, Map<String, Object> objectMap) {
-        if (null != beforeOutputFileBiConsumer) {
-            beforeOutputFileBiConsumer.accept(tableInfo, objectMap);
-        }
-    }
-
 }
