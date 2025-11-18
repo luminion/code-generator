@@ -1,24 +1,116 @@
 package io.github.luminion.generator.core;
 
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.builder.core.GlobalBuilder;
+import io.github.luminion.generator.config.builder.core.InjectionBuilder;
+import io.github.luminion.generator.config.builder.core.StrategyBuilder;
+import io.github.luminion.generator.config.builder.model.*;
+import io.github.luminion.generator.config.builder.special.AbstractSpecialBuilder;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.function.Consumer;
 
 /**
  * @author luminion
  */
 @RequiredArgsConstructor
 @Slf4j
-public abstract class AbstractGenerator<C> implements LambdaGenerator<C> {
-    private final Configurer configurer;
+public abstract class AbstractGenerator<C extends AbstractSpecialBuilder<C>> implements LambdaGenerator<C> {
+    protected final Configurer configurer;
 
+    @Override
+    public LambdaGenerator<C> global(Consumer<GlobalBuilder> consumer) {
+        consumer.accept(new GlobalBuilder(this.configurer));
+        return this;
+    }
 
-  
-    
+    @Override
+    public LambdaGenerator<C> strategy(Consumer<StrategyBuilder> consumer) {
+        consumer.accept(new StrategyBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> injection(Consumer<InjectionBuilder> consumer) {
+        consumer.accept(new InjectionBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> controller(Consumer<ControllerBuilder> consumer) {
+        consumer.accept(new ControllerBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> service(Consumer<ServiceBuilder> consumer) {
+        consumer.accept(new ServiceBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> serviceImpl(Consumer<ServiceImplBuilder> consumer) {
+        consumer.accept(new ServiceImplBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> mapper(Consumer<MapperBuilder> consumer) {
+        consumer.accept(new MapperBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> mapperXml(Consumer<MapperXmlBuilder> consumer) {
+        consumer.accept(new MapperXmlBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> entity(Consumer<EntityBuilder> consumer) {
+        consumer.accept(new EntityBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> queryDTO(Consumer<EntityQueryDTOBuilder> consumer) {
+        consumer.accept(new EntityQueryDTOBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> queryVO(Consumer<EntityQueryVOBuilder> consumer) {
+        consumer.accept(new EntityQueryVOBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> insertDTO(Consumer<EntityInsertDTOBuilder> consumer) {
+        consumer.accept(new EntityInsertDTOBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> updateDTO(Consumer<EntityUpdateDTOBuilder> consumer) {
+        consumer.accept(new EntityUpdateDTOBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> excelExportDTO(Consumer<EntityExcelExportDTOBuilder> consumer) {
+        consumer.accept(new EntityExcelExportDTOBuilder(this.configurer));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<C> excelImportDTO(Consumer<EntityExcelImportDTOBuilder> consumer) {
+        consumer.accept(new EntityExcelImportDTOBuilder(this.configurer));
+        return this;
+    }
 
     @Override
     public void execute(String... tableNames) {

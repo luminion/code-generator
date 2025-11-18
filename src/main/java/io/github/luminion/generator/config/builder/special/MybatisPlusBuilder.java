@@ -12,7 +12,6 @@ import lombok.NonNull;
  */
 public class MybatisPlusBuilder extends AbstractSpecialBuilder<MybatisPlusBuilder> {
 
-
     public MybatisPlusBuilder(Configurer configurer) {
         super(configurer);
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PLUS);

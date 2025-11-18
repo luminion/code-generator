@@ -13,7 +13,7 @@ import lombok.NonNull;
 public class MybatisPlusSqlBoosterBuilder extends AbstractSpecialBuilder<MybatisPlusSqlBoosterBuilder> {
     public MybatisPlusSqlBoosterBuilder(Configurer configurer) {
         super(configurer);
-        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PLUS);
+        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER);
     }
     
     @Override
