@@ -73,4 +73,14 @@ public class ServiceBuilder {
         return this;
     }
 
+    /**
+     * 自定义继承的Service类全称，带包名
+     *
+     * @param superClass 父类
+     * @return this
+     */
+    public ServiceBuilder superClass(@NonNull String superClass) {
+        this.configurer.getServiceConfig().setSuperClass(superClass);
+        return this;
+    }
 }

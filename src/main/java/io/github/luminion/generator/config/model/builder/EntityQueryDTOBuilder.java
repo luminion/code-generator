@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public class ServiceImplBuilder {
+public class EntityQueryDTOBuilder {
     private final Configurer configurer;
 
     /**
@@ -20,8 +20,8 @@ public class ServiceImplBuilder {
      * @param nameFormat 格式
      * @return this
      */
-    public ServiceImplBuilder nameFormat(@NonNull String nameFormat) {
-        this.configurer.getServiceImplConfig().getTemplateFile().setNameFormat(nameFormat);
+    public EntityQueryDTOBuilder nameFormat(@NonNull String nameFormat) {
+        this.configurer.getEntityQueryDTOConfig().getTemplateFile().setNameFormat(nameFormat);
         return this;
     }
 
@@ -32,8 +32,8 @@ public class ServiceImplBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public ServiceImplBuilder subPackage(@NonNull String subPackage) {
-        this.configurer.getServiceImplConfig().getTemplateFile().setSubPackage(subPackage);
+    public EntityQueryDTOBuilder subPackage(@NonNull String subPackage) {
+        this.configurer.getEntityQueryDTOConfig().getTemplateFile().setSubPackage(subPackage);
         return this;
     }
 
@@ -45,8 +45,8 @@ public class ServiceImplBuilder {
      * @param templatePath 模板文件路径
      * @return this
      */
-    public ServiceImplBuilder templatePath(@NonNull String templatePath) {
-        this.configurer.getServiceImplConfig().getTemplateFile().setTemplatePath(templatePath);
+    public EntityQueryDTOBuilder templatePath(@NonNull String templatePath) {
+        this.configurer.getEntityQueryDTOConfig().getTemplateFile().setTemplatePath(templatePath);
         return this;
     }
 
@@ -57,8 +57,8 @@ public class ServiceImplBuilder {
      * @param outputDir 输出文件路径
      * @return this
      */
-    public ServiceImplBuilder outputDir(@NonNull String outputDir) {
-        this.configurer.getServiceImplConfig().getTemplateFile().setOutputDir(outputDir);
+    public EntityQueryDTOBuilder outputDir(@NonNull String outputDir) {
+        this.configurer.getEntityQueryDTOConfig().getTemplateFile().setOutputDir(outputDir);
         return this;
     }
 
@@ -68,19 +68,20 @@ public class ServiceImplBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public ServiceImplBuilder fileOverride(boolean enable) {
-        this.configurer.getServiceImplConfig().getTemplateFile().setFileOverride(enable);
+    public EntityQueryDTOBuilder fileOverride(boolean enable) {
+        this.configurer.getEntityQueryDTOConfig().getTemplateFile().setFileOverride(enable);
         return this;
     }
 
     /**
-     * 自定义继承的ServiceImpl类全称，带包名
+     * 是否继承实体类
      *
-     * @param superClass 父类
+     * @param enable 是否启用
      * @return this
      */
-    public ServiceImplBuilder superClass(@NonNull String superClass) {
-        this.configurer.getServiceImplConfig().setSuperClass(superClass);
+    public EntityQueryDTOBuilder extendsEntity(boolean enable) {
+        this.configurer.getEntityQueryDTOConfig().setExtendsEntity(enable);
         return this;
     }
+
 }
