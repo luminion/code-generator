@@ -42,7 +42,7 @@ import java.util.TreeSet;
 @Data
 public class GlobalConfig implements TemplateRender {
 
-    //---------------- lombok---------------
+    //---------------- 通用模型项---------------
 
     /**
      * 是否为lombok模型（默认 false）
@@ -53,6 +53,17 @@ public class GlobalConfig implements TemplateRender {
      * 是否为链式模型setter（默认 false）
      */
     protected boolean chainModel;
+
+    /**
+     * 实体是否生成 serialVersionUID
+     */
+    protected boolean serializableUID = true;
+
+    /**
+     * 实体是否启用java.io.Serial (需JAVA 14) 注解
+     *
+     */
+    protected boolean serializableAnnotation = true;
 
     //---------------- 注释文档---------------
 
@@ -94,17 +105,6 @@ public class GlobalConfig implements TemplateRender {
      * 全局分页类
      */
     protected ClassPayload pageClassPayload = new ClassPayload();
-
-    /**
-     * 实体是否生成 serialVersionUID
-     */
-    protected boolean serializableUID = true;
-
-    /**
-     * 实体是否启用java.io.Serial (需JAVA 14) 注解
-     *
-     */
-    protected boolean serializableAnnotation = true;
 
 
     // ----------------输出目录及包相关-----------------
@@ -185,6 +185,10 @@ public class GlobalConfig implements TemplateRender {
         if (!generateQuery && generateExport) {
             log.warn("已配置生成导出但未配置生成查询, 导出功能依赖查询功能, 将不会生成导出相关功能!!!");
             generateExport = false;
+        }
+        if (javaEEApi.equals(JavaEEApi.JAVAX)) {
+            // javax一般为低版本, 不支持@serial
+            this.serializableAnnotation = false;
         }
     }
 

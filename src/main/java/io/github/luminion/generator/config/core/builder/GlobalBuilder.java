@@ -31,17 +31,40 @@ public class GlobalBuilder {
     }
 
     /**
-     * lombok链式getter和setter(需启用lombok)
+     * 链式setter
      *
      * @param enable 是否启用
      * @return this
      * @since 1.0.0
      */
-    public GlobalBuilder lombokChainModel(boolean enable) {
+    public GlobalBuilder chainModel(boolean enable) {
         this.configurer.getGlobalConfig().setChainModel(enable);
         return this;
     }
 
+
+
+    /**
+     * 添加序列化UID
+     *
+     * @param enable 是否启用
+     * @return this
+     */
+    public GlobalBuilder serializableUID(boolean enable){
+        this.configurer.getGlobalConfig().setSerializableUID(enable);
+        return this;
+    }
+
+    /**
+     * 添加序列化UID的@serial注解, 需要jdk14+
+     *
+     * @param enable 是否启用
+     * @return this
+     */
+    public GlobalBuilder serializableAnnotation(boolean enable){
+        this.configurer.getGlobalConfig().setSerializableAnnotation(enable);
+        return this;
+    }
 
     /**
      * 配置文档类型
@@ -52,6 +75,18 @@ public class GlobalBuilder {
      */
     public GlobalBuilder docType(@NonNull DocType docType) {
         this.configurer.getGlobalConfig().setDocType(docType);
+        return this;
+    }
+
+    /**
+     * 文档注释添加相关类链接
+     *
+     * @param enable 是否启用
+     * @return this
+     * @since 1.0.0
+     */
+    public GlobalBuilder docLink(boolean enable) {
+        this.configurer.getGlobalConfig().setDocLink(enable);
         return this;
     }
 
@@ -80,18 +115,6 @@ public class GlobalBuilder {
         return this;
     }
 
-
-    /**
-     * 文档注释添加相关类链接
-     *
-     * @param enable 是否启用
-     * @return this
-     * @since 1.0.0
-     */
-    public GlobalBuilder docLink(boolean enable) {
-        this.configurer.getGlobalConfig().setDocLink(enable);
-        return this;
-    }
 
     /**
      * java EE 框架
