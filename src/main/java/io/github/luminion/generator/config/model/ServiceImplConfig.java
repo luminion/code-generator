@@ -46,7 +46,7 @@ public class ServiceImplConfig implements TemplateRender {
             TemplateFileEnum.SERVICE_IMPL.getKey(),
             "%sServiceImpl",
             "service.impl",
-            "/templates/mybatisplus/serviceImpl.java",
+            "/templates/mybatis_plus/serviceImpl.java",
             ".java"
     );
 
@@ -87,6 +87,7 @@ public class ServiceImplConfig implements TemplateRender {
                     importPackages.add(globalConfig.getPageClassPayload().getClassName());
                     importPackages.add("com.baomidou.mybatisplus.extension.plugins.pagination.Page");
                 }
+                break;
             default:
                 throw new RuntimeException("暂不支持的运行环境");
         }

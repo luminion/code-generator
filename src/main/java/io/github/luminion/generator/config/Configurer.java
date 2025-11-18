@@ -23,10 +23,7 @@ import io.github.luminion.generator.config.core.*;
 import io.github.luminion.generator.po.TemplateFile;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 /**
@@ -126,6 +123,10 @@ public class Configurer {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
     }
 
+    public Configurer(String url, String username, String password, String schemaName) {
+        this.dataSourceConfig = new DataSourceConfig(url, username, password, schemaName);
+    }
+
     public List<TableInfo> getTableInfo() {
         getStrategyConfig().init();
         getGlobalConfig().init();
@@ -183,36 +184,36 @@ public class Configurer {
 
         result.putAll(globalConfig.renderData(tableInfo));
         result.putAll(strategyConfig.renderData(tableInfo));
-      
-        
+
+
         result.putAll(controllerConfig.renderData(tableInfo));
         result.putAll(serviceConfig.renderData(tableInfo));
         result.putAll(serviceImplConfig.renderData(tableInfo));
         result.putAll(mapperConfig.renderData(tableInfo));
         result.putAll(mapperXmlConfig.renderData(tableInfo));
         result.putAll(entityConfig.renderData(tableInfo));
-        
+
         result.putAll(entityQueryDTOConfig.renderData(tableInfo));
         result.putAll(entityQueryVOConfig.renderData(tableInfo));
-        
+
         result.putAll(entityInsertDTOConfig.renderData(tableInfo));
         result.putAll(entityUpdateDTOConfig.renderData(tableInfo));
-        
+
         result.putAll(entityExcelImportDTOConfig.renderData(tableInfo));
         result.putAll(entityExcelExportDTOConfig.renderData(tableInfo));
-        
-        result.put("config", this);
 
-        BiConsumer<TableInfo, Map<String, Object>> consumer = injectionConfig.getBeforeOutputFileBiConsumer();
-        consumer.accept(tableInfo, result);
+        result.put("config", this);
+        Optional.ofNullable(injectionConfig.getBeforeOutputFileBiConsumer())
+                .ifPresent(op -> op.accept(tableInfo, result));
+
         return result;
     }
-    
+
     public List<TemplateFile> getTemplateFiles() {
         Resolver resolver = getResolver();
         List<TemplateFile> templateFiles = resolver.getTemplateFiles();
         List<TemplateFile> customFiles = injectionConfig.getCustomFiles();
         templateFiles.addAll(customFiles);
-        return templateFiles; 
+        return templateFiles;
     }
 }

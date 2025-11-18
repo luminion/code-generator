@@ -28,7 +28,7 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
             TemplateFileEnum.ENTITY_EXCEL_IMPORT_DTO.getKey(),
             "%sExcelImportDTO",
             "dto.excel",
-            "/templates/mybatisplus/entityExcelImportDTO.java",
+            "/templates/model/entityExcelImportDTO.java",
             ".java"
     );
 

@@ -30,7 +30,7 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
             TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO.getKey(),
             "%sExcelExportDTO",
             "dto.excel",
-            "/templates/mybatisplus/entityExcelExportDTO.java",
+            "/templates/model/entityExcelExportDTO.java",
             ".java"
     );
 

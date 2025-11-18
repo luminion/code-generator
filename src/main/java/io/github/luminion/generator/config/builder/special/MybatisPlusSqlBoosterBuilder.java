@@ -14,6 +14,12 @@ public class MybatisPlusSqlBoosterBuilder extends AbstractSpecialBuilder<Mybatis
     public MybatisPlusSqlBoosterBuilder(Configurer configurer) {
         super(configurer);
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER);
+        configurer.getControllerConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/controller.java");
+        configurer.getServiceConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/controller.java");
+        configurer.getServiceImplConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/controller.java");
+        configurer.getMapperConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/controller.java");
+        configurer.getMapperXmlConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/controller.java");
+        
     }
     
     @Override

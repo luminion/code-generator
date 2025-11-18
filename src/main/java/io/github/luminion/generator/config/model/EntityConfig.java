@@ -46,7 +46,7 @@ public class EntityConfig implements TemplateRender {
             TemplateFileEnum.ENTITY.getKey(),
             "%s",
             "entity",
-            "/templates/mybatisplus/entity.java",
+            "/templates/model/entity.java",
             ".java"
     );
 

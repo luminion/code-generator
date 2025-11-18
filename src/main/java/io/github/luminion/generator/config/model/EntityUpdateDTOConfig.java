@@ -23,10 +23,10 @@ public class EntityUpdateDTOConfig implements TemplateRender{
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.ENTITY_INSERT_DTO.getKey(),
+            TemplateFileEnum.ENTITY_UPDATE_DTO.getKey(),
             "%sUpdateDTO",
             "dto.command",
-            "/templates/mybatisplus/entityUpdateDTO.java",
+            "/templates/model/entityUpdateDTO.java",
             ".java"
     );
 

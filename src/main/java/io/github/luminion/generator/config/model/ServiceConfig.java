@@ -47,7 +47,7 @@ public class ServiceConfig implements TemplateRender {
             TemplateFileEnum.SERVICE.getKey(),
             "%sService",
             "service",
-            "/templates/mybatisplus/service.java",
+            "/templates/mybatis_plus/service.java",
             ".java"
     );
 
@@ -122,6 +122,7 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
                     importPackages.add("java.io.OutputStream");
                 }
+                break;
             default:
                 throw new RuntimeException("暂不支持的运行环境");
         }

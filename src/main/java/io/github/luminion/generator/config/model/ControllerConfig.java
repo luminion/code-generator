@@ -45,12 +45,7 @@ public class ControllerConfig implements TemplateRender {
     /**
      * 模板文件
      */
-    protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.CONTROLLER.getKey(),
-            "%sController",
-            "controller",
-            "/templates/mybatisplus/controller.java",
-            ".java");
+    protected TemplateFile templateFile = new TemplateFile(TemplateFileEnum.CONTROLLER.getKey(), "%sController", "controller", "/templates/mybatis_plus/controller.java", ".java");
 
     /**
      * 自定义继承的Controller类全称，带包名
@@ -129,10 +124,7 @@ public class ControllerConfig implements TemplateRender {
         data.put("requestBaseUrl", requestBaseUrl);
         data.put("restful", this.restful);
         boolean isGenerateService = resolver.isGenerate(TemplateFileEnum.SERVICE, tableInfo);
-        data.put("baseService", isGenerateService ?
-                resolver.getClassSimpleName(TemplateFileEnum.SERVICE, tableInfo) :
-                resolver.getClassSimpleName(TemplateFileEnum.SERVICE_IMPL, tableInfo)
-        );
+        data.put("baseService", isGenerateService ? resolver.getClassSimpleName(TemplateFileEnum.SERVICE, tableInfo) : resolver.getClassSimpleName(TemplateFileEnum.SERVICE_IMPL, tableInfo));
         data.put("returnMethod", this.returnMethod);
         data.put("pageMethod", this.pageMethod);
         data.put("batchQueryMethod", batchQueryPost ? "@PostMapping" : "@GetMapping");
@@ -149,8 +141,7 @@ public class ControllerConfig implements TemplateRender {
         String requestBodyStr = requestBody ? "@RequestBody " : null;
         data.put("requestBodyStr", requestBodyStr);
         data.put("optionalBodyStr", batchQueryPost ? requestBodyStr : null);
-        Optional.ofNullable(tableInfo.getPrimaryKeyField())
-                .ifPresent(e -> data.put("primaryKeyPropertyType", e.getJavaType().getType()));
+        Optional.ofNullable(tableInfo.getPrimaryKeyField()).ifPresent(e -> data.put("primaryKeyPropertyType", e.getJavaType().getType()));
         if (pageMethod != null && pageMethod.isClassReady()) {
             data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
         } else {
@@ -213,7 +204,8 @@ public class ControllerConfig implements TemplateRender {
         if (globalConfig.isGenerateDelete()) {
             if (tableInfo.isHavePrimaryKey()) {
                 TableField primaryKeyTableField = tableInfo.getPrimaryKeyField();
-                importPackages.add(primaryKeyTableField.getJavaType().getPkg());
+
+                Optional.ofNullable(primaryKeyTableField.getJavaType().getPkg()).ifPresent(importPackages::add);
             } else {
                 log.warn("{}表无主键, 不生成根据id删除", tableInfo.getName());
             }
@@ -225,7 +217,7 @@ public class ControllerConfig implements TemplateRender {
             // 根据id查询
             if (tableInfo.isHavePrimaryKey()) {
                 TableField primaryKeyTableField = tableInfo.getPrimaryKeyField();
-                importPackages.add(primaryKeyTableField.getJavaType().getPkg());
+                Optional.ofNullable(primaryKeyTableField.getJavaType().getPkg()).ifPresent(importPackages::add);
             } else {
                 log.warn("{}表无主键, 不生成根据id查询", tableInfo.getName());
             }
@@ -287,14 +279,14 @@ public class ControllerConfig implements TemplateRender {
         if (crossOrigin) {
             annotations.add("@CrossOrigin");
         }
-       
+
         if (restController) {
             annotations.add("@RestController");
         } else {
             annotations.add("@Controller");
         }
-        annotations.add(String.format("@RequestMapping(\"%s\")",requestBaseUrl));
-        if (globalConfig.isLombok()){
+        annotations.add(String.format("@RequestMapping(\"%s\")", requestBaseUrl));
+        if (globalConfig.isLombok()) {
             annotations.add("@RequiredArgsConstructor");
         }
 

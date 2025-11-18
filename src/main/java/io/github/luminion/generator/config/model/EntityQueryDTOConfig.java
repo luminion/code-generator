@@ -27,7 +27,7 @@ public class EntityQueryDTOConfig implements TemplateRender {
             TemplateFileEnum.ENTITY_QUERY_DTO.getKey(),
             "%sQueryDTO",
             "dto.query",
-            "/templates/mybatisplus/entityQueryDTO.java",
+            "/templates/model/entityQueryDTO.java",
             ".java"
     );
     

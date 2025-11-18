@@ -30,7 +30,7 @@ public class EntityQueryVOConfig implements TemplateRender {
             TemplateFileEnum.ENTITY_QUERY_VO.getKey(),
             "%sQueryVO",
             "vo",
-            "/templates/mybatisplus/entityQueryVO.java",
+            "/templates/model/entityQueryVO.java",
             ".java"
     );
 

@@ -31,7 +31,7 @@ public class MapperConfig implements TemplateRender {
             TemplateFileEnum.MAPPER.getKey(),
             "%sMapper",
             "mapper",
-            "/templates/mybatisplus/mapper.java",
+            "/templates/mybatis_plus/mapper.java",
             ".java"
     );
 
