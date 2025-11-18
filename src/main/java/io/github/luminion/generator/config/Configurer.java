@@ -168,6 +168,8 @@ public class Configurer {
         HashMap<String, Object> result = new HashMap<>();
         Resolver resolver = getResolver();
 
+        // 表信息
+        result.put("table",tableInfo);
         // 类名
         result.putAll(resolver.getOutputClassSimpleNameMap(tableInfo));
         // 类包
@@ -176,6 +178,7 @@ public class Configurer {
         result.put("class", resolver.getOutputClassNameMap(tableInfo));
         // 类是否生成
         result.put("generate", resolver.getOutputClassGenerateMap());
+
 
         if (dataSourceConfig.getSchemaName() != null) {
             result.put("schemaName", dataSourceConfig.getSchemaName() + ".");

@@ -48,9 +48,7 @@ public class EntityQueryDTOConfig implements TemplateRender {
         importPackages.add(List.class.getCanonicalName());
         
         if (extendsEntity) {
-            String entityClassName = resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo);
-            String entityClassSimpleName = resolver.getClassSimpleName(TemplateFileEnum.ENTITY, tableInfo);
-            importPackages.add(entityClassName);
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
             if (globalConfig.isLombok()){
                 importPackages.add("lombok.EqualsAndHashCode");
             }

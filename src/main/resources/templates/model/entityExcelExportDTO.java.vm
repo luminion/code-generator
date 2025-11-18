@@ -1,4 +1,4 @@
-package ${package.queryVO};
+package ${package.excelExportDTO};
 #if($excelExportDTOFramePkg.size()>0)
 
 #end

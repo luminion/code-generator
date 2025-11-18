@@ -164,7 +164,7 @@ public class Resolver {
                     String fileOutputDir = e.getOutputDir();
                     if (fileOutputDir == null) {
                         String joinPackage = joinPackage(e.getSubPackage());
-                        fileOutputDir = joinPath(e.getOutputDir(), joinPackage);
+                        fileOutputDir = joinPath(globalConfig.getOutputDir(), joinPackage);
                         e.setOutputDir(fileOutputDir);
                     }
                     e.setFileOverride(e.isFileOverride() || globalConfig.isFileOverride());

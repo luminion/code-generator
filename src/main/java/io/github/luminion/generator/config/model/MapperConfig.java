@@ -78,7 +78,7 @@ public class MapperConfig implements TemplateRender {
                 throw new RuntimeException("未定义的运行环境");
         }
         if (mapperAnnotationClass != null) {
-            data.put("mapperAnnotationClass", ClassUtils.getSimpleName(mapperAnnotationClass));
+            data.put("mapperAnnotationClass","@"+ ClassUtils.getSimpleName(mapperAnnotationClass));
             importPackages.add(mapperAnnotationClass);
         }
         if (superClass != null) {

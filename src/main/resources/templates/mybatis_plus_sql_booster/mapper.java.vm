@@ -18,10 +18,8 @@ import ${pkg};
  * @author ${author}
  * @since ${date}
  */
-#if(${mapperAnnotationClass})
-@${mapperAnnotationClassSimpleName}
-#end
-public interface ${mapper} extends ${mapperSuperClassSimpleName}<${entity}, ${entityVO}> {
+    $!{mapperAnnotationClass}
+public interface ${mapper} extends ${mapperSuperClass}<${entity}, ${entityVO}> {
 #if(${generateQuery})
     
     @Override

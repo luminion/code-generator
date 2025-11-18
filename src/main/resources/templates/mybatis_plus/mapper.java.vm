@@ -18,9 +18,7 @@ import ${pkg};
  * @author ${author}
  * @since ${date}
  */
-#if(${mapperAnnotationClass})
-@${mapperAnnotationClassSimpleName}
-#end
+$!{mapperAnnotationClass}
 public interface ${mapper} extends ${mapperSuperClass}<${entity}> {
 #if(${generateQuery})
     

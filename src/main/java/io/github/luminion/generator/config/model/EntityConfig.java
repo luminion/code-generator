@@ -103,6 +103,7 @@ public class EntityConfig implements TemplateRender {
                 // 主键
                 if (field.isConvert() || field.isKeyIdentityFlag()) {
                     importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
+                    importPackages.add("com.baomidou.mybatisplus.annotation.IdType");
                 }
             } else if (field.isConvert() || this.tableFieldAnnotation) {
                 // 普通字段
