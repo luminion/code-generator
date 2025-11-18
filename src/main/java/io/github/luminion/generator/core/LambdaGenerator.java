@@ -1,6 +1,6 @@
 package io.github.luminion.generator.core;
 
-import io.github.luminion.generator.config.core.builder.GlobalBuilder;
+import io.github.luminion.generator.config.builder.core.GlobalBuilder;
 
 import java.util.function.Consumer;
 

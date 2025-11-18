@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.model.builder;
+package io.github.luminion.generator.config.builder.model;
 
 import io.github.luminion.generator.config.Configurer;
 import lombok.NonNull;
@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public class EntityExcelImportDTOBuilder {
+public class ServiceBuilder {
     private final Configurer configurer;
 
     /**
@@ -20,8 +20,8 @@ public class EntityExcelImportDTOBuilder {
      * @param nameFormat 格式
      * @return this
      */
-    public EntityExcelImportDTOBuilder nameFormat(@NonNull String nameFormat) {
-        this.configurer.getEntityExcelImportDTOConfig().getTemplateFile().setNameFormat(nameFormat);
+    public ServiceBuilder nameFormat(@NonNull String nameFormat) {
+        this.configurer.getServiceConfig().getTemplateFile().setNameFormat(nameFormat);
         return this;
     }
 
@@ -32,8 +32,8 @@ public class EntityExcelImportDTOBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public EntityExcelImportDTOBuilder subPackage(@NonNull String subPackage) {
-        this.configurer.getEntityExcelImportDTOConfig().getTemplateFile().setSubPackage(subPackage);
+    public ServiceBuilder subPackage(@NonNull String subPackage) {
+        this.configurer.getServiceConfig().getTemplateFile().setSubPackage(subPackage);
         return this;
     }
 
@@ -45,8 +45,8 @@ public class EntityExcelImportDTOBuilder {
      * @param templatePath 模板文件路径
      * @return this
      */
-    public EntityExcelImportDTOBuilder templatePath(@NonNull String templatePath) {
-        this.configurer.getEntityExcelImportDTOConfig().getTemplateFile().setTemplatePath(templatePath);
+    public ServiceBuilder templatePath(@NonNull String templatePath) {
+        this.configurer.getServiceConfig().getTemplateFile().setTemplatePath(templatePath);
         return this;
     }
 
@@ -57,8 +57,8 @@ public class EntityExcelImportDTOBuilder {
      * @param outputDir 输出文件路径
      * @return this
      */
-    public EntityExcelImportDTOBuilder outputDir(@NonNull String outputDir) {
-        this.configurer.getEntityExcelImportDTOConfig().getTemplateFile().setOutputDir(outputDir);
+    public ServiceBuilder outputDir(@NonNull String outputDir) {
+        this.configurer.getServiceConfig().getTemplateFile().setOutputDir(outputDir);
         return this;
     }
 
@@ -68,9 +68,19 @@ public class EntityExcelImportDTOBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public EntityExcelImportDTOBuilder fileOverride(boolean enable) {
-        this.configurer.getEntityExcelImportDTOConfig().getTemplateFile().setFileOverride(enable);
+    public ServiceBuilder fileOverride(boolean enable) {
+        this.configurer.getServiceConfig().getTemplateFile().setFileOverride(enable);
         return this;
     }
 
+    /**
+     * 自定义继承的Service类全称，带包名
+     *
+     * @param superClass 父类
+     * @return this
+     */
+    public ServiceBuilder superClass(@NonNull String superClass) {
+        this.configurer.getServiceConfig().setSuperClass(superClass);
+        return this;
+    }
 }

@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.model.builder;
+package io.github.luminion.generator.config.builder.model;
 
 import io.github.luminion.generator.config.Configurer;
 import lombok.NonNull;

@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.model.builder;
+package io.github.luminion.generator.config.builder.model;
 
 import io.github.luminion.generator.config.Configurer;
 import lombok.NonNull;
@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public class EntityInsertDTOBuilder {
+public class EntityExcelImportDTOBuilder {
     private final Configurer configurer;
 
     /**
@@ -20,8 +20,8 @@ public class EntityInsertDTOBuilder {
      * @param nameFormat 格式
      * @return this
      */
-    public EntityInsertDTOBuilder nameFormat(@NonNull String nameFormat) {
-        this.configurer.getEntityInsertDTOConfig().getTemplateFile().setNameFormat(nameFormat);
+    public EntityExcelImportDTOBuilder nameFormat(@NonNull String nameFormat) {
+        this.configurer.getEntityExcelImportDTOConfig().getTemplateFile().setNameFormat(nameFormat);
         return this;
     }
 
@@ -32,8 +32,8 @@ public class EntityInsertDTOBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public EntityInsertDTOBuilder subPackage(@NonNull String subPackage) {
-        this.configurer.getEntityInsertDTOConfig().getTemplateFile().setSubPackage(subPackage);
+    public EntityExcelImportDTOBuilder subPackage(@NonNull String subPackage) {
+        this.configurer.getEntityExcelImportDTOConfig().getTemplateFile().setSubPackage(subPackage);
         return this;
     }
 
@@ -45,8 +45,8 @@ public class EntityInsertDTOBuilder {
      * @param templatePath 模板文件路径
      * @return this
      */
-    public EntityInsertDTOBuilder templatePath(@NonNull String templatePath) {
-        this.configurer.getEntityInsertDTOConfig().getTemplateFile().setTemplatePath(templatePath);
+    public EntityExcelImportDTOBuilder templatePath(@NonNull String templatePath) {
+        this.configurer.getEntityExcelImportDTOConfig().getTemplateFile().setTemplatePath(templatePath);
         return this;
     }
 
@@ -57,8 +57,8 @@ public class EntityInsertDTOBuilder {
      * @param outputDir 输出文件路径
      * @return this
      */
-    public EntityInsertDTOBuilder outputDir(@NonNull String outputDir) {
-        this.configurer.getEntityInsertDTOConfig().getTemplateFile().setOutputDir(outputDir);
+    public EntityExcelImportDTOBuilder outputDir(@NonNull String outputDir) {
+        this.configurer.getEntityExcelImportDTOConfig().getTemplateFile().setOutputDir(outputDir);
         return this;
     }
 
@@ -68,8 +68,8 @@ public class EntityInsertDTOBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public EntityInsertDTOBuilder fileOverride(boolean enable) {
-        this.configurer.getEntityInsertDTOConfig().getTemplateFile().setFileOverride(enable);
+    public EntityExcelImportDTOBuilder fileOverride(boolean enable) {
+        this.configurer.getEntityExcelImportDTOConfig().getTemplateFile().setFileOverride(enable);
         return this;
     }
 

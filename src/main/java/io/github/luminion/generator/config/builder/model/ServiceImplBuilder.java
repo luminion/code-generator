@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.model.builder;
+package io.github.luminion.generator.config.builder.model;
 
 import io.github.luminion.generator.config.Configurer;
 import lombok.NonNull;
@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public class EntityQueryVOBuilder {
+public class ServiceImplBuilder {
     private final Configurer configurer;
 
     /**
@@ -20,8 +20,8 @@ public class EntityQueryVOBuilder {
      * @param nameFormat 格式
      * @return this
      */
-    public EntityQueryVOBuilder nameFormat(@NonNull String nameFormat) {
-        this.configurer.getEntityQueryVOConfig().getTemplateFile().setNameFormat(nameFormat);
+    public ServiceImplBuilder nameFormat(@NonNull String nameFormat) {
+        this.configurer.getServiceImplConfig().getTemplateFile().setNameFormat(nameFormat);
         return this;
     }
 
@@ -32,8 +32,8 @@ public class EntityQueryVOBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public EntityQueryVOBuilder subPackage(@NonNull String subPackage) {
-        this.configurer.getEntityQueryVOConfig().getTemplateFile().setSubPackage(subPackage);
+    public ServiceImplBuilder subPackage(@NonNull String subPackage) {
+        this.configurer.getServiceImplConfig().getTemplateFile().setSubPackage(subPackage);
         return this;
     }
 
@@ -45,8 +45,8 @@ public class EntityQueryVOBuilder {
      * @param templatePath 模板文件路径
      * @return this
      */
-    public EntityQueryVOBuilder templatePath(@NonNull String templatePath) {
-        this.configurer.getEntityQueryVOConfig().getTemplateFile().setTemplatePath(templatePath);
+    public ServiceImplBuilder templatePath(@NonNull String templatePath) {
+        this.configurer.getServiceImplConfig().getTemplateFile().setTemplatePath(templatePath);
         return this;
     }
 
@@ -57,8 +57,8 @@ public class EntityQueryVOBuilder {
      * @param outputDir 输出文件路径
      * @return this
      */
-    public EntityQueryVOBuilder outputDir(@NonNull String outputDir) {
-        this.configurer.getEntityQueryVOConfig().getTemplateFile().setOutputDir(outputDir);
+    public ServiceImplBuilder outputDir(@NonNull String outputDir) {
+        this.configurer.getServiceImplConfig().getTemplateFile().setOutputDir(outputDir);
         return this;
     }
 
@@ -68,19 +68,19 @@ public class EntityQueryVOBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public EntityQueryVOBuilder fileOverride(boolean enable) {
-        this.configurer.getEntityQueryVOConfig().getTemplateFile().setFileOverride(enable);
+    public ServiceImplBuilder fileOverride(boolean enable) {
+        this.configurer.getServiceImplConfig().getTemplateFile().setFileOverride(enable);
         return this;
     }
 
     /**
-     * 是否继承实体类
+     * 自定义继承的ServiceImpl类全称，带包名
      *
-     * @param enable 是否启用
+     * @param superClass 父类
      * @return this
      */
-    public EntityQueryVOBuilder extendsEntity(boolean enable) {
-        this.configurer.getEntityQueryVOConfig().setExtendsEntity(enable);
+    public ServiceImplBuilder superClass(@NonNull String superClass) {
+        this.configurer.getServiceImplConfig().setSuperClass(superClass);
         return this;
     }
 }

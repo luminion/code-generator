@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.model.builder;
+package io.github.luminion.generator.config.builder.model;
 
 import io.github.luminion.generator.config.Configurer;
 import lombok.NonNull;
@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public class EntityQueryDTOBuilder {
+public class EntityQueryVOBuilder {
     private final Configurer configurer;
 
     /**
@@ -20,8 +20,8 @@ public class EntityQueryDTOBuilder {
      * @param nameFormat 格式
      * @return this
      */
-    public EntityQueryDTOBuilder nameFormat(@NonNull String nameFormat) {
-        this.configurer.getEntityQueryDTOConfig().getTemplateFile().setNameFormat(nameFormat);
+    public EntityQueryVOBuilder nameFormat(@NonNull String nameFormat) {
+        this.configurer.getEntityQueryVOConfig().getTemplateFile().setNameFormat(nameFormat);
         return this;
     }
 
@@ -32,8 +32,8 @@ public class EntityQueryDTOBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public EntityQueryDTOBuilder subPackage(@NonNull String subPackage) {
-        this.configurer.getEntityQueryDTOConfig().getTemplateFile().setSubPackage(subPackage);
+    public EntityQueryVOBuilder subPackage(@NonNull String subPackage) {
+        this.configurer.getEntityQueryVOConfig().getTemplateFile().setSubPackage(subPackage);
         return this;
     }
 
@@ -45,8 +45,8 @@ public class EntityQueryDTOBuilder {
      * @param templatePath 模板文件路径
      * @return this
      */
-    public EntityQueryDTOBuilder templatePath(@NonNull String templatePath) {
-        this.configurer.getEntityQueryDTOConfig().getTemplateFile().setTemplatePath(templatePath);
+    public EntityQueryVOBuilder templatePath(@NonNull String templatePath) {
+        this.configurer.getEntityQueryVOConfig().getTemplateFile().setTemplatePath(templatePath);
         return this;
     }
 
@@ -57,8 +57,8 @@ public class EntityQueryDTOBuilder {
      * @param outputDir 输出文件路径
      * @return this
      */
-    public EntityQueryDTOBuilder outputDir(@NonNull String outputDir) {
-        this.configurer.getEntityQueryDTOConfig().getTemplateFile().setOutputDir(outputDir);
+    public EntityQueryVOBuilder outputDir(@NonNull String outputDir) {
+        this.configurer.getEntityQueryVOConfig().getTemplateFile().setOutputDir(outputDir);
         return this;
     }
 
@@ -68,8 +68,8 @@ public class EntityQueryDTOBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public EntityQueryDTOBuilder fileOverride(boolean enable) {
-        this.configurer.getEntityQueryDTOConfig().getTemplateFile().setFileOverride(enable);
+    public EntityQueryVOBuilder fileOverride(boolean enable) {
+        this.configurer.getEntityQueryVOConfig().getTemplateFile().setFileOverride(enable);
         return this;
     }
 
@@ -79,9 +79,8 @@ public class EntityQueryDTOBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public EntityQueryDTOBuilder extendsEntity(boolean enable) {
-        this.configurer.getEntityQueryDTOConfig().setExtendsEntity(enable);
+    public EntityQueryVOBuilder extendsEntity(boolean enable) {
+        this.configurer.getEntityQueryVOConfig().setExtendsEntity(enable);
         return this;
     }
-
 }

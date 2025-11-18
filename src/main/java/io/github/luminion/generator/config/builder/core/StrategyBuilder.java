@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.core.builder;
+package io.github.luminion.generator.config.builder.core;
 
 import io.github.luminion.generator.config.Configurer;
 import lombok.RequiredArgsConstructor;

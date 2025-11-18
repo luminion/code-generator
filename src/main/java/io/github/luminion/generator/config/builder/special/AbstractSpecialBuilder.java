@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.model.builder.special;
+package io.github.luminion.generator.config.builder.special;
 
 import io.github.luminion.generator.config.Configurer;
 import lombok.RequiredArgsConstructor;
