@@ -1,7 +1,10 @@
 package io.github.luminion.generator.config.builder.special;
 
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.enums.IdType;
 import io.github.luminion.generator.enums.RuntimeEnv;
+import io.github.luminion.generator.fill.IFill;
+import lombok.NonNull;
 
 /**
  * @author luminion
@@ -24,4 +27,25 @@ public class MybatisPlusBuilder extends AbstractSpecialBuilder<MybatisPlusBuilde
     public MybatisPlusBuilder entityTableFieldAnnotation(boolean enable) {
         return super.entityTableFieldAnnotation(enable);
     }
+
+    @Override
+    public MybatisPlusBuilder strategyIdType(@NonNull IdType idType) {
+        return super.strategyIdType(idType);
+    }
+
+    @Override
+    public MybatisPlusBuilder strategyLogicDeleteColumnName(@NonNull String logicDeleteColumnName) {
+        return super.strategyLogicDeleteColumnName(logicDeleteColumnName);
+    }
+
+    @Override
+    public MybatisPlusBuilder strategyTableFills(IFill... tableFills) {
+        return super.strategyTableFills(tableFills);
+    }
+
+    @Override
+    public MybatisPlusBuilder strategyVersionColumnName(@NonNull String versionColumnName) {
+        return super.strategyVersionColumnName(versionColumnName);
+    }
+    
 }

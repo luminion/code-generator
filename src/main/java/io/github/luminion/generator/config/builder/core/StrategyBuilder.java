@@ -1,12 +1,22 @@
 package io.github.luminion.generator.config.builder.core;
 
+import io.github.luminion.generator.common.DatabaseKeywordsHandler;
+import io.github.luminion.generator.common.ExtraFieldProvider;
+import io.github.luminion.generator.common.JavaFieldProvider;
+import io.github.luminion.generator.common.NameConverter;
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.enums.DateType;
+import io.github.luminion.generator.enums.IdType;
+import io.github.luminion.generator.fill.IFill;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
 /**
+ * 策略构建
+ *
  * @author luminion
  * @since 1.0.0
  */
@@ -14,138 +24,238 @@ import java.util.List;
 public class StrategyBuilder {
     private final Configurer configurer;
 
-
     /**
-     * 增加过滤表前缀
+     * 数据库表/字段名转实体属性名策略
      *
-     * @param tablePrefix 过滤表前缀
+     * @param nameConverter 名称转换器
      * @return this
      */
-    public StrategyBuilder addTablePrefix(String... tablePrefix) {
-        return addTablePrefix(Arrays.asList(tablePrefix));
+    public StrategyBuilder nameConverter(@NonNull NameConverter nameConverter) {
+        this.configurer.getStrategyConfig().setNameConverter(nameConverter);
+        return this;
+    }
+
+    /**
+     * 数据库类型转Java类型策略
+     *
+     * @param javaFieldProvider Java字段提供者
+     * @return this
+     */
+    public StrategyBuilder javaFieldProvider(@NonNull JavaFieldProvider javaFieldProvider) {
+        this.configurer.getStrategyConfig().setJavaFieldProvider(javaFieldProvider);
+        return this;
+    }
+
+    /**
+     * 数据库关键字处理器
+     *
+     * @param keyWordsHandler 关键字处理器
+     * @return this
+     */
+    public StrategyBuilder keyWordsHandler(@NonNull DatabaseKeywordsHandler keyWordsHandler) {
+        this.configurer.getStrategyConfig().setKeyWordsHandler(keyWordsHandler);
+        return this;
+    }
+
+    /**
+     * 全局主键类型
+     *
+     * @param idType 主键类型
+     * @return this
+     */
+    public StrategyBuilder idType(@NonNull IdType idType) {
+        this.configurer.getStrategyConfig().setIdType(idType);
+        return this;
+    }
+
+    /**
+     * 时间类型
+     *
+     * @param dateType 时间类型
+     * @return this
+     */
+    public StrategyBuilder dateType(@NonNull DateType dateType) {
+        this.configurer.getStrategyConfig().setDateType(dateType);
+        return this;
+    }
+
+//    /**
+//     * 乐观锁字段名
+//     *
+//     * @param versionColumnName 字段名
+//     * @return this
+//     */
+//    public StrategyBuilder versionColumnName(@NonNull String versionColumnName) {
+//        this.configurer.getStrategyConfig().setVersionColumnName(versionColumnName);
+//        return this;
+//    }
+//
+//    /**
+//     * 逻辑删除字段名
+//     *
+//     * @param logicDeleteColumnName 字段名
+//     * @return this
+//     */
+//    public StrategyBuilder logicDeleteColumnName(@NonNull String logicDeleteColumnName) {
+//        this.configurer.getStrategyConfig().setLogicDeleteColumnName(logicDeleteColumnName);
+//        return this;
+//    }
+
+    /**
+     * Boolean类型字段是否移除is前缀
+     *
+     * @param enabled 是否移除
+     * @return this
+     */
+    public StrategyBuilder booleanColumnRemoveIsPrefix(boolean enabled) {
+        this.configurer.getStrategyConfig().setBooleanColumnRemoveIsPrefix(enabled);
+        return this;
+    }
+
+    /**
+     * 添加父类公共字段
+     *
+     * @param superEntityColumns 父类公共字段
+     * @return this
+     */
+    public StrategyBuilder superEntityColumns(String... superEntityColumns) {
+        this.configurer.getStrategyConfig().getSuperEntityColumns().addAll(Arrays.asList(superEntityColumns));
+        return this;
+    }
+
+    /**
+     * 添加忽略字段
+     *
+     * @param ignoreColumns 忽略字段
+     * @return this
+     */
+    public StrategyBuilder ignoreColumns(String... ignoreColumns) {
+        this.configurer.getStrategyConfig().getIgnoreColumns().addAll(Arrays.asList(ignoreColumns));
+        return this;
+    }
+
+//    /**
+//     * 添加表填充字段
+//     *
+//     * @param tableFills 表填充字段
+//     * @return this
+//     */
+//    public StrategyBuilder tableFills(IFill... tableFills) {
+//        this.configurer.getStrategyConfig().getTableFillList().addAll(Arrays.asList(tableFills));
+//        return this;
+//    }
+
+    /**
+     * 跳过视图
+     *
+     * @param enabled 是否跳过
+     * @return this
+     */
+    public StrategyBuilder skipView(boolean enabled) {
+        this.configurer.getStrategyConfig().setSkipView(enabled);
+        return this;
+    }
+
+    /**
+     * 表名匹配
+     *
+     * @param tableNamePattern 表名匹配
+     * @return this
+     */
+    public StrategyBuilder tableNamePattern(@NonNull String tableNamePattern) {
+        this.configurer.getStrategyConfig().setTableNamePattern(tableNamePattern);
+        return this;
     }
 
     /**
      * 添加表前缀
      *
-     * @param tablePrefixList 表前缀列表
-     * @return {@link StrategyBuilder }
-     * @since 1.0.0
+     * @param tablePrefix 表前缀
+     * @return this
      */
-    public StrategyBuilder addTablePrefix(List<String> tablePrefixList) {
-        this.configurer.getStrategyConfig().getTablePrefix().addAll(tablePrefixList);
+    public StrategyBuilder tablePrefix(String... tablePrefix) {
+        this.configurer.getStrategyConfig().getTablePrefix().addAll(Arrays.asList(tablePrefix));
         return this;
     }
 
     /**
-     * 增加过滤表后缀
+     * 添加表后缀
      *
-     * @param tableSuffix 过滤表后缀
+     * @param tableSuffix 表后缀
      * @return this
-     * @since 3.5.1
      */
-    public StrategyBuilder addTableSuffix(String... tableSuffix) {
-        return addTableSuffix(Arrays.asList(tableSuffix));
-    }
-
-    public StrategyBuilder addTableSuffix(List<String> tableSuffixList) {
-        this.configurer.getStrategyConfig().getTableSuffix().addAll(tableSuffixList);
+    public StrategyBuilder tableSuffix(String... tableSuffix) {
+        this.configurer.getStrategyConfig().getTableSuffix().addAll(Arrays.asList(tableSuffix));
         return this;
     }
 
     /**
-     * 增加过滤字段前缀
+     * 添加字段前缀
      *
-     * @param fieldPrefix 过滤字段前缀
+     * @param fieldPrefix 字段前缀
      * @return this
-     * @since 3.5.0
      */
-    public StrategyBuilder addFieldPrefix(String... fieldPrefix) {
-        return addFieldPrefix(Arrays.asList(fieldPrefix));
-    }
-
-    public StrategyBuilder addFieldPrefix(List<String> fieldPrefix) {
-        this.configurer.getStrategyConfig().getFieldPrefix().addAll(fieldPrefix);
+    public StrategyBuilder fieldPrefix(String... fieldPrefix) {
+        this.configurer.getStrategyConfig().getFieldPrefix().addAll(Arrays.asList(fieldPrefix));
         return this;
     }
 
     /**
-     * 增加过滤字段后缀
+     * 添加字段后缀
      *
-     * @param fieldSuffix 过滤字段后缀
+     * @param fieldSuffix 字段后缀
      * @return this
-     * @since 3.5.1
      */
-    public StrategyBuilder addFieldSuffix(String... fieldSuffix) {
-        return addFieldSuffix(Arrays.asList(fieldSuffix));
-    }
-
-    public StrategyBuilder addFieldSuffix(List<String> fieldSuffixList) {
-        this.configurer.getStrategyConfig().getFieldSuffix().addAll(fieldSuffixList);
+    public StrategyBuilder fieldSuffix(String... fieldSuffix) {
+        this.configurer.getStrategyConfig().getFieldSuffix().addAll(Arrays.asList(fieldSuffix));
         return this;
     }
 
     /**
-     * 增加包含的表名
+     * 添加包含的表
      *
-     * @param include 包含表
+     * @param include 包含的表
      * @return this
      */
-    public StrategyBuilder addInclude(String... include) {
+    public StrategyBuilder include(String... include) {
         this.configurer.getStrategyConfig().getInclude().addAll(Arrays.asList(include));
         return this;
     }
 
-    public StrategyBuilder addInclude(List<String> includes) {
-        this.configurer.getStrategyConfig().getInclude().addAll(includes);
-        return this;
-    }
-
-    public StrategyBuilder addInclude(String include) {
-        this.configurer.getStrategyConfig().getInclude().addAll(Arrays.asList(include.split(",")));
+    /**
+     * 添加排除的表
+     *
+     * @param exclude 排除的表
+     * @return this
+     */
+    public StrategyBuilder exclude(String... exclude) {
+        this.configurer.getStrategyConfig().getExclude().addAll(Arrays.asList(exclude));
         return this;
     }
 
     /**
-     * 增加排除表
+     * 添加编辑时排除的字段
      *
-     * @param exclude 排除表
+     * @param editExcludeColumns 编辑时排除的字段
      * @return this
-     * @since 3.5.0
      */
-    public StrategyBuilder addExclude(String... exclude) {
-        return addExclude(Arrays.asList(exclude));
-    }
-
-    public StrategyBuilder addExclude(List<String> excludeList) {
-        this.configurer.getStrategyConfig().getExclude().addAll(excludeList);
+    public StrategyBuilder editExcludeColumn(String... editExcludeColumns) {
+        this.configurer.getStrategyConfig().getEditExcludeColumns().addAll(Arrays.asList(editExcludeColumns));
         return this;
     }
 
-    public StrategyBuilder addExclude(String exclude) {
-        this.configurer.getStrategyConfig().getExclude().addAll(Arrays.asList(exclude.split(",")));
+    /**
+     * 添加编辑时排除的字段
+     *
+     * @param editExcludeColumns 编辑时排除的字段
+     * @return this
+     */
+    public StrategyBuilder editExcludeColumnsClear() {
+        this.configurer.getStrategyConfig().getEditExcludeColumns().clear();
         return this;
     }
-
-//    /**
-//     * 包含表名
-//     *
-//     * @return this
-//     */
-//    public StrategyBuilder likeTable(LikeTable likeTable) {
-//        this.configurer.getStrategyConfig().setLikeTable(likeTable);
-//        return this;
-//    }
-//
-//    /**
-//     * 不包含表名
-//     *
-//     * @return this
-//     */
-//    public StrategyBuilder notLikeTable(LikeTable notLikeTable) {
-//        this.configurer.getStrategyConfig().setNotLikeTable(notLikeTable);
-//        return this;
-//    }
+    
+    
 
     /**
      * 额外字段后缀
@@ -154,13 +264,24 @@ public class StrategyBuilder {
      * @param operator sql运算符
      * @return this
      */
-    public StrategyBuilder extraFieldSuffix(String suffix, String operator) {
+    public StrategyBuilder extraFieldSuffix(@NonNull String suffix, @NonNull String operator) {
         this.configurer.getStrategyConfig().getExtraFieldSuffixMap().put(suffix, operator);
         return this;
     }
 
     /**
-     * 清除额外字段后缀
+     * 额外字段后缀
+     *
+     * @param extraFieldSuffixMap 额外字段后缀Map
+     * @return this
+     */
+    public StrategyBuilder extraFieldSuffix(@NonNull Map<String, String> extraFieldSuffixMap) {
+        this.configurer.getStrategyConfig().getExtraFieldSuffixMap().putAll(extraFieldSuffixMap);
+        return this;
+    }
+
+    /**
+     * 清空额外字段后缀
      *
      * @return this
      */
@@ -169,37 +290,14 @@ public class StrategyBuilder {
         return this;
     }
 
-//    /**
-//     * 额外字段策略
-//     *
-//     * @param extraFieldStrategy 额外字段策略, 3个泛型参数分别为sql运算符,表字段信息,是否生成
-//     * @return this
-//     */
-//    public StrategyBuilder extraFieldStrategy(BiFunction<String, TableField, Boolean> extraFieldStrategy) {
-//        this.configurer.getStrategyConfig().setExtraFieldProvider(extraFieldStrategy);
-//        return this;
-//    }
-
     /**
-     * 开启大写命名
+     * 额外字段提供者
      *
+     * @param extraFieldProvider 额外字段提供者
      * @return this
-     * @since 3.5.0
      */
-    public StrategyBuilder enableCapitalMode() {
-        this.configurer.getStrategyConfig().setCapitalMode(true);
+    public StrategyBuilder extraFieldProvider(@NonNull ExtraFieldProvider extraFieldProvider) {
+        this.configurer.getStrategyConfig().setExtraFieldProvider(extraFieldProvider);
         return this;
     }
-
-    /**
-     * 开启跳过视图
-     *
-     * @return this
-     * @since 3.5.0
-     */
-    public StrategyBuilder enableSkipView() {
-        this.configurer.getStrategyConfig().setSkipView(true);
-        return this;
-    }
-
 }

@@ -22,11 +22,9 @@ import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.IdType;
 import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.util.ReflectUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -51,8 +49,9 @@ public class StrategyConfig implements TemplateRender {
      * 数据库关键字处理器
      */
     protected DatabaseKeywordsHandler keyWordsHandler;
-    
+
     // ===================字段类型或特殊字段===================
+
     
     /**
      * 指定生成的主键的ID类型
@@ -91,10 +90,7 @@ public class StrategyConfig implements TemplateRender {
 
     // ===================过滤相关===================
 
-    /**
-     * 是否大写命名（默认 false）
-     */
-    protected boolean isCapitalMode;
+
     /**
      * 是否跳过视图（默认 false）
      */
@@ -141,12 +137,12 @@ public class StrategyConfig implements TemplateRender {
      * 需要排除的表名
      */
     protected final Set<String> exclude = new HashSet<>();
-    
+
     /**
      * 新增和修改需要需要排除的字段
      */
     protected final Set<String> editExcludeColumns = new HashSet<>();
-    
+
     // ===================额外字段===================
 
     /**
