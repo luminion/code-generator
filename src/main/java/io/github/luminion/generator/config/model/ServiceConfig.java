@@ -66,7 +66,7 @@ public class ServiceConfig implements TemplateRender {
       
 
         switch (globalConfig.getRuntimeEnv()) {
-            case SQL_BOOSTER_MY_BATIS_PLUS:
+            case MY_BATIS_PLUS_SQL_BOOSTER:
                 this.superClass = "io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService";
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));

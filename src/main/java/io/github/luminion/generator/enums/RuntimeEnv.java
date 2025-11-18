@@ -10,7 +10,7 @@ public enum RuntimeEnv {
 //    MYBATIS,
     MYBATIS_PLUS,
 //    SQL_BOOSTER_MY_BATIS,
-    SQL_BOOSTER_MY_BATIS_PLUS,
+    MY_BATIS_PLUS_SQL_BOOSTER,
     ;
     
 }

@@ -176,7 +176,7 @@ public class GlobalConfig implements TemplateRender {
             case MYBATIS_PLUS:
                 this.pageClassPayload = new ClassPayload("com.baomidou.mybatisplus.core.metadata.IPage");
                 break;
-            case SQL_BOOSTER_MY_BATIS_PLUS:
+            case MY_BATIS_PLUS_SQL_BOOSTER:
                 this.pageClassPayload = new ClassPayload("io.github.luminion.sqlbooster.core.Page");
             default:
                 throw new IllegalArgumentException("暂不支持的运行环境:" + runtimeEnv);
@@ -211,7 +211,7 @@ public class GlobalConfig implements TemplateRender {
                 break;
         }
         switch (this.runtimeEnv) {
-            case SQL_BOOSTER_MY_BATIS_PLUS:
+            case MY_BATIS_PLUS_SQL_BOOSTER:
                 data.put("sqlBooster", true);
             case MYBATIS_PLUS:
             default:

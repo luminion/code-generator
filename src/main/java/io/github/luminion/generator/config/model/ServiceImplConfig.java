@@ -66,7 +66,7 @@ public class ServiceImplConfig implements TemplateRender {
         Resolver resolver = tableInfo.getResolver();
 
         switch (globalConfig.getRuntimeEnv()) {
-            case SQL_BOOSTER_MY_BATIS_PLUS:
+            case MY_BATIS_PLUS_SQL_BOOSTER:
                 this.superClass = "io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpServiceImpl";
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {

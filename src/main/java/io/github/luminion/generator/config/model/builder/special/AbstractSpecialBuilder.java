@@ -20,7 +20,7 @@ public abstract class AbstractSpecialBuilder<C extends AbstractSpecialBuilder<C>
      * @param enable 是否启用
      * @return this
      */
-    protected C tableFieldAnnotation(boolean enable) {
+    protected C entityTableFieldAnnotation(boolean enable) {
         this.configurer.getEntityConfig().setTableFieldAnnotation(enable);
         return returnThis();
     }
@@ -31,7 +31,7 @@ public abstract class AbstractSpecialBuilder<C extends AbstractSpecialBuilder<C>
      * @param enable 是否启用
      * @return this
      */
-    protected C enactiveRecord(boolean enable) {
+    protected C entityActiveRecord(boolean enable) {
         this.configurer.getEntityConfig().setActiveRecord(enable);
         return returnThis();
     }

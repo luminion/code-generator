@@ -232,7 +232,7 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add("java.util.List");
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
 
-            if (RuntimeEnv.SQL_BOOSTER_MY_BATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
+            if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
                 importPackages.add("io.github.luminion.sqlbooster.model.sql.helper.SqlHelper");
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
             }

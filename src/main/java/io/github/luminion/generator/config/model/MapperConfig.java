@@ -66,7 +66,7 @@ public class MapperConfig implements TemplateRender {
                     importPackages.add(globalConfig.getPageClassPayload().getClassName());
                 }
                 break;
-            case SQL_BOOSTER_MY_BATIS_PLUS:
+            case MY_BATIS_PLUS_SQL_BOOSTER:
                 this.superClass = "io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpMapper";
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
