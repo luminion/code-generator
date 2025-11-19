@@ -24,7 +24,7 @@ import io.github.luminion.generator.common.JavaFieldInfo;
  * @author luminion
  * @since 1.0.0
  */
-public enum FieldType implements JavaFieldInfo {
+public enum JavaFieldType implements JavaFieldInfo {
     // 基本类型
     BASE_BYTE("byte", null),
     BASE_SHORT("short", null),
@@ -79,7 +79,7 @@ public enum FieldType implements JavaFieldInfo {
      */
     private final String pkg;
 
-    FieldType(final String type, final String pkg) {
+    JavaFieldType(final String type, final String pkg) {
         this.type = type;
         this.pkg = pkg;
     }

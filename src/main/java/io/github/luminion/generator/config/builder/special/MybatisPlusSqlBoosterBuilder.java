@@ -41,15 +41,17 @@ public class MybatisPlusSqlBoosterBuilder extends AbstractSpecialBuilder<Mybatis
     public MybatisPlusSqlBoosterBuilder strategyLogicDeleteColumnName(@NonNull String logicDeleteColumnName) {
         return super.strategyLogicDeleteColumnName(logicDeleteColumnName);
     }
+    
+    @Override
+    public MybatisPlusSqlBoosterBuilder strategyVersionColumnName(@NonNull String versionColumnName) {
+        return super.strategyVersionColumnName(versionColumnName);
+    }
 
     @Override
     public MybatisPlusSqlBoosterBuilder strategyTableFills(IFill... tableFills) {
         return super.strategyTableFills(tableFills);
     }
 
-    @Override
-    public MybatisPlusSqlBoosterBuilder strategyVersionColumnName(@NonNull String versionColumnName) {
-        return super.strategyVersionColumnName(versionColumnName);
-    }
+ 
 
 }

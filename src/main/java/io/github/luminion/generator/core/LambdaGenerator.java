@@ -13,6 +13,8 @@ import java.util.function.Consumer;
  * @since 1.0.0
  */
 public interface LambdaGenerator<C extends AbstractSpecialBuilder<C>> {
+    
+    LambdaGenerator<C> initialize();
 
     LambdaGenerator<C> global(Consumer<GlobalBuilder> consumer);
 

@@ -48,7 +48,6 @@ public class TableField {
     @Getter
     private final StrategyConfig strategyConfig;
 
-  
 
     /**
      * 数据库字段名称
@@ -62,7 +61,7 @@ public class TableField {
      */
     @Getter
     private boolean keyWords;
-    
+
     /**
      * 数据库字段（关键字含转义符号）
      */
@@ -129,7 +128,6 @@ public class TableField {
     private Map<String, Object> customMap;
 
 
-
     public TableField(TableInfo tableInfo,
                       DefaultDatabaseQueryMetaDataWrapper.Column columnInfo) {
         this.strategyConfig = tableInfo.getConfigurer().getStrategyConfig();
@@ -163,10 +161,13 @@ public class TableField {
         String propertyName = strategyConfig.getNameConverter().convertFieldName(removePrefixAndSuffix);
         this.propertyName = propertyName;
 
-        JavaFieldInfo javaFieldInfo = DefaultJavaFieldProvider.getJavaFieldType(metaInfo, strategyConfig.getDateType());
+        JavaFieldInfo javaFieldInfo = null;
         JavaFieldProvider javaFieldTypeConverter = strategyConfig.getJavaFieldProvider();
         if (javaFieldTypeConverter != null) {
             javaFieldInfo = javaFieldTypeConverter.convert(metaInfo);
+        }
+        if (javaFieldInfo == null) {
+            javaFieldInfo = DefaultJavaFieldProvider.getJavaFieldType(metaInfo, strategyConfig.getDateType());
         }
         this.JavaType = javaFieldInfo;
         this.propertyType = javaFieldInfo.getType();
@@ -186,9 +187,9 @@ public class TableField {
         if (this.keyFlag) {
             this.convert = !"id".equals(propertyName);
         }
-  
+
     }
-    
+
 
     /**
      * 按 JavaBean 规则来生成 get 和 set 方法后面的属性名称
@@ -230,7 +231,7 @@ public class TableField {
      */
     public boolean isVersionField() {
         String columnName = strategyConfig.getVersionColumnName();
-        return  StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
+        return StringUtils.isNotBlank(columnName) && this.name.equalsIgnoreCase(columnName);
     }
 
     /**

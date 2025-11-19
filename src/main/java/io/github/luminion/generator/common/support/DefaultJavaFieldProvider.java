@@ -1,7 +1,7 @@
 package io.github.luminion.generator.common.support;
 
 import io.github.luminion.generator.common.JavaFieldInfo;
-import io.github.luminion.generator.enums.FieldType;
+import io.github.luminion.generator.enums.JavaFieldType;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.po.TableField;
 
@@ -19,42 +19,42 @@ public abstract class DefaultJavaFieldProvider {
     private static final Map<Integer, JavaFieldInfo> typeMap = new HashMap<>();
     static {
         // byte[]
-        typeMap.put(Types.BINARY, FieldType.BYTE_ARRAY);
-        typeMap.put(Types.BLOB, FieldType.BYTE_ARRAY);
-        typeMap.put(Types.LONGVARBINARY, FieldType.BYTE_ARRAY);
-        typeMap.put(Types.VARBINARY, FieldType.BYTE_ARRAY);
+        typeMap.put(Types.BINARY, JavaFieldType.BYTE_ARRAY);
+        typeMap.put(Types.BLOB, JavaFieldType.BYTE_ARRAY);
+        typeMap.put(Types.LONGVARBINARY, JavaFieldType.BYTE_ARRAY);
+        typeMap.put(Types.VARBINARY, JavaFieldType.BYTE_ARRAY);
         //byte
-        typeMap.put(Types.TINYINT, FieldType.BYTE);
+        typeMap.put(Types.TINYINT, JavaFieldType.BYTE);
         //long
-        typeMap.put(Types.BIGINT, FieldType.LONG);
+        typeMap.put(Types.BIGINT, JavaFieldType.LONG);
         //boolean
-        typeMap.put(Types.BIT, FieldType.BOOLEAN);
-        typeMap.put(Types.BOOLEAN, FieldType.BOOLEAN);
+        typeMap.put(Types.BIT, JavaFieldType.BOOLEAN);
+        typeMap.put(Types.BOOLEAN, JavaFieldType.BOOLEAN);
         //short
-        typeMap.put(Types.SMALLINT, FieldType.SHORT);
+        typeMap.put(Types.SMALLINT, JavaFieldType.SHORT);
         //string
-        typeMap.put(Types.CHAR, FieldType.STRING);
-        typeMap.put(Types.CLOB, FieldType.STRING);
-        typeMap.put(Types.VARCHAR, FieldType.STRING);
-        typeMap.put(Types.LONGVARCHAR, FieldType.STRING);
-        typeMap.put(Types.LONGNVARCHAR, FieldType.STRING);
-        typeMap.put(Types.NCHAR, FieldType.STRING);
-        typeMap.put(Types.NCLOB, FieldType.STRING);
-        typeMap.put(Types.NVARCHAR, FieldType.STRING);
+        typeMap.put(Types.CHAR, JavaFieldType.STRING);
+        typeMap.put(Types.CLOB, JavaFieldType.STRING);
+        typeMap.put(Types.VARCHAR, JavaFieldType.STRING);
+        typeMap.put(Types.LONGVARCHAR, JavaFieldType.STRING);
+        typeMap.put(Types.LONGNVARCHAR, JavaFieldType.STRING);
+        typeMap.put(Types.NCHAR, JavaFieldType.STRING);
+        typeMap.put(Types.NCLOB, JavaFieldType.STRING);
+        typeMap.put(Types.NVARCHAR, JavaFieldType.STRING);
         //date
-        typeMap.put(Types.DATE, FieldType.DATE);
+        typeMap.put(Types.DATE, JavaFieldType.DATE);
         //timestamp
-        typeMap.put(Types.TIMESTAMP, FieldType.TIMESTAMP);
-        typeMap.put(Types.TIMESTAMP_WITH_TIMEZONE, FieldType.TIMESTAMP);
+        typeMap.put(Types.TIMESTAMP, JavaFieldType.TIMESTAMP);
+        typeMap.put(Types.TIMESTAMP_WITH_TIMEZONE, JavaFieldType.TIMESTAMP);
         //double
-        typeMap.put(Types.FLOAT, FieldType.DOUBLE);
-        typeMap.put(Types.REAL, FieldType.DOUBLE);
-        typeMap.put(Types.DOUBLE, FieldType.DOUBLE);
+        typeMap.put(Types.FLOAT, JavaFieldType.DOUBLE);
+        typeMap.put(Types.REAL, JavaFieldType.DOUBLE);
+        typeMap.put(Types.DOUBLE, JavaFieldType.DOUBLE);
         //int
-        typeMap.put(Types.INTEGER, FieldType.INTEGER);
+        typeMap.put(Types.INTEGER, JavaFieldType.INTEGER);
         //bigDecimal
-        typeMap.put(Types.NUMERIC, FieldType.BIG_DECIMAL);
-        typeMap.put(Types.DECIMAL, FieldType.BIG_DECIMAL);
+        typeMap.put(Types.NUMERIC, JavaFieldType.BIG_DECIMAL);
+        typeMap.put(Types.DECIMAL, JavaFieldType.BIG_DECIMAL);
         // 类型需要补充完整
     }
 
@@ -76,64 +76,64 @@ public abstract class DefaultJavaFieldProvider {
             case Types.TIMESTAMP:
                 return getTimestampType(metaInfo, dateType);
             default:
-                return typeMap.getOrDefault(typeCode, FieldType.OBJECT);
+                return typeMap.getOrDefault(typeCode, JavaFieldType.OBJECT);
         }
     }
 
     private static JavaFieldInfo getBitType(TableField.MetaInfo metaInfo) {
         if (metaInfo.getLength() > 1) {
-            return FieldType.BYTE_ARRAY;
+            return JavaFieldType.BYTE_ARRAY;
         }
-        return FieldType.BOOLEAN;
+        return JavaFieldType.BOOLEAN;
     }
 
     private static JavaFieldInfo getNumber(TableField.MetaInfo metaInfo) {
         if (metaInfo.getScale() > 0 || metaInfo.getLength() > 18) {
             return typeMap.get(metaInfo.getJdbcType().TYPE_CODE);
         } else if (metaInfo.getLength() > 9) {
-            return FieldType.LONG;
+            return JavaFieldType.LONG;
         } else if (metaInfo.getLength() > 4) {
-            return FieldType.INTEGER;
+            return JavaFieldType.INTEGER;
         } else {
-            return FieldType.SHORT;
+            return JavaFieldType.SHORT;
         }
     }
 
     private static JavaFieldInfo getDateType(TableField.MetaInfo metaInfo, DateType dateType) {
-        FieldType javaFieldTypeEnum;
+        JavaFieldType javaJavaFieldTypeEnum;
         switch (dateType) {
             case SQL_PACK:
-                javaFieldTypeEnum = FieldType.DATE_SQL;
+                javaJavaFieldTypeEnum = JavaFieldType.DATE_SQL;
                 break;
             case TIME_PACK:
-                javaFieldTypeEnum = FieldType.LOCAL_DATE;
+                javaJavaFieldTypeEnum = JavaFieldType.LOCAL_DATE;
                 break;
             default:
-                javaFieldTypeEnum = FieldType.DATE;
+                javaJavaFieldTypeEnum = JavaFieldType.DATE;
         }
-        return javaFieldTypeEnum;
+        return javaJavaFieldTypeEnum;
     }
 
     private static JavaFieldInfo getTimeType(TableField.MetaInfo metaInfo, DateType dateType) {
-        FieldType javaFieldTypeEnum;
+        JavaFieldType javaJavaFieldTypeEnum;
         if (dateType == DateType.TIME_PACK) {
-            javaFieldTypeEnum = FieldType.LOCAL_TIME;
+            javaJavaFieldTypeEnum = JavaFieldType.LOCAL_TIME;
         } else {
-            javaFieldTypeEnum = FieldType.TIME;
+            javaJavaFieldTypeEnum = JavaFieldType.TIME;
         }
-        return javaFieldTypeEnum;
+        return javaJavaFieldTypeEnum;
     }
 
     private static JavaFieldInfo getTimestampType(TableField.MetaInfo metaInfo, DateType dateType) {
-        FieldType javaFieldTypeEnum;
+        JavaFieldType javaJavaFieldTypeEnum;
         if (dateType == DateType.TIME_PACK) {
-            javaFieldTypeEnum = FieldType.LOCAL_DATE_TIME;
+            javaJavaFieldTypeEnum = JavaFieldType.LOCAL_DATE_TIME;
         } else if (dateType == DateType.ONLY_DATE) {
-            javaFieldTypeEnum = FieldType.DATE;
+            javaJavaFieldTypeEnum = JavaFieldType.DATE;
         } else {
-            javaFieldTypeEnum = FieldType.TIMESTAMP;
+            javaJavaFieldTypeEnum = JavaFieldType.TIMESTAMP;
         }
-        return javaFieldTypeEnum;
+        return javaJavaFieldTypeEnum;
     }
     
 }

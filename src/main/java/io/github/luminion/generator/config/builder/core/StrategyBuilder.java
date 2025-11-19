@@ -57,16 +57,7 @@ public class StrategyBuilder {
         return this;
     }
 
-    /**
-     * 全局主键类型
-     *
-     * @param idType 主键类型
-     * @return this
-     */
-    public StrategyBuilder idType(@NonNull IdType idType) {
-        this.configurer.getStrategyConfig().setIdType(idType);
-        return this;
-    }
+
 
     /**
      * 时间类型
@@ -79,6 +70,18 @@ public class StrategyBuilder {
         return this;
     }
 
+
+
+//    /**
+//     * 全局主键类型
+//     *
+//     * @param idType 主键类型
+//     * @return this
+//     */
+//    public StrategyBuilder idType(@NonNull IdType idType) {
+//        this.configurer.getStrategyConfig().setIdType(idType);
+//        return this;
+//    }
 //    /**
 //     * 乐观锁字段名
 //     *

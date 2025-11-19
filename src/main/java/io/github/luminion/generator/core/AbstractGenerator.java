@@ -6,12 +6,20 @@ import io.github.luminion.generator.config.builder.core.InjectionBuilder;
 import io.github.luminion.generator.config.builder.core.StrategyBuilder;
 import io.github.luminion.generator.config.builder.model.*;
 import io.github.luminion.generator.config.builder.special.AbstractSpecialBuilder;
+import io.github.luminion.generator.config.core.StrategyConfig;
+import io.github.luminion.generator.config.model.MapperXmlConfig;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
+import io.github.luminion.generator.enums.DateType;
+import io.github.luminion.generator.enums.JavaFieldType;
+import io.github.luminion.generator.enums.IdType;
+import io.github.luminion.generator.enums.JdbcType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -21,6 +29,47 @@ import java.util.function.Consumer;
 @Slf4j
 public abstract class AbstractGenerator<C extends AbstractSpecialBuilder<C>> implements LambdaGenerator<C> {
     protected final Configurer configurer;
+
+    @Override
+    public LambdaGenerator<C> initialize() {
+        StrategyConfig strategyConfig = getStrategyConfig();
+        Map<String, String> extraFieldSuffixMap = strategyConfig.getExtraFieldSuffixMap();
+        extraFieldSuffixMap.put("In", "IN");
+        extraFieldSuffixMap.put("Like", "LIKE");
+        extraFieldSuffixMap.put("Le", "<=");
+        extraFieldSuffixMap.put("Ge", ">=");
+
+        MapperXmlConfig mapperXmlConfig = this.configurer.getMapperXmlConfig();
+        Map<String, Boolean> sortColumnMap = mapperXmlConfig.getSortColumnMap();
+        sortColumnMap.put("order", false);
+        sortColumnMap.put("rank", false);
+        sortColumnMap.put("sort", false);
+        sortColumnMap.put("seq", false);
+        sortColumnMap.put("sequence", false);
+        sortColumnMap.put("create_time", true);
+        sortColumnMap.put("id", true);
+
+        return this;
+    }
+
+    private StrategyConfig getStrategyConfig() {
+        StrategyConfig strategyConfig = this.configurer.getStrategyConfig();
+        strategyConfig.setIdType(IdType.ASSIGN_ID);
+        strategyConfig.setJavaFieldProvider(metaInfo -> {
+            if (JdbcType.TINYINT == metaInfo.getJdbcType()) {
+                return JavaFieldType.INTEGER;
+            }
+            if (JdbcType.SMALLINT == metaInfo.getJdbcType()) {
+                return JavaFieldType.INTEGER;
+            }
+            return null;
+        });
+        Set<String> editExcludeColumns = strategyConfig.getEditExcludeColumns();
+        editExcludeColumns.add("create_time");
+        editExcludeColumns.add("update_time");
+        strategyConfig.setDateType(DateType.TIME_PACK);
+        return strategyConfig;
+    }
 
     @Override
     public LambdaGenerator<C> global(Consumer<GlobalBuilder> consumer) {
