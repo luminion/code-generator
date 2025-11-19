@@ -41,38 +41,38 @@ public abstract class AbstractSpecialBuilder<C extends AbstractSpecialBuilder<C>
         return returnThis();
     }
     
-//    /**
-//     * 全局主键类型
-//     *
-//     * @param idType 主键类型
-//     * @return this
-//     */
-//    protected C strategyIdType(@NonNull IdType idType) {
-//        this.configurer.getStrategyConfig().setIdType(idType);
-//        return returnThis();
-//    }
-//
-//    /**
-//     * 乐观锁字段名
-//     *
-//     * @param versionColumnName 字段名
-//     * @return this
-//     */
-//    protected C strategyVersionColumnName(@NonNull String versionColumnName) {
-//        this.configurer.getStrategyConfig().setVersionColumnName(versionColumnName);
-//        return returnThis();
-//    }
-//
-//    /**
-//     * 逻辑删除字段名
-//     *
-//     * @param logicDeleteColumnName 字段名
-//     * @return this
-//     */
-//    protected C strategyLogicDeleteColumnName(@NonNull String logicDeleteColumnName) {
-//        this.configurer.getStrategyConfig().setLogicDeleteColumnName(logicDeleteColumnName);
-//        return returnThis();
-//    }
+    /**
+     * 全局主键类型
+     *
+     * @param idType 主键类型
+     * @return this
+     */
+    protected C strategyIdType(@NonNull IdType idType) {
+        this.configurer.getStrategyConfig().setIdType(idType);
+        return returnThis();
+    }
+
+    /**
+     * 乐观锁字段名
+     *
+     * @param versionColumnName 字段名
+     * @return this
+     */
+    protected C strategyVersionColumnName(@NonNull String versionColumnName) {
+        this.configurer.getStrategyConfig().setVersionColumnName(versionColumnName);
+        return returnThis();
+    }
+
+    /**
+     * 逻辑删除字段名
+     *
+     * @param logicDeleteColumnName 字段名
+     * @return this
+     */
+    protected C strategyLogicDeleteColumnName(@NonNull String logicDeleteColumnName) {
+        this.configurer.getStrategyConfig().setLogicDeleteColumnName(logicDeleteColumnName);
+        return returnThis();
+    }
 
     /**
      * 添加表填充字段

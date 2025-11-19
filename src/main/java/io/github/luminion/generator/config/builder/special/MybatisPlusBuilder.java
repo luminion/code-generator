@@ -27,19 +27,19 @@ public class MybatisPlusBuilder extends AbstractSpecialBuilder<MybatisPlusBuilde
         return super.entityTableFieldAnnotation(enable);
     }
 
-//    @Override
-//    public MybatisPlusBuilder strategyIdType(@NonNull IdType idType) {
-//        return super.strategyIdType(idType);
-//    }
-//    @Override
-//    public MybatisPlusBuilder strategyVersionColumnName(@NonNull String versionColumnName) {
-//        return super.strategyVersionColumnName(versionColumnName);
-//    }
-//
-//    @Override
-//    public MybatisPlusBuilder strategyLogicDeleteColumnName(@NonNull String logicDeleteColumnName) {
-//        return super.strategyLogicDeleteColumnName(logicDeleteColumnName);
-//    }
+    @Override
+    public MybatisPlusBuilder strategyIdType(@NonNull IdType idType) {
+        return super.strategyIdType(idType);
+    }
+    @Override
+    public MybatisPlusBuilder strategyVersionColumnName(@NonNull String versionColumnName) {
+        return super.strategyVersionColumnName(versionColumnName);
+    }
+
+    @Override
+    public MybatisPlusBuilder strategyLogicDeleteColumnName(@NonNull String logicDeleteColumnName) {
+        return super.strategyLogicDeleteColumnName(logicDeleteColumnName);
+    }
 
     @Override
     public MybatisPlusBuilder strategyTableFills(IFill... tableFills) {
