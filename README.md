@@ -3,29 +3,48 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/mybatis-plus-generator)](https://mvnrepository.com/artifact/io.github.luminion/mybatis-plus-generator)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-MyBatis-Plus 代码生成器，提供了比官方代码生成器更丰富的功能和可配置项，旨在提升开发效率，减少重复代码编写。
+代码生成器，旨在提升开发效率，减少重复代码编写。
 
 ## 功能特性
 
 - **基础代码生成**：生成实体类、Mapper、Service、Controller 等基础代码
-- **领域模型生成**：支持生成新增 DTO、修改 DTO、查询 DTO、查询 VO 等领域模型
+- **领域模型生成**：支持生成`新增DTO`、`修改DTO`、`查询DTO`、`查询VO`、`EXCEL导入DTO`、`EXCEL导出DTO` 等领域模型
 - **选择性方法生成**：支持选择性生成增删查改、导入导出等方法
 - **多种数据库支持**：支持 MySQL、PostgreSQL、Oracle 等主流数据库
 - **模板引擎支持**：使用 Velocity 模板引擎，支持自定义模板
 - **配置灵活**：提供链式调用的配置方式，配置简单易用
 - **高扩展性**: 支持自定义模板、自定义注入、自定义名称转换等
+- **SQL-Booster 集成**: 集成SQL-Booster，提供更丰富的 SQL 查询能力
 
 ---
 
-## Maven依赖
+## 准备工作
 
-当前最新版本为:
+### 1. 添加生成器依赖
+
+首先, 在您的项目中添加 `code-generator` 的依赖。由于它是一个开发工具, 通常建议将其放在 `test` 或 `provided` 作用域下。
+
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/mybatis-plus-generator)](https://mvnrepository.com/artifact/io.github.luminion/mybatis-plus-generator)
 
 ```xml
 <dependency>
     <groupId>io.github.luminion</groupId>
     <artifactId>mybatis-plus-generator</artifactId>
+    <version>latest</version>
+    <scope>test</scope> <!-- Or <scope>provided</scope> -->
+</dependency>
+```
+
+### 2. 添加数据库驱动
+
+接下来, 请确保您的项目中包含了所需要的数据库驱动。
+
+```xml
+
+<!-- MySQL Connector (请根据您的数据库选择) -->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
     <version>latest</version>
 </dependency>
 ```
@@ -34,7 +53,7 @@ MyBatis-Plus 代码生成器，提供了比官方代码生成器更丰富的功�
 
 ## 快速开始
 
-使用 `GeneratorHelper` 可以快速生成代码：
+完成上述准备工作后, 您可以在一个测试类或 `main` 方法中使用 `GeneratorHelper` 来生成代码：
 
 ```java
 public class GeneratorTest {
@@ -60,6 +79,16 @@ public class GeneratorTest {
 
 `code-generator` 同样支持与 `SQL-Booster` 集成, 以生成更强大的 SQL 查询能力。
 
+如果使用此功能, 请确保在项目中添加 `sql-booster` 依赖:
+```xml
+<dependency>
+    <groupId>io.github.luminion</groupId>
+    <artifactId>sql-booster</artifactId>
+    <version>latest</version>
+</dependency>
+```
+
+**使用示例:**
 ```java
 public class GeneratorTest {
     public static void main(String[] args) {
@@ -211,3 +240,13 @@ public class GeneratorTest {
 2. 需要确保数据库连接信息正确
 3. 根据实际需要调整配置参数
 4. 可以通过自定义模板来满足特殊需求
+
+## 版本依赖
+建议依赖版本如下:
+
+| 生成器版本         | mybatis-plus官方生成器 | mybatis-plus-enhancer | 说明                        |
+|---------------|-------------------|-----------------------|---------------------------|
+| 0.0.3 - 0.0.9 | 3.5.3.2           | -                     | 早期实验版本                    |
+| 1.0.0 - 1.0.1 | 3.5.3.2 - 3.5.5   | -                     | 初版                        |
+| 1.2.0 - 1.2.7 | 3.5.7 - 3.5.11    | 1.2.0 - 1.2.4         | 聚合mybatis-plus-enhancer功能 |
+| 2.0.0         | -                 | 2.0.0及以上(可选)          | 重构细分配置, 移除非必要依赖, 提升兼容性    |
