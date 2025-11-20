@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author luminion
  */
 @SpringBootApplication
-public class GeneratorApp3 {
+public class App {
     public static void main(String[] args) {
-        SpringApplication.run(GeneratorApp3.class);
+        SpringApplication.run(App.class);
 
     }
 }
