@@ -1,5 +1,7 @@
 # Bug 清单
 
+## 1.0.0
+
 - 示例Bug：用户无法登录
 - ~~已修复的Bug：另一个问题~~
 - ~~insert及update的dto中, editExcludeColumns无效~~
