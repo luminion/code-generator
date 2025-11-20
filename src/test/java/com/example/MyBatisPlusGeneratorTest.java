@@ -16,8 +16,11 @@ import org.junit.jupiter.api.Test;
  */
 public class MyBatisPlusGeneratorTest {
 
-    String url = "jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8";
-    String username = "root";
+    //String url = "jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8";
+    //String username = "root";
+    //String password = "123456";
+    String url = "jdbc:postgresql://localhost:5432/test?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true";
+    String username = "postgres";
     String password = "123456";
     // 所有测试用例将输出到此单一目录
     String outputDir = System.getProperty("user.dir") + "\\src\\test\\java";
@@ -27,9 +30,11 @@ public class MyBatisPlusGeneratorTest {
     @BeforeEach
     void setup() {
         generator = GeneratorHelper.mybatisPlusGenerator(url, username, password)
+                //.initialize()
                 .global(g -> g
                         .outputDir(outputDir)
                         .fileOverride(true)
+                        .javaEEApi(JavaEEApi.JAVAX)
                         .parentPackage("com.example.test")
                         .generateExport(true)
                         .generateImport(true)
@@ -42,14 +47,20 @@ public class MyBatisPlusGeneratorTest {
         generator.execute("sys_user");
     }
 
-
-    /**
-     * 基础测试: 最简单的配置, 用于验证基本功能.
-     */
     @Test
     public void testBasic() {
 
     }
+
+
+    @Test
+    public void testJakarta() {
+        generator.global(g -> g
+                .javaEEApi(JavaEEApi.JAKARTA)
+                .openOutputDir(true)
+        );
+    }
+
 
     @Test
     public void testGlobal1() {
@@ -62,10 +73,9 @@ public class MyBatisPlusGeneratorTest {
                 .docLink(true)
                 .author("author1")
                 .date("yyyy-MM-dd")
-                .javaEEApi(JavaEEApi.JAKARTA)
                 .excelApi(ExcelApi.FAST_EXCEL)
                 .outputDir(outputDir)
-                .openOutputDir(true)
+                //.openOutputDir(true)
                 //.fileOverride(true)
                 //.parentPackage("com.example.test1")
                 .parentPackageModule("module1")
@@ -84,9 +94,8 @@ public class MyBatisPlusGeneratorTest {
                 .docLink(false)
                 .author("author2")
                 .date("yyyy/MM/dd HH:mm:ss")
-                .javaEEApi(JavaEEApi.JAVAX)
                 .excelApi(ExcelApi.EASY_EXCEL)
-                .openOutputDir(false)
+                //.openOutputDir(false)
                 //.fileOverride(false)
                 .parentPackageModule("module2")
                 .validated(false)
