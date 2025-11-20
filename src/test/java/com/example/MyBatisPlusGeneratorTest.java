@@ -3,7 +3,9 @@ package com.example;
 import io.github.luminion.generator.GeneratorHelper;
 import io.github.luminion.generator.config.builder.special.MybatisPlusBuilder;
 import io.github.luminion.generator.core.LambdaGenerator;
-import org.junit.jupiter.api.AfterAll;
+import io.github.luminion.generator.enums.DocType;
+import io.github.luminion.generator.enums.ExcelApi;
+import io.github.luminion.generator.enums.JavaEEApi;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +31,8 @@ public class MyBatisPlusGeneratorTest {
                         .outputDir(outputDir)
                         .fileOverride(true)
                         .parentPackage("com.example.test")
+                        .generateExport(true)
+                        .generateImport(true)
                 )
         ;
     }
@@ -47,22 +51,45 @@ public class MyBatisPlusGeneratorTest {
 
     }
 
-
     @Test
     public void testGlobal1() {
         generator.global(g -> g
-                .author("test-author")
-                .parentPackageModule("usr")
+                .lombok(true)
+                .chainModel(true)
+                .serializableUID(true)
+                .serializableAnnotation(false)
+                .docType(DocType.SPRING_DOC)
+                .docLink(true)
+                .author("author1")
+                .date("yyyy-MM-dd")
+                .javaEEApi(JavaEEApi.JAKARTA)
+                .excelApi(ExcelApi.FAST_EXCEL)
+                .outputDir(outputDir)
+                .openOutputDir(true)
+                //.fileOverride(true)
+                //.parentPackage("com.example.test1")
+                .parentPackageModule("module1")
+                .validated(true)
         );
     }
 
     @Test
     public void testGlobal2() {
         generator.global(g -> g
-                .author("test-author2")
-                .parentPackageModule("usr2")
+                .lombok(false)
+                .chainModel(false)
+                .serializableUID(false)
+                .serializableAnnotation(true)
+                .docType(DocType.SWAGGER)
+                .docLink(false)
+                .author("author2")
+                .date("yyyy/MM/dd HH:mm:ss")
+                .javaEEApi(JavaEEApi.JAVAX)
+                .excelApi(ExcelApi.EASY_EXCEL)
+                .openOutputDir(false)
+                //.fileOverride(false)
+                .parentPackageModule("module2")
+                .validated(false)
         );
     }
-
-
 }

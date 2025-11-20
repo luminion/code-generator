@@ -197,7 +197,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder parentPackageModule(@NonNull String parentPackageModule) {
-        this.configurer.getGlobalConfig().setParentPackage(parentPackageModule);
+        this.configurer.getGlobalConfig().setParentPackageModule(parentPackageModule);
         return this;
     }
     

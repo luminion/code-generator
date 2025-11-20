@@ -137,7 +137,7 @@ public class ControllerConfig implements TemplateRender {
         } else {
             data.put("pageMethodParams", "Long current, Long size");
         }
-        data.put("validatedStr", globalConfig.isValidated() ? "@Validated" : null);
+        data.put("validatedStr", globalConfig.isValidated() ? "@Validated " : null);
         String requestBodyStr = requestBody ? "@RequestBody " : null;
         data.put("requestBodyStr", requestBodyStr);
         data.put("optionalBodyStr", batchQueryPost ? requestBodyStr : null);
