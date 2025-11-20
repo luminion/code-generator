@@ -1,6 +1,6 @@
 # Bug 清单
 
-## 1.0.X
+## 1.0.0
 
 - ~~insert及update的dto中, editExcludeColumns无效~~
 - ~~restController时添加了额外responseBody~~
