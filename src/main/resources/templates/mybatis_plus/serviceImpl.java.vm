@@ -31,8 +31,8 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #end
     public ${queryVO} voById(Serializable id) { 
         #if(${table.primaryKeyField})
-        ${queryDTO} queryDTO = new ${queryDTO}()
-        queryDTO.set${table.primaryKeyField.capitalName}((${table.primaryKeyField.propertyType})id);
+        ${queryDTO} queryDTO = new ${queryDTO}();
+        queryDTO.set${table.primaryKeyField.capitalName}((${table.primaryKeyField.propertyType}) id);
         return this.voList(queryDTO).stream().findFirst().orElse(null);
         #else
         throw new IllegalStateException("can't find id property");
@@ -100,14 +100,14 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public void excelTemplate(OutputStream os) {
-        ${excelApiClass}.write(os, ${class.excelImportDTO}).sheet().doWrite(Collections.emptyList());
+        ${excelApiClass}.write(os, ${excelImportDTO}.class).sheet().doWrite(Collections.emptyList());
     }
 
     #if(${generate.service})
     @Override
     #end
     public int excelImport(InputStream is) {
-        List<${excelImportDTO}> dataList = ${excelApiClass}.read(is).head(${class.excelImportDTO}).sheet().doReadSync();
+        List<${excelImportDTO}> dataList = ${excelApiClass}.read(is).head(${excelImportDTO}.class).sheet().doReadSync();
         List<${entity}> entityList = dataList.stream().map(excelImportDTO -> {
             ${entity} entity = new ${entity}();
             BeanUtils.copyProperties(excelImportDTO, entity);
@@ -123,7 +123,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public void excelExport(${queryDTO} queryDTO, OutputStream os) {
-        ${excelApiClass}.write(os, ${class.excelExportDTO}).sheet().doWrite(this.voList(queryDTO));
+        ${excelApiClass}.write(os, ${excelImportDTO}.class).sheet().doWrite(this.voList(queryDTO));
     }
 #end
 }

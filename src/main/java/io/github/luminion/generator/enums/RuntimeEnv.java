@@ -13,4 +13,13 @@ public enum RuntimeEnv {
     MY_BATIS_PLUS_SQL_BOOSTER,
     ;
     
+    
+    public static boolean isSqlBooster(RuntimeEnv env){
+        return MY_BATIS_PLUS_SQL_BOOSTER.equals(env);
+    }
+    
+    public static boolean isMyBatisPlus(RuntimeEnv env){
+        return MYBATIS_PLUS.equals(env);
+    }
+    
 }

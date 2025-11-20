@@ -44,6 +44,11 @@ public class EntityQueryDTOConfig implements TemplateRender {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         Resolver resolver = configurer.getResolver();
         TreeSet<String> importPackages = new TreeSet<>();
+
+        // 关闭功能
+        if (!globalConfig.isGenerateQuery()){
+            this.getTemplateFile().setGenerate(false);
+        }
       
         importPackages.add(List.class.getCanonicalName());
         

@@ -36,6 +36,11 @@ public class EntityUpdateDTOConfig implements TemplateRender{
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
         Set<String> importPackages = new TreeSet<>();
 
+        // 关闭功能
+        if (!globalConfig.isGenerateUpdate()){
+            this.getTemplateFile().setGenerate(false);
+        }
+
 
         String size = globalConfig.getJavaEEApi().getPackagePrefix() + "validation.constraints.Size";
         String notBlank = globalConfig.getJavaEEApi().getPackagePrefix() + "validation.constraints.NotBlank";

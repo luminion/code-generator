@@ -243,8 +243,13 @@ public class StrategyConfig implements TemplateRender {
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         data.put("idType", idType == null ? null : idType.toString());
-        data.put("logicDeleteFieldName", this.logicDeleteColumnName);
-        data.put("versionFieldName", this.versionColumnName);
+        //data.put("logicDeleteColumnName", this.logicDeleteColumnName);
+        //data.put("versionColumnName", this.versionColumnName);
+        data.put("booleanColumnRemoveIsPrefix",this.booleanColumnRemoveIsPrefix);
+        
+        data.put("editExcludeColumns",this.editExcludeColumns);
+        data.put("extraFieldSuffixMap",this.extraFieldSuffixMap);
+        data.put("extraFieldProvider",this.extraFieldProvider);
         return data;
     }
 }

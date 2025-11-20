@@ -4,6 +4,7 @@ import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
@@ -46,6 +47,11 @@ public class EntityQueryVOConfig implements TemplateRender {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         Resolver resolver = configurer.getResolver();
         TreeSet<String> importPackages = new TreeSet<>();
+
+        // 关闭功能
+        if (!globalConfig.isGenerateInsert() && !RuntimeEnv.isSqlBooster(globalConfig.getRuntimeEnv())){
+            this.getTemplateFile().setGenerate(false);
+        }
     
         if (extendsEntity) {
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));

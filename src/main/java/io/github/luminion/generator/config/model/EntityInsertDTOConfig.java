@@ -36,6 +36,10 @@ public class EntityInsertDTOConfig implements TemplateRender {
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
         Set<String> importPackages = new TreeSet<>();
 
+        // 关闭功能
+        if (!globalConfig.isGenerateInsert()){
+            this.getTemplateFile().setGenerate(false);
+        }
 
         String size = globalConfig.getJavaEEApi().getPackagePrefix() + "validation.constraints.Size";
         String notBlank = globalConfig.getJavaEEApi().getPackagePrefix() + "validation.constraints.NotBlank";
@@ -44,13 +48,13 @@ public class EntityInsertDTOConfig implements TemplateRender {
         // 属性过滤
         Set<String> editExcludeColumns = tableInfo.getConfigurer().getStrategyConfig().getEditExcludeColumns();
         for (TableField field : tableInfo.getFields()) {
-            if (field.isLogicDeleteField()) {
-                continue;
-            }
             if (field.isKeyFlag()) {
                 continue;
             }
             if (field.isVersionField()) {
+                continue;
+            }
+            if (field.isLogicDeleteField()) {
                 continue;
             }
             if (field.getFill() != null &&

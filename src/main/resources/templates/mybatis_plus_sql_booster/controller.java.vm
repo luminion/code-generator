@@ -25,7 +25,7 @@ import ${pkg};
 #if(${crossOrigin})
 @CrossOrigin
 #end
-#if(${restControllerStyle})
+#if(${restController})
 @RestController
 #else
 @Controller
@@ -71,7 +71,7 @@ public class ${controller} {
     #else
     @GetMapping("/select$!{idPathParams}")
     #end
-    #if(!${restControllerStyle})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr("${queryVO}")} voById($!{idMethodParams}${primaryKeyPropertyType} id) {
@@ -91,7 +91,7 @@ public class ${controller} {
      */
     #end
     ${batchQueryMethod}("/list")
-    #if(!${restControllerStyle})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} voList($!{optionalBodyStr}${queryDTO} queryDTO) {
@@ -112,7 +112,7 @@ public class ${controller} {
      */
     #end
     @PostMapping("/list/booster")
-    #if(!${restControllerStyle})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} voListBooster($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper) {
@@ -134,7 +134,7 @@ public class ${controller} {
      */
     #end
     ${batchQueryMethod}("/page$!{pagePathParams}")
-    #if(!${restControllerStyle})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPage($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
@@ -157,7 +157,7 @@ public class ${controller} {
      */
     #end
     @PostMapping("/page/booster$!{pagePathParams}")
-    #if(!${restControllerStyle})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPageBooster($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, $!{pageMethodParams}) {
@@ -183,7 +183,7 @@ public class ${controller} {
     #else
     @PostMapping("/insert")
     #end
-    #if(!${restControllerStyle})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr("Serializable")} insertByDTO($!{requiredBodyStr}$!{validatedStr}${insertDTO} insertDTO) {
@@ -209,7 +209,7 @@ public class ${controller} {
     #else
     @PostMapping("/update")
     #end
-    #if(!${restControllerStyle})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr("Boolean")} updateByDTO($!{requiredBodyStr}$!{validatedStr}${updateDTO} updateDTO) {
@@ -235,7 +235,7 @@ public class ${controller} {
     #else
     @PostMapping("/delete$!{idPathParams}")
     #end
-    #if(!${restControllerStyle})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr("Boolean")} removeById($!{idMethodParams}${primaryKeyPropertyType} id) {
@@ -274,7 +274,7 @@ public class ${controller} {
      */
     #end
     @PostMapping("/excel/import")
-    #if(!${restControllerStyle})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr("Integer")} excelImport(@RequestParam("excel") MultipartFile excel) throws IOException {

@@ -45,6 +45,11 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
         Set<String> importPackages = new TreeSet<>();
         
+        // 关闭功能
+        if (!globalConfig.isGenerateExport()){
+            this.getTemplateFile().setGenerate(false);
+        }
+        
         // excel包
         String excelIgnoreUnannotated = globalConfig.getExcelApi().getPackagePrefix() + "annotation.ExcelIgnoreUnannotated";
         String excelProperty = globalConfig.getExcelApi().getPackagePrefix() + "annotation.ExcelProperty";
