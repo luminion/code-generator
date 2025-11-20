@@ -2,8 +2,6 @@
 
 ## 1.0.X
 
-- 示例Bug：用户无法登录
-- ~~已修复的Bug：另一个问题~~
 - ~~insert及update的dto中, editExcludeColumns无效~~
 - ~~restController时添加了额外responseBody~~
 - ~~dto未根据全局设置自动禁用生成~~
