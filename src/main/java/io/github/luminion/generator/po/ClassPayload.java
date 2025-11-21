@@ -27,6 +27,12 @@ public class ClassPayload {
         this.classSimpleName = ClassUtils.getSimpleName(className);
         this.className = className;
     }
+    public ClassPayload(String className, int classGenericTypeCount) {
+        this.classPackage = ClassUtils.getPackage(className);
+        this.classSimpleName = ClassUtils.getSimpleName(className);
+        this.className = className;
+        this.classGenericTypeCount = classGenericTypeCount;
+    }
 
     public ClassPayload(String classPackage, String classSimpleName) {
         this.classPackage = classPackage;

@@ -1,4 +1,4 @@
-# Bug 清单
+# todo 清单
 
 ## 1.0.0
 
@@ -10,5 +10,9 @@
 - ~~dto的链式setter无效~~
 - ~~controller的Page返回参数没有泛型
 - ~~实体类没有导入tableId和idType
-- ~~实体类额外导入了activeModel类
+- ~~实体类额外导入了activeModel类~~
 - ~~serviceImpl导出使用的importDTO~~
+- ~~controller swagger的方法参数说明
+- ~~controller springdoc的方法参数说明
+- ~~实体类tableId按需添加
+- ~~mybatis-plus相关设置的的迁移, 包含注解/配置项builder
