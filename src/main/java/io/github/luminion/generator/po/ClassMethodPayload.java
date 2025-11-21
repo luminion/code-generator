@@ -22,17 +22,6 @@ public class ClassMethodPayload extends ClassPayload {
     protected boolean isStatic;
     protected boolean isConstructor;
     protected boolean isGenericMethod;
-    
-    @SneakyThrows
-    public ClassMethodPayload(String className, String methodName, Class<?> methodParameterClass){
-        super(className);
-        this.methodName = methodName;
-        Class<?> aClass = Class.forName(className);
-        Method method = aClass.getMethod(methodName, methodParameterClass);
-        this.methodGenericTypeCount = method.getGenericParameterTypes().length;
-        this.isStatic = Modifier.isStatic(method.getModifiers());
-        this.isConstructor = method.getName().startsWith("<init>");
-    }
 
     public ClassMethodPayload(Method method) {
         super(method.getDeclaringClass());
@@ -54,6 +43,12 @@ public class ClassMethodPayload extends ClassPayload {
         return methodName != null;
     }
 
+    /**
+     * 获取调用方法的字符串
+     * 
+     * @param parametersStr 参数字符串
+     * @return 调用方法字符串
+     */
     public String invokeMethodStr(String parametersStr) {
         if (methodName == null) {
             return parametersStr;

@@ -34,12 +34,6 @@ public class ClassPayload {
         this.classGenericTypeCount = classGenericTypeCount;
     }
 
-    public ClassPayload(String classPackage, String classSimpleName) {
-        this.classPackage = classPackage;
-        this.classSimpleName = classSimpleName;
-        this.className = classPackage + "." + classSimpleName;
-    }
-
     public ClassPayload(Class<?> clazz) {
         this.clazz = clazz;
         this.classPackage = clazz.getPackage().getName();
@@ -55,6 +49,13 @@ public class ClassPayload {
         return true;
     }
 
+    /**
+     * 获取返回类型的 字符串表达形式(如果有反省则匹配泛型类型)
+     * <p>
+     * 例: 当类为List时, {@code returnGenericTypeStr("String") => List<String>}
+     * @param genericTypeStr 返回泛型的字符串表达形式
+     * @return 返回的泛型类型字符串
+     */
     public String returnGenericTypeStr(String... genericTypeStr) {
         if (classSimpleName == null) {
             return genericTypeStr != null && genericTypeStr.length == 1 ? genericTypeStr[0] : "Object";
