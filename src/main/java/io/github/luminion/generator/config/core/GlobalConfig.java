@@ -200,7 +200,7 @@ public class GlobalConfig implements TemplateRender {
         data.put("validated", this.validated);
         data.put("docLink", this.docLink);
         data.put("lombok", this.lombok);
-        data.put("lombokChainModel", this.chainModel);
+        data.put("chainModel", this.chainModel);
 
         switch (this.docType) {
             case SPRING_DOC:

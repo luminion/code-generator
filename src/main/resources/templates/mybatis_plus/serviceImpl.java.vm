@@ -123,7 +123,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public void excelExport(${queryDTO} queryDTO, OutputStream os) {
-        ${excelApiClass}.write(os, ${excelImportDTO}.class).sheet().doWrite(this.voList(queryDTO));
+        ${excelApiClass}.write(os, ${excelExportDTO}.class).sheet().doWrite(this.voList(queryDTO));
     }
 #end
 }

@@ -15,11 +15,11 @@
  */
 package io.github.luminion.generator.config.model;
 
+import io.github.luminion.generator.common.JavaFieldInfo;
+import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.JavaFieldInfo;
-import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
@@ -87,7 +87,7 @@ public class EntityConfig implements TemplateRender {
         if (StringUtils.isNotBlank(this.superClass)) {
             data.put("entitySuperClass", ClassUtils.getSimpleName(this.superClass));
             importPackages.add(this.superClass);
-        } else {
+        } else if (this.activeRecord){
             // 无父类开启 AR 模式
             importPackages.add("com.baomidou.mybatisplus.extension.activerecord.Model");
         }
