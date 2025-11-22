@@ -8,8 +8,8 @@
 - ~~serviceImpl缺少标点, excel导入导出方法类参数错误~~
 - ~~导入dto有多余的文档注释~~
 - ~~dto的链式setter无效~~
-- ~~controller的Page返回参数没有泛型
-- ~~实体类没有导入tableId和idType
+- ~~controller的Page返回参数没有泛型~~
+- ~~实体类没有导入tableId和idType~~
 - ~~实体类额外导入了activeModel类~~
 - ~~serviceImpl导出使用的importDTO~~
 - ~~controller swagger的方法参数说明
