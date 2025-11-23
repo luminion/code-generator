@@ -5,6 +5,8 @@
 
 代码生成器，旨在提升开发效率，减少重复代码编写。
 
+该项目部分代码的灵感和实现参考了 [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) 项目，特此感谢。
+
 ## 功能特性
 
 - **基础代码生成**：生成实体类、Mapper、Service、Controller 等基础代码
