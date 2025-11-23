@@ -5,17 +5,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.config.core.GlobalConfig;
-import io.github.luminion.generator.config.model.ServiceConfig;
-import io.github.luminion.generator.config.model.ServiceImplConfig;
-import io.github.luminion.generator.fill.Column;
-import io.github.luminion.generator.fill.IFill;
-import io.github.luminion.generator.fill.Property;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import lombok.Data;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author luminion

@@ -1,13 +1,11 @@
 package io.github.luminion.generator.config.builder.custom;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import io.github.luminion.generator.enums.RuntimeEnv;
-import io.github.luminion.generator.fill.IFill;
 import lombok.NonNull;
-
-import java.util.Arrays;
 
 /**
  * @author luminion
@@ -16,7 +14,7 @@ import java.util.Arrays;
 @SuppressWarnings("unused")
 public class MybatisPlusBuilder<B extends MybatisPlusBuilder<B>> extends AbstractCustomBuilder<B> {
     protected final Configurer<MybatisPlusConfig> configurer;
-    
+
     public MybatisPlusBuilder(Configurer<MybatisPlusConfig> configurer) {
         this.configurer = configurer;
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PLUS);
@@ -80,11 +78,12 @@ public class MybatisPlusBuilder<B extends MybatisPlusBuilder<B>> extends Abstrac
     /**
      * 添加表填充字段
      *
+     * @param columnName 表字段名
      * @param tableFills 表填充字段
      * @return this
      */
-    protected B mybatisPlusTableFills(IFill... tableFills) {
-        this.configurer.getCustomConfig().getTableFillMap().addAll(Arrays.asList(tableFills));
+    protected B mybatisPlusTableFills(String columnName, FieldFill tableFills) {
+        this.configurer.getCustomConfig().getTableFillMap().put(columnName, tableFills);
         return returnThis();
     }
 
