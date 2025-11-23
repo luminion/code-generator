@@ -51,7 +51,7 @@ public class MybatisPlusConfig implements TemplateRender{
     protected boolean tableFieldAnnotation;
 
     @Override
-    public void beforeRenderData(TableInfo tableInfo) {
+    public void renderDataPreProcess(TableInfo tableInfo) {
         Configurer<?> configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         

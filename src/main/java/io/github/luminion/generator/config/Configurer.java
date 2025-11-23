@@ -16,7 +16,6 @@
 package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.config.core.DataSourceConfig;
 import io.github.luminion.generator.config.model.*;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.common.support.DefaultDatabaseQuery;
@@ -116,7 +115,7 @@ public class Configurer<C extends TemplateRender> {
      * 数据库表信息
      * 配置
      */
-    private final List<TableInfo> tableInfo = new ArrayList<>();
+    private final List<TableInfo> tableInfoList = new ArrayList<>();
 
     /**
      * 模板渲染列表
@@ -124,7 +123,7 @@ public class Configurer<C extends TemplateRender> {
     private final List<TemplateRender> templateRenderList = new ArrayList<>();
 
     /**
-     * 解析器
+     * 模板文件map
      */
     private final Map<String, TemplateFile> templateFileMap = new HashMap<>();
 
@@ -183,13 +182,13 @@ public class Configurer<C extends TemplateRender> {
             }
         }
 
-        if (this.tableInfo.isEmpty()) {
+        if (this.tableInfoList.isEmpty()) {
             try {
                 DefaultDatabaseQuery defaultQuery = new DefaultDatabaseQuery(this);
                 // 设置表信息
                 List<TableInfo> tableInfos = defaultQuery.queryTables();
                 if (!tableInfos.isEmpty()) {
-                    this.tableInfo.addAll(tableInfos);
+                    this.tableInfoList.addAll(tableInfos);
                 }
             } catch (Exception exception) {
                 throw new RuntimeException("创建IDatabaseQuery实例出现错误:", exception);
@@ -240,7 +239,7 @@ public class Configurer<C extends TemplateRender> {
 
         // 渲染前处理
         for (TemplateRender templateRender : getTemplateRenderList()) {
-            templateRender.beforeRenderData(tableInfo);
+            templateRender.renderDataPreProcess(tableInfo);
         }
 
         // 渲染数据

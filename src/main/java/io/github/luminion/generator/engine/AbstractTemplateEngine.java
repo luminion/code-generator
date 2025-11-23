@@ -80,7 +80,7 @@ public abstract class AbstractTemplateEngine {
      */
     public AbstractTemplateEngine batchOutput() {
         try {
-            List<TableInfo> tableInfoList = configurer.getTableInfo();
+            List<TableInfo> tableInfoList = configurer.getTableInfoList();
             tableInfoList.forEach(tableInfo -> {
                 Map<String, Object> objectMap = configurer.renderMap(tableInfo);
                 List<TemplateFile> templateFiles = configurer.getTemplateFiles();

@@ -51,9 +51,9 @@ import java.util.stream.Collectors;
 public class DefaultDatabaseQuery implements TableInfoProvider {
     protected final DefaultDatabaseQueryMetaDataWrapper databaseMetaDataWrapper;
     protected final StrategyConfig strategyConfig;
-    protected final Configurer configurer;
+    protected final Configurer<?> configurer;
 
-    public DefaultDatabaseQuery(Configurer configurer) {
+    public DefaultDatabaseQuery(Configurer<?> configurer) {
         this.configurer = configurer;
         this.strategyConfig = configurer.getStrategyConfig();
         DataSourceConfig dataSourceConfig = configurer.getDataSourceConfig();

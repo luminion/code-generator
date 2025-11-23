@@ -36,7 +36,7 @@ public interface TemplateRender extends Serializable {
 
 
     /**
-     * 验证配置项
+     * 验证/初始化配置项
      *
      * @since 1.0.0
      */
@@ -58,7 +58,7 @@ public interface TemplateRender extends Serializable {
      *
      * @since 1.0.0
      */
-    default void beforeRenderData(TableInfo tableInfo) {
+    default void renderDataPreProcess(TableInfo tableInfo) {
         
     }
     
