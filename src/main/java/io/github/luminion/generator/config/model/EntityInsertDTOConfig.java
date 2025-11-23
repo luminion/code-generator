@@ -78,15 +78,18 @@ public class EntityInsertDTOConfig implements TemplateRender {
             TableField.MetaInfo metaInfo = field.getMetaInfo();
             boolean isString = "String".equals(field.getPropertyType());
             boolean notnullFlag = !metaInfo.isNullable() && metaInfo.getDefaultValue() == null;
-            if (notnullFlag) {
-                if (isString) {
-                    importPackages.add(notBlank);
-                } else {
-                    importPackages.add(notNull);
+        
+            if (globalConfig.isValidated()) {
+                if (notnullFlag) {
+                    if (isString) {
+                        importPackages.add(notBlank);
+                    } else {
+                        importPackages.add(notNull);
+                    }
                 }
-            }
-            if (isString) {
-                importPackages.add(size);
+                if (isString && globalConfig.isValidated()) {
+                    importPackages.add(size);
+                }
             }
         }
 

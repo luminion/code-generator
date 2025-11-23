@@ -14,6 +14,7 @@
 - ~~serviceImpl导出使用的importDTO~~
 - ~~controller swagger的方法参数说明(降低模板复杂度,暂不添加)~~
 - ~~controller springdoc的方法参数说明(降低模板复杂度,暂不添加)~~
-- ~~实体类tableId按需添加
+- ~~实体类tableId按需添加~~
 - ~~mybatis-plus相关设置的的迁移, 包含注解/配置项builder~~
 - ~~渲染模板tableFillList修改为tableFillMap
+- ~~queryDTO和mapperXml没有追加额外后缀字段

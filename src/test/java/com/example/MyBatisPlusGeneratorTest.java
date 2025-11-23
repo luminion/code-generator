@@ -1,5 +1,7 @@
 package com.example;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.GeneratorHelper;
 import io.github.luminion.generator.config.builder.custom.MybatisPlusBuilder;
 import io.github.luminion.generator.core.LambdaGenerator;
@@ -100,5 +102,36 @@ public class MyBatisPlusGeneratorTest {
                 .parentPackageModule("module2")
                 .validated(false)
         );
+    }
+
+    @Test
+    public void testGlobal3() {
+        generator.global(g -> g
+                        .lombok(false)
+                        .chainModel(true)
+                        .serializableUID(false)
+                        .serializableAnnotation(true)
+                        .docType(DocType.SWAGGER)
+                        .docLink(true)
+                        .author("author3")
+                        .date("yyyy/MM/dd HH:mm:ss")
+                        .excelApi(ExcelApi.EASY_EXCEL)
+                        //.openOutputDir(false)
+                        //.fileOverride(false)
+                        .parentPackageModule("module2")
+                        .validated(false)
+                )
+                .custom(c -> c
+                        .idType(IdType.ASSIGN_ID)
+                        .logicDeleteColumnName("deleted")
+                        .versionColumnName("version")
+                        .activeRecord(true)
+                        .tableFieldAnnotation(true)
+                        .tableFill("create_time", FieldFill.INSERT)
+                        .tableFill("update_time", FieldFill.UPDATE)
+                        .tableFill("age", FieldFill.INSERT_UPDATE)
+                )
+
+        ;
     }
 }

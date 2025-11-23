@@ -18,15 +18,16 @@ public class MyBatisPlusSqlBoosterGenerator extends AbstractGenerator<MybatisPlu
     public MyBatisPlusSqlBoosterGenerator(Configurer<MybatisPlusConfig> configurer) {
         super(configurer);
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER);
-        InitializeUtils.initializeExtraFieldSuffix(configurer);
-        InitializeUtils.initializeMapperSortColumn(configurer);
-        InitializeUtils.initJdbcTypeConverter(configurer);
-        InitializeUtils.initializeMybatisPlus(configurer);
+        configurer.getEntityConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus/entity.java");
         configurer.getControllerConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/controller.java");
         configurer.getServiceConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/service.java");
         configurer.getServiceImplConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/serviceImpl.java");
         configurer.getMapperConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/mapper.java");
         configurer.getMapperXmlConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/mapperXml.java");
+        InitializeUtils.initializeExtraFieldSuffix(configurer);
+        InitializeUtils.initializeMapperSortColumn(configurer);
+        InitializeUtils.initJdbcTypeConverter(configurer);
+        InitializeUtils.initializeMybatisPlus(configurer);
     }
 
     @Override

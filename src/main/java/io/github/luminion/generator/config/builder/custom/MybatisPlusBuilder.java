@@ -20,27 +20,6 @@ public class MybatisPlusBuilder {
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PLUS);
     }
 
-    /**
-     * 是否生成实体时，生成字段注解
-     *
-     * @param enable 是否启用
-     * @return this
-     */
-    public MybatisPlusBuilder mybatisPlusTableFieldAnnotation(boolean enable) {
-        this.configurer.getCustomConfig().setTableFieldAnnotation(enable);
-        return this;
-    }
-
-    /**
-     * 开启 ActiveRecord 模式
-     *
-     * @param enable 是否启用
-     * @return this
-     */
-    public MybatisPlusBuilder mybatisPlusActiveRecord(boolean enable) {
-        this.configurer.getCustomConfig().setActiveRecord(enable);
-        return this;
-    }
 
     /**
      * 全局主键类型
@@ -48,7 +27,7 @@ public class MybatisPlusBuilder {
      * @param idType 主键类型
      * @return this
      */
-    public MybatisPlusBuilder mybatisPlusIdType(@NonNull IdType idType) {
+    public MybatisPlusBuilder idType(@NonNull IdType idType) {
         this.configurer.getCustomConfig().setIdType(idType);
         return this;
     }
@@ -59,7 +38,7 @@ public class MybatisPlusBuilder {
      * @param versionColumnName 字段名
      * @return this
      */
-    public MybatisPlusBuilder mybatisPlusVersionColumnName(@NonNull String versionColumnName) {
+    public MybatisPlusBuilder versionColumnName(@NonNull String versionColumnName) {
         this.configurer.getCustomConfig().setVersionColumnName(versionColumnName);
         return this;
     }
@@ -70,20 +49,42 @@ public class MybatisPlusBuilder {
      * @param logicDeleteColumnName 字段名
      * @return this
      */
-    public MybatisPlusBuilder mybatisPlusLogicDeleteColumnName(@NonNull String logicDeleteColumnName) {
+    public MybatisPlusBuilder logicDeleteColumnName(@NonNull String logicDeleteColumnName) {
         this.configurer.getCustomConfig().setLogicDeleteColumnName(logicDeleteColumnName);
         return this;
     }
 
     /**
+     * 开启 ActiveRecord 模式
+     *
+     * @param enable 是否启用
+     * @return this
+     */
+    public MybatisPlusBuilder activeRecord(boolean enable) {
+        this.configurer.getCustomConfig().setActiveRecord(enable);
+        return this;
+    }
+
+
+    /**
+     * 是否生成实体时，生成字段注解
+     *
+     * @param enable 是否启用
+     * @return this
+     */
+    public MybatisPlusBuilder tableFieldAnnotation(boolean enable) {
+        this.configurer.getCustomConfig().setTableFieldAnnotation(enable);
+        return this;
+    }
+    /**
      * 添加表填充字段
      *
      * @param columnName 表字段名
-     * @param tableFills 表填充字段
+     * @param fieldFill 表填充字段
      * @return this
      */
-    public MybatisPlusBuilder mybatisPlusTableFills(String columnName, FieldFill tableFills) {
-        this.configurer.getCustomConfig().getTableFillMap().put(columnName, tableFills);
+    public MybatisPlusBuilder tableFill(String columnName, FieldFill fieldFill) {
+        this.configurer.getCustomConfig().getTableFillMap().put(columnName, fieldFill);
         return this;
     }
 

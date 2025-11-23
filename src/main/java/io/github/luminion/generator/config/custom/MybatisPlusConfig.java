@@ -19,15 +19,10 @@ import java.util.Set;
  */
 @Data
 public class MybatisPlusConfig implements TemplateRender {
-
     /**
      * 指定生成的主键的ID类型
      */
     protected IdType idType = IdType.ASSIGN_ID;
-    /**
-     * 开启 ActiveRecord 模式
-     */
-    protected boolean activeRecord;
     /**
      * 乐观锁字段名称(数据库字段)
      */
@@ -37,19 +32,22 @@ public class MybatisPlusConfig implements TemplateRender {
      */
     protected String logicDeleteColumnName;
     /**
-     * 表填充字段
+     * 开启 ActiveRecord 模式
      */
-    protected final Map<String, FieldFill> tableFillMap = new HashMap<>();
-
+    protected boolean activeRecord;
     /**
      * 是否生成实体时，生成字段注解
      */
     protected boolean tableFieldAnnotation;
+    /**
+     * 表填充字段
+     */
+    protected final Map<String, FieldFill> tableFillMap = new HashMap<>();
 
     @Override
     public void renderDataPreProcess(TableInfo tableInfo) {
         Configurer<?> configurer = tableInfo.getConfigurer();
-        
+
         for (TableField field : tableInfo.getFields()) {
             String columnName = field.getColumnName();
             if (columnName != null && columnName.equals(this.logicDeleteColumnName)) {
@@ -60,15 +58,13 @@ public class MybatisPlusConfig implements TemplateRender {
             }
             tableFillMap.entrySet().stream()
                     //忽略大写字段问题
-                    .filter(entry -> entry.getKey().equalsIgnoreCase(field.getName()))
-                    .findFirst()
-                    .ifPresent(entry -> field.setFill(entry.getValue().name()));
+                    .filter(entry -> entry.getKey().equalsIgnoreCase(field.getName())).findFirst().ifPresent(entry -> field.setFill(entry.getValue().name()));
         }
 
         // service
- 
+
         // serviceImpl
-  
+
         // mapper
 
 
@@ -86,6 +82,7 @@ public class MybatisPlusConfig implements TemplateRender {
         if (this.activeRecord) {
             configurer.getControllerConfig().setSuperClass(null);
             entityImportPackages.add("com.baomidou.mybatisplus.extension.activerecord.Model");
+            entityImportPackages.add("java.io.Serializable");
         }
         if (configurer.getGlobalConfig().isLombok() && this.activeRecord) {
             entityImportPackages.add("lombok.EqualsAndHashCode");
@@ -123,8 +120,9 @@ public class MybatisPlusConfig implements TemplateRender {
         data.put("idType", idType == null ? null : idType.toString());
         data.put("logicDeleteColumnName", this.logicDeleteColumnName);
         data.put("versionColumnName", this.versionColumnName);
-        data.put("tableFillMap", this.tableFillMap);
         data.put("activeRecord", this.activeRecord);
+        data.put("tableFieldAnnotation", this.tableFieldAnnotation);
+        data.put("tableFillMap", this.tableFillMap);
         return data;
     }
 }

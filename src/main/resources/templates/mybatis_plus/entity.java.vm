@@ -36,7 +36,7 @@ import ${pkg};
 #elseif(${swagger})
 @ApiModel(description = "$!{table.comment}")
 #end
-#if(${tableNameAnnotation})
+#if(${table.convert})
 @TableName("$!{schemaName}${table.name}")
 #end
 #if(${entitySuperClass})
@@ -72,20 +72,20 @@ public class ${entity}#if(${serializableUID}) implements Serializable#end {
     #end
     #if(${field.keyFlag})
         #if(${field.keyIdentityFlag})
-    @TableId(value = "${field.annotationColumnName}", type = IdType.AUTO)
+    @TableId(value = "${field.columnName}", type = IdType.AUTO)
         #elseif(!$null.isNull(${idType}) && "$!idType" != "")
-    @TableId(value = "${field.annotationColumnName}", type = IdType.${idType})
+    @TableId(value = "${field.columnName}", type = IdType.${idType})
         #elseif(${field.convert} || ${tableFieldAnnotation})
-    @TableId("${field.annotationColumnName}")
+    @TableId("${field.columnName}")
         #end
     #elseif(${field.fill})
         #if(${field.convert} || ${tableFieldAnnotation})
-    @TableField(value = "${field.annotationColumnName}", fill = FieldFill.${field.fill})
+    @TableField(value = "${field.columnName}", fill = FieldFill.${field.fill})
         #else
     @TableField(fill = FieldFill.${field.fill})
         #end
     #elseif(${field.convert} || ${tableFieldAnnotation})
-    @TableField("${field.annotationColumnName}")
+    @TableField("${field.columnName}")
     #end
     #if(${field.versionField})
     @Version

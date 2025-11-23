@@ -65,24 +65,28 @@ public class EntityUpdateDTOConfig implements TemplateRender {
             ) {
                 continue;
             }
-            if (field.isKeyFlag()) {
-                importPackages.add(notNull);
-            }
             if (editExcludeColumns.contains(field.getColumnName())) {
                 continue;
             }
             Optional.ofNullable(field.getJavaType().getPkg()).ifPresent(importPackages::add);
+
             boolean notnullFlag = field.isKeyFlag() || field.isVersionField();
             boolean isString = "String".equals(field.getPropertyType());
-            if (notnullFlag) {
-                if (isString) {
-                    importPackages.add(notBlank);
-                } else {
+
+            if (globalConfig.isValidated()) {
+                if (field.isKeyFlag()) {
                     importPackages.add(notNull);
                 }
-            }
-            if (isString) {
-                importPackages.add(size);
+                if (notnullFlag) {
+                    if (isString) {
+                        importPackages.add(notBlank);
+                    } else {
+                        importPackages.add(notNull);
+                    }
+                }
+                if (isString && globalConfig.isValidated()) {
+                    importPackages.add(size);
+                }
             }
         }
 
