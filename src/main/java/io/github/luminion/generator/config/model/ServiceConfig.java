@@ -80,7 +80,7 @@ public class ServiceConfig implements TemplateRender {
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateInsert()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_CREATE_DTO, tableInfo));
                 }
                 if (globalConfig.isGenerateUpdate()) {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
@@ -107,7 +107,7 @@ public class ServiceConfig implements TemplateRender {
                 this.superClass = "com.baomidou.mybatisplus.extension.service.IService";
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 if (globalConfig.isGenerateInsert()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_CREATE_DTO, tableInfo));
                     importPackages.add("java.io.Serializable");
                 }
                 if (globalConfig.isGenerateUpdate()) {

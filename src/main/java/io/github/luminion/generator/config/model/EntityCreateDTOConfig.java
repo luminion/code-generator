@@ -16,16 +16,16 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Data
-public class EntityInsertDTOConfig implements TemplateRender {
+public class EntityCreateDTOConfig implements TemplateRender {
 
     /**
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.ENTITY_INSERT_DTO.getKey(),
-            "%sInsertDTO",
+            TemplateFileEnum.ENTITY_CREATE_DTO.getKey(),
+            "%sCreateDTO",
             "dto.command",
-            "/templates/model/entityInsertDTO.java",
+            "/templates/model/entityCreateDTO.java",
             ".java"
     );
     /**
@@ -102,8 +102,8 @@ public class EntityInsertDTOConfig implements TemplateRender {
         // 导入包
         Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("insertDTOJavaPkg", javaPackages);
-        data.put("insertDTOFramePkg", frameworkPackages);
+        data.put("createDTOJavaPkg", javaPackages);
+        data.put("createDTOFramePkg", frameworkPackages);
         return data;
     }
 }

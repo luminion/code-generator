@@ -37,8 +37,10 @@ public enum TemplateFileEnum {
     
     ENTITY_QUERY_DTO("queryDTO"),
     ENTITY_QUERY_VO("queryVO"),
-    ENTITY_INSERT_DTO("insertDTO"),
+    
+    ENTITY_CREATE_DTO("createDTO"),
     ENTITY_UPDATE_DTO("updateDTO"),
+    
     ENTITY_EXCEL_IMPORT_DTO("excelImportDTO"),
     ENTITY_EXCEL_EXPORT_DTO("excelExportDTO"),
     ;

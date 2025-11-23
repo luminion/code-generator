@@ -32,7 +32,7 @@ public interface LambdaGenerator<B> {
 
     LambdaGenerator<B> queryVO(Consumer<EntityQueryVOBuilder> consumer);
 
-    LambdaGenerator<B> insertDTO(Consumer<EntityInsertDTOBuilder> consumer);
+    LambdaGenerator<B> createDTO(Consumer<EntityInsertDTOBuilder> consumer);
 
     LambdaGenerator<B> updateDTO(Consumer<EntityUpdateDTOBuilder> consumer);
 

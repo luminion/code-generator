@@ -116,7 +116,7 @@ public class ServiceImplConfig implements TemplateRender {
         }
 
         if (globalConfig.isGenerateInsert()) {
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_CREATE_DTO, tableInfo));
             importPackages.add("org.springframework.beans.BeanUtils");
             importPackages.add("java.io.Serializable");
         }

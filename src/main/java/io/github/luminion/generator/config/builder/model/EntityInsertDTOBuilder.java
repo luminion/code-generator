@@ -21,7 +21,7 @@ public class EntityInsertDTOBuilder {
      * @return this
      */
     public EntityInsertDTOBuilder nameFormat(@NonNull String nameFormat) {
-        this.configurer.getEntityInsertDTOConfig().getTemplateFile().setNameFormat(nameFormat);
+        this.configurer.getEntityCreateDTOConfig().getTemplateFile().setNameFormat(nameFormat);
         return this;
     }
 
@@ -33,7 +33,7 @@ public class EntityInsertDTOBuilder {
      * @return this
      */
     public EntityInsertDTOBuilder subPackage(@NonNull String subPackage) {
-        this.configurer.getEntityInsertDTOConfig().getTemplateFile().setSubPackage(subPackage);
+        this.configurer.getEntityCreateDTOConfig().getTemplateFile().setSubPackage(subPackage);
         return this;
     }
 
@@ -46,7 +46,7 @@ public class EntityInsertDTOBuilder {
      * @return this
      */
     public EntityInsertDTOBuilder templatePath(@NonNull String templatePath) {
-        this.configurer.getEntityInsertDTOConfig().getTemplateFile().setTemplatePath(templatePath);
+        this.configurer.getEntityCreateDTOConfig().getTemplateFile().setTemplatePath(templatePath);
         return this;
     }
 
@@ -58,7 +58,7 @@ public class EntityInsertDTOBuilder {
      * @return this
      */
     public EntityInsertDTOBuilder outputDir(@NonNull String outputDir) {
-        this.configurer.getEntityInsertDTOConfig().getTemplateFile().setOutputDir(outputDir);
+        this.configurer.getEntityCreateDTOConfig().getTemplateFile().setOutputDir(outputDir);
         return this;
     }
 
@@ -69,7 +69,7 @@ public class EntityInsertDTOBuilder {
      * @return this
      */
     public EntityInsertDTOBuilder fileOverride(boolean enable) {
-        this.configurer.getEntityInsertDTOConfig().getTemplateFile().setFileOverride(enable);
+        this.configurer.getEntityCreateDTOConfig().getTemplateFile().setFileOverride(enable);
         return this;
     }
 

@@ -203,7 +203,7 @@ public class ControllerConfig implements TemplateRender {
         // 新增
         if (globalConfig.isGenerateInsert()) {
             importPackages.add("java.io.Serializable");
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_INSERT_DTO, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_CREATE_DTO, tableInfo));
         }
         // 修改
         if (globalConfig.isGenerateUpdate()) {

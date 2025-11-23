@@ -32,7 +32,7 @@ public interface ${service} extends ${serviceSuperClass}<${entity}, ${queryVO}> 
     #end
     #if(${generateInsert})
 
-    Serializable insertByDTO(${insertDTO} insertDTO);
+    Serializable createByDTO(${createDTO} createDTO);
     #end
     #if(${generateUpdate})
 

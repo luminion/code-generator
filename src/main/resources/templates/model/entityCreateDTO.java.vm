@@ -1,14 +1,14 @@
-package ${package.insertDTO};
-#if($insertDTOFramePkg.size()>0)
+package ${package.createDTO};
+#if($createDTOFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${insertDTOFramePkg})
+#foreach($pkg in ${createDTOFramePkg})
 import ${pkg};
 #end
-#if($insertDTOJavaPkg.size()>0)
+#if($createDTOJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${insertDTOJavaPkg})
+#foreach($pkg in ${createDTOJavaPkg})
 import ${pkg};
 #end
 
@@ -33,7 +33,7 @@ import ${pkg};
 #elseif(${swagger})
 @ApiModel(description = "$!{table.comment}-新增DTO")
 #end
-public class ${insertDTO}#if(${serializableUID}) implements Serializable#end {
+public class ${createDTO}#if(${serializableUID}) implements Serializable#end {
 #if(${serializableUID})
 
     #if(${serializableAnnotation})
@@ -96,7 +96,7 @@ public class ${insertDTO}#if(${serializableUID}) implements Serializable#end {
     }
 
     #if(${chainModel})
-    public ${insertDTO} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    public ${createDTO} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end

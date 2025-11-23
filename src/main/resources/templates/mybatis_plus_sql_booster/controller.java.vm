@@ -174,7 +174,7 @@ public class ${controller} {
     /**
      * 新增
      *
-     * @param insertDTO 新增入参对象
+     * @param createDTO 新增入参对象
      * @return 新增后的数据id
      */
     #end
@@ -186,8 +186,8 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Serializable")} insertByDTO($!{requiredBodyStr}$!{validatedStr}${insertDTO} insertDTO) {
-        return ${returnMethod.invokeMethodStr("baseService.insertByDTO(insertDTO)")};
+    public ${returnMethod.returnGenericTypeStr("Serializable")} insertByDTO($!{requiredBodyStr}$!{validatedStr}${createDTO} createDTO) {
+        return ${returnMethod.invokeMethodStr("baseService.insertByDTO(createDTO)")};
     }
 #end
 #if(${generateUpdate})

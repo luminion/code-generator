@@ -90,7 +90,7 @@ public class Configurer<C extends TemplateRender> {
     /**
      * 新增DTO配置
      */
-    private final EntityInsertDTOConfig entityInsertDTOConfig = new EntityInsertDTOConfig();
+    private final EntityCreateDTOConfig entityCreateDTOConfig = new EntityCreateDTOConfig();
     /**
      * 修改DTO配置
      */
@@ -164,7 +164,7 @@ public class Configurer<C extends TemplateRender> {
             templateRenderList.add(entityConfig);
             templateRenderList.add(entityQueryDTOConfig);
             templateRenderList.add(entityQueryVOConfig);
-            templateRenderList.add(entityInsertDTOConfig);
+            templateRenderList.add(entityCreateDTOConfig);
             templateRenderList.add(entityUpdateDTOConfig);
             templateRenderList.add(entityExcelImportDTOConfig);
             templateRenderList.add(entityExcelExportDTOConfig);

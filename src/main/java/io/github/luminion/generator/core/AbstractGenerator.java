@@ -82,7 +82,7 @@ public abstract class AbstractGenerator<C extends TemplateRender,B> implements L
     }
 
     @Override
-    public LambdaGenerator<B> insertDTO(Consumer<EntityInsertDTOBuilder> consumer) {
+    public LambdaGenerator<B> createDTO(Consumer<EntityInsertDTOBuilder> consumer) {
         consumer.accept(new EntityInsertDTOBuilder(this.configurer));
         return this;
     }

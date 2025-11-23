@@ -61,9 +61,9 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #if(${generate.service})
     @Override
     #end
-    public Serializable insertByDTO(${insertDTO} insertDTO) {
+    public Serializable createByDTO(${createDTO} createDTO) {
         ${entity} entity = new ${entity}();
-        BeanUtils.copyProperties(insertDTO, entity);
+        BeanUtils.copyProperties(createDTO, entity);
         super.save(entity);
         #if(${table.primaryKeyField})
         return entity.get${table.primaryKeyField.capitalName}();
