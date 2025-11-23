@@ -42,6 +42,12 @@ public class EntityQueryVOConfig implements TemplateRender {
     protected boolean extendsEntity = true;
 
     @Override
+    public List<TemplateFile> renderTemplateFiles() {
+        return Collections.singletonList(templateFile);
+    }
+
+
+    @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Configurer<?> configurer = tableInfo.getConfigurer();

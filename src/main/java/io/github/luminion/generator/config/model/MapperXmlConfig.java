@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +60,12 @@ public class MapperXmlConfig implements TemplateRender {
      * 字段名 -> 是否倒序
      */
     protected Map<String, Boolean> sortColumnMap = new LinkedHashMap<>();
+
+    @Override
+    public List<TemplateFile> renderTemplateFiles() {
+        return Collections.singletonList(templateFile);
+    }
+
 
     @Override
     @SneakyThrows

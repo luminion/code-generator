@@ -34,6 +34,12 @@ public class EntityUpdateDTOConfig implements TemplateRender {
     private Set<String> importPackages = new TreeSet<>();
 
     @Override
+    public List<TemplateFile> renderTemplateFiles() {
+        return Collections.singletonList(templateFile);
+    }
+
+
+    @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();

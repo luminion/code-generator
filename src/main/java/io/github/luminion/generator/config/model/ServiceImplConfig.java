@@ -61,6 +61,12 @@ public class ServiceImplConfig implements TemplateRender {
 
 
     @Override
+    public List<TemplateFile> renderTemplateFiles() {
+        return Collections.singletonList(templateFile);
+    }
+
+
+    @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
 

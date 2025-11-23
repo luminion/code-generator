@@ -10,10 +10,7 @@ import io.github.luminion.generator.po.TemplateFile;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -37,8 +34,13 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
      * 导入的包
      */
     private Set<String> importPackages = new TreeSet<>();
-    
 
+
+    @Override
+    public List<TemplateFile> renderTemplateFiles() {
+        return Collections.singletonList(templateFile);
+    }
+    
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);

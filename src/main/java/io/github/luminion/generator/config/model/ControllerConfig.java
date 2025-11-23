@@ -109,6 +109,11 @@ public class ControllerConfig implements TemplateRender {
 
 
     @Override
+    public List<TemplateFile> renderTemplateFiles() {
+        return Collections.singletonList(templateFile);
+    }
+
+    @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Configurer<?> configurer = tableInfo.getConfigurer();

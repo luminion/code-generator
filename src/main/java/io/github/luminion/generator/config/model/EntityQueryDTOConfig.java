@@ -40,6 +40,12 @@ public class EntityQueryDTOConfig implements TemplateRender {
      */
     protected boolean extendsEntity = true;
 
+    @Override
+    public List<TemplateFile> renderTemplateFiles() {
+        return Collections.singletonList(templateFile);
+    }
+
+
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {

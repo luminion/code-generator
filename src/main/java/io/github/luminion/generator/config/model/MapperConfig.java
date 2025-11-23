@@ -52,6 +52,12 @@ public class MapperConfig implements TemplateRender {
     protected String mapperAnnotationClass = "org.apache.ibatis.annotations.Mapper";
 
     @Override
+    public List<TemplateFile> renderTemplateFiles() {
+        return Collections.singletonList(templateFile);
+    }
+
+
+    @Override
     @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
