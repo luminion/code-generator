@@ -44,9 +44,9 @@ public abstract class AbstractTemplateEngine {
      * 配置信息
      */
     @Getter
-    protected final Configurer configurer;
+    protected final Configurer<?> configurer;
 
-    public AbstractTemplateEngine(Configurer configurer) {
+    public AbstractTemplateEngine(Configurer<?> configurer) {
         this.configurer = configurer;
     }
 
@@ -107,6 +107,7 @@ public abstract class AbstractTemplateEngine {
      * @param templateString 模板字符串
      * @since 3.5.0
      */
+    @SuppressWarnings("unused")
     public abstract String writer(Map<String, Object> objectMap, String templateName, String templateString) throws Exception;
 
     /**

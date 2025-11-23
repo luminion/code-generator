@@ -22,8 +22,22 @@ import ${pkg};
 #end
  * @since ${date}
  */
-#foreach($anno in ${entityAnnotations})
-${anno}
+#if(${lombok})
+@Data
+    #if(${chainModel})
+@Accessors(chain = true)
+    #end
+    #if(${entitySuperClass})
+@EqualsAndHashCode(callSuper = true)
+    #end
+#end
+#if(${springdoc})
+@Schema(description = "$!{table.comment}")
+#elseif(${swagger})
+@ApiModel(description = "$!{table.comment}")
+#end
+#if(${tableNameAnnotation})
+@TableName("$!{schemaName}${table.name}")
 #end
 #if(${entitySuperClass})
 public class ${entity} extends ${entitySuperClass}#if(${serializableUID}) implements Serializable#end {

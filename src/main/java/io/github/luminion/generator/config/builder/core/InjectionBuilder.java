@@ -15,8 +15,9 @@ import java.util.function.BiConsumer;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class InjectionBuilder {
-    private final Configurer configurer;
+    private final Configurer<?> configurer;
 
     /**
      * 注入自定义参数

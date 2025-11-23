@@ -15,11 +15,11 @@
  */
 package io.github.luminion.generator.config.core;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.common.*;
 import io.github.luminion.generator.common.support.DefaultExtraFieldProvider;
 import io.github.luminion.generator.common.support.DefaultNameConverter;
 import io.github.luminion.generator.enums.DateType;
-import io.github.luminion.generator.enums.IdType;
 import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.util.StringUtils;
@@ -52,24 +52,11 @@ public class StrategyConfig implements TemplateRender {
 
     // ===================字段类型或特殊字段===================
 
-    
-    /**
-     * 指定生成的主键的ID类型
-     */
-    protected IdType idType = IdType.ASSIGN_ID;
     /**
      * java日期类型
      */
     private DateType dateType = DateType.TIME_PACK;
 
-    /**
-     * 乐观锁字段名称(数据库字段)
-     */
-    protected String versionColumnName;
-    /**
-     * 逻辑删除字段名称(数据库字段)
-     */
-    protected String logicDeleteColumnName;
     /**
      * Boolean类型字段是否移除is前缀（默认 false）<br>
      * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
@@ -83,10 +70,6 @@ public class StrategyConfig implements TemplateRender {
      * 自定义忽略字段
      */
     protected final Set<String> ignoreColumns = new HashSet<>();
-    /**
-     * 表填充字段
-     */
-    protected final List<IFill> tableFillList = new ArrayList<>();
 
     // ===================过滤相关===================
 
@@ -242,7 +225,7 @@ public class StrategyConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        data.put("idType", idType == null ? null : idType.toString());
+        //data.put("idType", idType == null ? null : idType.toString());
         //data.put("logicDeleteColumnName", this.logicDeleteColumnName);
         //data.put("versionColumnName", this.versionColumnName);
         data.put("booleanColumnRemoveIsPrefix",this.booleanColumnRemoveIsPrefix);

@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  * @author luminion
  * @since 1.0.0
  */
-public class StringUtils {
+public abstract class StringUtils {
 
     /**
      * 是否为大写命名

@@ -34,11 +34,15 @@ public class MapperConfig implements TemplateRender {
             "/templates/mybatis_plus/mapper.java",
             ".java"
     );
+    /**
+     * 导入的包
+     */
+    private Set<String> importPackages = new TreeSet<>();
 
     /**
      * 自定义继承的Mapper类全称，带包名
      */
-    protected String superClass = "com.baomidou.mybatisplus.core.mapper.BaseMapper";
+    protected String superClass;
 
     /**
      * Mapper标记注解
@@ -51,7 +55,6 @@ public class MapperConfig implements TemplateRender {
     @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        Set<String> importPackages = new TreeSet<>();
 
         Configurer configurer = tableInfo.getConfigurer();
         Resolver resolver = configurer.getResolver();
@@ -59,6 +62,7 @@ public class MapperConfig implements TemplateRender {
         importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
         switch (globalConfig.getRuntimeEnv()) {
             case MYBATIS_PLUS:
+                this.superClass = "com.baomidou.mybatisplus.core.mapper.BaseMapper";
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(List.class.getName());
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));

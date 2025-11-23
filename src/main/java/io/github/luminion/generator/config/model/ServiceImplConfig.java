@@ -49,21 +49,24 @@ public class ServiceImplConfig implements TemplateRender {
             "/templates/mybatis_plus/serviceImpl.java",
             ".java"
     );
+    /**
+     * 导入的包
+     */
+    private Set<String> importPackages = new TreeSet<>();
 
     /**
      * 自定义继承的ServiceImpl类全称，带包名
      */
-    protected String superClass = "com.baomidou.mybatisplus.extension.service.impl.ServiceImplConfig";
+    protected String superClass;
 
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
 
-        Set<String> importPackages = new TreeSet<>();
         Configurer configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        Resolver resolver = tableInfo.getResolver();
+        Resolver resolver = tableInfo.getConfigurer().getResolver();
 
         switch (globalConfig.getRuntimeEnv()) {
             case MY_BATIS_PLUS_SQL_BOOSTER:

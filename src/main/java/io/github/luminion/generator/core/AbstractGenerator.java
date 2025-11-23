@@ -1,25 +1,18 @@
 package io.github.luminion.generator.core;
 
+import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.builder.core.GlobalBuilder;
 import io.github.luminion.generator.config.builder.core.InjectionBuilder;
 import io.github.luminion.generator.config.builder.core.StrategyBuilder;
 import io.github.luminion.generator.config.builder.model.*;
-import io.github.luminion.generator.config.builder.special.AbstractSpecialBuilder;
-import io.github.luminion.generator.config.core.StrategyConfig;
-import io.github.luminion.generator.config.model.MapperXmlConfig;
+import io.github.luminion.generator.config.builder.custom.AbstractCustomBuilder;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
-import io.github.luminion.generator.enums.DateType;
-import io.github.luminion.generator.enums.JavaFieldType;
-import io.github.luminion.generator.enums.IdType;
-import io.github.luminion.generator.enums.JdbcType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -27,136 +20,95 @@ import java.util.function.Consumer;
  */
 @RequiredArgsConstructor
 @Slf4j
-public abstract class AbstractGenerator<C extends AbstractSpecialBuilder<C>> implements LambdaGenerator<C> {
-    protected final Configurer configurer;
+public abstract class AbstractGenerator<C extends TemplateRender,B> implements LambdaGenerator<B> {
+    protected final Configurer<C> configurer;
 
     @Override
-    public LambdaGenerator<C> initialize() {
-        StrategyConfig strategyConfig = getStrategyConfig();
-        Map<String, String> extraFieldSuffixMap = strategyConfig.getExtraFieldSuffixMap();
-        extraFieldSuffixMap.put("In", "IN");
-        extraFieldSuffixMap.put("Like", "LIKE");
-        extraFieldSuffixMap.put("Le", "<=");
-        extraFieldSuffixMap.put("Ge", ">=");
-
-        MapperXmlConfig mapperXmlConfig = this.configurer.getMapperXmlConfig();
-        Map<String, Boolean> sortColumnMap = mapperXmlConfig.getSortColumnMap();
-        sortColumnMap.put("order", false);
-        sortColumnMap.put("rank", false);
-        sortColumnMap.put("sort", false);
-        sortColumnMap.put("seq", false);
-        sortColumnMap.put("sequence", false);
-        sortColumnMap.put("create_time", true);
-        sortColumnMap.put("id", true);
-
-        return this;
-    }
-
-    private StrategyConfig getStrategyConfig() {
-        StrategyConfig strategyConfig = this.configurer.getStrategyConfig();
-        strategyConfig.setIdType(IdType.ASSIGN_ID);
-        strategyConfig.setJavaFieldProvider(metaInfo -> {
-            if (JdbcType.TINYINT == metaInfo.getJdbcType()) {
-                return JavaFieldType.INTEGER;
-            }
-            if (JdbcType.SMALLINT == metaInfo.getJdbcType()) {
-                return JavaFieldType.INTEGER;
-            }
-            return null;
-        });
-        Set<String> editExcludeColumns = strategyConfig.getEditExcludeColumns();
-        editExcludeColumns.add("create_time");
-        editExcludeColumns.add("update_time");
-        strategyConfig.setDateType(DateType.TIME_PACK);
-        return strategyConfig;
-    }
-
-    @Override
-    public LambdaGenerator<C> global(Consumer<GlobalBuilder> consumer) {
+    public LambdaGenerator<B> global(Consumer<GlobalBuilder> consumer) {
         consumer.accept(new GlobalBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> strategy(Consumer<StrategyBuilder> consumer) {
+    public LambdaGenerator<B> strategy(Consumer<StrategyBuilder> consumer) {
         consumer.accept(new StrategyBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> injection(Consumer<InjectionBuilder> consumer) {
+    public LambdaGenerator<B> injection(Consumer<InjectionBuilder> consumer) {
         consumer.accept(new InjectionBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> controller(Consumer<ControllerBuilder> consumer) {
+    public LambdaGenerator<B> controller(Consumer<ControllerBuilder> consumer) {
         consumer.accept(new ControllerBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> service(Consumer<ServiceBuilder> consumer) {
+    public LambdaGenerator<B> service(Consumer<ServiceBuilder> consumer) {
         consumer.accept(new ServiceBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> serviceImpl(Consumer<ServiceImplBuilder> consumer) {
+    public LambdaGenerator<B> serviceImpl(Consumer<ServiceImplBuilder> consumer) {
         consumer.accept(new ServiceImplBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> mapper(Consumer<MapperBuilder> consumer) {
+    public LambdaGenerator<B> mapper(Consumer<MapperBuilder> consumer) {
         consumer.accept(new MapperBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> mapperXml(Consumer<MapperXmlBuilder> consumer) {
+    public LambdaGenerator<B> mapperXml(Consumer<MapperXmlBuilder> consumer) {
         consumer.accept(new MapperXmlBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> entity(Consumer<EntityBuilder> consumer) {
+    public LambdaGenerator<B> entity(Consumer<EntityBuilder> consumer) {
         consumer.accept(new EntityBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> queryDTO(Consumer<EntityQueryDTOBuilder> consumer) {
+    public LambdaGenerator<B> queryDTO(Consumer<EntityQueryDTOBuilder> consumer) {
         consumer.accept(new EntityQueryDTOBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> queryVO(Consumer<EntityQueryVOBuilder> consumer) {
+    public LambdaGenerator<B> queryVO(Consumer<EntityQueryVOBuilder> consumer) {
         consumer.accept(new EntityQueryVOBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> insertDTO(Consumer<EntityInsertDTOBuilder> consumer) {
+    public LambdaGenerator<B> insertDTO(Consumer<EntityInsertDTOBuilder> consumer) {
         consumer.accept(new EntityInsertDTOBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> updateDTO(Consumer<EntityUpdateDTOBuilder> consumer) {
+    public LambdaGenerator<B> updateDTO(Consumer<EntityUpdateDTOBuilder> consumer) {
         consumer.accept(new EntityUpdateDTOBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> excelExportDTO(Consumer<EntityExcelExportDTOBuilder> consumer) {
+    public LambdaGenerator<B> excelExportDTO(Consumer<EntityExcelExportDTOBuilder> consumer) {
         consumer.accept(new EntityExcelExportDTOBuilder(this.configurer));
         return this;
     }
 
     @Override
-    public LambdaGenerator<C> excelImportDTO(Consumer<EntityExcelImportDTOBuilder> consumer) {
+    public LambdaGenerator<B> excelImportDTO(Consumer<EntityExcelImportDTOBuilder> consumer) {
         consumer.accept(new EntityExcelImportDTOBuilder(this.configurer));
         return this;
     }

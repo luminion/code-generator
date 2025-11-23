@@ -14,14 +14,19 @@ import java.util.function.Consumer;
  * @author luminion
  * @since 1.0.0
  */
-public class MyBatisPlusGenerator extends AbstractGenerator<MybatisPlusConfig, MybatisPlusBuilder<?>> {
-    public MyBatisPlusGenerator(Configurer<MybatisPlusConfig> configurer) {
+public class MyBatisPlusSqlBoosterGenerator extends AbstractGenerator<MybatisPlusConfig, MybatisPlusBuilder<?>> {
+    public MyBatisPlusSqlBoosterGenerator(Configurer<MybatisPlusConfig> configurer) {
         super(configurer);
-        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PLUS);
+        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER);
         InitializeUtils.initializeExtraFieldSuffix(configurer);
         InitializeUtils.initializeMapperSortColumn(configurer);
         InitializeUtils.initJdbcTypeConverter(configurer);
         InitializeUtils.initializeMybatisPlus(configurer);
+        configurer.getControllerConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/controller.java");
+        configurer.getServiceConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/service.java");
+        configurer.getServiceImplConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/serviceImpl.java");
+        configurer.getMapperConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/mapper.java");
+        configurer.getMapperXmlConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/mapperXml.java");
     }
 
     @Override

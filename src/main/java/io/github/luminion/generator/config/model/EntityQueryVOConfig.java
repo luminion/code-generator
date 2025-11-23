@@ -11,10 +11,7 @@ import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import lombok.Data;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -34,6 +31,10 @@ public class EntityQueryVOConfig implements TemplateRender {
             "/templates/model/entityQueryVO.java",
             ".java"
     );
+    /**
+     * 导入的包
+     */
+    private Set<String> importPackages = new TreeSet<>();
 
     /**
      * 是否继承实体类
@@ -46,7 +47,6 @@ public class EntityQueryVOConfig implements TemplateRender {
         Configurer configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         Resolver resolver = configurer.getResolver();
-        TreeSet<String> importPackages = new TreeSet<>();
 
         // 关闭功能
         if (!globalConfig.isGenerateInsert() && !RuntimeEnv.isSqlBooster(globalConfig.getRuntimeEnv())){

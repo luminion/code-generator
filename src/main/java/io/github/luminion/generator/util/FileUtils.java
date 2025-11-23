@@ -24,7 +24,7 @@ import java.io.IOException;
  * @author luminion
  * @since 1.0.0 
  */
-public class FileUtils {
+public abstract class FileUtils {
 
     /**
      * Makes a directory, including any necessary but nonexistent parent

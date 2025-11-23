@@ -1,7 +1,7 @@
 package io.github.luminion.generator;
 
 import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.config.builder.special.MybatisPlusSqlBoosterBuilder;
+import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import io.github.luminion.generator.core.suppport.MyBatisPlusGenerator;
 
 /**
@@ -32,6 +32,7 @@ import io.github.luminion.generator.core.suppport.MyBatisPlusGenerator;
  * @author luminion
  * @since 1.0.0
  */
+@SuppressWarnings("unused")
 public class GeneratorHelper {
 
     /**
@@ -43,7 +44,7 @@ public class GeneratorHelper {
      * @return MyBatis-Plus代码生成器实例
      */
     public static MyBatisPlusGenerator mybatisPlusGenerator(String url, String username, String password) {
-        return new MyBatisPlusGenerator(new Configurer(url, username, password));
+        return new MyBatisPlusGenerator(new Configurer<>(url, username, password, new MybatisPlusConfig()));
     }
 
     /**
@@ -56,32 +57,7 @@ public class GeneratorHelper {
      * @return MyBatis-Plus代码生成器实例
      */
     public static MyBatisPlusGenerator mybatisPlusGenerator(String url, String username, String password, String schemaName) {
-        return new MyBatisPlusGenerator(new Configurer(url, username, password, schemaName));
-    }
-
-    /**
-     * 创建一个MyBatis-Plus和SQL-Booster结合的代码生成器。
-     *
-     * @param url      数据库连接URL
-     * @param username 数据库用户名
-     * @param password 数据库密码
-     * @return MybatisPlusSqlBoosterBuilder实例，用于进一步配置
-     */
-    public static MybatisPlusSqlBoosterBuilder mybatisPlusSqlBoosterGenerator(String url, String username, String password) {
-        return new MybatisPlusSqlBoosterBuilder(new Configurer(url, username, password));
-    }
-
-    /**
-     * 创建一个带schema的MyBatis-Plus和SQL-Booster结合的代码生成器。
-     *
-     * @param url        数据库连接URL
-     * @param username   数据库用户名
-     * @param password   数据库密码
-     * @param schemaName 数据库schema名称
-     * @return MybatisPlusSqlBoosterBuilder实例，用于进一步配置
-     */
-    public static MybatisPlusSqlBoosterBuilder mybatisPlusSqlBoosterGenerator(String url, String username, String password, String schemaName) {
-        return new MybatisPlusSqlBoosterBuilder(new Configurer(url, username, password, schemaName));
+        return new MyBatisPlusGenerator(new Configurer<>(url, username, password, schemaName,new MybatisPlusConfig()));
     }
 
 }

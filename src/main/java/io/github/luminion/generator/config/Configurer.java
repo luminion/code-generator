@@ -15,6 +15,7 @@
  */
 package io.github.luminion.generator.config;
 
+import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.core.DataSourceConfig;
 import io.github.luminion.generator.config.model.*;
 import io.github.luminion.generator.po.TableInfo;
@@ -24,7 +25,6 @@ import io.github.luminion.generator.po.TemplateFile;
 import lombok.Getter;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 
 /**
  * 配置汇总 传递给文件生成工具
@@ -34,11 +34,14 @@ import java.util.function.BiConsumer;
  * @since 1.0.0
  */
 @Getter
-public class Configurer {
+public class Configurer<C extends TemplateRender> {
     /**
      * 数据库配置信息
      */
     private final DataSourceConfig dataSourceConfig;
+
+    // ====================模型渲染所需====================
+
     /**
      * 全局配置信息
      */
@@ -47,10 +50,7 @@ public class Configurer {
      * 策略配置信息
      */
     private final StrategyConfig strategyConfig = new StrategyConfig();
-    /**
-     * 注入配置信息
-     */
-    private final InjectionConfig injectionConfig = new InjectionConfig();
+
 
     //====================模型配置--开始====================
 
@@ -105,6 +105,10 @@ public class Configurer {
      * Excel导出DTO配置
      */
     private final EntityExcelExportDTOConfig entityExcelExportDTOConfig = new EntityExcelExportDTOConfig();
+    /**
+     * 特殊配置
+     */
+    private final C customConfig;
 
     //====================模型配置--结束====================
 
@@ -115,21 +119,67 @@ public class Configurer {
     private final List<TableInfo> tableInfo = new ArrayList<>();
 
     /**
+     * 模板渲染列表
+     */
+    private List<TemplateRender> templateRenderList = new ArrayList<>();
+
+    /**
      * 解析器
      */
-    private Resolver resolver;
+    private final Map<String, TemplateFile> templateFileMap = new HashMap<>();
+
 
     public Configurer(String url, String username, String password) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
+        this.customConfig = null;
+    }
+
+    public Configurer(String url, String username, String password, C customConfig) {
+        this.dataSourceConfig = new DataSourceConfig(url, username, password);
+        this.customConfig = customConfig;
     }
 
     public Configurer(String url, String username, String password, String schemaName) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password, schemaName);
+        this.customConfig = null;
     }
 
-    public List<TableInfo> getTableInfo() {
-        getStrategyConfig().init();
-        getGlobalConfig().init();
+    public Configurer(String url, String username, String password, String schemaName, C customConfig) {
+        this.dataSourceConfig = new DataSourceConfig(url, username, password, schemaName);
+        this.customConfig = customConfig;
+
+    }
+
+    private void init() {
+        if (templateRenderList.isEmpty()) {
+            templateRenderList.add(globalConfig);
+            templateRenderList.add(strategyConfig);
+            templateRenderList.add(controllerConfig);
+            templateRenderList.add(serviceConfig);
+            templateRenderList.add(serviceImplConfig);
+            templateRenderList.add(mapperConfig);
+            templateRenderList.add(mapperXmlConfig);
+            templateRenderList.add(entityConfig);
+            templateRenderList.add(entityQueryDTOConfig);
+            templateRenderList.add(entityQueryVOConfig);
+            templateRenderList.add(entityInsertDTOConfig);
+            templateRenderList.add(entityUpdateDTOConfig);
+            templateRenderList.add(entityExcelImportDTOConfig);
+            templateRenderList.add(entityExcelExportDTOConfig);
+            if (customConfig != null) {
+                templateRenderList.add(customConfig);
+            }
+        }
+        for (TemplateRender templateRender : templateRenderList) {
+            templateRender.init();
+            List<TemplateFile> templateFiles = templateRender.renderTemplateFiles();
+            if (templateFiles != null) {
+                for (TemplateFile templateFile : templateFiles) {
+                    templateFileMap.put(templateFile.getKey(), templateFile);
+                }
+            }
+        }
+
         if (this.tableInfo.isEmpty()) {
             try {
                 DefaultDatabaseQuery defaultQuery = new DefaultDatabaseQuery(this);
@@ -142,20 +192,22 @@ public class Configurer {
                 throw new RuntimeException("创建IDatabaseQuery实例出现错误:", exception);
             }
         }
-        return tableInfo;
     }
+
 
     /**
      * 获取解析器
      *
-     * @return {@link Resolver }
-     * @since 1.0.0
      */
     public Resolver getResolver() {
-        if (resolver == null) {
-            this.resolver = new Resolver(this);
-        }
-        return resolver;
+        return new Resolver(this);
+    }
+
+    /**
+     * 获取模板文件
+     */
+    public List<TemplateFile> getTemplateFiles() {
+        return getResolver().getTemplateFiles();
     }
 
     /**
@@ -169,7 +221,7 @@ public class Configurer {
         Resolver resolver = getResolver();
 
         // 表信息
-        result.put("table",tableInfo);
+        result.put("table", tableInfo);
         // 类名
         result.putAll(resolver.getOutputClassSimpleNameMap(tableInfo));
         // 类包
@@ -179,44 +231,22 @@ public class Configurer {
         // 类是否生成
         result.put("generate", resolver.getOutputClassGenerateMap());
 
-
         if (dataSourceConfig.getSchemaName() != null) {
             result.put("schemaName", dataSourceConfig.getSchemaName() + ".");
         }
 
+        // 渲染前处理
+        for (TemplateRender templateRender : getTemplateRenderList()) {
+            templateRender.beforeRenderData(tableInfo);
+        }
 
-        result.putAll(globalConfig.renderData(tableInfo));
-        result.putAll(strategyConfig.renderData(tableInfo));
-
-
-        result.putAll(controllerConfig.renderData(tableInfo));
-        result.putAll(serviceConfig.renderData(tableInfo));
-        result.putAll(serviceImplConfig.renderData(tableInfo));
-        result.putAll(mapperConfig.renderData(tableInfo));
-        result.putAll(mapperXmlConfig.renderData(tableInfo));
-        result.putAll(entityConfig.renderData(tableInfo));
-
-        result.putAll(entityQueryDTOConfig.renderData(tableInfo));
-        result.putAll(entityQueryVOConfig.renderData(tableInfo));
-
-        result.putAll(entityInsertDTOConfig.renderData(tableInfo));
-        result.putAll(entityUpdateDTOConfig.renderData(tableInfo));
-
-        result.putAll(entityExcelImportDTOConfig.renderData(tableInfo));
-        result.putAll(entityExcelExportDTOConfig.renderData(tableInfo));
-
-        result.put("config", this);
-        Optional.ofNullable(injectionConfig.getBeforeOutputFileBiConsumer())
-                .ifPresent(op -> op.accept(tableInfo, result));
+        // 渲染数据
+        for (TemplateRender templateRender : getTemplateRenderList()) {
+            result.putAll(templateRender.renderData(tableInfo));
+        }
 
         return result;
     }
 
-    public List<TemplateFile> getTemplateFiles() {
-        Resolver resolver = getResolver();
-        List<TemplateFile> templateFiles = resolver.getTemplateFiles();
-        List<TemplateFile> customFiles = injectionConfig.getCustomFiles();
-        templateFiles.addAll(customFiles);
-        return templateFiles;
-    }
+
 }

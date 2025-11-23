@@ -20,6 +20,7 @@ import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.StrategyConfig;
 import io.github.luminion.generator.enums.NameConvertType;
 import io.github.luminion.generator.common.support.DefaultDatabaseQueryMetaDataWrapper;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,71 +35,58 @@ import java.util.stream.Collectors;
  * @author luminion
  * @since 1.0.0
  */
+@Data
 public class TableInfo {
 
-    @Getter
     private final Configurer configurer;
     /**
      * 配置适配器
      */
-    @Getter
     private final StrategyConfig strategyConfig;
 
     /**
      * 表名是否转化
      */
-    @Getter
-    @Setter
     private boolean convert;
 
     /**
      * 表名称
      */
-    @Getter
     private String name;
 
     /**
      * 实体名称
      */
-    @Getter
     private String entityName;
 
     /**
      * 表注释
      */
-    @Getter
     private String comment;
 
     /**
      * 公共字段
      */
-    @Getter
     private final List<TableField> commonFields = new ArrayList<>();
 
     /**
      * 表字段
      */
-    @Getter
     private final List<TableField> fields = new ArrayList<>();
 
     /**
      * 额外字段
      */
-    @Getter
     private final List<TableSuffixField> extraFields = new ArrayList<>();
 
     /**
      * 是否有主键
      */
-    @Getter
-    @Setter
     private boolean havePrimaryKey;
     
     /**
      * 主键字段
      */
-    @Getter
-    @Setter
     private TableField primaryKeyField;
 
 //    /**
@@ -211,14 +199,6 @@ public class TableInfo {
                 }
             }
         }
-    }
-
-    public TableField getField(String name) {
-        return tableFieldMap.get(name);
-    }
-    
-    public Resolver getResolver() {
-        return configurer.getResolver();
     }
 
 }

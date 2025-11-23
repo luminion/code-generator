@@ -9,8 +9,9 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class ServiceBuilder {
-    private final Configurer configurer;
+    private final Configurer<?> configurer;
 
     /**
      * 名称格式化

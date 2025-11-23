@@ -102,6 +102,11 @@ public class ControllerConfig implements TemplateRender {
      */
     protected ClassMethodPayload pageMethod = new ClassMethodPayload();
 
+    /**
+     * 导入的包
+     */
+    private Set<String> importPackages = new TreeSet<>();
+
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
@@ -151,7 +156,6 @@ public class ControllerConfig implements TemplateRender {
 
 
         // ======================导包======================
-        TreeSet<String> importPackages = new TreeSet<>();
         // spring组件
         importPackages.add("org.springframework.web.bind.annotation.*");
         if (!restController) {
@@ -165,13 +169,13 @@ public class ControllerConfig implements TemplateRender {
             case SPRING_DOC:
                 importPackages.add("io.swagger.v3.oas.annotations.tags.Tag");
                 importPackages.add("io.swagger.v3.oas.annotations.Operation");
-                importPackages.add("io.swagger.v3.oas.annotations.Parameter");
-                importPackages.add("io.swagger.v3.oas.annotations.Parameters");
+                //importPackages.add("io.swagger.v3.oas.annotations.Parameter");
+                //importPackages.add("io.swagger.v3.oas.annotations.Parameters");
                 break;
             case SWAGGER:
                 importPackages.add("io.swagger.annotations.Api");
                 importPackages.add("io.swagger.annotations.ApiOperation");
-                importPackages.add("io.swagger.annotations.ApiParam");
+                //importPackages.add("io.swagger.annotations.ApiParam");
                 break;
         }
         // 类信息

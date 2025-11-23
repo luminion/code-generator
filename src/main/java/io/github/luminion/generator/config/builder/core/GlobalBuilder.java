@@ -15,8 +15,9 @@ import java.util.Date;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class GlobalBuilder {
-    private final Configurer configurer;
+    private final Configurer<?> configurer;
 
     /**
      * lombok模型

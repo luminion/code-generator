@@ -9,8 +9,9 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class EntityBuilder {
-    private final Configurer configurer;
+    private final Configurer<?> configurer;
 
     /**
      * 名称格式化
@@ -83,26 +84,4 @@ public class EntityBuilder {
         this.configurer.getEntityConfig().setSuperClass(superClass);
         return this;
     }
-
-//    /**
-//     * 开启 ActiveRecord 模式
-//     *
-//     * @param enable 是否启用
-//     * @return this
-//     */
-//    public EntityBuilder activeRecord(boolean enable) {
-//        this.configurer.getEntityConfig().setActiveRecord(enable);
-//        return this;
-//    }
-
-//    /**
-//     * 是否生成实体时，生成字段注解
-//     *
-//     * @param enable 是否启用
-//     * @return this
-//     */
-//    public EntityBuilder tableFieldAnnotation(boolean enable) {
-//        this.configurer.getEntityConfig().setTableFieldAnnotation(enable);
-//        return this;
-//    }
 }

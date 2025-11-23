@@ -6,7 +6,7 @@ import io.github.luminion.generator.enums.DbType;
  * @author luminion
  * @since 1.0.0
  */
-public class DatasourceUtils {
+public abstract class DatasourceUtils {
     /**
      * 判断数据库类型
      *

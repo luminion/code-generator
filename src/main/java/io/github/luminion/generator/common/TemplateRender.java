@@ -16,11 +16,13 @@
 package io.github.luminion.generator.common;
 
 import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.po.TemplateFile;
 import lombok.SneakyThrows;
 
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -42,6 +44,24 @@ public interface TemplateRender extends Serializable {
         
     }
 
+    /**
+     * 输出的模板文件
+     *
+     */
+    default List<TemplateFile> renderTemplateFiles(){
+        return null;
+    } 
+
+
+    /**
+     * 进行renderData前的操作,用于读取其他配置项, 修改配置及表信息
+     *
+     * @since 1.0.0
+     */
+    default void beforeRenderData(TableInfo tableInfo) {
+        
+    }
+    
     /**
      * 渲染数据
      *

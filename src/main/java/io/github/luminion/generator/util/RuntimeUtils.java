@@ -29,7 +29,7 @@ import java.text.MessageFormat;
  * @author luminion
  * @since 1.0.0
  */
-public class RuntimeUtils {
+public abstract class RuntimeUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RuntimeUtils.class);
 

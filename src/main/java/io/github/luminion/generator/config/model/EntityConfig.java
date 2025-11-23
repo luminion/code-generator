@@ -56,75 +56,21 @@ public class EntityConfig implements TemplateRender {
     protected String superClass;
 
     /**
-     * 开启 ActiveRecord 模式
+     * 导入的包
      */
-    protected boolean activeRecord;
-    /**
-     * 是否生成实体时，生成字段注解
-     */
-    protected boolean tableFieldAnnotation;
-
-    @Override
-    public void init() {
-        if (this.superClass != null && this.activeRecord) {
-            log.warn("继承和父类和activeRecord同时开启,activeRecord将失效!!!");
-        }
-    }
+    private Set<String> importPackages = new TreeSet<>();
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        Set<String> importPackages = new TreeSet<>();
-        data.put("activeRecord", this.activeRecord);
-
-        if (this.tableFieldAnnotation) {
-            data.put("tableFieldAnnotation", this.tableFieldAnnotation);
-            importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
-        }
-
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
-
         if (StringUtils.isNotBlank(this.superClass)) {
             data.put("entitySuperClass", ClassUtils.getSimpleName(this.superClass));
             importPackages.add(this.superClass);
-        } else if (this.activeRecord){
-            // 无父类开启 AR 模式
-            importPackages.add("com.baomidou.mybatisplus.extension.activerecord.Model");
+        } 
+        if (globalConfig.isLombok() && this.superClass != null) {
+            importPackages.add("lombok.EqualsAndHashCode");
         }
-        if (tableInfo.isConvert()) {
-            importPackages.add("com.baomidou.mybatisplus.annotation.TableName");
-        }
-        tableInfo.getFields().forEach(field -> {
-            JavaFieldInfo columnType = field.getJavaType();
-            if (null != columnType && null != columnType.getPkg()) {
-                importPackages.add(columnType.getPkg());
-            }
-            if (field.isKeyFlag()) {
-                // 主键
-                importPackages.add("com.baomidou.mybatisplus.annotation.TableId");
-                importPackages.add("com.baomidou.mybatisplus.annotation.IdType");
-            } else if (field.isConvert() || this.tableFieldAnnotation) {
-                // 普通字段
-                importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
-            }
-            if (null != field.getFill()) {
-                // 填充字段
-                importPackages.add("com.baomidou.mybatisplus.annotation.TableField");
-                importPackages.add("com.baomidou.mybatisplus.annotation.FieldFill");
-            }
-            if (field.isVersionField()) {
-                importPackages.add("com.baomidou.mybatisplus.annotation.Version");
-            }
-            if (field.isLogicDeleteField()) {
-                importPackages.add("com.baomidou.mybatisplus.annotation.TableLogic");
-            }
-        });
-        if (globalConfig.isLombok()) {
-            if (this.superClass != null || this.activeRecord) {
-                importPackages.add("lombok.EqualsAndHashCode");
-            }
-        }
-
         // 全局包
         importPackages.addAll(globalConfig.getModelSerializableImportPackages());
         importPackages.addAll(globalConfig.getModelDocImportPackages());
@@ -135,35 +81,6 @@ public class EntityConfig implements TemplateRender {
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
         data.put("entityJavaPkg", javaPackages);
         data.put("entityFramePkg", frameworkPackages);
-
-        // 注解
-        TreeSet<String> annotations = new TreeSet<>();
-        String comment = Optional.ofNullable(tableInfo.getComment()).orElse("");
-        String tableName = tableInfo.getName();
-        String schemaName = Optional.ofNullable(tableInfo.getSchemaName()).orElse("");
-        switch (globalConfig.getDocType()) {
-            case SPRING_DOC:
-                annotations.add(String.format("@Schema(description = \"%s\")", comment));
-                break;
-            case SWAGGER:
-                annotations.add(String.format("@ApiModel(description = \"%s\")", comment));
-                break;
-        }
-        if (globalConfig.isLombok()) {
-            annotations.add("@Data");
-            if (globalConfig.isChainModel()) {
-                annotations.add("@Accessors(chain = true)");
-            }
-            if (this.superClass != null || this.activeRecord) {
-                annotations.add("@EqualsAndHashCode(callSuper = true)");
-            }
-        }
-        if (tableInfo.isConvert()) {
-            annotations.add(String.format("@TableName(\"%s%s\")", schemaName, tableName));
-        }
-
-        data.put("entityAnnotations", annotations);
-
         return data;
     }
 

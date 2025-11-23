@@ -1,7 +1,7 @@
 package com.example;
 
 import io.github.luminion.generator.GeneratorHelper;
-import io.github.luminion.generator.config.builder.special.MybatisPlusBuilder;
+import io.github.luminion.generator.config.builder.custom.MybatisPlusBuilder;
 import io.github.luminion.generator.core.LambdaGenerator;
 import io.github.luminion.generator.enums.DocType;
 import io.github.luminion.generator.enums.ExcelApi;

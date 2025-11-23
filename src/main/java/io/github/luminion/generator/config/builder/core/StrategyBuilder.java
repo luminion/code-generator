@@ -6,8 +6,6 @@ import io.github.luminion.generator.common.JavaFieldProvider;
 import io.github.luminion.generator.common.NameConverter;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.DateType;
-import io.github.luminion.generator.enums.IdType;
-import io.github.luminion.generator.fill.IFill;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -21,8 +19,9 @@ import java.util.Map;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
+@SuppressWarnings("unused")
 public class StrategyBuilder {
-    private final Configurer configurer;
+    private final Configurer<?> configurer;
 
     /**
      * 数据库表/字段名转实体属性名策略
@@ -250,7 +249,6 @@ public class StrategyBuilder {
     /**
      * 添加编辑时排除的字段
      *
-     * @param editExcludeColumns 编辑时排除的字段
      * @return this
      */
     public StrategyBuilder editExcludeColumnsClear() {

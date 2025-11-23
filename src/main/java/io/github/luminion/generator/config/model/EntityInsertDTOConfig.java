@@ -28,13 +28,16 @@ public class EntityInsertDTOConfig implements TemplateRender {
             "/templates/model/entityInsertDTO.java",
             ".java"
     );
+    /**
+     * 导入的包
+     */
+    private Set<String> importPackages = new TreeSet<>();
 
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
-        Set<String> importPackages = new TreeSet<>();
 
         // 关闭功能
         if (!globalConfig.isGenerateInsert()){

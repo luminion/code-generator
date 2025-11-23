@@ -16,7 +16,7 @@
 package io.github.luminion.generator.fill;
 
 
-import io.github.luminion.generator.enums.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 
 /**
  * 字段填充

@@ -30,6 +30,10 @@ public class EntityQueryDTOConfig implements TemplateRender {
             "/templates/model/entityQueryDTO.java",
             ".java"
     );
+    /**
+     * 导入的包
+     */
+    private Set<String> importPackages = new TreeSet<>();
     
     /**
      * 是否继承实体类
@@ -43,7 +47,6 @@ public class EntityQueryDTOConfig implements TemplateRender {
         Configurer configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         Resolver resolver = configurer.getResolver();
-        TreeSet<String> importPackages = new TreeSet<>();
 
         // 关闭功能
         if (!globalConfig.isGenerateQuery()){

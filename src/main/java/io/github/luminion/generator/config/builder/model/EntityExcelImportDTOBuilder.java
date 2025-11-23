@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor
 public class EntityExcelImportDTOBuilder {
-    private final Configurer configurer;
+    private final Configurer<?> configurer;
 
     /**
      * 名称格式化
