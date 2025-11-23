@@ -84,7 +84,7 @@ public class MybatisPlusBuilder<B extends MybatisPlusBuilder<B>> extends Abstrac
      * @return this
      */
     protected B mybatisPlusTableFills(IFill... tableFills) {
-        this.configurer.getCustomConfig().getTableFillList().addAll(Arrays.asList(tableFills));
+        this.configurer.getCustomConfig().getTableFillMap().addAll(Arrays.asList(tableFills));
         return returnThis();
     }
 

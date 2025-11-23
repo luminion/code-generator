@@ -1,9 +1,7 @@
 package io.github.luminion.generator.po;
 
-import io.github.luminion.generator.util.ClassUtils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;

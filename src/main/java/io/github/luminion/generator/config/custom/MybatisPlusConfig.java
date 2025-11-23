@@ -1,10 +1,13 @@
 package io.github.luminion.generator.config.custom;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.config.model.ServiceConfig;
+import io.github.luminion.generator.config.model.ServiceImplConfig;
 import io.github.luminion.generator.fill.Column;
 import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.fill.Property;
@@ -12,17 +15,14 @@ import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
 @Data
-public class MybatisPlusConfig implements TemplateRender{
+public class MybatisPlusConfig implements TemplateRender {
 
     /**
      * 指定生成的主键的ID类型
@@ -43,7 +43,7 @@ public class MybatisPlusConfig implements TemplateRender{
     /**
      * 表填充字段
      */
-    protected final List<IFill> tableFillList = new ArrayList<>();
+    protected final Map<String, FieldFill> tableFillMap = new HashMap<>();
 
     /**
      * 是否生成实体时，生成字段注解
@@ -53,42 +53,41 @@ public class MybatisPlusConfig implements TemplateRender{
     @Override
     public void renderDataPreProcess(TableInfo tableInfo) {
         Configurer<?> configurer = tableInfo.getConfigurer();
-        GlobalConfig globalConfig = configurer.getGlobalConfig();
         
         for (TableField field : tableInfo.getFields()) {
             String columnName = field.getColumnName();
-            if (columnName!=null && columnName.equals(this.logicDeleteColumnName)){
+            if (columnName != null && columnName.equals(this.logicDeleteColumnName)) {
                 field.setLogicDeleteField(true);
             }
-            if (columnName!=null && columnName.equals(this.versionColumnName)){
+            if (columnName != null && columnName.equals(this.versionColumnName)) {
                 field.setVersionField(true);
             }
-            tableFillList.stream()
+            tableFillMap.entrySet().stream()
                     //忽略大写字段问题
-                    .filter(tf -> tf instanceof Column && tf.getName().equalsIgnoreCase(field.getName()) 
-                            || tf instanceof Property && tf.getName().equals(field.getPropertyType()))
-                    .findFirst().ifPresent(tf -> field.setFill(tf.getFieldFill().name()));
+                    .filter(entry -> entry.getKey().equalsIgnoreCase(field.getName()))
+                    .findFirst()
+                    .ifPresent(entry -> field.setFill(entry.getValue().name()));
         }
-        
+
         // service
-        
+ 
         // serviceImpl
-        
+  
         // mapper
-        
-        
+
+
         // 实体类
         Set<String> entityImportPackages = configurer.getEntityConfig().getImportPackages();
-        if (this.tableFieldAnnotation){
+        if (this.tableFieldAnnotation) {
             entityImportPackages.add("com.baomidou.mybatisplus.annotation.TableField");
         }
-        if (this.activeRecord){
+        if (this.activeRecord) {
             entityImportPackages.add("com.baomidou.mybatisplus.extension.activerecord.Model");
         }
-        if (tableInfo.isConvert()){
+        if (tableInfo.isConvert()) {
             entityImportPackages.add("com.baomidou.mybatisplus.annotation.TableName");
         }
-        if (this.activeRecord){
+        if (this.activeRecord) {
             configurer.getControllerConfig().setSuperClass(null);
             entityImportPackages.add("com.baomidou.mybatisplus.extension.activerecord.Model");
         }
@@ -128,7 +127,7 @@ public class MybatisPlusConfig implements TemplateRender{
         data.put("idType", idType == null ? null : idType.toString());
         data.put("logicDeleteColumnName", this.logicDeleteColumnName);
         data.put("versionColumnName", this.versionColumnName);
-        data.put("tableFillList", this.tableFillList);
+        data.put("tableFillMap", this.tableFillMap);
         data.put("activeRecord", this.activeRecord);
         return data;
     }
