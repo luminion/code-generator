@@ -186,8 +186,8 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Serializable")} insertByDTO($!{requiredBodyStr}$!{validatedStr}${createDTO} createDTO) {
-        return ${returnMethod.invokeMethodStr("baseService.insertByDTO(createDTO)")};
+    public ${returnMethod.returnGenericTypeStr("Serializable")} createByDTO($!{requiredBodyStr}$!{validatedStr}${createDTO} createDTO) {
+        return ${returnMethod.invokeMethodStr("baseService.createByDTO(createDTO)")};
     }
 #end
 #if(${generateUpdate})
