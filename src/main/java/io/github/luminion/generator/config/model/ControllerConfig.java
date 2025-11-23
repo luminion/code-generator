@@ -116,10 +116,11 @@ public class ControllerConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        Configurer<?> configurer = tableInfo.getConfigurer();
+        
+        Resolver resolver = tableInfo.getResolver();
+        Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        Resolver resolver = configurer.getResolver();
-
+        
         data.put("crossOrigin", this.crossOrigin);
         data.put("restController", this.restController);
         data.put("controllerSuperClass", ClassUtils.getSimpleName(this.superClass));

@@ -70,9 +70,9 @@ public class ServiceImplConfig implements TemplateRender {
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
 
-        Configurer<?> configurer = tableInfo.getConfigurer();
+        Resolver resolver = tableInfo.getResolver();
+        Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        Resolver resolver = tableInfo.getConfigurer().getResolver();
 
         switch (globalConfig.getRuntimeEnv()) {
             case MY_BATIS_PLUS_SQL_BOOSTER:

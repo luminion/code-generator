@@ -16,14 +16,11 @@
 package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.config.core.DataSourceConfig;
+import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.config.core.StrategyConfig;
 import io.github.luminion.generator.config.model.*;
-import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.common.support.DefaultDatabaseQuery;
-import io.github.luminion.generator.config.core.*;
-import io.github.luminion.generator.po.TemplateFile;
 import lombok.Getter;
-
-import java.util.*;
 
 /**
  * 配置汇总 传递给文件生成工具
@@ -111,146 +108,24 @@ public class Configurer<C extends TemplateRender> {
 
     //====================模型配置--结束====================
 
-    /**
-     * 数据库表信息
-     * 配置
-     */
-    private final List<TableInfo> tableInfoList = new ArrayList<>();
-
-    /**
-     * 模板渲染列表
-     */
-    private final List<TemplateRender> templateRenderList = new ArrayList<>();
-
-    /**
-     * 模板文件map
-     */
-    private final Map<String, TemplateFile> templateFileMap = new HashMap<>();
-
-
     public Configurer(String url, String username, String password) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
         this.customConfig = null;
-        init();
     }
 
     public Configurer(String url, String username, String password, C customConfig) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
         this.customConfig = customConfig;
-        init();
     }
 
     public Configurer(String url, String username, String password, String schemaName) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password, schemaName);
         this.customConfig = null;
-        init();
     }
 
     public Configurer(String url, String username, String password, String schemaName, C customConfig) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password, schemaName);
         this.customConfig = customConfig;
-        init();
-    }
-
-    private void init() {
-        if (templateRenderList.isEmpty()) {
-            templateRenderList.add(globalConfig);
-            templateRenderList.add(strategyConfig);
-            templateRenderList.add(controllerConfig);
-            templateRenderList.add(serviceConfig);
-            templateRenderList.add(serviceImplConfig);
-            templateRenderList.add(mapperConfig);
-            templateRenderList.add(mapperXmlConfig);
-            templateRenderList.add(entityConfig);
-            templateRenderList.add(entityQueryDTOConfig);
-            templateRenderList.add(entityQueryVOConfig);
-            templateRenderList.add(entityCreateDTOConfig);
-            templateRenderList.add(entityUpdateDTOConfig);
-            templateRenderList.add(entityExcelImportDTOConfig);
-            templateRenderList.add(entityExcelExportDTOConfig);
-            if (customConfig != null) {
-                templateRenderList.add(customConfig);
-            }
-        }
-        for (TemplateRender templateRender : templateRenderList) {
-            List<TemplateFile> templateFiles = templateRender.renderTemplateFiles();
-            if (templateFiles != null) {
-                for (TemplateFile templateFile : templateFiles) {
-                    templateFileMap.put(templateFile.getKey(), templateFile);
-                }
-            }
-        }
-
-        if (this.tableInfoList.isEmpty()) {
-            try {
-                DefaultDatabaseQuery defaultQuery = new DefaultDatabaseQuery(this);
-                // 设置表信息
-                List<TableInfo> tableInfos = defaultQuery.queryTables();
-                if (!tableInfos.isEmpty()) {
-                    this.tableInfoList.addAll(tableInfos);
-                }
-            } catch (Exception exception) {
-                throw new RuntimeException("创建IDatabaseQuery实例出现错误:", exception);
-            }
-        }
-    }
-
-
-    /**
-     * 获取解析器
-     *
-     */
-    public Resolver getResolver() {
-        return new Resolver(this);
-    }
-
-    /**
-     * 获取模板文件
-     */
-    public List<TemplateFile> getTemplateFiles() {
-        return getResolver().getTemplateFiles();
-    }
-
-    /**
-     * 获取输出的模板参数
-     *
-     * @return {@link Map }
-     * @since 1.0.0
-     */
-    public Map<String, Object> renderMap(TableInfo tableInfo) {
-        HashMap<String, Object> result = new HashMap<>();
-        Resolver resolver = getResolver();
-
-        // 初始化配置
-        for (TemplateRender templateRender : getTemplateRenderList()) {
-            templateRender.init();
-        }
-
-        // 渲染前处理
-        for (TemplateRender templateRender : getTemplateRenderList()) {
-            templateRender.renderDataPreProcess(tableInfo);
-        }
-
-        // 渲染数据
-        for (TemplateRender templateRender : getTemplateRenderList()) {
-            result.putAll(templateRender.renderData(tableInfo));
-        }
-
-        // 表信息
-        result.put("table", tableInfo);
-        // 类名
-        result.putAll(resolver.getOutputClassSimpleNameMap(tableInfo));
-        // 类包
-        result.put("package", resolver.getOutputClassPackageInfoMap());
-        // 类全名
-        result.put("class", resolver.getOutputClassNameMap(tableInfo));
-        // 类是否生成
-        result.put("generate", resolver.getOutputClassGenerateMap());
-        if (dataSourceConfig.getSchemaName() != null) {
-            result.put("schemaName", dataSourceConfig.getSchemaName() + ".");
-        }
-
-        return result;
     }
 
 

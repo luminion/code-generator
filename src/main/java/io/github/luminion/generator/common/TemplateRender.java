@@ -32,8 +32,11 @@ import java.util.Map;
  * @author luminion
  * @since 1.0.0
  */
-public interface TemplateRender extends Serializable {
+public interface TemplateRender extends Serializable, Comparable<TemplateRender> {
 
+    default int order() {
+        return 100;
+    }
 
     /**
      * 验证/初始化配置项
@@ -41,16 +44,16 @@ public interface TemplateRender extends Serializable {
      * @since 1.0.0
      */
     default void init() {
-        
+
     }
 
     /**
      * 输出的模板文件
      *
      */
-    default List<TemplateFile> renderTemplateFiles(){
+    default List<TemplateFile> renderTemplateFiles() {
         return null;
-    } 
+    }
 
 
     /**
@@ -59,9 +62,9 @@ public interface TemplateRender extends Serializable {
      * @since 1.0.0
      */
     default void renderDataPreProcess(TableInfo tableInfo) {
-        
+
     }
-    
+
     /**
      * 渲染数据
      *
@@ -81,4 +84,8 @@ public interface TemplateRender extends Serializable {
         return new HashMap<>();
     }
 
+    @Override
+    default int compareTo(TemplateRender o) {
+        return this.order() - o.order();
+    }
 }

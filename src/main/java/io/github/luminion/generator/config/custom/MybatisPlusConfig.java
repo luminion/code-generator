@@ -45,8 +45,13 @@ public class MybatisPlusConfig implements TemplateRender {
     protected final Map<String, FieldFill> tableFillMap = new HashMap<>();
 
     @Override
+    public int order() {
+        return -1;
+    }
+
+    @Override
     public void renderDataPreProcess(TableInfo tableInfo) {
-        Configurer<?> configurer = tableInfo.getConfigurer();
+        Configurer<?> configurer = tableInfo.getResolver().getConfigurer();
 
         for (TableField field : tableInfo.getFields()) {
             String columnName = field.getColumnName();
@@ -58,7 +63,9 @@ public class MybatisPlusConfig implements TemplateRender {
             }
             tableFillMap.entrySet().stream()
                     //忽略大写字段问题
-                    .filter(entry -> entry.getKey().equalsIgnoreCase(field.getName())).findFirst().ifPresent(entry -> field.setFill(entry.getValue().name()));
+                    .filter(entry -> entry.getKey().equalsIgnoreCase(field.getName()))
+                    .findFirst()
+                    .ifPresent(entry -> field.setFill(entry.getValue().name()));
         }
 
         // service

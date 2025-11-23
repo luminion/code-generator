@@ -36,7 +36,7 @@ import java.util.Properties;
  */
 @Slf4j
 public class VelocityTemplateEngine extends AbstractTemplateEngine {
-    private VelocityEngine velocityEngine;
+    private final VelocityEngine velocityEngine;
 
     {
         try {
@@ -46,7 +46,7 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         }
     }
 
-    public VelocityTemplateEngine(Configurer configAdapter) {
+    public VelocityTemplateEngine(Configurer<?> configAdapter) {
         super(configAdapter);
         Properties p = new Properties();
         p.setProperty(Velocity.ENCODING_DEFAULT, StandardCharsets.UTF_8.name());

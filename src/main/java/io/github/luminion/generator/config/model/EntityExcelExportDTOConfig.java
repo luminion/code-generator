@@ -2,6 +2,8 @@ package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
@@ -44,7 +46,9 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
+        Resolver resolver = tableInfo.getResolver();
+        Configurer<?> configurer = resolver.getConfigurer();
+        GlobalConfig globalConfig = configurer.getGlobalConfig();
         
         // 关闭功能
         if (!globalConfig.isGenerateExport()){

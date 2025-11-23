@@ -132,7 +132,7 @@ public class StrategyConfig implements TemplateRender {
     /**
      * 额外字段后缀
      */
-    protected Map<String, String> extraFieldSuffixMap = new LinkedHashMap<>();
+    protected final Map<String, String> extraFieldSuffixMap = new LinkedHashMap<>();
 
     /**
      * 额外字段策略

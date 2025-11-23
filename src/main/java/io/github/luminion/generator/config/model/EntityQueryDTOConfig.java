@@ -50,9 +50,9 @@ public class EntityQueryDTOConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        Configurer<?> configurer = tableInfo.getConfigurer();
+        Resolver resolver = tableInfo.getResolver();
+        Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        Resolver resolver = configurer.getResolver();
 
         // 关闭功能
         if (!globalConfig.isGenerateQuery()){

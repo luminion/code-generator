@@ -6,6 +6,7 @@ import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import io.github.luminion.generator.config.model.MapperXmlConfig;
 import io.github.luminion.generator.enums.JavaFieldType;
 import io.github.luminion.generator.enums.JdbcType;
+import io.github.luminion.generator.enums.SqlKeyword;
 
 import java.util.Map;
 
@@ -45,10 +46,25 @@ public abstract class InitializeUtils {
     public static void initializeExtraFieldSuffix(Configurer<?> configurer) {
         StrategyConfig strategyConfig = configurer.getStrategyConfig();
         Map<String, String> extraFieldSuffixMap = strategyConfig.getExtraFieldSuffixMap();
-        extraFieldSuffixMap.put("In", "IN");
-        extraFieldSuffixMap.put("Like", "LIKE");
+    
+        extraFieldSuffixMap.put("Ne", "!=");
+        extraFieldSuffixMap.put("Lt", "<");
         extraFieldSuffixMap.put("Le", "<=");
+        extraFieldSuffixMap.put("Gt", ">");
         extraFieldSuffixMap.put("Ge", ">=");
+        
+        extraFieldSuffixMap.put("Like", "LIKE");
+        extraFieldSuffixMap.put("NotLike", "NOT LIKE");
+        
+        extraFieldSuffixMap.put("In", "IN");
+        extraFieldSuffixMap.put("NotIn", "NOT IN");
+        
+        extraFieldSuffixMap.put("IsNull", "IS NULL");
+        extraFieldSuffixMap.put("IsNotNull", "IS NOT NULL");
+        
+        extraFieldSuffixMap.put("BitIn", "&");
+        extraFieldSuffixMap.put("BitNotIn", "!&");
+        
     }
     
     

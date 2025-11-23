@@ -116,9 +116,8 @@ public class ${queryDTO}#if(${serializableUID}) implements Serializable#end {
 #end
 ## --基础getter/setter end---
 ## --额外字段getter/setter start--
+#if(!${lombok})
 #foreach($field in ${table.extraFields})
-#set($isLike = ($field.sqlOperator == "LIKE" || $field.sqlOperator == "NOT LIKE"))
-#if(!${lombok} || $isLike)
 
     #if(${field.propertyType.equals("boolean")})
         #set($getprefix="is")
@@ -126,14 +125,8 @@ public class ${queryDTO}#if(${serializableUID}) implements Serializable#end {
         #set($getprefix="get")
     #end
     public ${field.propertyType} ${getprefix}${field.capitalName}() {
-        #if($isLike)
-        return ${field.propertyName} == null || ${field.propertyName}.isEmpty() ? null : "%" + ${field.propertyName} + "%";
-        #else
         return ${field.propertyName};
-        #end
     }
-#end
-#if(!${lombok})
 
     #if(${chainModel})
     public ${queryDTO} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {

@@ -16,6 +16,7 @@
 package io.github.luminion.generator.engine;
 
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.FileUtils;
@@ -44,10 +45,10 @@ public abstract class AbstractTemplateEngine {
      * 配置信息
      */
     @Getter
-    protected final Configurer<?> configurer;
+    protected final Resolver resolver;
 
     public AbstractTemplateEngine(Configurer<?> configurer) {
-        this.configurer = configurer;
+        this.resolver = new Resolver(configurer);
     }
 
     /**
@@ -80,10 +81,10 @@ public abstract class AbstractTemplateEngine {
      */
     public AbstractTemplateEngine batchOutput() {
         try {
-            List<TableInfo> tableInfoList = configurer.getTableInfoList();
+            List<TableInfo> tableInfoList = resolver.getTableInfoList();
             tableInfoList.forEach(tableInfo -> {
-                Map<String, Object> objectMap = configurer.renderMap(tableInfo);
-                List<TemplateFile> templateFiles = configurer.getTemplateFiles();
+                Map<String, Object> objectMap = resolver.renderMap(tableInfo);
+                List<TemplateFile> templateFiles = resolver.getTemplateFiles();
                 for (TemplateFile file : templateFiles) {
                     file.validate();
                     String outputDir = file.getOutputDir();
@@ -93,7 +94,7 @@ public abstract class AbstractTemplateEngine {
                 }
             });
         } catch (Exception e) {
-            throw new RuntimeException("无法创建文件，请检查配置信息！", e);
+            throw new RuntimeException("Unable to create file, please check configuration information", e);
         }
         return this;
     }
@@ -125,10 +126,10 @@ public abstract class AbstractTemplateEngine {
      * 打开输出目录
      */
     public void open() {
-        String outDir = getConfigurer().getGlobalConfig().getOutputDir();
+        String outDir = getResolver().getConfigurer().getGlobalConfig().getOutputDir();
         if (StringUtils.isBlank(outDir) || !new File(outDir).exists()) {
-            System.err.println("未找到输出目录：" + outDir);
-        } else if (getConfigurer().getGlobalConfig().isOpenOutputDir()) {
+            System.err.println("Output directory not found：" + outDir);
+        } else if (getResolver().getConfigurer().getGlobalConfig().isOpenOutputDir()) {
             try {
                 RuntimeUtils.openDir(outDir);
             } catch (IOException e) {

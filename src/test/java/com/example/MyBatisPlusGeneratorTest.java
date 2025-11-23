@@ -50,80 +50,25 @@ public class MyBatisPlusGeneratorTest {
     }
 
     @Test
-    public void testBasic() {
-
-    }
-
-
-    @Test
-    public void testJakarta() {
-        generator.global(g -> g
-                .javaEEApi(JavaEEApi.JAKARTA)
-                .openOutputDir(true)
-        );
-    }
-
-
-    @Test
-    public void testGlobal1() {
-        generator.global(g -> g
-                .lombok(true)
-                .chainModel(true)
-                .serializableUID(true)
-                .serializableAnnotation(false)
-                .docType(DocType.SPRING_DOC)
-                .docLink(true)
-                .author("author1")
-                .date("yyyy-MM-dd")
-                .excelApi(ExcelApi.FAST_EXCEL)
-                .outputDir(outputDir)
-                //.openOutputDir(true)
-                //.fileOverride(true)
-                //.parentPackage("com.example.test1")
-                .parentPackageModule("module1")
-                .validated(true)
-        );
-    }
-
-    @Test
-    public void testGlobal2() {
-        generator.global(g -> g
-                .lombok(false)
-                .chainModel(false)
-                .serializableUID(false)
-                .serializableAnnotation(true)
-                .docType(DocType.SWAGGER)
-                .docLink(false)
-                .author("author2")
-                .date("yyyy/MM/dd HH:mm:ss")
-                .excelApi(ExcelApi.EASY_EXCEL)
-                //.openOutputDir(false)
-                //.fileOverride(false)
-                .parentPackageModule("module2")
-                .validated(false)
-        );
-    }
-
-    @Test
-    public void testGlobalMyBatisPlus3() {
+    public void test() {
         generator.global(g -> g
                         .lombok(false)
-                        .chainModel(true)
-                        .serializableUID(false)
+                        .chainModel(false)
+                        .serializableUID(true)
                         .serializableAnnotation(true)
                         .docType(DocType.SWAGGER)
                         .docLink(true)
-                        .author("author3")
-                        .date("yyyy/MM/dd HH:mm:ss")
+                        //.author("author3")
+                        //.date("yyyy/MM/dd HH:mm:ss")
                         .excelApi(ExcelApi.EASY_EXCEL)
                         //.openOutputDir(false)
                         //.fileOverride(false)
                         //.parentPackageModule("module2")
                         .validated(true)
                         //.generateQuery(false)
-                        .generateCreate(false)
-                        .generateUpdate(false)
-                        .generateDelete(false)
+                        //.generateCreate(false)
+                        //.generateUpdate(false)
+                        //.generateDelete(false)
                 
                 )
                 .custom(c -> c

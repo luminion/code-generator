@@ -17,6 +17,7 @@ package io.github.luminion.generator.common.support;
 
 import io.github.luminion.generator.common.TableInfoProvider;
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.DataSourceConfig;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
@@ -51,12 +52,12 @@ import java.util.stream.Collectors;
 public class DefaultDatabaseQuery implements TableInfoProvider {
     protected final DefaultDatabaseQueryMetaDataWrapper databaseMetaDataWrapper;
     protected final StrategyConfig strategyConfig;
-    protected final Configurer<?> configurer;
+    protected final Resolver resolver;
 
-    public DefaultDatabaseQuery(Configurer<?> configurer) {
-        this.configurer = configurer;
-        this.strategyConfig = configurer.getStrategyConfig();
-        DataSourceConfig dataSourceConfig = configurer.getDataSourceConfig();
+    public DefaultDatabaseQuery(Resolver resolver) {
+        this.resolver = resolver;
+        this.strategyConfig = resolver.getConfigurer().getStrategyConfig();
+        DataSourceConfig dataSourceConfig = resolver.getConfigurer().getDataSourceConfig();
         this.databaseMetaDataWrapper = new DefaultDatabaseQueryMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchemaName());
     }
 
@@ -74,7 +75,7 @@ public class DefaultDatabaseQuery implements TableInfoProvider {
             tables.forEach(table -> {
                 String tableName = table.getName();
                 if (StringUtils.isNotBlank(tableName)) {
-                    TableInfo tableInfo = new TableInfo(configurer, table);
+                    TableInfo tableInfo = new TableInfo(resolver, table);
                     if (isInclude && strategyConfig.matchIncludeTable(tableName)) {
                         includeTableList.add(tableInfo);
                     } else if (isExclude && strategyConfig.matchExcludeTable(tableName)) {

@@ -117,7 +117,7 @@ public class TableField {
 
 
     public TableField(TableInfo tableInfo, DefaultDatabaseQueryMetaDataWrapper.Column columnInfo) {
-        this.strategyConfig = tableInfo.getConfigurer().getStrategyConfig();
+        this.strategyConfig = tableInfo.getResolver().getConfigurer().getStrategyConfig();
         if (columnInfo.isPrimaryKey()) {
             this.keyFlag = true;
             this.keyIdentityFlag = columnInfo.isAutoIncrement();

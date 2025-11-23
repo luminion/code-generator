@@ -61,10 +61,10 @@ public class MapperConfig implements TemplateRender {
     @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-
-        Configurer<?> configurer = tableInfo.getConfigurer();
-        Resolver resolver = configurer.getResolver();
+        Resolver resolver = tableInfo.getResolver();
+        Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
+        
         importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
         switch (globalConfig.getRuntimeEnv()) {
             case MYBATIS_PLUS:
