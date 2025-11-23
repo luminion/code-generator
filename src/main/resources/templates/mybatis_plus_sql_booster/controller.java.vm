@@ -181,7 +181,7 @@ public class ${controller} {
     #if(${restful})
     @PostMapping("")
     #else
-    @PostMapping("/insert")
+    @PostMapping("/create")
     #end
     #if(!${restController})
     @ResponseBody
