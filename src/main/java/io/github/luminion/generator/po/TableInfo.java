@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Data
 public class TableInfo {
 
-    private final Configurer configurer;
+    private final Configurer<?> configurer;
     /**
      * 配置适配器
      */

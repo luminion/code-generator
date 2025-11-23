@@ -60,20 +60,19 @@ public class TemplateFile {
         return String.format(nameFormat, tableInfo.getEntityName());
     }
 
-    public boolean validate() {
+    public void validate() {
         if (templatePath == null) {
-            throw new IllegalArgumentException("模板路径不能为空");
+            throw new IllegalArgumentException("Template path cannot be empty");
         }
         if (outputDir == null) {
-            throw new IllegalArgumentException("文件输出文件夹不能为空");
+            throw new IllegalArgumentException("File output folder cannot be empty");
         }
         if (nameFormat == null) {
-            throw new IllegalArgumentException("文件名称格式化函数不能为空");
+            throw new IllegalArgumentException("File name formatting function cannot be empty");
         }
         if (outputFileSuffix == null) {
-            throw new IllegalArgumentException("文件名称后缀不能为空");
+            throw new IllegalArgumentException("File name suffix cannot be empty");
         }
-        return true;
     }
     
 }

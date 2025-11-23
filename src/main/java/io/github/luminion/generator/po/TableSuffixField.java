@@ -118,7 +118,7 @@ public class TableSuffixField {
                 this.sqlOperatorXml = "!&";
                 break;
             default:
-                throw new IllegalArgumentException(String.format("不支持的后缀字段操作符:%s, 支持的操作符:LIKE,NOT LIKE,IN,NOT IN,IS NULL,IS NOT NULL,>,<,>=,<=,!=,<>,&,!&", sqlOperator));
+                throw new IllegalArgumentException(String.format("Unsupported suffix field operator:[%s], allow: LIKE,NOT LIKE,IN,NOT IN,IS NULL,IS NOT NULL,>,<,>=,<=,!=,<>,&,!&", sqlOperator));
         }
         return this;
     }

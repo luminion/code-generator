@@ -163,12 +163,12 @@ public class GlobalConfig implements TemplateRender {
     /**
      * 生成导入方法及配套类(需允许新增)
      */
-    protected boolean generateImport = false;
+    protected boolean generateImport = true;
 
     /**
      * 生成导出方法(需允许查询)
      */
-    protected boolean generateExport = false;
+    protected boolean generateExport = true;
 
     @Override
     public void init() {

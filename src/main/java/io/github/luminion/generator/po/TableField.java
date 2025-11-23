@@ -116,8 +116,7 @@ public class TableField {
     private Map<String, Object> customMap;
 
 
-    public TableField(TableInfo tableInfo,
-                      DefaultDatabaseQueryMetaDataWrapper.Column columnInfo) {
+    public TableField(TableInfo tableInfo, DefaultDatabaseQueryMetaDataWrapper.Column columnInfo) {
         this.strategyConfig = tableInfo.getConfigurer().getStrategyConfig();
         if (columnInfo.isPrimaryKey()) {
             this.keyFlag = true;
@@ -252,17 +251,10 @@ public class TableField {
         private JdbcType jdbcType;
 
         /**
-         * 类型名称(可用做额外判断处理,例如在pg下,json,uuid,jsonb,tsquery这种都认为是OHTER 1111)
+         * 类型名称(可用做额外判断处理,例如在pg下,json,uuid,jsonb,ts query这种都认为是OHTER 1111)
          */
         @Getter
         private String typeName;
-
-        /**
-         * 是否为生成列
-         *
-         * @since 3.5.8
-         */
-        private boolean generatedColumn;
 
         public MetaInfo(DefaultDatabaseQueryMetaDataWrapper.Column column, TableInfo tableInfo) {
             if (column != null) {
@@ -275,7 +267,6 @@ public class TableField {
                 this.scale = column.getScale();
                 this.jdbcType = column.getJdbcType();
                 this.typeName = column.getTypeName();
-                this.generatedColumn = column.isGeneratedColumn();
             }
         }
     }

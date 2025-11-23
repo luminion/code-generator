@@ -105,7 +105,7 @@ public class MyBatisPlusGeneratorTest {
     }
 
     @Test
-    public void testGlobal3() {
+    public void testGlobalMyBatisPlus3() {
         generator.global(g -> g
                         .lombok(false)
                         .chainModel(true)
@@ -118,8 +118,10 @@ public class MyBatisPlusGeneratorTest {
                         .excelApi(ExcelApi.EASY_EXCEL)
                         //.openOutputDir(false)
                         //.fileOverride(false)
-                        .parentPackageModule("module2")
-                        .validated(false)
+                        //.parentPackageModule("module2")
+                        //.validated(false)
+                        .validated(true)
+                
                 )
                 .custom(c -> c
                         .idType(IdType.ASSIGN_ID)

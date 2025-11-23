@@ -110,11 +110,11 @@ public abstract class AbstractGenerator<C extends TemplateRender,B> implements L
         if (tableNames.length > 0) {
             configurer.getStrategyConfig().getInclude().addAll(Arrays.asList(tableNames));
         }
-        log.debug("==========================准备生成文件...==========================");
+        log.debug("========================== ready to generate...==========================");
         VelocityTemplateEngine templateEngine = new VelocityTemplateEngine(this.configurer);
         // 模板引擎初始化执行文件输出
         templateEngine.batchOutput().open();
-        log.debug("==========================文件生成完成！！！==========================");
+        log.debug("========================== generate success！！！==========================");
         String banner =
                 "  _  _                                      ___             _  _      _                               ___             _  _  \n" +
                         " | || |   __ _    __ __   __ _      o O O  /   \\     o O O | \\| |    (_)     __      ___      o O O  |   \\   __ _    | || | \n" +
