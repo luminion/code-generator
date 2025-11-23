@@ -14,7 +14,7 @@ import java.util.function.Consumer;
  * @author luminion
  * @since 1.0.0
  */
-public class MyBatisPlusSqlBoosterGenerator extends AbstractGenerator<MybatisPlusConfig, MybatisPlusBuilder<?>> {
+public class MyBatisPlusSqlBoosterGenerator extends AbstractGenerator<MybatisPlusConfig, MybatisPlusBuilder> {
     public MyBatisPlusSqlBoosterGenerator(Configurer<MybatisPlusConfig> configurer) {
         super(configurer);
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER);
@@ -30,8 +30,8 @@ public class MyBatisPlusSqlBoosterGenerator extends AbstractGenerator<MybatisPlu
     }
 
     @Override
-    public LambdaGenerator<MybatisPlusBuilder<?>> custom(Consumer<MybatisPlusBuilder<?>> consumer) {
-        consumer.accept(new MybatisPlusBuilder<>(this.configurer));
+    public LambdaGenerator<MybatisPlusBuilder> custom(Consumer<MybatisPlusBuilder> consumer) {
+        consumer.accept(new MybatisPlusBuilder(this.configurer));
         return this;
     }
 }

@@ -1,7 +1,6 @@
 package io.github.luminion.generator.core;
 
 import io.github.luminion.generator.config.builder.core.GlobalBuilder;
-import io.github.luminion.generator.config.builder.core.InjectionBuilder;
 import io.github.luminion.generator.config.builder.core.StrategyBuilder;
 import io.github.luminion.generator.config.builder.model.*;
 
@@ -16,8 +15,6 @@ public interface LambdaGenerator<B> {
     LambdaGenerator<B> global(Consumer<GlobalBuilder> consumer);
 
     LambdaGenerator<B> strategy(Consumer<StrategyBuilder> consumer);
-
-    LambdaGenerator<B> injection(Consumer<InjectionBuilder> consumer);
 
     LambdaGenerator<B> controller(Consumer<ControllerBuilder> consumer);
 

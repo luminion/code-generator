@@ -12,7 +12,7 @@ import lombok.NonNull;
  * @since 1.0.0
  */
 @SuppressWarnings("unused")
-public class MybatisPlusBuilder<B extends MybatisPlusBuilder<B>> extends AbstractCustomBuilder<B> {
+public class MybatisPlusBuilder {
     protected final Configurer<MybatisPlusConfig> configurer;
 
     public MybatisPlusBuilder(Configurer<MybatisPlusConfig> configurer) {
@@ -26,9 +26,9 @@ public class MybatisPlusBuilder<B extends MybatisPlusBuilder<B>> extends Abstrac
      * @param enable 是否启用
      * @return this
      */
-    protected B mybatisPlusTableFieldAnnotation(boolean enable) {
+    public MybatisPlusBuilder mybatisPlusTableFieldAnnotation(boolean enable) {
         this.configurer.getCustomConfig().setTableFieldAnnotation(enable);
-        return returnThis();
+        return this;
     }
 
     /**
@@ -37,9 +37,9 @@ public class MybatisPlusBuilder<B extends MybatisPlusBuilder<B>> extends Abstrac
      * @param enable 是否启用
      * @return this
      */
-    protected B mybatisPlusActiveRecord(boolean enable) {
+    public MybatisPlusBuilder mybatisPlusActiveRecord(boolean enable) {
         this.configurer.getCustomConfig().setActiveRecord(enable);
-        return returnThis();
+        return this;
     }
 
     /**
@@ -48,9 +48,9 @@ public class MybatisPlusBuilder<B extends MybatisPlusBuilder<B>> extends Abstrac
      * @param idType 主键类型
      * @return this
      */
-    protected B mybatisPlusIdType(@NonNull IdType idType) {
+    public MybatisPlusBuilder mybatisPlusIdType(@NonNull IdType idType) {
         this.configurer.getCustomConfig().setIdType(idType);
-        return returnThis();
+        return this;
     }
 
     /**
@@ -59,9 +59,9 @@ public class MybatisPlusBuilder<B extends MybatisPlusBuilder<B>> extends Abstrac
      * @param versionColumnName 字段名
      * @return this
      */
-    protected B mybatisPlusVersionColumnName(@NonNull String versionColumnName) {
+    public MybatisPlusBuilder mybatisPlusVersionColumnName(@NonNull String versionColumnName) {
         this.configurer.getCustomConfig().setVersionColumnName(versionColumnName);
-        return returnThis();
+        return this;
     }
 
     /**
@@ -70,9 +70,9 @@ public class MybatisPlusBuilder<B extends MybatisPlusBuilder<B>> extends Abstrac
      * @param logicDeleteColumnName 字段名
      * @return this
      */
-    protected B mybatisPlusLogicDeleteColumnName(@NonNull String logicDeleteColumnName) {
+    public MybatisPlusBuilder mybatisPlusLogicDeleteColumnName(@NonNull String logicDeleteColumnName) {
         this.configurer.getCustomConfig().setLogicDeleteColumnName(logicDeleteColumnName);
-        return returnThis();
+        return this;
     }
 
     /**
@@ -82,9 +82,9 @@ public class MybatisPlusBuilder<B extends MybatisPlusBuilder<B>> extends Abstrac
      * @param tableFills 表填充字段
      * @return this
      */
-    protected B mybatisPlusTableFills(String columnName, FieldFill tableFills) {
+    public MybatisPlusBuilder mybatisPlusTableFills(String columnName, FieldFill tableFills) {
         this.configurer.getCustomConfig().getTableFillMap().put(columnName, tableFills);
-        return returnThis();
+        return this;
     }
 
 

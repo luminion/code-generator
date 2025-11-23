@@ -14,7 +14,7 @@ import java.util.function.Consumer;
  * @author luminion
  * @since 1.0.0
  */
-public class MyBatisPlusGenerator extends AbstractGenerator<MybatisPlusConfig, MybatisPlusBuilder<?>> {
+public class MyBatisPlusGenerator extends AbstractGenerator<MybatisPlusConfig, MybatisPlusBuilder> {
     public MyBatisPlusGenerator(Configurer<MybatisPlusConfig> configurer) {
         super(configurer);
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PLUS);
@@ -25,8 +25,8 @@ public class MyBatisPlusGenerator extends AbstractGenerator<MybatisPlusConfig, M
     }
 
     @Override
-    public LambdaGenerator<MybatisPlusBuilder<?>> custom(Consumer<MybatisPlusBuilder<?>> consumer) {
-        consumer.accept(new MybatisPlusBuilder<>(this.configurer));
+    public LambdaGenerator<MybatisPlusBuilder> custom(Consumer<MybatisPlusBuilder> consumer) {
+        consumer.accept(new MybatisPlusBuilder(this.configurer));
         return this;
     }
 }

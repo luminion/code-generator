@@ -3,10 +3,8 @@ package io.github.luminion.generator.core;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.builder.core.GlobalBuilder;
-import io.github.luminion.generator.config.builder.core.InjectionBuilder;
 import io.github.luminion.generator.config.builder.core.StrategyBuilder;
 import io.github.luminion.generator.config.builder.model.*;
-import io.github.luminion.generator.config.builder.custom.AbstractCustomBuilder;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +30,6 @@ public abstract class AbstractGenerator<C extends TemplateRender,B> implements L
     @Override
     public LambdaGenerator<B> strategy(Consumer<StrategyBuilder> consumer) {
         consumer.accept(new StrategyBuilder(this.configurer));
-        return this;
-    }
-
-    @Override
-    public LambdaGenerator<B> injection(Consumer<InjectionBuilder> consumer) {
-        consumer.accept(new InjectionBuilder(this.configurer));
         return this;
     }
 
