@@ -79,7 +79,7 @@ public class ServiceConfig implements TemplateRender {
                 this.superClass = "io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService";
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
-                if (globalConfig.isGenerateInsert()) {
+                if (globalConfig.isGenerateCreate()) {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_CREATE_DTO, tableInfo));
                 }
                 if (globalConfig.isGenerateUpdate()) {
@@ -106,7 +106,7 @@ public class ServiceConfig implements TemplateRender {
             case MYBATIS_PLUS:
                 this.superClass = "com.baomidou.mybatisplus.extension.service.IService";
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
-                if (globalConfig.isGenerateInsert()) {
+                if (globalConfig.isGenerateCreate()) {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_CREATE_DTO, tableInfo));
                     importPackages.add("java.io.Serializable");
                 }

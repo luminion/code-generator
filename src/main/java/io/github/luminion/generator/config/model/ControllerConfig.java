@@ -201,7 +201,7 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add("org.springframework.validation.annotation.Validated");
         }
         // 新增
-        if (globalConfig.isGenerateInsert()) {
+        if (globalConfig.isGenerateCreate()) {
             importPackages.add("java.io.Serializable");
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_CREATE_DTO, tableInfo));
         }

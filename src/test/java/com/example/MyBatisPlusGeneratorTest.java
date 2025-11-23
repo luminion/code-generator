@@ -121,7 +121,9 @@ public class MyBatisPlusGeneratorTest {
                         //.parentPackageModule("module2")
                         .validated(true)
                         //.generateQuery(false)
-                        .generateInsert(false)
+                        .generateCreate(false)
+                        .generateUpdate(false)
+                        .generateDelete(false)
                 
                 )
                 .custom(c -> c

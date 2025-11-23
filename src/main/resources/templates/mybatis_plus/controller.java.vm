@@ -107,7 +107,7 @@ public class ${controller} {
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
     }
 #end
-#if(${generateInsert})
+#if(${generateCreate})
 
     #if(${springdoc})
     @Operation(summary = "新增")

@@ -30,7 +30,7 @@ public interface ${service} extends ${serviceSuperClass}<${entity}, ${queryVO}> 
     @Override
     Page<${queryVO}> voPage(Wrapper wrapper, long current, long size);
     #end
-    #if(${generateInsert})
+    #if(${generateCreate})
 
     Serializable createByDTO(${createDTO} createDTO);
     #end

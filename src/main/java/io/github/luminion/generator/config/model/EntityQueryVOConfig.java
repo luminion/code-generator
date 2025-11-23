@@ -55,7 +55,7 @@ public class EntityQueryVOConfig implements TemplateRender {
         Resolver resolver = configurer.getResolver();
 
         // 关闭功能
-        if (!globalConfig.isGenerateInsert() && !RuntimeEnv.isSqlBooster(globalConfig.getRuntimeEnv())){
+        if (!globalConfig.isGenerateQuery() && !RuntimeEnv.isSqlBooster(globalConfig.getRuntimeEnv())){
             this.getTemplateFile().setGenerate(false);
         }
     

@@ -56,7 +56,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         return page;
     }
 #end
-#if(${generateInsert})
+#if(${generateCreate})
 
     #if(${generate.service})
     @Override

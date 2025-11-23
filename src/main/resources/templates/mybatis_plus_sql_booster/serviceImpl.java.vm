@@ -41,7 +41,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         return super.voPage(wrapper, current, size);
     }
 #end
-#if(${generateInsert})
+#if(${generateCreate})
 
     #if(${generate.service})
     @Override

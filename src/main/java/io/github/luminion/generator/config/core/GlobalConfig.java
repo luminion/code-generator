@@ -148,7 +148,7 @@ public class GlobalConfig implements TemplateRender {
     /**
      * 生成新增方法及配套类
      */
-    protected boolean generateInsert = true;
+    protected boolean generateCreate = true;
 
     /**
      * 生成更新方法及配套类
@@ -224,7 +224,7 @@ public class GlobalConfig implements TemplateRender {
         data.put("excelApiClass", excelApi.getMainEntrance());
 
         data.put("generateQuery", this.generateQuery);
-        data.put("generateInsert", this.generateInsert);
+        data.put("generateCreate", this.generateCreate);
         data.put("generateUpdate", this.generateUpdate);
         data.put("generateDelete", this.generateDelete);
         data.put("generateImport", this.generateImport);

@@ -27,7 +27,7 @@ public interface ${service} extends ${serviceSuperClass}<${entity}> {
 
     IPage<${queryVO}> voPage(${queryDTO} queryDTO, long current, long size);
     #end
-    #if(${generateInsert})
+    #if(${generateCreate})
 
     Serializable createByDTO(${createDTO} createDTO);
     #end

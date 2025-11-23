@@ -230,8 +230,8 @@ public class GlobalBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder generateInsert(boolean enable) {
-        this.configurer.getGlobalConfig().setGenerateInsert(enable);
+    public GlobalBuilder generateCreate(boolean enable) {
+        this.configurer.getGlobalConfig().setGenerateCreate(enable);
         return this;
     }
 

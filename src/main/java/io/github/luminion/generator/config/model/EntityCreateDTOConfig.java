@@ -46,7 +46,7 @@ public class EntityCreateDTOConfig implements TemplateRender {
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
 
         // 关闭功能
-        if (!globalConfig.isGenerateInsert()){
+        if (!globalConfig.isGenerateCreate()){
             this.getTemplateFile().setGenerate(false);
         }
 
