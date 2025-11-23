@@ -262,11 +262,6 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add("java.io.IOException");
             importPackages.add(responseClass);
         }
-        if (pageMethod != null && pageMethod.isClassReady()) {
-            importPackages.add(pageMethod.getClassName());
-        } else {
-            importPackages.add(globalConfig.getPageClassPayload().getClassName());
-        }
 
         Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());

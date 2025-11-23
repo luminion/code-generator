@@ -179,7 +179,7 @@ public class GlobalConfig implements TemplateRender {
             case MY_BATIS_PLUS_SQL_BOOSTER:
                 this.pageClassPayload = new ClassPayload("io.github.luminion.sqlbooster.core.Page", 1);
             default:
-                throw new IllegalArgumentException("暂不支持的运行环境:" + runtimeEnv);
+                throw new IllegalArgumentException("Runtime environment not supported:" + runtimeEnv);
         }
 
         if (!generateQuery && generateExport) {

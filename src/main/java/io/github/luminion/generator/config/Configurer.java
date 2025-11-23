@@ -173,7 +173,6 @@ public class Configurer<C extends TemplateRender> {
             }
         }
         for (TemplateRender templateRender : templateRenderList) {
-            templateRender.init();
             List<TemplateFile> templateFiles = templateRender.renderTemplateFiles();
             if (templateFiles != null) {
                 for (TemplateFile templateFile : templateFiles) {
@@ -222,19 +221,9 @@ public class Configurer<C extends TemplateRender> {
         HashMap<String, Object> result = new HashMap<>();
         Resolver resolver = getResolver();
 
-        // 表信息
-        result.put("table", tableInfo);
-        // 类名
-        result.putAll(resolver.getOutputClassSimpleNameMap(tableInfo));
-        // 类包
-        result.put("package", resolver.getOutputClassPackageInfoMap());
-        // 类全名
-        result.put("class", resolver.getOutputClassNameMap(tableInfo));
-        // 类是否生成
-        result.put("generate", resolver.getOutputClassGenerateMap());
-
-        if (dataSourceConfig.getSchemaName() != null) {
-            result.put("schemaName", dataSourceConfig.getSchemaName() + ".");
+        // 初始化配置
+        for (TemplateRender templateRender : getTemplateRenderList()) {
+            templateRender.init();
         }
 
         // 渲染前处理
@@ -245,6 +234,20 @@ public class Configurer<C extends TemplateRender> {
         // 渲染数据
         for (TemplateRender templateRender : getTemplateRenderList()) {
             result.putAll(templateRender.renderData(tableInfo));
+        }
+
+        // 表信息
+        result.put("table", tableInfo);
+        // 类名
+        result.putAll(resolver.getOutputClassSimpleNameMap(tableInfo));
+        // 类包
+        result.put("package", resolver.getOutputClassPackageInfoMap());
+        // 类全名
+        result.put("class", resolver.getOutputClassNameMap(tableInfo));
+        // 类是否生成
+        result.put("generate", resolver.getOutputClassGenerateMap());
+        if (dataSourceConfig.getSchemaName() != null) {
+            result.put("schemaName", dataSourceConfig.getSchemaName() + ".");
         }
 
         return result;

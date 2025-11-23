@@ -119,8 +119,8 @@ public class MyBatisPlusGeneratorTest {
                         //.openOutputDir(false)
                         //.fileOverride(false)
                         //.parentPackageModule("module2")
-                        //.validated(false)
                         .validated(true)
+                        .generateQuery(false)
                 
                 )
                 .custom(c -> c
