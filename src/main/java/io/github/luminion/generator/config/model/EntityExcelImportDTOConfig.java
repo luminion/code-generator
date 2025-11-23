@@ -60,7 +60,7 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
 
         // 属性过滤
         importPackages.add(excelProperty);
-        Set<String> editExcludeColumns = tableInfo.getConfigurer().getStrategyConfig().getEditExcludeColumns();
+        Set<String> editExcludeColumns = configurer.getStrategyConfig().getEditExcludeColumns();
         for (TableField field : tableInfo.getFields()) {
             if (field.isLogicDeleteField()) {
                 continue;

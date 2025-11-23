@@ -59,7 +59,7 @@ public class EntityCreateDTOConfig implements TemplateRender {
         String notNull = globalConfig.getJavaEEApi().getPackagePrefix() + "validation.constraints.NotNull";
         
         // 属性过滤
-        Set<String> editExcludeColumns = tableInfo.getConfigurer().getStrategyConfig().getEditExcludeColumns();
+        Set<String> editExcludeColumns = configurer.getStrategyConfig().getEditExcludeColumns();
         for (TableField field : tableInfo.getFields()) {
             if (field.isKeyFlag()) {
                 continue;
