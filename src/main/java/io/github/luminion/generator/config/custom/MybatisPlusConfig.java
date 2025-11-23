@@ -52,7 +52,7 @@ public class MybatisPlusConfig implements TemplateRender{
 
     @Override
     public void beforeRenderData(TableInfo tableInfo) {
-        Configurer configurer = tableInfo.getConfigurer();
+        Configurer<?> configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         
         for (TableField field : tableInfo.getFields()) {

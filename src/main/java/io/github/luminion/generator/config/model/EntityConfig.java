@@ -15,7 +15,6 @@
  */
 package io.github.luminion.generator.config.model;
 
-import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
@@ -26,7 +25,10 @@ import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
@@ -67,7 +69,7 @@ public class EntityConfig implements TemplateRender {
         if (StringUtils.isNotBlank(this.superClass)) {
             data.put("entitySuperClass", ClassUtils.getSimpleName(this.superClass));
             importPackages.add(this.superClass);
-        } 
+        }
         if (globalConfig.isLombok() && this.superClass != null) {
             importPackages.add("lombok.EqualsAndHashCode");
         }

@@ -63,7 +63,7 @@ public class ServiceConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
-        Configurer configurer = tableInfo.getConfigurer();
+        Configurer<?> configurer = tableInfo.getConfigurer();
         Resolver resolver = configurer.getResolver();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
       

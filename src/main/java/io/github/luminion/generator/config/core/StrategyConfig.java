@@ -15,17 +15,18 @@
  */
 package io.github.luminion.generator.config.core;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.common.*;
 import io.github.luminion.generator.common.support.DefaultExtraFieldProvider;
 import io.github.luminion.generator.common.support.DefaultNameConverter;
 import io.github.luminion.generator.enums.DateType;
-import io.github.luminion.generator.fill.IFill;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * 策略配置项
@@ -225,9 +226,6 @@ public class StrategyConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        //data.put("idType", idType == null ? null : idType.toString());
-        //data.put("logicDeleteColumnName", this.logicDeleteColumnName);
-        //data.put("versionColumnName", this.versionColumnName);
         data.put("booleanColumnRemoveIsPrefix",this.booleanColumnRemoveIsPrefix);
         
         data.put("editExcludeColumns",this.editExcludeColumns);

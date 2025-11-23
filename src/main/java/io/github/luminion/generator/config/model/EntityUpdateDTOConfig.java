@@ -2,7 +2,6 @@ package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.core.GlobalConfig;
-import io.github.luminion.generator.enums.FieldFill;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Data
-public class EntityUpdateDTOConfig implements TemplateRender{
+public class EntityUpdateDTOConfig implements TemplateRender {
 
     /**
      * 模板文件
@@ -40,7 +39,7 @@ public class EntityUpdateDTOConfig implements TemplateRender{
         GlobalConfig globalConfig = tableInfo.getConfigurer().getGlobalConfig();
 
         // 关闭功能
-        if (!globalConfig.isGenerateUpdate()){
+        if (!globalConfig.isGenerateUpdate()) {
             this.getTemplateFile().setGenerate(false);
         }
 
@@ -55,10 +54,12 @@ public class EntityUpdateDTOConfig implements TemplateRender{
             if (field.isLogicDeleteField()) {
                 continue;
             }
-            if (FieldFill.INSERT.name().equals(field.getFill()) || FieldFill.INSERT_UPDATE.name().equals(field.getFill()) || FieldFill.UPDATE.name().equals(field.getFill())) {
+            if (field.getFill() != null &&
+                    ("INSERT".equals(field.getFill()) || "INSERT_UPDATE".equals(field.getFill()) || "UPDATE".equals(field.getFill()))
+            ) {
                 continue;
             }
-            if (field.isKeyFlag()){
+            if (field.isKeyFlag()) {
                 importPackages.add(notNull);
             }
             if (editExcludeColumns.contains(field.getColumnName())) {
@@ -92,5 +93,5 @@ public class EntityUpdateDTOConfig implements TemplateRender{
         data.put("updateDTOFramePkg", frameworkPackages);
         return data;
     }
-    
+
 }

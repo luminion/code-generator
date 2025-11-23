@@ -64,7 +64,7 @@ public class ServiceImplConfig implements TemplateRender {
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
 
-        Configurer configurer = tableInfo.getConfigurer();
+        Configurer<?> configurer = tableInfo.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         Resolver resolver = tableInfo.getConfigurer().getResolver();
 

@@ -121,7 +121,7 @@ public class Configurer<C extends TemplateRender> {
     /**
      * 模板渲染列表
      */
-    private List<TemplateRender> templateRenderList = new ArrayList<>();
+    private final List<TemplateRender> templateRenderList = new ArrayList<>();
 
     /**
      * 解析器
@@ -132,22 +132,25 @@ public class Configurer<C extends TemplateRender> {
     public Configurer(String url, String username, String password) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
         this.customConfig = null;
+        init();
     }
 
     public Configurer(String url, String username, String password, C customConfig) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
         this.customConfig = customConfig;
+        init();
     }
 
     public Configurer(String url, String username, String password, String schemaName) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password, schemaName);
         this.customConfig = null;
+        init();
     }
 
     public Configurer(String url, String username, String password, String schemaName, C customConfig) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password, schemaName);
         this.customConfig = customConfig;
-
+        init();
     }
 
     private void init() {

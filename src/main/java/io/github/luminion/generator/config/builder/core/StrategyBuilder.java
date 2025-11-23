@@ -69,40 +69,6 @@ public class StrategyBuilder {
         return this;
     }
 
-
-
-//    /**
-//     * 全局主键类型
-//     *
-//     * @param idType 主键类型
-//     * @return this
-//     */
-//    public StrategyBuilder idType(@NonNull IdType idType) {
-//        this.configurer.getStrategyConfig().setIdType(idType);
-//        return this;
-//    }
-//    /**
-//     * 乐观锁字段名
-//     *
-//     * @param versionColumnName 字段名
-//     * @return this
-//     */
-//    public StrategyBuilder versionColumnName(@NonNull String versionColumnName) {
-//        this.configurer.getStrategyConfig().setVersionColumnName(versionColumnName);
-//        return this;
-//    }
-//
-//    /**
-//     * 逻辑删除字段名
-//     *
-//     * @param logicDeleteColumnName 字段名
-//     * @return this
-//     */
-//    public StrategyBuilder logicDeleteColumnName(@NonNull String logicDeleteColumnName) {
-//        this.configurer.getStrategyConfig().setLogicDeleteColumnName(logicDeleteColumnName);
-//        return this;
-//    }
-
     /**
      * Boolean类型字段是否移除is前缀
      *
@@ -135,17 +101,6 @@ public class StrategyBuilder {
         this.configurer.getStrategyConfig().getIgnoreColumns().addAll(Arrays.asList(ignoreColumns));
         return this;
     }
-
-//    /**
-//     * 添加表填充字段
-//     *
-//     * @param tableFills 表填充字段
-//     * @return this
-//     */
-//    public StrategyBuilder tableFills(IFill... tableFills) {
-//        this.configurer.getStrategyConfig().getTableFillList().addAll(Arrays.asList(tableFills));
-//        return this;
-//    }
 
     /**
      * 跳过视图
