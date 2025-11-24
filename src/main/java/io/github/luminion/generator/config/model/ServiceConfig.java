@@ -87,7 +87,7 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add("java.io.Serializable");
                 }
                 if (globalConfig.isGenerateQuery()) {
-                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
+                    importPackages.add("io.github.luminion.sqlbooster.core.Page");
                     importPackages.add("io.github.luminion.sqlbooster.model.api.Wrapper");
                     importPackages.add("java.util.List");
                     importPackages.add("java.io.Serializable");
@@ -119,7 +119,7 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                     importPackages.add("java.util.List");
-                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
+                    importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
                 }
                 if (globalConfig.isGenerateImport()) {
                     importPackages.add("java.io.InputStream");

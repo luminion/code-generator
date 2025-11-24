@@ -77,7 +77,7 @@ public class ServiceImplConfig implements TemplateRender {
                 this.superClass = "io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpServiceImpl";
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
-                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
+                    importPackages.add("io.github.luminion.sqlbooster.core.Page");
                     importPackages.add("java.io.Serializable");
                     importPackages.add("io.github.luminion.sqlbooster.model.api.Wrapper");
                     importPackages.add("java.util.List");
@@ -91,7 +91,7 @@ public class ServiceImplConfig implements TemplateRender {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                     importPackages.add("java.util.List");
-                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
+                    importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
                     importPackages.add("com.baomidou.mybatisplus.extension.plugins.pagination.Page");
                 }
                 break;

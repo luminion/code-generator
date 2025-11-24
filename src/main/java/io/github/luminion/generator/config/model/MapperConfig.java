@@ -71,7 +71,7 @@ public class MapperConfig implements TemplateRender {
                     importPackages.add(List.class.getName());
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
-                    importPackages.add(globalConfig.getPageClassPayload().getClassName());
+                    importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
                 }
                 break;
             case MY_BATIS_PLUS_SQL_BOOSTER:

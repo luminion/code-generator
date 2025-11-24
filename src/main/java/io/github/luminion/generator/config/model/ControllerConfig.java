@@ -149,14 +149,9 @@ public class ControllerConfig implements TemplateRender {
         data.put("requestBodyStr", requestBodyStr);
         data.put("optionalBodyStr", batchQueryPost ? requestBodyStr : null);
         Optional.ofNullable(tableInfo.getPrimaryKeyField()).ifPresent(e -> data.put("primaryKeyPropertyType", e.getJavaType().getType()));
-        if (pageMethod != null && pageMethod.isClassReady()) {
-            data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
-        } else {
-            ClassPayload pageClassPayload = globalConfig.getPageClassPayload();
-            data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
-        }
-
-
+        // 分页
+        data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
+        
         // ======================导包======================
         // spring组件
         importPackages.add("org.springframework.web.bind.annotation.*");
@@ -234,14 +229,8 @@ public class ControllerConfig implements TemplateRender {
                 importPackages.add("io.github.luminion.sqlbooster.model.sql.helper.SqlHelper");
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
             }
-
             if (pageMethod != null && pageMethod.isClassReady()) {
                 importPackages.add(pageMethod.getClassName());
-                data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
-            } else {
-                ClassPayload pageClassPayload = globalConfig.getPageClassPayload();
-                importPackages.add(pageClassPayload.getClassName());
-                data.put("pageReturnType", pageClassPayload.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
             }
         }
         String responseClass = globalConfig.getJavaEEApi().getPackagePrefix() + "servlet.http.HttpServletResponse";

@@ -21,6 +21,10 @@ public class ClassMethodPayload extends ClassPayload {
     protected boolean isConstructor;
     protected boolean isGenericMethod;
 
+    public ClassMethodPayload(String className, int classGenericTypeCount) {
+        super(className, classGenericTypeCount);
+    }
+
     public ClassMethodPayload(Method method) {
         super(method.getDeclaringClass());
         this.methodName = method.getName();

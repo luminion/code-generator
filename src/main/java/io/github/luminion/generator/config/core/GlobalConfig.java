@@ -101,11 +101,6 @@ public class GlobalConfig implements TemplateRender {
      */
     protected RuntimeEnv runtimeEnv = RuntimeEnv.MYBATIS_PLUS;
 
-    /**
-     * 全局分页类
-     */
-    protected ClassPayload pageClassPayload = new ClassPayload();
-
 
     // ----------------输出目录及包相关-----------------
 
@@ -172,16 +167,6 @@ public class GlobalConfig implements TemplateRender {
 
     @Override
     public void init() {
-        switch (runtimeEnv) {
-            case MYBATIS_PLUS:
-                this.pageClassPayload = new ClassPayload("com.baomidou.mybatisplus.core.metadata.IPage", 1);
-                break;
-            case MY_BATIS_PLUS_SQL_BOOSTER:
-                this.pageClassPayload = new ClassPayload("io.github.luminion.sqlbooster.core.Page", 1);
-            default:
-                throw new IllegalArgumentException("Runtime environment not supported:" + runtimeEnv);
-        }
-
         if (!generateQuery && generateExport) {
             log.warn("已配置生成导出但未配置生成查询, 导出功能依赖查询功能, 将不会生成导出相关功能!!!");
             generateExport = false;

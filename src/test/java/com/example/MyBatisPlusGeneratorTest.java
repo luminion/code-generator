@@ -2,6 +2,10 @@ package com.example;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.example.common.P;
+import com.example.common.R;
+import com.github.pagehelper.PageInfo;
 import io.github.luminion.generator.GeneratorHelper;
 import io.github.luminion.generator.config.builder.custom.MybatisPlusBuilder;
 import io.github.luminion.generator.core.LambdaGenerator;
@@ -69,7 +73,15 @@ public class MyBatisPlusGeneratorTest {
                         //.generateCreate(false)
                         //.generateUpdate(false)
                         //.generateDelete(false)
-                
+                )
+                .controller(c -> c
+                        .returnMethod(R::of)
+                        //.pageMethod(P::of, PageInfo.class)
+                        .pathVariable(true)
+                        .crossOrigin(true)
+                        .restful(true)
+                        .requestBody(true)
+                        .batchQueryPost(true)
                 )
                 .custom(c -> c
                         .idType(IdType.ASSIGN_ID)
@@ -80,6 +92,13 @@ public class MyBatisPlusGeneratorTest {
                         .tableFill("create_time", FieldFill.INSERT)
                         .tableFill("update_time", FieldFill.UPDATE)
                         .tableFill("age", FieldFill.INSERT_UPDATE)
+                        .pageMethod(P::of)
+                )
+                .queryDTO(q -> q
+                        .extendsEntity(false)        
+                )
+                .queryVO(q -> q
+                        .extendsEntity(false)
                 )
 
         ;

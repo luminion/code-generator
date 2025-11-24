@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.core.StrategyConfig;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
+import io.github.luminion.generator.config.model.ControllerConfig;
 import io.github.luminion.generator.config.model.MapperXmlConfig;
 import io.github.luminion.generator.enums.JavaFieldType;
 import io.github.luminion.generator.enums.JdbcType;
 import io.github.luminion.generator.enums.SqlKeyword;
+import io.github.luminion.generator.po.ClassMethodPayload;
 
 import java.util.Map;
 
@@ -77,6 +79,9 @@ public abstract class InitializeUtils {
         customConfig.setIdType(IdType.ASSIGN_ID);
         customConfig.setVersionColumnName("version");
         customConfig.setLogicDeleteColumnName("deleted");
+        ControllerConfig controllerConfig = configurer.getControllerConfig();
+        ClassMethodPayload classMethodPayload = new ClassMethodPayload("com.baomidou.mybatisplus.core.metadata.IPage",1);
+        controllerConfig.setPageMethod(classMethodPayload);
     }
 
     

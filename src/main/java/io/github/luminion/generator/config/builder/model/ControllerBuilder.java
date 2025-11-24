@@ -203,17 +203,17 @@ public class ControllerBuilder {
         return this;
     }
 
-    /**
-     * 指定controller返回的分页包装类及方法
-     *
-     * @param methodReference 包装方法, 方法的入参数类型必须为Service返回的分页对象类型
-     * @return this
-     */
-    public <T, R> ControllerBuilder pageMethod(@NonNull MethodReference<T, R> methodReference) {
-        ClassPayload pageClassPayload = this.configurer.getGlobalConfig().getPageClassPayload();
-        ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, pageClassPayload.getClazz());
-        this.configurer.getControllerConfig().setPageMethod(payload);
-        return this;
-    }
+    ///**
+    // * 指定controller返回的分页包装类及方法
+    // *
+    // * @param methodReference 包装方法, 方法的入参数类型必须为Service返回的分页对象类型
+    // * @param pageClass Service分页返回值的类
+    // * @return this
+    // */
+    //public <T, R> ControllerBuilder pageMethod(@NonNull MethodReference<T, R> methodReference, Class<T> pageClass) {
+    //    ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, pageClass);
+    //    this.configurer.getControllerConfig().setPageMethod(payload);
+    //    return this;
+    //}
 
 }
