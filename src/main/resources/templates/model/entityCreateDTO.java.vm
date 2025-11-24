@@ -28,9 +28,9 @@ import ${pkg};
 @Accessors(chain = true)
     #end
 #end
-#if(${springdoc})
+#if(${swagger3})
 @Schema(description = "$!{table.comment}-新增DTO")
-#elseif(${swagger})
+#elseif(${swagger2})
 @ApiModel(description = "$!{table.comment}-新增DTO")
 #end
 public class ${createDTO}#if(${serializableUID}) implements Serializable#end {
@@ -51,9 +51,9 @@ public class ${createDTO}#if(${serializableUID}) implements Serializable#end {
 #else
 
     #if("$!field.comment" != "")
-        #if(${springdoc})
+        #if(${swagger3})
     @Schema(description = "${field.comment}")
-        #elseif(${swagger})
+        #elseif(${swagger2})
     @ApiModelProperty("${field.comment}")
         #else
     /**

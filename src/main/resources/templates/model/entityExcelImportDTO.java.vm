@@ -44,9 +44,9 @@ public class ${excelImportDTO}#if(${serializableUID}) implements Serializable#en
 #else
 
 ##    #if("$!field.comment" != "")
-##        #if(${springdoc})
+##        #if(${swagger3})
 ##    @Schema(description = "${field.comment}")
-##        #elseif(${swagger})
+##        #elseif(${swagger2})
 ##    @ApiModelProperty("${field.comment}")
 ##        #else
 ##    /**

@@ -32,9 +32,9 @@ import ${pkg};
 @EqualsAndHashCode(callSuper = true)
     #end
 #end
-#if(${springdoc})
+#if(${swagger3})
 @Schema(description = "$!{table.comment}-查询DTO")
-#elseif(${swagger})
+#elseif(${swagger2})
 @ApiModel(description = "$!{table.comment}-查询DTO")
 #end
 #if(${queryDTOExtendsEntity})
@@ -56,9 +56,9 @@ public class ${queryDTO}#if(${serializableUID}) implements Serializable#end {
 #else
 
     #if("$!field.comment" != "")
-        #if(${springdoc})
+        #if(${swagger3})
     @Schema(description = "${field.comment}")
-        #elseif(${swagger})
+        #elseif(${swagger2})
     @ApiModelProperty("${field.comment}")
         #else
     /**
@@ -74,9 +74,9 @@ public class ${queryDTO}#if(${serializableUID}) implements Serializable#end {
 #foreach($field in ${table.extraFields})
 
     #if("$!field.comment" != "")
-        #if(${springdoc})
+        #if(${swagger3})
     @Schema(description = "${field.comment}")
-        #elseif(${swagger})
+        #elseif(${swagger2})
     @ApiModelProperty("${field.comment}")
         #else
     /**

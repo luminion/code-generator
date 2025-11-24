@@ -23,9 +23,23 @@ import ${pkg};
 #end
  * @since ${date}
  */
-#foreach($anno in ${controllerAnnotations})
-${anno}
+#if(${swagger3})
+@Tag(name= "$!{table.comment}", description = "$!{table.comment}")
+#elseif(${swagger2})
+@Api(tags = "$!{table.comment}")
 #end
+#if(${crossOrigin})
+@CrossOrigin
+#end
+#if(${restController})
+@RestController
+#else
+@Controller
+#end
+#if(${lombok})
+@RequiredArgsConstructor
+#end
+@RequestMapping("$!{requestBaseUrl}")
 #if(${controllerSuperClass})
 public class ${controller} extends ${controllerSuperClass} {
 #else

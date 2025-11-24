@@ -19,6 +19,7 @@ import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.*;
@@ -154,25 +155,22 @@ public class ControllerConfig implements TemplateRender {
         
         // ======================导包======================
         // spring组件
-        importPackages.add("org.springframework.web.bind.annotation.*");
+        importPackages.add(RuntimeClass.SPRING_BOOT_WEB_ANNOTATION_S.getClassName());
         if (!restController) {
-            importPackages.add("org.springframework.stereotype.Controller");
+            importPackages.add(RuntimeClass.SPRING_BOOT_CONTROLLER.getClassName());
         }
         if (globalConfig.isLombok()) {
-            importPackages.add("lombok.RequiredArgsConstructor");
+            importPackages.add(RuntimeClass.LOMBOK_REQUIRED_ARGS_CONSTRUCTOR.getClassName());
         }
         // 文档类型
         switch (globalConfig.getDocType()) {
-            case SPRING_DOC:
-                importPackages.add("io.swagger.v3.oas.annotations.tags.Tag");
-                importPackages.add("io.swagger.v3.oas.annotations.Operation");
-                //importPackages.add("io.swagger.v3.oas.annotations.Parameter");
-                //importPackages.add("io.swagger.v3.oas.annotations.Parameters");
+            case SWAGGER_V3:
+                importPackages.add(RuntimeClass.SWAGGER_V3_TAG.getClassName());
+                importPackages.add(RuntimeClass.SWAGGER_V3_OPERATION.getClassName());
                 break;
-            case SWAGGER:
-                importPackages.add("io.swagger.annotations.Api");
-                importPackages.add("io.swagger.annotations.ApiOperation");
-                //importPackages.add("io.swagger.annotations.ApiParam");
+            case SWAGGER_V2:
+                importPackages.add(RuntimeClass.SWAGGER_V2_API.getClassName());
+                importPackages.add(RuntimeClass.SWAGGER_V2_API_OPERATION.getClassName());
                 break;
         }
         // 类信息
@@ -190,11 +188,11 @@ public class ControllerConfig implements TemplateRender {
         }
         // 参数校验
         if (globalConfig.isValidated()) {
-            importPackages.add("org.springframework.validation.annotation.Validated");
+            importPackages.add(RuntimeClass.SPRING_BOOT_VALIDATED.getClassName());
         }
         // 新增
         if (globalConfig.isGenerateCreate()) {
-            importPackages.add("java.io.Serializable");
+            importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_CREATE_DTO, tableInfo));
         }
         // 修改
@@ -222,30 +220,30 @@ public class ControllerConfig implements TemplateRender {
             } else {
                 log.warn("{}表无主键, 不生成根据id查询", tableInfo.getName());
             }
-            importPackages.add("java.util.List");
+            importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
 
             if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
-                importPackages.add("io.github.luminion.sqlbooster.model.sql.helper.SqlHelper");
+                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_HELPER.getClassName());
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
             }
             if (pageMethod != null && pageMethod.isClassReady()) {
                 importPackages.add(pageMethod.getClassName());
             }
         }
-        String responseClass = globalConfig.getJavaEEApi().getPackagePrefix() + "servlet.http.HttpServletResponse";
+        String responseClass = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.SUFFIX_RESPONSE.getClassName();
 
         // 导入
         if (globalConfig.isGenerateImport()) {
             // 导入需要下载导入模板, 导入response
             importPackages.add(responseClass);
-            importPackages.add("java.io.IOException");
-            importPackages.add("org.springframework.web.multipart.MultipartFile");
+            importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getClassName());
+            importPackages.add(RuntimeClass.SPRING_BOOT_MULTIPART_FILE.getClassName());
         }
 
         // 导出
         if (globalConfig.isGenerateExport()) {
-            importPackages.add("java.io.IOException");
+            importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getClassName());
             importPackages.add(responseClass);
         }
 
@@ -253,35 +251,7 @@ public class ControllerConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         data.put("controllerFrameworkPkg", frameworkPackages);
         data.put("controllerJavaPkg", javaPackages);
-
-
-        // 类注解
-        String comment = Optional.ofNullable(tableInfo.getComment()).orElse("");
-        TreeSet<String> annotations = new TreeSet<>();
-        switch (globalConfig.getDocType()) {
-            case SPRING_DOC:
-                annotations.add(String.format("@Tag(name= \"%s\", description = \"%s\")", comment, comment));
-                break;
-            case SWAGGER:
-                annotations.add(String.format("@Api(tags = \"%s\")", comment));
-                break;
-        }
-        if (crossOrigin) {
-            annotations.add("@CrossOrigin");
-        }
-
-        if (restController) {
-            annotations.add("@RestController");
-        } else {
-            annotations.add("@Controller");
-        }
-        annotations.add(String.format("@RequestMapping(\"%s\")", requestBaseUrl));
-        if (globalConfig.isLombok()) {
-            annotations.add("@RequiredArgsConstructor");
-        }
-
-
-        data.put("controllerAnnotations", annotations);
+        
         return data;
     }
 

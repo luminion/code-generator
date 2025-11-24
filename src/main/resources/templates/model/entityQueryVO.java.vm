@@ -32,9 +32,9 @@ import ${pkg};
 @EqualsAndHashCode(callSuper = true)
     #end
 #end
-#if(${springdoc})
+#if(${swagger3})
 @Schema(description = "$!{table.comment}-VO")
-#elseif(${swagger})
+#elseif(${swagger2})
 @ApiModel(description = "$!{table.comment}-VO")
 #end
 #if(${queryVOExtendsEntity})
@@ -56,9 +56,9 @@ public class ${queryVO}#if(${serializableUID}) implements Serializable#end {
 #else
 
     #if("$!field.comment" != "")
-        #if(${springdoc})
+        #if(${swagger3})
     @Schema(description = "${field.comment}")
-        #elseif(${swagger})
+        #elseif(${swagger2})
     @ApiModelProperty("${field.comment}")
         #else
     /**

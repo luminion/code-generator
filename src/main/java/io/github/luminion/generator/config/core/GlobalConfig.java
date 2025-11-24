@@ -16,11 +16,7 @@
 package io.github.luminion.generator.config.core;
 
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.enums.DocType;
-import io.github.luminion.generator.enums.ExcelApi;
-import io.github.luminion.generator.enums.JavaEEApi;
-import io.github.luminion.generator.enums.RuntimeEnv;
-import io.github.luminion.generator.po.ClassPayload;
+import io.github.luminion.generator.enums.*;
 import io.github.luminion.generator.po.TableInfo;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -188,10 +184,10 @@ public class GlobalConfig implements TemplateRender {
         data.put("chainModel", this.chainModel);
 
         switch (this.docType) {
-            case SPRING_DOC:
+            case SWAGGER_V3:
                 data.put("springdoc", true);
                 break;
-            case SWAGGER:
+            case SWAGGER_V2:
                 data.put("swagger", true);
                 break;
         }
@@ -227,9 +223,9 @@ public class GlobalConfig implements TemplateRender {
     public Set<String> getModelSerializableImportPackages() {
         Set<String> importPackages = new TreeSet<>();
         if (this.serializableUID) {
-            importPackages.add("java.io.Serializable");
+            importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
             if (this.serializableAnnotation) {
-                importPackages.add("java.io.Serial");
+                importPackages.add(RuntimeClass.JAVA_IO_SERIAL.getClassName());
             }
         }
         return importPackages;
@@ -244,12 +240,12 @@ public class GlobalConfig implements TemplateRender {
     public Set<String> getModelDocImportPackages() {
         Set<String> importPackages = new TreeSet<>();
         switch (this.docType) {
-            case SPRING_DOC:
-                importPackages.add("io.swagger.v3.oas.annotations.media.Schema");
+            case SWAGGER_V3:
+                importPackages.add(RuntimeClass.SWAGGER_V3_SCHEMA.getClassName());
                 break;
-            case SWAGGER:
-                importPackages.add("io.swagger.annotations.ApiModel");
-                importPackages.add("io.swagger.annotations.ApiModelProperty");
+            case SWAGGER_V2:
+                importPackages.add(RuntimeClass.SWAGGER_V2_API_MODEL.getClassName());
+                importPackages.add(RuntimeClass.SWAGGER_V2_API_MODEL_PROPERTY.getClassName());
                 break;
         }
         return importPackages;
@@ -260,8 +256,9 @@ public class GlobalConfig implements TemplateRender {
         if (this.lombok) {
             if (this.chainModel) {
                 importPackages.add("lombok.experimental.Accessors");
+                importPackages.add(RuntimeClass.LOMBOK_ACCESSORS.getClassName());
             }
-            importPackages.add("lombok.Data");
+            importPackages.add(RuntimeClass.LOMBOK_DATA.getClassName());
         }
         return importPackages;
     }

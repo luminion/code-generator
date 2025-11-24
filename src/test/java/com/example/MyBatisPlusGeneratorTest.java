@@ -2,10 +2,8 @@ package com.example;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.common.P;
 import com.example.common.R;
-import com.github.pagehelper.PageInfo;
 import io.github.luminion.generator.GeneratorHelper;
 import io.github.luminion.generator.config.builder.custom.MybatisPlusBuilder;
 import io.github.luminion.generator.core.LambdaGenerator;
@@ -60,7 +58,7 @@ public class MyBatisPlusGeneratorTest {
                         .chainModel(false)
                         .serializableUID(true)
                         .serializableAnnotation(true)
-                        .docType(DocType.SWAGGER)
+                        .docType(DocType.SWAGGER_V2)
                         .docLink(true)
                         //.author("author3")
                         //.date("yyyy/MM/dd HH:mm:ss")
