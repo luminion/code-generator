@@ -39,7 +39,7 @@ public enum SqlKeyword {
     /**
      * 小于等于操作符
      */
-    LE("<="),
+    LTE("<="),
     /**
      * 大于操作符
      */
@@ -47,7 +47,7 @@ public enum SqlKeyword {
     /**
      * 大于等于操作符
      */
-    GE(">="),
+    GTE(">="),
     /**
      * 模糊匹配操作符
      */
@@ -137,13 +137,15 @@ public enum SqlKeyword {
                 return SqlKeyword.LT.getKeyword();
             case "<=":
             case "LE":
-                return SqlKeyword.LE.getKeyword();
+            case "LTE":
+                return SqlKeyword.LTE.getKeyword();
             case ">":
             case "GT":
                 return SqlKeyword.GT.getKeyword();
             case ">=":
             case "GE":
-                return SqlKeyword.GE.getKeyword();
+            case "GTE":
+                return SqlKeyword.GTE.getKeyword();
             case "$":
             case "LIKE":
                 return SqlKeyword.LIKE.getKeyword();
@@ -198,8 +200,8 @@ public enum SqlKeyword {
      * @since 1.0.0
      */
     public static boolean isCompareOperator(String operator) {
-        return SqlKeyword.LT.getKeyword().equals(operator) || SqlKeyword.LE.getKeyword().equals(operator) ||
-                SqlKeyword.GT.getKeyword().equals(operator) || SqlKeyword.GE.getKeyword().equals(operator);
+        return SqlKeyword.LT.getKeyword().equals(operator) || SqlKeyword.LTE.getKeyword().equals(operator) ||
+                SqlKeyword.GT.getKeyword().equals(operator) || SqlKeyword.GTE.getKeyword().equals(operator);
     }
 
     /**

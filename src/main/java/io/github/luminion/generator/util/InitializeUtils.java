@@ -49,9 +49,10 @@ public abstract class InitializeUtils {
     
         extraFieldSuffixMap.put("Ne", "!=");
         extraFieldSuffixMap.put("Lt", "<");
-        extraFieldSuffixMap.put("Le", "<=");
         extraFieldSuffixMap.put("Gt", ">");
-        extraFieldSuffixMap.put("Ge", ">=");
+
+        extraFieldSuffixMap.put("Lte", "<=");
+        extraFieldSuffixMap.put("Gte", ">=");
         
         extraFieldSuffixMap.put("Like", "LIKE");
         extraFieldSuffixMap.put("NotLike", "NOT LIKE");
