@@ -36,7 +36,7 @@ public class Resolver {
      * 模板渲染列表
      */
     @Getter
-    private final TreeSet<TemplateRender> templateRenderList = new TreeSet<>();
+    private final List<TemplateRender> templateRenderList = new ArrayList<>();
 
     /**
      * 模板文件map
@@ -85,7 +85,7 @@ public class Resolver {
         if (this.configurer.getCustomConfig() != null) {
             templateRenderList.add(this.configurer.getCustomConfig());
         }
-        
+        templateRenderList.sort(Comparator.comparingInt(TemplateRender::order));
         // 遍历渲染, 初始化, 添加模板
         for (TemplateRender templateRender : templateRenderList) {
             templateRender.init();

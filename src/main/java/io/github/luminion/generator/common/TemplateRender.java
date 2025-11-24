@@ -32,17 +32,11 @@ import java.util.Map;
  * @author luminion
  * @since 1.0.0
  */
-public interface TemplateRender extends Serializable, Comparable<TemplateRender> {
+public interface TemplateRender extends Serializable {
 
     default int order() {
         return 100;
     }
-    
-    @Override
-    default int compareTo(TemplateRender o) {
-        return this.order() - o.order();
-    }
-    
 
     /**
      * 验证/初始化配置项
@@ -94,7 +88,7 @@ public interface TemplateRender extends Serializable, Comparable<TemplateRender>
     /**
      * 渲染后, 对渲染的map进行修改
      *
-     * @param tableInfo 表信息
+     * @param tableInfo  表信息
      * @param renderData 渲染的数据
      * @since 1.0.0
      */

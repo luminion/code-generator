@@ -1,7 +1,7 @@
 spring:
   datasource:
     dynamic:
-      primary: mysql
+      primary: postgresql
       strict: false
       datasource:
         mysql:

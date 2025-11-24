@@ -82,18 +82,22 @@
             <if test="param1.${field.propertyName} != null">
                 AND a.${field.columnName} ${field.sqlOperatorXml}
             </if>
-        #elseif(${field.sqlOperator}=="&")
-            <if test="param1.${field.propertyName} != null">
-                AND a.${field.columnName} &amp; #{param1.${field.propertyName}} > 0
-            </if>
-        #elseif(${field.sqlOperator}=="!&")
-            <if test="param1.${field.propertyName} != null">
-                AND a.${field.columnName} &amp; #{param1.${field.propertyName}} = 0
-            </if>
         #elseif(${field.sqlOperator}=="LIKE" || ${field.sqlOperator}=="NOT LIKE")
             <if test="param1.${field.propertyName} != null">
                 <bind name="${field.propertyName}" value="'%' + param1.${field.propertyName} + '%'"/>
                 AND a.${field.columnName} ${field.sqlOperatorXml} #{${field.propertyName}}
+            </if>
+        #elseif(${field.sqlOperator}=="BIT ANY")
+            <if test="param1.${field.propertyName} != null">
+                AND (a.${field.columnName} &amp; #{param1.${field.propertyName}}) > 0
+            </if>
+        #elseif(${field.sqlOperator}=="BIT ALL")
+            <if test="param1.${field.propertyName} != null">
+                AND (a.${field.columnName} &amp; #{param1.${field.propertyName}}) = #{param1.${field.propertyName}} 
+            </if>
+        #elseif(${field.sqlOperator}=="BIT NONE")
+            <if test="param1.${field.propertyName} != null">
+                AND (a.${field.columnName} &amp; #{param1.${field.propertyName}}) = 0
             </if>
         #else
             <if test="param1.${field.propertyName} != null">

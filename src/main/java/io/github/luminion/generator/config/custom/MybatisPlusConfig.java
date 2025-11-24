@@ -132,8 +132,8 @@ public class MybatisPlusConfig implements TemplateRender {
         });
         Collection<String> entityJavaPackages = entityImportPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> entityFramePackages = entityImportPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        Set<String> entityFramePkg =(Set<String>)  renderData.get("entityFramePkg");
-        Set<String> entityJavaPkg = (Set<String>) renderData.get("entityJavaPkg");
+        Collection<String> entityFramePkg =(Collection<String>)  renderData.get("entityFramePkg");
+        Collection<String> entityJavaPkg = (Collection<String>) renderData.get("entityJavaPkg");
         entityFramePkg.addAll(entityFramePackages);
         entityJavaPkg.addAll(entityJavaPackages);
     }
