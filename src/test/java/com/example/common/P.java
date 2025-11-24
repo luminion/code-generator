@@ -2,7 +2,7 @@ package com.example.common;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.PageInfo;
-import io.github.luminion.sqlbooster.core.Page;
+import io.github.luminion.sqlbooster.core.BoosterPage;
 import lombok.Data;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class P<T> {
         records = data.getRecords();
     }
 
-    public P(Page<T> data) {
+    public P(BoosterPage<T> data) {
         records = data.getRecords();
     }
 
@@ -31,7 +31,7 @@ public class P<T> {
         return new P<>(page);
     }
 
-    public static <T> P<T> of(Page<T> page) {
+    public static <T> P<T> of(BoosterPage<T> page) {
         return new P<>(page);
     }
 

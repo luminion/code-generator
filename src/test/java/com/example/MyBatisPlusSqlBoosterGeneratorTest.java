@@ -54,8 +54,8 @@ public class MyBatisPlusSqlBoosterGeneratorTest {
     @Test
     public void test() {
         generator.global(g -> g
-                        .lombok(false)
-                        .chainModel(false)
+                        //.lombok(false)
+                        //.chainModel(false)
                         .serializableUID(true)
                         .serializableAnnotation(true)
                         .docType(DocType.SWAGGER_V2)
@@ -93,10 +93,12 @@ public class MyBatisPlusSqlBoosterGeneratorTest {
                         .pageMethod(P::of)
                 )
                 .queryDTO(q -> q
-                        .extendsEntity(false)        
+                        .fileOverride(true)
+                        //.extendsEntity(false)        
                 )
                 .queryVO(q -> q
-                        .extendsEntity(false)
+                        .fileOverride(true)
+                        //.extendsEntity(false)
                 )
 
         ;

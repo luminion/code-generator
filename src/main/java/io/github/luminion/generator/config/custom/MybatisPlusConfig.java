@@ -98,7 +98,6 @@ public class MybatisPlusConfig implements TemplateRender {
             entityImportPackages.add("com.baomidou.mybatisplus.annotation.TableName");
         }
         if (this.activeRecord) {
-            configurer.getControllerConfig().setSuperClass(null);
             entityImportPackages.add("com.baomidou.mybatisplus.extension.activerecord.Model");
             entityImportPackages.add("java.io.Serializable");
         }

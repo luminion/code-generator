@@ -88,8 +88,8 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                 }
                 if (globalConfig.isGenerateQuery()) {
-                    importPackages.add(RuntimeClass.SQL_BOOSTER_PAGE.getClassName());
-                    importPackages.add(RuntimeClass.SQL_BOOSTER_WRAPPER.getClassName());
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getClassName());
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_WRAPPER.getClassName());
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                 }
@@ -98,7 +98,7 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
                 }
                 if (globalConfig.isGenerateExport()) {
-                    importPackages.add(RuntimeClass.SQL_BOOSTER_WRAPPER.getClassName());
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_WRAPPER.getClassName());
                     importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
                 }
                 break;

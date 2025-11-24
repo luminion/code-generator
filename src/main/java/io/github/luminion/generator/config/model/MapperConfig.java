@@ -79,7 +79,7 @@ public class MapperConfig implements TemplateRender {
                 this.superClass = RuntimeClass.SQL_BOOSTER_BOOSTER_MP_MAPPER.getClassName();
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
-                    importPackages.add(RuntimeClass.SQL_BOOSTER_WRAPPER.getClassName());
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_WRAPPER.getClassName());
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                 }
                 break;

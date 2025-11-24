@@ -28,7 +28,7 @@ public interface ${service} extends ${serviceSuperClass}<${entity}, ${queryVO}> 
     List<${queryVO}> voList(Wrapper<${entity}> wrapper);
 
     @Override
-    Page<${queryVO}> voPage(Wrapper<${entity}> wrapper, long current, long size);
+    BoosterPage<${queryVO}> voPage(Wrapper<${entity}> wrapper, long current, long size);
     #end
     #if(${generateCreate})
 

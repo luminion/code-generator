@@ -54,8 +54,8 @@ public class MyBatisPlusGeneratorTest {
     @Test
     public void test() {
         generator.global(g -> g
-                        .lombok(false)
-                        .chainModel(false)
+                        //.lombok(false)
+                        //.chainModel(false)
                         .serializableUID(true)
                         .serializableAnnotation(true)
                         .docType(DocType.SWAGGER_V2)

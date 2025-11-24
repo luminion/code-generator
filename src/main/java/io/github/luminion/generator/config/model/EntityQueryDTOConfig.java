@@ -27,7 +27,7 @@ public class EntityQueryDTOConfig implements TemplateRender {
     protected TemplateFile templateFile = new TemplateFile(
             TemplateFileEnum.ENTITY_QUERY_DTO.getKey(),
             "%sQueryDTO",
-            "dto.query",
+            "model.query",
             "/templates/model/entityQueryDTO.java",
             ".java"
     );

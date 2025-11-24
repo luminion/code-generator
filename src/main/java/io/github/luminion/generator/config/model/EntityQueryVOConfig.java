@@ -28,7 +28,7 @@ public class EntityQueryVOConfig implements TemplateRender {
     protected TemplateFile templateFile = new TemplateFile(
             TemplateFileEnum.ENTITY_QUERY_VO.getKey(),
             "%sQueryVO",
-            "vo",
+            "model.vo",
             "/templates/model/entityQueryVO.java",
             ".java"
     );

@@ -5,7 +5,7 @@ import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.util.ReflectUtils;
-import io.github.luminion.sqlbooster.core.Page;
+import io.github.luminion.sqlbooster.core.BoosterPage;
 import lombok.NonNull;
 
 /**
@@ -25,8 +25,8 @@ public class MybatisPlusSqlBoosterBuilder extends AbstractMybatisPlusBuilder<Myb
      * @param methodReference 分页返回的包装方法
      * @return this
      */
-    public <T, R> MybatisPlusSqlBoosterBuilder pageMethod(@NonNull MethodReference<Page<T>, R> methodReference) {
-        ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, Page.class);
+    public <T, R> MybatisPlusSqlBoosterBuilder pageMethod(@NonNull MethodReference<BoosterPage<T>, R> methodReference) {
+        ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, BoosterPage.class);
         this.configurer.getControllerConfig().setPageMethod(payload);
         return this;
     }

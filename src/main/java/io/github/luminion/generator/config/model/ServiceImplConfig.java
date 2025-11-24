@@ -80,8 +80,8 @@ public class ServiceImplConfig implements TemplateRender {
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
-                    importPackages.add(RuntimeClass.SQL_BOOSTER_PAGE.getClassName());
-                    importPackages.add(RuntimeClass.SQL_BOOSTER_WRAPPER.getClassName());
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getClassName());
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_WRAPPER.getClassName());
               
                 }
                 break;

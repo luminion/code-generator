@@ -27,7 +27,7 @@ import ${pkg};
     #if(${chainModel})
 @Accessors(chain = true)
     #end
-    #if(${entitySuperClass})
+    #if(${entitySuperClass} || ${activeRecord})
 @EqualsAndHashCode(callSuper = true)
     #end
 #end

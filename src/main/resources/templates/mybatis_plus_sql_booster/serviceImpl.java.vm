@@ -37,7 +37,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     }
 
     @Override
-    public Page<${queryVO}> voPage(Wrapper<${entity}> wrapper, long current, long size) {
+    public BoosterPage<${queryVO}> voPage(Wrapper<${entity}> wrapper, long current, long size) {
         return super.voPage(wrapper, current, size);
     }
 #end

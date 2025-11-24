@@ -49,9 +49,9 @@ public enum RuntimeClass {
     SPRING_BOOT_MULTIPART_FILE("org.springframework.web.multipart.MultipartFile"),
     SPRING_BOOT_BEAN_UTILS("org.springframework.beans.BeanUtils"),
 
-    SQL_BOOSTER_PAGE("io.github.luminion.sqlbooster.core.Page"),
-    SQL_BOOSTER_WRAPPER("io.github.luminion.sqlbooster.model.api.Wrapper"),
+    SQL_BOOSTER_SQL_WRAPPER("io.github.luminion.sqlbooster.model.api.Wrapper"),
     SQL_BOOSTER_SQL_HELPER("io.github.luminion.sqlbooster.model.sql.helper.SqlHelper"),
+    SQL_BOOSTER_BOOSTER_PAGE("io.github.luminion.sqlbooster.core.BoosterPage"),
     SQL_BOOSTER_BOOSTER_MP_MAPPER("io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpMapper"),
     SQL_BOOSTER_BOOSTER_MP_SERVICE_IMPL("io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpServiceImpl"),
     SQL_BOOSTER_BOOSTER_MP_SERVICE("io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService"),

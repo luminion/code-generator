@@ -22,7 +22,7 @@ public class MyBatisPlusSqlBoosterGenerator extends AbstractGenerator<MybatisPlu
         super(configurer);
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER);
         ControllerConfig controllerConfig = configurer.getControllerConfig();
-        ClassMethodPayload classMethodPayload = new ClassMethodPayload(RuntimeClass.SQL_BOOSTER_PAGE.getClassName(), 1);
+        ClassMethodPayload classMethodPayload = new ClassMethodPayload(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getClassName(), 1);
         controllerConfig.setPageMethod(classMethodPayload);
         configurer.getEntityConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus/entity.java");
         configurer.getControllerConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/controller.java");

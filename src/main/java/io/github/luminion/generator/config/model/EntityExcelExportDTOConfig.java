@@ -29,7 +29,7 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
     protected TemplateFile templateFile = new TemplateFile(
             TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO.getKey(),
             "%sExcelExportDTO",
-            "dto.excel",
+            "model.excel",
             "/templates/model/entityExcelExportDTO.java",
             ".java"
     );
