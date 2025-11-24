@@ -34,10 +34,6 @@ public class MapperConfig implements TemplateRender {
             "/templates/mybatis_plus/mapper.java",
             ".java"
     );
-    /**
-     * 导入的包
-     */
-    private Set<String> importPackages = new TreeSet<>();
 
     /**
      * 自定义继承的Mapper类全称，带包名
@@ -61,6 +57,8 @@ public class MapperConfig implements TemplateRender {
     @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
+        Set<String> importPackages = new TreeSet<>();
+
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();

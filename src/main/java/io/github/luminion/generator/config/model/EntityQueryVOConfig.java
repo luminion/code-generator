@@ -31,10 +31,6 @@ public class EntityQueryVOConfig implements TemplateRender {
             "/templates/model/entityQueryVO.java",
             ".java"
     );
-    /**
-     * 导入的包
-     */
-    private Set<String> importPackages = new TreeSet<>();
 
     /**
      * 是否继承实体类
@@ -50,6 +46,8 @@ public class EntityQueryVOConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
+        Set<String> importPackages = new TreeSet<>();
+
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();

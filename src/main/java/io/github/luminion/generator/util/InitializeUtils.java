@@ -1,5 +1,6 @@
 package io.github.luminion.generator.util;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.core.StrategyConfig;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
@@ -48,6 +49,7 @@ public abstract class InitializeUtils {
         Map<String, String> extraFieldSuffixMap = strategyConfig.getExtraFieldSuffixMap();
     
         extraFieldSuffixMap.put("Ne", "!=");
+        
         extraFieldSuffixMap.put("Lt", "<");
         extraFieldSuffixMap.put("Gt", ">");
 
@@ -70,8 +72,10 @@ public abstract class InitializeUtils {
     
     
     public static void initializeMybatisPlus(Configurer<MybatisPlusConfig> configurer) {
-        StrategyConfig strategyConfig = configurer.getStrategyConfig();
-        //strategyConfig.setIdType(IdType.ASSIGN_ID);
+        MybatisPlusConfig customConfig = configurer.getCustomConfig();
+        customConfig.setIdType(IdType.ASSIGN_ID);
+        customConfig.setVersionColumnName("version");
+        customConfig.setLogicDeleteColumnName("deleted");
     }
 
     

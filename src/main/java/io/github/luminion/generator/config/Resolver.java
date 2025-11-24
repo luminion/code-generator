@@ -275,15 +275,14 @@ public class Resolver {
      */
     public Map<String, Object> renderMap(TableInfo tableInfo) {
         HashMap<String, Object> result = new HashMap<>();
-        // 初始化配置
-        for (TemplateRender templateRender : templateRenderList) {
-            templateRender.init();
-        }
 
-        // 渲染前处理
+        // 渲染前处理, 这一步提供给配置器, 允许其修改配置
         for (TemplateRender templateRender : templateRenderList) {
             templateRender.renderDataPreProcess(tableInfo);
         }
+        
+        // 此时配置已完全确定
+        tableInfo.processExtraField();
 
         // 渲染数据
         for (TemplateRender templateRender : templateRenderList) {
@@ -303,6 +302,12 @@ public class Resolver {
         if (this.configurer.getDataSourceConfig().getSchemaName() != null) {
             result.put("schemaName", this.configurer.getDataSourceConfig().getSchemaName() + ".");
         }
+        
+        // 渲染后处理
+        for (TemplateRender templateRender : templateRenderList) {
+            templateRender.renderDataPostProcess(tableInfo, result);
+        }
+    
         return result;
     }
 

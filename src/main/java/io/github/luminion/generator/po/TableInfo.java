@@ -158,13 +158,6 @@ public class TableInfo {
                 .collect(Collectors.joining(", "));
     }
 
-    public List<TableSuffixField> getExtraFields() {
-        if (extraFields.isEmpty()){
-            processExtraField();
-        }
-        return extraFields;
-    }
-
     /**
      * 处理额外字段
      */

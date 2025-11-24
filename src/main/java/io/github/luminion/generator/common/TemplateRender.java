@@ -37,6 +37,12 @@ public interface TemplateRender extends Serializable, Comparable<TemplateRender>
     default int order() {
         return 100;
     }
+    
+    @Override
+    default int compareTo(TemplateRender o) {
+        return this.order() - o.order();
+    }
+    
 
     /**
      * 验证/初始化配置项
@@ -57,8 +63,9 @@ public interface TemplateRender extends Serializable, Comparable<TemplateRender>
 
 
     /**
-     * 进行renderData前的操作,用于读取其他配置项, 修改配置及表信息
+     * 渲染前处理, 允许在这一步读取修改配置及表信息
      *
+     * @param tableInfo 表信息
      * @since 1.0.0
      */
     default void renderDataPreProcess(TableInfo tableInfo) {
@@ -66,7 +73,7 @@ public interface TemplateRender extends Serializable, Comparable<TemplateRender>
     }
 
     /**
-     * 渲染数据
+     * 渲染数据, 这一步应该只渲染信息, 不能再修改配置及表信息
      *
      * @param tableInfo 表信息
      * @return map
@@ -84,8 +91,14 @@ public interface TemplateRender extends Serializable, Comparable<TemplateRender>
         return new HashMap<>();
     }
 
-    @Override
-    default int compareTo(TemplateRender o) {
-        return this.order() - o.order();
+    /**
+     * 渲染后, 对渲染的map进行修改
+     *
+     * @param tableInfo 表信息
+     * @param renderData 渲染的数据
+     * @since 1.0.0
+     */
+    default void renderDataPostProcess(TableInfo tableInfo, Map<String, Object> renderData) {
+
     }
 }

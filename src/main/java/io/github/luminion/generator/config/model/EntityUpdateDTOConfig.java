@@ -30,10 +30,6 @@ public class EntityUpdateDTOConfig implements TemplateRender {
             "/templates/model/entityUpdateDTO.java",
             ".java"
     );
-    /**
-     * 导入的包
-     */
-    private Set<String> importPackages = new TreeSet<>();
 
     @Override
     public List<TemplateFile> renderTemplateFiles() {
@@ -44,6 +40,8 @@ public class EntityUpdateDTOConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
+        Set<String> importPackages = new TreeSet<>();
+
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();

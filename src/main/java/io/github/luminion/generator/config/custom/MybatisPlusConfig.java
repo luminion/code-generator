@@ -5,13 +5,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author luminion
@@ -51,8 +51,7 @@ public class MybatisPlusConfig implements TemplateRender {
 
     @Override
     public void renderDataPreProcess(TableInfo tableInfo) {
-        Configurer<?> configurer = tableInfo.getResolver().getConfigurer();
-
+        // 设置表信息
         for (TableField field : tableInfo.getFields()) {
             String columnName = field.getColumnName();
             if (columnName != null && columnName.equals(this.logicDeleteColumnName)) {
@@ -67,16 +66,28 @@ public class MybatisPlusConfig implements TemplateRender {
                     .findFirst()
                     .ifPresent(entry -> field.setFill(entry.getValue().name()));
         }
+    }
 
-        // service
+    @Override
+    public Map<String, Object> renderData(TableInfo tableInfo) {
+        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
+        data.put("idType", idType == null ? null : idType.toString());
+        data.put("logicDeleteColumnName", this.logicDeleteColumnName);
+        data.put("versionColumnName", this.versionColumnName);
+        data.put("activeRecord", this.activeRecord);
+        data.put("tableFieldAnnotation", this.tableFieldAnnotation);
+        data.put("tableFillMap", this.tableFillMap);
+        return data;
+    }
 
-        // serviceImpl
-
-        // mapper
-
-
-        // 实体类
-        Set<String> entityImportPackages = configurer.getEntityConfig().getImportPackages();
+    @Override
+    @SuppressWarnings("unchecked")
+    public void renderDataPostProcess(TableInfo tableInfo, Map<String, Object> renderData) {
+        Resolver resolver = tableInfo.getResolver();
+        Configurer<?> configurer = resolver.getConfigurer();
+      
+        // 追加导入包
+        Set<String> entityImportPackages = new TreeSet<>();
         if (this.tableFieldAnnotation) {
             entityImportPackages.add("com.baomidou.mybatisplus.annotation.TableField");
         }
@@ -119,17 +130,11 @@ public class MybatisPlusConfig implements TemplateRender {
                 entityImportPackages.add("com.baomidou.mybatisplus.annotation.TableLogic");
             }
         });
-    }
-
-    @Override
-    public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        data.put("idType", idType == null ? null : idType.toString());
-        data.put("logicDeleteColumnName", this.logicDeleteColumnName);
-        data.put("versionColumnName", this.versionColumnName);
-        data.put("activeRecord", this.activeRecord);
-        data.put("tableFieldAnnotation", this.tableFieldAnnotation);
-        data.put("tableFillMap", this.tableFillMap);
-        return data;
+        Collection<String> entityJavaPackages = entityImportPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
+        Collection<String> entityFramePackages = entityImportPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
+        Set<String> entityFramePkg =(Set<String>)  renderData.get("entityFramePkg");
+        Set<String> entityJavaPkg = (Set<String>) renderData.get("entityJavaPkg");
+        entityFramePkg.addAll(entityFramePackages);
+        entityJavaPkg.addAll(entityJavaPackages);
     }
 }

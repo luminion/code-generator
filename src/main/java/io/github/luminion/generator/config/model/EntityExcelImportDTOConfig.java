@@ -30,10 +30,6 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
             "/templates/model/entityExcelImportDTO.java",
             ".java"
     );
-    /**
-     * 导入的包
-     */
-    private Set<String> importPackages = new TreeSet<>();
 
 
     @Override
@@ -44,6 +40,8 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
+        Set<String> importPackages = new TreeSet<>();
+        
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();

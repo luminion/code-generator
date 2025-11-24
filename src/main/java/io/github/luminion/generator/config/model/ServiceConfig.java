@@ -50,10 +50,6 @@ public class ServiceConfig implements TemplateRender {
             "/templates/mybatis_plus/service.java",
             ".java"
     );
-    /**
-     * 导入的包
-     */
-    private Set<String> importPackages = new TreeSet<>();
 
     /**
      * 自定义继承的Service类全称，带包名
@@ -68,7 +64,9 @@ public class ServiceConfig implements TemplateRender {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
+        Set<String> importPackages = new TreeSet<>();
+
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
