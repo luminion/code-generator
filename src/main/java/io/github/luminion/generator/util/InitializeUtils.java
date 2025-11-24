@@ -65,8 +65,9 @@ public abstract class InitializeUtils {
         extraFieldSuffixMap.put("IsNull", "IS NULL");
         extraFieldSuffixMap.put("IsNotNull", "IS NOT NULL");
         
-        extraFieldSuffixMap.put("BitIn", "&");
-        extraFieldSuffixMap.put("BitNotIn", "!&");
+        extraFieldSuffixMap.put("BitAny", "BIT ANY");
+        extraFieldSuffixMap.put("BitAll", "BIT ALL");
+        extraFieldSuffixMap.put("BitNone", "BIT NONE");
         
     }
     
