@@ -4,6 +4,7 @@ import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
@@ -52,9 +53,9 @@ public class EntityCreateDTOConfig implements TemplateRender {
             this.getTemplateFile().setGenerate(false);
         }
 
-        String size = globalConfig.getJavaEEApi().getPackagePrefix() + "validation.constraints.Size";
-        String notBlank = globalConfig.getJavaEEApi().getPackagePrefix() + "validation.constraints.NotBlank";
-        String notNull = globalConfig.getJavaEEApi().getPackagePrefix() + "validation.constraints.NotNull";
+        String size = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_SIZE.getClassName();
+        String notBlank = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_NOT_BLANK.getClassName();
+        String notNull = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_NOT_NULL.getClassName();
         
         // 属性过滤
         Set<String> editExcludeColumns = configurer.getStrategyConfig().getEditExcludeColumns();

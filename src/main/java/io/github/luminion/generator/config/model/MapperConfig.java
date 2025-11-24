@@ -4,6 +4,7 @@ import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
@@ -66,24 +67,24 @@ public class MapperConfig implements TemplateRender {
         importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
         switch (globalConfig.getRuntimeEnv()) {
             case MYBATIS_PLUS:
-                this.superClass = "com.baomidou.mybatisplus.core.mapper.BaseMapper";
+                this.superClass = RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getClassName();
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(List.class.getName());
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
-                    importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
+                    importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
                 }
                 break;
             case MY_BATIS_PLUS_SQL_BOOSTER:
-                this.superClass = "io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpMapper";
+                this.superClass = RuntimeClass.SQL_BOOSTER_BOOSTER_MP_MAPPER.getClassName();
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
-                    importPackages.add("io.github.luminion.sqlbooster.model.api.Wrapper");
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_WRAPPER.getClassName());
                     importPackages.add(List.class.getName());
                 }
                 break;
             default:
-                throw new RuntimeException("未定义的运行环境");
+                throw new RuntimeException("Unknown runtime environment:" + globalConfig.getRuntimeEnv());
         }
         if (mapperAnnotationClass != null) {
             data.put("mapperAnnotationClass","@"+ ClassUtils.getSimpleName(mapperAnnotationClass));

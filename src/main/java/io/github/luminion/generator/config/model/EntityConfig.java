@@ -19,6 +19,7 @@ import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
@@ -75,7 +76,7 @@ public class EntityConfig implements TemplateRender {
             importPackages.add(this.superClass);
         }
         if (globalConfig.isLombok() && this.superClass != null) {
-            importPackages.add("lombok.EqualsAndHashCode");
+            importPackages.add(RuntimeClass.LOMBOK_EQUALS_AND_HASH_CODE.getClassName());
         }
         // 全局包
         importPackages.addAll(globalConfig.getModelSerializableImportPackages());

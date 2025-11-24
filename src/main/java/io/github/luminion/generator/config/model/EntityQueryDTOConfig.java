@@ -4,6 +4,7 @@ import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
@@ -62,7 +63,7 @@ public class EntityQueryDTOConfig implements TemplateRender {
         if (extendsEntity) {
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
             if (globalConfig.isLombok()){
-                importPackages.add("lombok.EqualsAndHashCode");
+                importPackages.add(RuntimeClass.LOMBOK_EQUALS_AND_HASH_CODE.getClassName());
             }
             data.put("queryDTOExtendsEntity", extendsEntity);
         }

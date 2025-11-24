@@ -5,6 +5,7 @@ import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
@@ -52,8 +53,8 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
         }
 
         // excel包
-        String excelIgnoreUnannotated = globalConfig.getExcelApi().getPackagePrefix() + "annotation.ExcelIgnoreUnannotated";
-        String excelProperty = globalConfig.getExcelApi().getPackagePrefix() + "annotation.ExcelProperty";
+        String excelIgnoreUnannotated = globalConfig.getExcelApi().getPackagePrefix() + RuntimeClass.PREFIX_EXCEL_EXCEL_IGNORE_UNANNOTATED.getClassName();
+        String excelProperty = globalConfig.getExcelApi().getPackagePrefix() + RuntimeClass.PREFIX_EXCEL_EXCEL_PROPERTY.getClassName();
         importPackages.add(excelIgnoreUnannotated);
 
         // 属性过滤
@@ -87,7 +88,7 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
         importPackages.addAll(globalConfig.getModelSerializableImportPackages());
 //        importPackages.addAll(globalConfig.getModelDocImportPackages());
         importPackages.addAll(globalConfig.getModelLombokImportPackages());
-        importPackages.remove("lombok.experimental.Accessors");
+        importPackages.remove(RuntimeClass.LOMBOK_ACCESSORS.getClassName());
 
 
         // 导入包

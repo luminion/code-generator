@@ -19,6 +19,7 @@ import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
@@ -74,7 +75,7 @@ public class ServiceConfig implements TemplateRender {
 
         switch (globalConfig.getRuntimeEnv()) {
             case MY_BATIS_PLUS_SQL_BOOSTER:
-                this.superClass = "io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService";
+                this.superClass = RuntimeClass.SQL_BOOSTER_BOOSTER_MP_SERVICE.getClassName();
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateCreate()) {
@@ -84,54 +85,54 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
                 }
                 if (globalConfig.isGenerateDelete()) {
-                    importPackages.add("java.io.Serializable");
+                    importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                 }
                 if (globalConfig.isGenerateQuery()) {
-                    importPackages.add("io.github.luminion.sqlbooster.core.Page");
-                    importPackages.add("io.github.luminion.sqlbooster.model.api.Wrapper");
-                    importPackages.add("java.util.List");
-                    importPackages.add("java.io.Serializable");
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_PAGE.getClassName());
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_WRAPPER.getClassName());
+                    importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
+                    importPackages.add(List.class.getName());
                 }
                 if (globalConfig.isGenerateImport()) {
-                    importPackages.add("java.io.InputStream");
-                    importPackages.add("java.io.OutputStream");
+                    importPackages.add(RuntimeClass.JAVA_IO_INPUT_STREAM.getClassName());
+                    importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
                 }
                 if (globalConfig.isGenerateExport()) {
-                    importPackages.add("io.github.luminion.sqlbooster.model.api.Wrapper");
-                    importPackages.add("java.io.OutputStream");
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_WRAPPER.getClassName());
+                    importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
                 }
                 break;
             case MYBATIS_PLUS:
-                this.superClass = "com.baomidou.mybatisplus.extension.service.IService";
+                this.superClass = RuntimeClass.MYBATIS_PLUS_I_SERVICE.getClassName();
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 if (globalConfig.isGenerateCreate()) {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_CREATE_DTO, tableInfo));
-                    importPackages.add("java.io.Serializable");
+                    importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                 }
                 if (globalConfig.isGenerateUpdate()) {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
                 }
                 if (globalConfig.isGenerateDelete()) {
-                    importPackages.add("java.io.Serializable");
+                    importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                 }
                 if (globalConfig.isGenerateQuery()) {
-                    importPackages.add("java.io.Serializable");
+                    importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
-                    importPackages.add("java.util.List");
-                    importPackages.add("com.baomidou.mybatisplus.core.metadata.IPage");
+                    importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
+                    importPackages.add(List.class.getName());
                 }
                 if (globalConfig.isGenerateImport()) {
-                    importPackages.add("java.io.InputStream");
-                    importPackages.add("java.io.OutputStream");
+                    importPackages.add(RuntimeClass.JAVA_IO_INPUT_STREAM.getClassName());
+                    importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
                 }
                 if (globalConfig.isGenerateExport()) {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-                    importPackages.add("java.io.OutputStream");
+                    importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
                 }
                 break;
             default:
-                throw new RuntimeException("暂不支持的运行环境");
+                throw new RuntimeException("Unknown runtime environment:" + globalConfig.getRuntimeEnv());
         }
 
 

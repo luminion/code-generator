@@ -206,7 +206,7 @@ public class ControllerConfig implements TemplateRender {
 
                 Optional.ofNullable(primaryKeyTableField.getJavaType().getPkg()).ifPresent(importPackages::add);
             } else {
-                log.warn("{}表无主键, 不生成根据id删除", tableInfo.getName());
+                log.warn("table [{}] does not have a primary key, won't generate deleteById", tableInfo.getName());
             }
         }
 
@@ -218,9 +218,9 @@ public class ControllerConfig implements TemplateRender {
                 TableField primaryKeyTableField = tableInfo.getPrimaryKeyField();
                 Optional.ofNullable(primaryKeyTableField.getJavaType().getPkg()).ifPresent(importPackages::add);
             } else {
-                log.warn("{}表无主键, 不生成根据id查询", tableInfo.getName());
+                log.warn("table [{}] does not have a primary key, won't generate voById", tableInfo.getName());
             }
-            importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
+            importPackages.add(List.class.getName());
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
 
             if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
@@ -231,14 +231,14 @@ public class ControllerConfig implements TemplateRender {
                 importPackages.add(pageMethod.getClassName());
             }
         }
-        String responseClass = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.SUFFIX_RESPONSE.getClassName();
+        String responseClass = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_SERVLET_REQUEST.getClassName();
 
         // 导入
         if (globalConfig.isGenerateImport()) {
             // 导入需要下载导入模板, 导入response
             importPackages.add(responseClass);
             importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getClassName());
-            importPackages.add(RuntimeClass.SPRING_BOOT_MULTIPART_FILE.getClassName());
+            importPackages.add(RuntimeClass.SPRING_BOOT_BEAN_UTILS.getClassName());
         }
 
         // 导出
