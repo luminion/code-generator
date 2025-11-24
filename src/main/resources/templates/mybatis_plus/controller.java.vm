@@ -55,9 +55,9 @@ public class ${controller} {
 #end
 #if(${generateQuery})
 
-    #if(${springdoc})
+    #if(${swagger3})
     @Operation(summary = "根据id查询详情")
-    #elseif(${swagger})
+    #elseif(${swagger2})
     @ApiOperation(value = "根据id查询详情")
     #else
     /**
@@ -79,9 +79,9 @@ public class ${controller} {
         return ${returnMethod.invokeMethodStr("baseService.voById(id)")};
     }
 
-    #if(${springdoc})
+    #if(${swagger3})
     @Operation(summary = "列表查询")
-    #elseif(${swagger})
+    #elseif(${swagger2})
     @ApiOperation(value = "列表查询")
     #else
     /**
@@ -99,9 +99,9 @@ public class ${controller} {
         return ${returnMethod.invokeMethodStr("baseService.voList(queryDTO)")};
     }
 
-    #if(${springdoc})
+    #if(${swagger3})
     @Operation(summary = "分页查询")
-    #elseif(${swagger})
+    #elseif(${swagger2})
     @ApiOperation(value = "分页查询")
     #else
     /**
@@ -123,9 +123,9 @@ public class ${controller} {
 #end
 #if(${generateCreate})
 
-    #if(${springdoc})
+    #if(${swagger3})
     @Operation(summary = "新增")
-    #elseif(${swagger})
+    #elseif(${swagger2})
     @ApiOperation(value = "新增")
     #else
     /**
@@ -149,9 +149,9 @@ public class ${controller} {
 #end
 #if(${generateUpdate})
 
-    #if(${springdoc})
+    #if(${swagger3})
     @Operation(summary = "修改")
-    #elseif(${swagger})
+    #elseif(${swagger2})
     @ApiOperation(value = "修改")
     #else
     /**
@@ -175,9 +175,9 @@ public class ${controller} {
 #end
 #if(${generateDelete})
 
-    #if(${springdoc})
+    #if(${swagger3})
     @Operation(summary = "删除")
-    #elseif(${swagger})
+    #elseif(${swagger2})
     @ApiOperation(value = "删除")
     #else
     /**
@@ -201,9 +201,9 @@ public class ${controller} {
 #end
 #if(${generateImport})
 
-    #if(${springdoc})
+    #if(${swagger3})
     @Operation(summary = "下载excel导入模板")
-    #elseif(${swagger})
+    #elseif(${swagger2})
     @ApiOperation(value = "下载excel导入模板")
     #else
     /**
@@ -218,9 +218,9 @@ public class ${controller} {
         baseService.excelTemplate(response.getOutputStream());
     }
 
-    #if(${springdoc})
+    #if(${swagger3})
     @Operation(summary = "excel文件导入")
-    #elseif(${swagger})
+    #elseif(${swagger2})
     @ApiOperation(value = "excel文件导入")
     #else
     /**
@@ -241,17 +241,15 @@ public class ${controller} {
 #end
 #if(${generateExport})
 
-    #if(${springdoc})
+    #if(${swagger3})
     @Operation(summary = "excel文件导出")
-    #elseif(${swagger})
+    #elseif(${swagger2})
     @ApiOperation(value = "excel文件导出")
     #else
     /**
      * excel文件导出
      * 
      * @param queryDTO 查询条件
-     * @param current 页码
-     * @param size 每页大小
      */
     #end
     ${batchQueryMethod}("/excel/export")

@@ -205,9 +205,10 @@ public class ControllerConfig implements TemplateRender {
                 TableField primaryKeyTableField = tableInfo.getPrimaryKeyField();
 
                 Optional.ofNullable(primaryKeyTableField.getJavaType().getPkg()).ifPresent(importPackages::add);
-            } else {
-                log.warn("table [{}] does not have a primary key, won't generate deleteById", tableInfo.getName());
-            }
+            } 
+            //else {
+            //    log.warn("table [{}] does not have a primary key, won't generate deleteById", tableInfo.getName());
+            //}
         }
 
         // 查询
@@ -217,9 +218,10 @@ public class ControllerConfig implements TemplateRender {
             if (tableInfo.isHavePrimaryKey()) {
                 TableField primaryKeyTableField = tableInfo.getPrimaryKeyField();
                 Optional.ofNullable(primaryKeyTableField.getJavaType().getPkg()).ifPresent(importPackages::add);
-            } else {
-                log.warn("table [{}] does not have a primary key, won't generate voById", tableInfo.getName());
             }
+            //else {
+            //    log.warn("table [{}] does not have a primary key, won't generate voById", tableInfo.getName());
+            //}
             importPackages.add(List.class.getName());
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
 
@@ -231,14 +233,14 @@ public class ControllerConfig implements TemplateRender {
                 importPackages.add(pageMethod.getClassName());
             }
         }
-        String responseClass = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_SERVLET_REQUEST.getClassName();
+        String responseClass = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_SERVLET_RESPONSE.getClassName();
 
         // 导入
         if (globalConfig.isGenerateImport()) {
             // 导入需要下载导入模板, 导入response
             importPackages.add(responseClass);
             importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getClassName());
-            importPackages.add(RuntimeClass.SPRING_BOOT_BEAN_UTILS.getClassName());
+            importPackages.add(RuntimeClass.SPRING_BOOT_MULTIPART_FILE.getClassName());
         }
 
         // 导出

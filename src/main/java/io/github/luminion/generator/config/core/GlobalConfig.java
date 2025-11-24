@@ -185,10 +185,10 @@ public class GlobalConfig implements TemplateRender {
 
         switch (this.docType) {
             case SWAGGER_V3:
-                data.put("springdoc", true);
+                data.put("swagger3", true);
                 break;
             case SWAGGER_V2:
-                data.put("swagger", true);
+                data.put("swagger2", true);
                 break;
         }
         switch (this.runtimeEnv) {

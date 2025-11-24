@@ -31,9 +31,9 @@ import ${pkg};
 @EqualsAndHashCode(callSuper = true)
     #end
 #end
-#if(${springdoc})
+#if(${swagger3})
 @Schema(description = "$!{table.comment}")
-#elseif(${swagger})
+#elseif(${swagger2})
 @ApiModel(description = "$!{table.comment}")
 #end
 #if(${table.convert})
@@ -60,9 +60,9 @@ public class ${entity}#if(${serializableUID}) implements Serializable#end {
     #set($keyPropertyName=${field.propertyName})
     #end
     #if("$!field.comment" != "")
-        #if(${springdoc})
+        #if(${swagger3})
     @Schema(description = "${field.comment}")
-        #elseif(${swagger})
+        #elseif(${swagger2})
     @ApiModelProperty("${field.comment}")
         #else
     /**
