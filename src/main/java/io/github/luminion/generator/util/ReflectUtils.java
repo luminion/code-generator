@@ -27,12 +27,12 @@ public abstract class ReflectUtils {
      * @return {@link ClassMethodPayload }
      */
     public static ClassMethodPayload lambdaMethodInfo(MethodReference<?, ?> methodReference, Class<?> parameterClass) {
-        String methodName = "", className = "";
+        String methodName = "" , className = "";
         try {
             Method lambdaMethod = methodReference.getClass().getDeclaredMethod("writeReplace");
             lambdaMethod.setAccessible(Boolean.TRUE);
             SerializedLambda serializedLambda = (SerializedLambda) lambdaMethod.invoke(methodReference);
-            className = serializedLambda.getImplClass().replace("/", ".");
+            className = serializedLambda.getImplClass().replace("/" , ".");
             methodName = serializedLambda.getImplMethodName();
             Class<?> methodClass = Class.forName(className);
             try {
@@ -48,7 +48,7 @@ public abstract class ReflectUtils {
                 return new ClassMethodPayload(constructor);
             }
         } catch (Exception e) {
-            String msg = String.format("can't find constructor or method with parameter[%s] source:%s.%s() ", parameterClass.getName(), className, methodName);
+            String msg = String.format("can't find constructor or method with parameter[%s] source:%s.%s() " , parameterClass.getName(), className, methodName);
             throw new IllegalStateException(msg);
         }
     }

@@ -25,10 +25,10 @@ public interface ${service} extends ${serviceSuperClass}<${entity}, ${queryVO}> 
     ${queryVO} voById(Serializable id);
 
     @Override
-    List<${queryVO}> voList(Wrapper wrapper);
+    List<${queryVO}> voList(Wrapper<${entity}> wrapper);
 
     @Override
-    Page<${queryVO}> voPage(Wrapper wrapper, long current, long size);
+    Page<${queryVO}> voPage(Wrapper<${entity}> wrapper, long current, long size);
     #end
     #if(${generateCreate})
 
@@ -51,7 +51,7 @@ public interface ${service} extends ${serviceSuperClass}<${entity}, ${queryVO}> 
     #end
     #if(${generateExport})
 
-    void excelExport(Wrapper wrapper, OutputStream os);
+    void excelExport(Wrapper<${entity}> wrapper, OutputStream os);
     #end
 }
 

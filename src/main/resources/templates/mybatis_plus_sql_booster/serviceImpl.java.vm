@@ -32,12 +32,12 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     }
 
     @Override
-    public List<${queryVO}> voList(Wrapper wrapper) {
+    public List<${queryVO}> voList(Wrapper<${entity}> wrapper) {
         return super.voList(wrapper);
     }
 
     @Override
-    public Page<${queryVO}> voPage(Wrapper wrapper, long current, long size) {
+    public Page<${queryVO}> voPage(Wrapper<${entity}> wrapper, long current, long size) {
         return super.voPage(wrapper, current, size);
     }
 #end
@@ -85,14 +85,14 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public void excelTemplate(OutputStream os) {
-        ${excelApiClass}.write(os, ${class.excelImportDTO}).sheet().doWrite(Collections.emptyList());
+        ${excelApiClass}.write(os, ${excelImportDTO}.class).sheet().doWrite(Collections.emptyList());
     }
 
     #if(${generate.service})
     @Override
     #end
     public int excelImport(InputStream is) {
-        List<${excelImportDTO}> dataList = ${excelApiClass}.read(is).head(${class.excelImportDTO}).sheet().doReadSync();
+        List<${excelImportDTO}> dataList = ${excelApiClass}.read(is).head(${excelImportDTO}.class).sheet().doReadSync();
         List<${entity}> entityList = dataList.stream().map(excelImportDTO -> {
             ${entity} entity = new ${entity}();
             BeanUtils.copyProperties(excelImportDTO, entity);
@@ -107,8 +107,8 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #if(${generate.service})
     @Override
     #end
-    public void excelExport(Wrapper wrapper, OutputStream os) {
-        ${excelApiClass}.write(os, ${class.excelExportDTO}).sheet().doWrite(this.voList(wrapper));
+    public void excelExport(Wrapper<${entity}> wrapper, OutputStream os) {
+        ${excelApiClass}.write(os, ${excelExportDTO}.class).sheet().doWrite(this.voList(wrapper));
     }
 #end
 }

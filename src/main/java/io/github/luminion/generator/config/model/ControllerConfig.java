@@ -162,6 +162,17 @@ public class ControllerConfig implements TemplateRender {
         if (globalConfig.isLombok()) {
             importPackages.add(RuntimeClass.LOMBOK_REQUIRED_ARGS_CONSTRUCTOR.getClassName());
         }
+
+        // 运行环境
+        switch (globalConfig.getRuntimeEnv()) {
+            case MY_BATIS_PLUS_SQL_BOOSTER:
+                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_HELPER.getClassName());
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
+                break;
+            case MYBATIS_PLUS:
+                break;
+        }
+        
         // 文档类型
         switch (globalConfig.getDocType()) {
             case SWAGGER_V3:
@@ -222,7 +233,7 @@ public class ControllerConfig implements TemplateRender {
             //else {
             //    log.warn("table [{}] does not have a primary key, won't generate voById", tableInfo.getName());
             //}
-            importPackages.add(List.class.getName());
+            importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
 
             if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {

@@ -57,8 +57,8 @@ public class EntityQueryDTOConfig implements TemplateRender {
         if (!globalConfig.isGenerateQuery()){
             this.getTemplateFile().setGenerate(false);
         }
-      
-        importPackages.add(List.class.getCanonicalName());
+
+        importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
         
         if (extendsEntity) {
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));

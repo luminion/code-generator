@@ -91,7 +91,7 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add(RuntimeClass.SQL_BOOSTER_PAGE.getClassName());
                     importPackages.add(RuntimeClass.SQL_BOOSTER_WRAPPER.getClassName());
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
-                    importPackages.add(List.class.getName());
+                    importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                 }
                 if (globalConfig.isGenerateImport()) {
                     importPackages.add(RuntimeClass.JAVA_IO_INPUT_STREAM.getClassName());
@@ -120,7 +120,7 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                     importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
-                    importPackages.add(List.class.getName());
+                    importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                 }
                 if (globalConfig.isGenerateImport()) {
                     importPackages.add(RuntimeClass.JAVA_IO_INPUT_STREAM.getClassName());

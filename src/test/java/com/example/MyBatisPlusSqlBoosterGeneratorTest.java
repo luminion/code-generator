@@ -75,11 +75,11 @@ public class MyBatisPlusSqlBoosterGeneratorTest {
                 .controller(c -> c
                         .returnMethod(R::of)
                         //.pageMethod(P::of, PageInfo.class)
-                        .pathVariable(true)
-                        .crossOrigin(true)
-                        .restful(true)
-                        .requestBody(true)
-                        .batchQueryPost(true)
+                        //.pathVariable(true)
+                        //.crossOrigin(true)
+                        //.restful(true)
+                        //.requestBody(true)
+                        //.batchQueryPost(true)
                 )
                 .custom(c -> c
                         .idType(IdType.ASSIGN_ID)

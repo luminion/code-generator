@@ -96,7 +96,7 @@ public class ${controller} {
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} voList($!{optionalBodyStr}${queryDTO} queryDTO) {
-        SqlHelper<${entity}> sqlHelper = SqlHelper.of(baseService).merge(queryDTO)
+        SqlHelper<${entity}> sqlHelper = SqlHelper.of(baseService).merge(queryDTO);
         return ${returnMethod.invokeMethodStr("baseService.voList(sqlHelper)")};
     }
 
@@ -139,7 +139,7 @@ public class ${controller} {
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPage($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
-        SqlHelper<${entity}> sqlHelper = SqlHelper.of(baseService).merge(queryDTO)
+        SqlHelper<${entity}> sqlHelper = SqlHelper.of(baseService).merge(queryDTO);
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlHelper, current, size)")})};
     }
 
@@ -161,7 +161,7 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPageBooster($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, $!{pageMethodParams}) {
+    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPageBooster($!{optionalBodyStr}SqlHelper<${entity}> sqlHelper, $!{pageMethodParams}) {
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlHelper, current, size)")})};
     }
 #end
@@ -301,7 +301,7 @@ public class ${controller} {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        SqlHelper<${entity}> sqlHelper = SqlHelper.of(baseService).merge(queryDTO)
+        SqlHelper<${entity}> sqlHelper = SqlHelper.of(baseService).merge(queryDTO);
         baseService.excelExport(sqlHelper, response.getOutputStream());
     }
     
@@ -317,7 +317,7 @@ public class ${controller} {
      */
     #end
     @PostMapping("/excel/export/booster")
-    public void excelExport($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper, HttpServletResponse response) throws IOException {
+    public void excelExport($!{optionalBodyStr}SqlHelper<${entity}> sqlHelper, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
         response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");

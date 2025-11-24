@@ -18,11 +18,11 @@ import ${pkg};
  * @author ${author}
  * @since ${date}
  */
-    $!{mapperAnnotationClass}
-public interface ${mapper} extends ${mapperSuperClass}<${entity}, ${entityVO}> {
+$!{mapperAnnotationClass}
+public interface ${mapper} extends ${mapperSuperClass}<${entity}, ${queryVO}> {
 #if(${generateQuery})
     
     @Override
-    List<${queryVO}> selectByBooster(Wrapper wrapper, Object page);
+    List<${queryVO}> selectByBooster(Wrapper<${entity}> wrapper, Object page);
 #end
 }
