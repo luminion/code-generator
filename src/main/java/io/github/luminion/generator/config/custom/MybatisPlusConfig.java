@@ -6,6 +6,7 @@ import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
+import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import lombok.Data;
@@ -89,20 +90,20 @@ public class MybatisPlusConfig implements TemplateRender {
         // 追加导入包
         Set<String> entityImportPackages = new TreeSet<>();
         if (this.tableFieldAnnotation) {
-            entityImportPackages.add("com.baomidou.mybatisplus.annotation.TableField");
+            entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_FIELD.getClassName());
         }
         if (this.activeRecord) {
-            entityImportPackages.add("com.baomidou.mybatisplus.extension.activerecord.Model");
+            entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_ACTIVE_RECORD_MODEL.getClassName());
         }
         if (tableInfo.isConvert()) {
-            entityImportPackages.add("com.baomidou.mybatisplus.annotation.TableName");
+            entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_NAME.getClassName());
         }
         if (this.activeRecord) {
-            entityImportPackages.add("com.baomidou.mybatisplus.extension.activerecord.Model");
-            entityImportPackages.add("java.io.Serializable");
+            entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_ACTIVE_RECORD_MODEL.getClassName());
+            entityImportPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
         }
         if (configurer.getGlobalConfig().isLombok() && this.activeRecord) {
-            entityImportPackages.add("lombok.EqualsAndHashCode");
+            entityImportPackages.add(RuntimeClass.LOMBOK_EQUALS_AND_HASH_CODE.getClassName());
         }
         tableInfo.getFields().forEach(field -> {
             JavaFieldInfo columnType = field.getJavaType();
@@ -111,22 +112,22 @@ public class MybatisPlusConfig implements TemplateRender {
             }
             if (field.isKeyFlag()) {
                 // 主键
-                entityImportPackages.add("com.baomidou.mybatisplus.annotation.TableId");
-                entityImportPackages.add("com.baomidou.mybatisplus.annotation.IdType");
+                entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_ID.getClassName());
+                entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_ID_TYPE.getClassName());
             } else if (field.isConvert() || this.tableFieldAnnotation) {
                 // 普通字段
-                entityImportPackages.add("com.baomidou.mybatisplus.annotation.TableField");
+                entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_FIELD.getClassName());
             }
             if (null != field.getFill()) {
                 // 填充字段
-                entityImportPackages.add("com.baomidou.mybatisplus.annotation.TableField");
-                entityImportPackages.add("com.baomidou.mybatisplus.annotation.FieldFill");
+                entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_FIELD.getClassName());
+                entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_FIELD_FILL.getClassName());
             }
             if (field.isVersionField()) {
-                entityImportPackages.add("com.baomidou.mybatisplus.annotation.Version");
+                entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_VERSION.getClassName());
             }
             if (field.isLogicDeleteField()) {
-                entityImportPackages.add("com.baomidou.mybatisplus.annotation.TableLogic");
+                entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_LOGIC.getClassName());
             }
         });
         Collection<String> entityJavaPackages = entityImportPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
