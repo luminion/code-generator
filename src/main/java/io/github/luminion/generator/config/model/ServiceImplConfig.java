@@ -147,10 +147,15 @@ public class ServiceImplConfig implements TemplateRender {
             //importPackages.add(RuntimeClass.PREFIX_EXCEL_LONGEST_MATCH_COLUMN_WIDTH_STYLE_STRATEGY.getClassName());
         }
 
-        Collection<String> serviceImplImportPackages4Java = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
-        Collection<String> serviceImplImportPackages4Framework = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("serviceImplFrameworkPkg", serviceImplImportPackages4Framework);
-        data.put("serviceImplJavaPkg", serviceImplImportPackages4Java);
+        Collection<String> frameworkPackages = importPackages.stream()
+                .filter(pkg -> !pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        Collection<String> javaPackages = importPackages.stream()
+                .filter(pkg -> pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+    
+        data.put("serviceImplFrameworkPkg", frameworkPackages);
+        data.put("serviceImplJavaPkg", javaPackages);
 
         return data;
     }

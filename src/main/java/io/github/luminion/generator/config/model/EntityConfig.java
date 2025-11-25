@@ -84,10 +84,14 @@ public class EntityConfig implements TemplateRender {
         importPackages.addAll(globalConfig.getModelLombokImportPackages());
 
         // 导入包
-        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
-        Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("entityJavaPkg", javaPackages);
+        Collection<String> frameworkPackages = importPackages.stream()
+                .filter(pkg -> !pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        Collection<String> javaPackages = importPackages.stream()
+                .filter(pkg -> pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
         data.put("entityFramePkg", frameworkPackages);
+        data.put("entityJavaPkg", javaPackages);
         return data;
     }
 

@@ -116,7 +116,7 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} voListBooster($!{requiredBodyStr}SqlHelper<${entity}> sqlHelper) {
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} voListBooster($!{optionalBodyStr}SqlHelper<${entity}> sqlHelper) {
         return ${returnMethod.invokeMethodStr("baseService.voList(sqlHelper)")};
     }
 

@@ -92,10 +92,14 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
 
 
         // 导入包
-        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
-        Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("excelImportDTOJavaPkg", javaPackages);
+        Collection<String> frameworkPackages = importPackages.stream()
+                .filter(pkg -> !pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        Collection<String> javaPackages = importPackages.stream()
+                .filter(pkg -> pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
         data.put("excelImportDTOFramePkg", frameworkPackages);
+        data.put("excelImportDTOJavaPkg", javaPackages);
         return data;
     }
 

@@ -260,8 +260,12 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(responseClass);
         }
 
-        Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
+        Collection<String> frameworkPackages = importPackages.stream()
+                .filter(pkg -> !pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        Collection<String> javaPackages = importPackages.stream()
+                .filter(pkg -> pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
         data.put("controllerFrameworkPkg", frameworkPackages);
         data.put("controllerJavaPkg", javaPackages);
         

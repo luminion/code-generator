@@ -80,10 +80,15 @@ public class EntityQueryVOConfig implements TemplateRender {
 
 
         // 导入包
-        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
-        Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("queryVOJavaPkg", javaPackages);
+        Collection<String> frameworkPackages = importPackages.stream()
+                .filter(pkg -> !pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        Collection<String> javaPackages = importPackages.stream()
+                .filter(pkg -> pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+     
         data.put("queryVOFramePkg", frameworkPackages);
+        data.put("queryVOJavaPkg", javaPackages);
         
         
         return data;

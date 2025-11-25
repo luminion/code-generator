@@ -95,9 +95,13 @@ public class MapperConfig implements TemplateRender {
             data.put("mapperSuperClass", ClassUtils.getSimpleName(this.superClass));
         }
 
-
-        Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
+        Collection<String> frameworkPackages = importPackages.stream()
+                .filter(pkg -> !pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        Collection<String> javaPackages = importPackages.stream()
+                .filter(pkg -> pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        
         data.put("mapperFrameworkPkg", frameworkPackages);
         data.put("mapperJavaPkg", javaPackages);
 

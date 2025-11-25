@@ -103,10 +103,14 @@ public class EntityCreateDTOConfig implements TemplateRender {
 
 
         // 导入包
-        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
-        Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("createDTOJavaPkg", javaPackages);
+        Collection<String> frameworkPackages = importPackages.stream()
+                .filter(pkg -> !pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        Collection<String> javaPackages = importPackages.stream()
+                .filter(pkg -> pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
         data.put("createDTOFramePkg", frameworkPackages);
+        data.put("createDTOJavaPkg", javaPackages);
         return data;
     }
 }

@@ -80,11 +80,14 @@ public class EntityQueryDTOConfig implements TemplateRender {
         importPackages.addAll(globalConfig.getModelLombokImportPackages());
 
         // 导入包
-        Collection<String> javaPackages = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
-        Collection<String> frameworkPackages = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("queryDTOJavaPkg", javaPackages);
+        Collection<String> frameworkPackages = importPackages.stream()
+                .filter(pkg -> !pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        Collection<String> javaPackages = importPackages.stream()
+                .filter(pkg -> pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
         data.put("queryDTOFramePkg", frameworkPackages);
-        
+        data.put("queryDTOJavaPkg", javaPackages);
         
         return data;
     }

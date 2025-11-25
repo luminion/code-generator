@@ -141,11 +141,15 @@ public class ServiceConfig implements TemplateRender {
             importPackages.add(this.superClass);
         }
 
-        
-        Collection<String> serviceImportPackages4Framework = importPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        Collection<String> serviceImportPackages4Java = importPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
-        data.put("serviceFrameworkPkg", serviceImportPackages4Framework);
-        data.put("serviceJavaPkg", serviceImportPackages4Java);
+
+        Collection<String> frameworkPackages = importPackages.stream()
+                .filter(pkg -> !pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        Collection<String> javaPackages = importPackages.stream()
+                .filter(pkg -> pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        data.put("serviceFrameworkPkg", frameworkPackages);
+        data.put("serviceJavaPkg", javaPackages);
         
         return data;
     }
