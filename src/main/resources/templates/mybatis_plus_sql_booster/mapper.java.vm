@@ -23,6 +23,6 @@ public interface ${mapper} extends ${mapperSuperClass}<${entity}, ${queryVO}> {
 #if(${generateQuery})
     
     @Override
-    List<${queryVO}> selectByBooster(Wrapper<${entity}> wrapper, Object page);
+    List<${queryVO}> selectByXml(SqlContext<${entity}> sqlContext, Object page);
 #end
 }

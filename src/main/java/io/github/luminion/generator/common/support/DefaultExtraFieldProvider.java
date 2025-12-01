@@ -53,8 +53,8 @@ public class DefaultExtraFieldProvider implements ExtraFieldProvider {
     @Override
     @SneakyThrows
     public Boolean whetherGenerate(String sqlOperator, TableField tableField) {
-        String replacedOperator = SqlKeyword.replaceOperator(sqlOperator);
-        replacedOperator = replacedOperator.toUpperCase();
+        SqlKeyword sqlKeyword = SqlKeyword.resolve(sqlOperator);
+        String replacedOperator = sqlKeyword.getSymbol();
         String propertyType = tableField.getPropertyType();
         // 主键
         boolean isKeyFlag = tableField.isKeyFlag();
@@ -77,7 +77,7 @@ public class DefaultExtraFieldProvider implements ExtraFieldProvider {
         }
 
         // 大小比较
-        if (SqlKeyword.isCompareOperator(replacedOperator)) {
+        if (sqlKeyword.isCompare()) {
             return ALLOW_COMPARE.contains(propertyType) 
                     && !isKeyFlag 
                     && !isIdColumn
@@ -85,14 +85,14 @@ public class DefaultExtraFieldProvider implements ExtraFieldProvider {
         }
 
         // 模糊查询
-        if (SqlKeyword.isLikeOperator(replacedOperator)) {
+        if (sqlKeyword.isLike()) {
             return isString
                     && !isIdColumn
                     ;
         }
 
         // in查询
-        if (SqlKeyword.isInOperator(replacedOperator)) {
+        if (sqlKeyword.isIn()) {
             return ALLOW_IN.contains(propertyType)  
                     || isKeyFlag 
                     || isIdColumn 
@@ -101,14 +101,14 @@ public class DefaultExtraFieldProvider implements ExtraFieldProvider {
         }
 
         // 是否为空
-        if (SqlKeyword.isNullOperator(replacedOperator)) {
+        if (sqlKeyword.isNullCheck()) {
             return isNullable 
                     && !isKeyFlag
                     ;
         }
         
         // 比特位
-        if (SqlKeyword.isBitOperator(replacedOperator)){
+        if (sqlKeyword.isBitOperation()){
             return "Byte".equals(propertyType) 
                     || "Short".equals(propertyType) 
                     || "Integer".equals(propertyType) 

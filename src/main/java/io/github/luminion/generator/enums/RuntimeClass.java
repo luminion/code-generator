@@ -57,12 +57,12 @@ public enum RuntimeClass {
     SPRING_BOOT_MULTIPART_FILE("org.springframework.web.multipart.MultipartFile"),
     SPRING_BOOT_BEAN_UTILS("org.springframework.beans.BeanUtils"),
 
-    SQL_BOOSTER_SQL_WRAPPER("io.github.luminion.sqlbooster.model.api.Wrapper"),
-    SQL_BOOSTER_SQL_HELPER("io.github.luminion.sqlbooster.model.helper.SqlHelper"),
-    SQL_BOOSTER_BOOSTER_PAGE("io.github.luminion.sqlbooster.core.BoosterPage"),
-    SQL_BOOSTER_BOOSTER_MP_MAPPER("io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpMapper"),
-    SQL_BOOSTER_BOOSTER_MP_SERVICE_IMPL("io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpServiceImpl"),
-    SQL_BOOSTER_BOOSTER_MP_SERVICE("io.github.luminion.sqlbooster.extension.mybatisplus.BoosterMpService"),
+    SQL_BOOSTER_SQL_CONTEXT("io.github.luminion.sqlbooster.model.SqlContext"),
+    SQL_BOOSTER_SQL_BUILDER("io.github.luminion.sqlbooster.builder.SqlBuilder"),
+    SQL_BOOSTER_BOOSTER_PAGE("io.github.luminion.sqlbooster.model.BPage"),
+    SQL_BOOSTER_MP_MAPPER("io.github.luminion.sqlbooster.extension.mybatisplus.MpMapper"),
+    SQL_BOOSTER_MP_SERVICE_IMPL("io.github.luminion.sqlbooster.extension.mybatisplus.MpServiceImpl"),
+    SQL_BOOSTER_MP_SERVICE("io.github.luminion.sqlbooster.extension.mybatisplus.MpService"),
 
     PREFIX_JAKARTA_SERVLET_REQUEST("servlet.http.HttpServletRequest"),
     PREFIX_JAKARTA_SERVLET_RESPONSE("servlet.http.HttpServletResponse"),

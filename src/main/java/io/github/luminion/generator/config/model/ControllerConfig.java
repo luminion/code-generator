@@ -166,7 +166,7 @@ public class ControllerConfig implements TemplateRender {
         // 运行环境
         switch (globalConfig.getRuntimeEnv()) {
             case MY_BATIS_PLUS_SQL_BOOSTER:
-                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_HELPER.getClassName());
+                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_BUILDER.getClassName());
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 break;
             case MYBATIS_PLUS:
@@ -237,7 +237,8 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
 
             if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
-                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_HELPER.getClassName());
+                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_BUILDER.getClassName());
+                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
             }
             if (pageMethod != null && pageMethod.isClassReady()) {

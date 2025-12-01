@@ -76,10 +76,10 @@ public class MapperConfig implements TemplateRender {
                 }
                 break;
             case MY_BATIS_PLUS_SQL_BOOSTER:
-                this.superClass = RuntimeClass.SQL_BOOSTER_BOOSTER_MP_MAPPER.getClassName();
+                this.superClass = RuntimeClass.SQL_BOOSTER_MP_MAPPER.getClassName();
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateQuery()) {
-                    importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_WRAPPER.getClassName());
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                 }
                 break;

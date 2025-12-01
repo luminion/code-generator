@@ -96,8 +96,35 @@ public class ${controller} {
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} voList($!{optionalBodyStr}${queryDTO} queryDTO) {
+        #if($sqlBooster)
+        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(queryDTO).build();
+        return ${returnMethod.invokeMethodStr("baseService.voList(build)")};    
+        #else
         return ${returnMethod.invokeMethodStr("baseService.voList(queryDTO)")};
+        #end
     }
+    #if(${sqlBooster})
+
+    #if(${swagger3})
+    @Operation(summary = "列表查询-动态条件")
+    #elseif(${swagger2})
+    @ApiOperation(value = "列表查询-动态条件")
+    #else
+    /**
+     * 列表查询-动态条件
+     *
+     * @param sqlHelper 条件构造器
+     * @return 查询结果
+     */
+    #end
+    @PostMapping("/list/booster")
+    #if(!${restController})
+    @ResponseBody
+    #end
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} voListBySqlContext($!{optionalBodyStr}SqlContext<${entity}> sqlContext) {
+        return ${returnMethod.invokeMethodStr("baseService.voList(sqlContext)")};
+    }
+    #end
 
     #if(${swagger3})
     @Operation(summary = "分页查询")
@@ -118,8 +145,36 @@ public class ${controller} {
     @ResponseBody
     #end
     public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPage($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
+        #if($sqlBooster)
+        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(queryDTO).build();
+            return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(build, current, size)")})};
+        #else
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
+        #end
     }
+    #if(${sqlBooster})
+    #if(${swagger3})
+    @Operation(summary = "分页查询-动态条件")
+    #elseif(${swagger2})
+    @ApiOperation(value = "分页查询-动态条件")
+    #else
+    /**
+     * 分页查询-动态条件
+     *
+     * @param sqlContext 条件构造器
+     * @param current 页码
+     * @param size 每页大小
+     * @return 查询结果
+     */
+    #end
+    @PostMapping("/page/booster$!{pagePathParams}")
+    #if(!${restController})
+    @ResponseBody
+    #end
+    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPageBySqlContext($!{optionalBodyStr}SqlContext<${entity}> sqlContext, $!{pageMethodParams}) {
+        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlContext, current, size)")})};
+    }
+    #end
 #end
 #if(${generateCreate})
 
@@ -213,7 +268,7 @@ public class ${controller} {
     @GetMapping("/excel/template")
     public void excelTemplate(HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
         baseService.excelTemplate(response.getOutputStream());
     }
@@ -255,9 +310,35 @@ public class ${controller} {
     ${batchQueryMethod}("/excel/export")
     public void excelExport($!{optionalBodyStr}${queryDTO} queryDTO, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
-        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
+        #if($sqlBooster)
+        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(queryDTO).build();
+        baseService.excelExport(build, response.getOutputStream());
+        #else
         baseService.excelExport(queryDTO, response.getOutputStream());
+        #end
     }
+    #if(${sqlBooster})
+
+    #if(${swagger3})
+    @Operation(summary = "excel文件导出-动态条件")
+    #elseif(${swagger2})
+    @ApiOperation(value = "excel文件导出-动态条件")
+    #else
+    /**
+     * excel文件导出-动态条件
+     * 
+     * @param sqlContext 条件构造器
+     */
+    #end
+    @PostMapping("/excel/export/booster")
+    public void excelExport($!{optionalBodyStr}SqlContext<${entity}> sqlContext, HttpServletResponse response) throws IOException {
+        response.setContentType("application/vnd.ms-excel");
+##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+        response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
+        baseService.excelExport(sqlContext, response.getOutputStream());
+    }
+    #end
 #end
 }

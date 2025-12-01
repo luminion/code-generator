@@ -75,7 +75,7 @@ public class ServiceConfig implements TemplateRender {
 
         switch (globalConfig.getRuntimeEnv()) {
             case MY_BATIS_PLUS_SQL_BOOSTER:
-                this.superClass = RuntimeClass.SQL_BOOSTER_BOOSTER_MP_SERVICE.getClassName();
+                this.superClass = RuntimeClass.SQL_BOOSTER_MP_SERVICE.getClassName();
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateCreate()) {
@@ -89,7 +89,7 @@ public class ServiceConfig implements TemplateRender {
                 }
                 if (globalConfig.isGenerateQuery()) {
                     importPackages.add(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getClassName());
-                    importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_WRAPPER.getClassName());
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                 }
@@ -98,7 +98,7 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
                 }
                 if (globalConfig.isGenerateExport()) {
-                    importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_WRAPPER.getClassName());
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
                     importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
                 }
                 break;

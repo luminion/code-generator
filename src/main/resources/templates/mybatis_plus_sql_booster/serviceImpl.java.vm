@@ -32,13 +32,13 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     }
 
     @Override
-    public List<${queryVO}> voList(Wrapper<${entity}> wrapper) {
-        return super.voList(wrapper);
+    public List<${queryVO}> voList(SqlContext<${entity}> sqlContext) {
+        return super.voList(sqlContext);
     }
 
     @Override
-    public BoosterPage<${queryVO}> voPage(Wrapper<${entity}> wrapper, long current, long size) {
-        return super.voPage(wrapper, current, size);
+    public BPage<${queryVO}> voPage(SqlContext<${entity}> sqlContext, long current, long size) {
+        return super.voPage(sqlContext, current, size);
     }
 #end
 #if(${generateCreate})
@@ -107,8 +107,8 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #if(${generate.service})
     @Override
     #end
-    public void excelExport(Wrapper<${entity}> wrapper, OutputStream os) {
-        ${excelApiClass}.write(os, ${excelExportDTO}.class).sheet().doWrite(this.voList(wrapper));
+    public void excelExport(SqlContext<${entity}> sqlContext, OutputStream os) {
+        ${excelApiClass}.write(os, ${excelExportDTO}.class).sheet().doWrite(this.voList(sqlContext));
     }
 #end
 }

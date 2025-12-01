@@ -58,9 +58,9 @@
 #if(${generateQuery})
     
     #if(${baseResultMap})
-    <select id="selectByBooster" resultMap="voResultMap">
+    <select id="selectByXml" resultMap="voResultMap">
     #else
-    <select id="selectByBooster" resultType="${class.queryVO}">
+    <select id="selectByXml" resultType="${class.queryVO}">
     #end
         SELECT
         a.*
