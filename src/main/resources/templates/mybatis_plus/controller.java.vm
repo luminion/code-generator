@@ -1,17 +1,17 @@
 package ${package.controller};
-#if($controllerFrameworkPkg.size()>0)
 
-#end
+#if($controllerFrameworkPkg.size()>0)
 #foreach($pkg in ${controllerFrameworkPkg})
 import ${pkg};
 #end
-#if($controllerJavaPkg.size()>0)
 
 #end
+#if($controllerJavaPkg.size()>0)
 #foreach($pkg in ${controllerJavaPkg})
 import ${pkg};
 #end
 
+#end
 /**
  * $!{table.comment} 前端控制器
  *
@@ -47,14 +47,14 @@ public class ${controller} {
 #end
 
     private final ${baseService} baseService;
-#if(!${lombok})
 
+#if(!${lombok})
     public ${controller}(${baseService} baseService) {
         this.baseService = baseService;
     }
+
 #end
 #if(${generateQuery})
-
     #if(${swagger3})
     @Operation(summary = "根据id查询详情")
     #elseif(${swagger2})
@@ -103,8 +103,8 @@ public class ${controller} {
         return ${returnMethod.invokeMethodStr("baseService.voList(queryDTO)")};
         #end
     }
-    #if(${sqlBooster})
 
+    #if(${sqlBooster})
     #if(${swagger3})
     @Operation(summary = "列表查询-动态条件")
     #elseif(${swagger2})
@@ -124,8 +124,8 @@ public class ${controller} {
     public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} voListBySqlContext($!{optionalBodyStr}SqlContext<${entity}> sqlContext) {
         return ${returnMethod.invokeMethodStr("baseService.voList(sqlContext)")};
     }
-    #end
 
+    #end
     #if(${swagger3})
     @Operation(summary = "分页查询")
     #elseif(${swagger2})
@@ -147,7 +147,7 @@ public class ${controller} {
     public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPage($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
         #if($sqlBooster)
         SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(queryDTO).build();
-            return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(build, current, size)")})};
+        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(build, current, size)")})};
         #else
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
         #end
@@ -175,10 +175,10 @@ public class ${controller} {
     public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPageBySqlContext($!{optionalBodyStr}SqlContext<${entity}> sqlContext, $!{pageMethodParams}) {
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlContext, current, size)")})};
     }
+
     #end
 #end
 #if(${generateCreate})
-
     #if(${swagger3})
     @Operation(summary = "新增")
     #elseif(${swagger2})
@@ -202,9 +202,9 @@ public class ${controller} {
     public ${returnMethod.returnGenericTypeStr("Serializable")} createByDTO($!{requiredBodyStr}$!{validatedStr}${createDTO} createDTO) {
         return ${returnMethod.invokeMethodStr("baseService.createByDTO(createDTO)")};
     }
+
 #end
 #if(${generateUpdate})
-
     #if(${swagger3})
     @Operation(summary = "修改")
     #elseif(${swagger2})
@@ -228,9 +228,9 @@ public class ${controller} {
     public ${returnMethod.returnGenericTypeStr("Boolean")} updateByDTO($!{requiredBodyStr}$!{validatedStr}${updateDTO} updateDTO) {
         return ${returnMethod.invokeMethodStr("baseService.updateByDTO(updateDTO)")};
     }
+
 #end
 #if(${generateDelete})
-
     #if(${swagger3})
     @Operation(summary = "删除")
     #elseif(${swagger2})
@@ -254,9 +254,9 @@ public class ${controller} {
     public ${returnMethod.returnGenericTypeStr("Boolean")} removeById($!{idMethodParams}${primaryKeyPropertyType} id) {
         return ${returnMethod.invokeMethodStr("baseService.removeById(id)")};
     }
+
 #end
 #if(${generateImport})
-
     #if(${swagger3})
     @Operation(summary = "下载excel导入模板")
     #elseif(${swagger2})
@@ -294,9 +294,9 @@ public class ${controller} {
         if (excel == null || excel.isEmpty()) return ${returnMethod.invokeMethodStr(0)};
         return ${returnMethod.invokeMethodStr("baseService.excelImport(excel.getInputStream())")};
     }
+
 #end
 #if(${generateExport})
-
     #if(${swagger3})
     @Operation(summary = "excel文件导出")
     #elseif(${swagger2})
@@ -320,8 +320,8 @@ public class ${controller} {
         baseService.excelExport(queryDTO, response.getOutputStream());
         #end
     }
-    #if(${sqlBooster})
 
+    #if(${sqlBooster})
     #if(${swagger3})
     @Operation(summary = "excel文件导出-动态条件")
     #elseif(${swagger2})
@@ -340,6 +340,7 @@ public class ${controller} {
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
         baseService.excelExport(sqlContext, response.getOutputStream());
     }
+
     #end
 #end
 }
