@@ -147,13 +147,14 @@ public class ${controller} {
     public ${returnMethod.returnGenericTypeStr(${pageReturnType})} voPage($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
         #if($sqlBooster)
         SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(queryDTO).build();
-            return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(build, current, size)")})};
+        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(build, current, size)")})};
         #else
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
         #end
     }
 
     #if(${sqlBooster})
+
     #if(${swagger3})
     @Operation(summary = "分页查询-动态条件")
     #elseif(${swagger2})

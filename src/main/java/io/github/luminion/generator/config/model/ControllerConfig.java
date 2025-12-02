@@ -46,7 +46,7 @@ public class ControllerConfig implements TemplateRender {
     /**
      * 模板文件
      */
-    protected TemplateFile templateFile = new TemplateFile(TemplateFileEnum.CONTROLLER.getKey(), "%sController", "controller", "/templates/mybatis_plus/controller.java", ".java");
+    protected TemplateFile templateFile = new TemplateFile(TemplateFileEnum.CONTROLLER.getKey(), "%sController", "controller", "/templates/model/controller.java", ".java");
 
     /**
      * 自定义继承的Controller类全称，带包名
