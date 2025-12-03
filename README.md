@@ -37,6 +37,37 @@
 </dependency>
 ```
 
+迭代优化中,目前发布为快照版本, 可添加maven中央快照仓库(可能需网络代理)获取
+
+老版本地址: https://github.com/bootystar/mybatis-plus-generator
+
+```xml
+
+<repositories>
+    <repository>
+        <name>Central Portal Snapshots</name>
+        <id>central-portal-snapshots</id>
+        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>io.github.luminion</groupId>
+        <artifactId>mybatis-plus-generator</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+</dependencies>
+
+```
+
+
 ### 2. 添加数据库驱动
 
 接下来, 请确保您的项目中包含了所需要的数据库驱动。
