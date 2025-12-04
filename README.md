@@ -16,7 +16,8 @@
 - **模板引擎支持**：使用 Velocity 模板引擎，支持自定义模板
 - **配置灵活**：提供链式调用的配置方式，配置简单易用
 - **高扩展性**: 支持自定义模板、自定义注入、自定义名称转换等
-- **SQL-Booster 集成**: 集成SQL-Booster，提供更丰富的 SQL 查询能力
+- **便利性** xml默认生成绝大多数场景的sql查询, 并封装了dto供前端调用, 无需手动编写
+- **SQL-Booster 集成**: 集成SQL-Booster，提供更丰富的动态SQL查询能力
 
 ---
 
@@ -37,9 +38,10 @@
 </dependency>
 ```
 
-迭代优化中,目前发布为快照版本, 可添加maven中央快照仓库(可能需网络代理)获取
+迭代优化中, 老版本地址: https://github.com/bootystar/mybatis-plus-generator
 
-老版本地址: https://github.com/bootystar/mybatis-plus-generator
+目前发布为快照版本, 可添加maven中央快照仓库(可能需网络代理)获取
+
 
 ```xml
 
@@ -208,13 +210,6 @@ public class GeneratorTest {
 | `strategyLogicDeleteColumnName(String)` | `String` | 逻辑删除字段名 |
 | `strategyTableFills(IFill...)` | `IFill...` | 添加表填充字段 |
 
-### 注入配置 (InjectionBuilder)
-
-| 配置方法 | 参数类型 | 详细说明 |
-|---|---|---|
-| `beforeOutputFile(BiConsumer<TableInfo, Map<String, Object>>)` | `BiConsumer` | 注入自定义参数, 在输出文件前回调 |
-| `addCustomFile(TemplateFile)` | `TemplateFile` | 添加自定义模板文件 |
-| `addCustomFiles(List<TemplateFile>)` | `List<TemplateFile>` | 批量添加自定义模板文件 |
 
 ### 模型配置 (EntityBuilder, MapperBuilder, etc.)
 
