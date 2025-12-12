@@ -3,9 +3,9 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/mybatis-plus-generator)](https://mvnrepository.com/artifact/io.github.luminion/mybatis-plus-generator)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-代码生成器，旨在提升开发效率，减少重复代码编写。
+代码生成器，通过数据库表信息, 一键生成`Controller`/`Service`/`Mapper`/`Entity` 等代码及配套`CRUD方法`/`领域模型`
 
-该项目部分代码的灵感和实现参考了 [MyBatis-Plus](https://github.com/baomidou/mybatis-plus) 项目，特此感谢。
+旧版地址: https://github.com/bootystar/mybatis-plus-generator
 
 ## 功能特性
 
@@ -38,9 +38,7 @@
 </dependency>
 ```
 
-迭代优化中, 老版本地址: https://github.com/bootystar/mybatis-plus-generator
-
-目前发布为快照版本, 可添加maven中央快照仓库(可能需网络代理)获取
+可添加maven中央快照仓库(可能需网络代理)获取快照版本
 
 
 ```xml
@@ -115,6 +113,9 @@ public class GeneratorTest {
 `code-generator` 同样支持与 `SQL-Booster` 集成, 以生成更强大的 SQL 查询能力。
 
 如果使用此功能, 请确保在项目中添加 `sql-booster` 依赖:
+
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/sql-booster)](https://mvnrepository.com/artifact/io.github.luminion/sql-booster)
+
 ```xml
 <dependency>
     <groupId>io.github.luminion</groupId>
@@ -268,3 +269,7 @@ public class GeneratorTest {
 2. 需要确保数据库连接信息正确
 3. 根据实际需要调整配置参数
 4. 可以通过自定义模板来满足特殊需求
+
+## 声明
+
+该项目中部分代码及实现源自[MyBatis-Plus](https://github.com/baomidou/mybatis-plus) 项目，特此感谢。

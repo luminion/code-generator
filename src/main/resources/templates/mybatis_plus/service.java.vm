@@ -19,14 +19,6 @@ import ${pkg};
  * @since ${date}
  */
 public interface ${service} extends ${serviceSuperClass}<${entity}> {
-    #if(${generateQuery})
-
-    ${queryVO} voById(Serializable id);
-
-    List<${queryVO}> voList(${queryDTO} queryDTO);
-
-    IPage<${queryVO}> voPage(${queryDTO} queryDTO, long current, long size);
-    #end
     #if(${generateCreate})
 
     Serializable createByDTO(${createDTO} createDTO);
@@ -36,9 +28,17 @@ public interface ${service} extends ${serviceSuperClass}<${entity}> {
     boolean updateByDTO(${updateDTO} updateDTO);
     #end
     #if(${generateDelete})
-    
+
     @Override
     boolean removeById(Serializable id);
+    #end
+    #if(${generateQuery})
+
+    ${queryVO} voById(Serializable id);
+
+    List<${queryVO}> voList(${queryDTO} queryDTO);
+
+    IPage<${queryVO}> voPage(${queryDTO} queryDTO, long current, long size);
     #end
     #if(${generateImport})
 

@@ -24,23 +24,6 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
 #else
 public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity}, ${queryVO}> {
 #end
-#if(${generateQuery})
-
-    @Override
-    public ${queryVO} voById(Serializable id) { 
-        return super.voById(id);
-    }
-
-    @Override
-    public List<${queryVO}> voList(SqlContext<${entity}> sqlContext) {
-        return super.voList(sqlContext);
-    }
-
-    @Override
-    public BPage<${queryVO}> voPage(SqlContext<${entity}> sqlContext, long current, long size) {
-        return super.voPage(sqlContext, current, size);
-    }
-#end
 #if(${generateCreate})
 
     #if(${generate.service})
@@ -77,6 +60,23 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         #else
         throw new IllegalStateException("can't find id property");
         #end
+    }
+#end
+#if(${generateQuery})
+
+    @Override
+    public ${queryVO} voById(Serializable id) { 
+        return super.voById(id);
+    }
+
+    @Override
+    public List<${queryVO}> voList(SqlContext<${entity}> sqlContext) {
+        return super.voList(sqlContext);
+    }
+
+    @Override
+    public BPage<${queryVO}> voPage(SqlContext<${entity}> sqlContext, long current, long size) {
+        return super.voPage(sqlContext, current, size);
     }
 #end
 #if(${generateImport})

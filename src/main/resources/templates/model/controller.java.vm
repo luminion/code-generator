@@ -53,131 +53,6 @@ public class ${controller} {
         this.baseService = baseService;
     }
 #end
-#if(${generateQuery})
-
-    #if(${swagger3})
-    @Operation(summary = "根据id查询详情")
-    #elseif(${swagger2})
-    @ApiOperation(value = "根据id查询详情")
-    #else
-    /**
-     * 根据id查询详情
-     *
-     * @param id 主键id
-     * @return 查询结果
-     */
-    #end
-    #if(${restful})
-    @GetMapping("$!{idPathParams}")
-    #else
-    @GetMapping("/select$!{idPathParams}")
-    #end
-    #if(!${restController})
-    @ResponseBody
-    #end
-    public ${returnMethod.returnGenericTypeStr("${queryVO}")} id($!{idMethodParams}${primaryKeyPropertyType} id) {
-        return ${returnMethod.invokeMethodStr("baseService.voById(id)")};
-    }
-
-    #if(${swagger3})
-    @Operation(summary = "列表查询")
-    #elseif(${swagger2})
-    @ApiOperation(value = "列表查询")
-    #else
-    /**
-     * 列表查询
-     *
-     * @param queryDTO 查询条件
-     * @return 查询结果
-     */
-    #end
-    ${batchQueryMethod}("/list")
-    #if(!${restController})
-    @ResponseBody
-    #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} list($!{optionalBodyStr}${queryDTO} queryDTO) {
-        #if($sqlBooster)
-        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(queryDTO).build();
-        return ${returnMethod.invokeMethodStr("baseService.voList(build)")};    
-        #else
-        return ${returnMethod.invokeMethodStr("baseService.voList(queryDTO)")};
-        #end
-    }
-    #if(${sqlBooster})
-
-    #if(${swagger3})
-    @Operation(summary = "列表查询-动态条件")
-    #elseif(${swagger2})
-    @ApiOperation(value = "列表查询-动态条件")
-    #else
-    /**
-     * 列表查询-动态条件
-     *
-     * @param sqlHelper 条件构造器
-     * @return 查询结果
-     */
-    #end
-    @PostMapping("/advanced/list")
-    #if(!${restController})
-    @ResponseBody
-    #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} advancedList($!{optionalBodyStr}SqlContext<${entity}> sqlContext) {
-        return ${returnMethod.invokeMethodStr("baseService.voList(sqlContext)")};
-    }
-    #end
-
-    #if(${swagger3})
-    @Operation(summary = "分页查询")
-    #elseif(${swagger2})
-    @ApiOperation(value = "分页查询")
-    #else
-    /**
-     * 分页查询
-     *
-     * @param queryDTO 查询条件
-     * @param current 页码
-     * @param size 每页大小
-     * @return 查询结果
-     */
-    #end
-    ${batchQueryMethod}("/page$!{pagePathParams}")
-    #if(!${restController})
-    @ResponseBody
-    #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} page($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
-        #if($sqlBooster)
-        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(queryDTO).build();
-        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(build, current, size)")})};
-        #else
-        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
-        #end
-    }
-
-    #if(${sqlBooster})
-
-    #if(${swagger3})
-    @Operation(summary = "分页查询-动态条件")
-    #elseif(${swagger2})
-    @ApiOperation(value = "分页查询-动态条件")
-    #else
-    /**
-     * 分页查询-动态条件
-     *
-     * @param sqlContext 条件构造器
-     * @param current 页码
-     * @param size 每页大小
-     * @return 查询结果
-     */
-    #end
-    @PostMapping("/advanced/page$!{pagePathParams}")
-    #if(!${restController})
-    @ResponseBody
-    #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} advancedPage($!{optionalBodyStr}SqlContext<${entity}> sqlContext, $!{pageMethodParams}) {
-        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlContext, current, size)")})};
-    }
-    #end
-#end
 #if(${generateCreate})
 
     #if(${swagger3})
@@ -256,6 +131,84 @@ public class ${controller} {
         return ${returnMethod.invokeMethodStr("baseService.removeById(id)")};
     }
 #end
+#if(${generateQuery})
+
+    #if(${swagger3})
+    @Operation(summary = "根据id查询详情")
+    #elseif(${swagger2})
+    @ApiOperation(value = "根据id查询详情")
+    #else
+    /**
+     * 根据id查询详情
+     *
+     * @param id 主键id
+     * @return 查询结果
+     */
+    #end
+    #if(${restful})
+    @GetMapping("$!{idPathParams}")
+    #else
+    @GetMapping("/select$!{idPathParams}")
+    #end
+    #if(!${restController})
+    @ResponseBody
+    #end
+    public ${returnMethod.returnGenericTypeStr("${queryVO}")} id($!{idMethodParams}${primaryKeyPropertyType} id) {
+        return ${returnMethod.invokeMethodStr("baseService.voById(id)")};
+    }
+
+    #if(${swagger3})
+    @Operation(summary = "列表查询")
+    #elseif(${swagger2})
+    @ApiOperation(value = "列表查询")
+    #else
+    /**
+     * 列表查询
+     *
+     * @param queryDTO 查询条件
+     * @return 查询结果
+     */
+    #end
+    ${batchQueryMethod}("/list")
+    #if(!${restController})
+    @ResponseBody
+    #end
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} list($!{optionalBodyStr}${queryDTO} queryDTO) {
+        #if($sqlBooster)
+        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(queryDTO).build();
+        return ${returnMethod.invokeMethodStr("baseService.voList(build)")};    
+        #else
+        return ${returnMethod.invokeMethodStr("baseService.voList(queryDTO)")};
+        #end
+    }
+
+    #if(${swagger3})
+    @Operation(summary = "分页查询")
+    #elseif(${swagger2})
+    @ApiOperation(value = "分页查询")
+    #else
+    /**
+     * 分页查询
+     *
+     * @param queryDTO 查询条件
+     * @param current 页码
+     * @param size 每页大小
+     * @return 查询结果
+     */
+    #end
+    ${batchQueryMethod}("/page$!{pagePathParams}")
+    #if(!${restController})
+    @ResponseBody
+    #end
+    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} page($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
+        #if($sqlBooster)
+        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(queryDTO).build();
+        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(build, current, size)")})};
+        #else
+        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
+        #end
+    }
+#end
 #if(${generateImport})
 
     #if(${swagger3})
@@ -321,7 +274,50 @@ public class ${controller} {
         baseService.excelExport(queryDTO, response.getOutputStream());
         #end
     }
-    #if(${sqlBooster})
+#end
+#if(${sqlBooster})
+
+    #if(${swagger3})
+    @Operation(summary = "列表查询-动态条件")
+    #elseif(${swagger2})
+    @ApiOperation(value = "列表查询-动态条件")
+    #else
+    /**
+     * 列表查询-动态条件
+     *
+     * @param sqlHelper 条件构造器
+     * @return 查询结果
+     */
+    #end
+    @PostMapping("/advanced/list")
+    #if(!${restController})
+    @ResponseBody
+    #end
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} advancedList($!{optionalBodyStr}SqlContext<${entity}> sqlContext) {
+        return ${returnMethod.invokeMethodStr("baseService.voList(sqlContext)")};
+    }
+
+    #if(${swagger3})
+    @Operation(summary = "分页查询-动态条件")
+    #elseif(${swagger2})
+    @ApiOperation(value = "分页查询-动态条件")
+    #else
+    /**
+     * 分页查询-动态条件
+     *
+     * @param sqlContext 条件构造器
+     * @param current 页码
+     * @param size 每页大小
+     * @return 查询结果
+     */
+    #end
+    @PostMapping("/advanced/page$!{pagePathParams}")
+    #if(!${restController})
+    @ResponseBody
+    #end
+    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} advancedPage($!{optionalBodyStr}SqlContext<${entity}> sqlContext, $!{pageMethodParams}) {
+        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlContext, current, size)")})};
+    }
 
     #if(${swagger3})
     @Operation(summary = "excel文件导出-动态条件")
@@ -334,13 +330,12 @@ public class ${controller} {
      * @param sqlContext 条件构造器
      */
     #end
-    @PostMapping("/advanced/excel/export/booster")
+    @PostMapping("/advanced/excel/export")
     public void advancedExcelExport($!{optionalBodyStr}SqlContext<${entity}> sqlContext, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
 ##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
         baseService.excelExport(sqlContext, response.getOutputStream());
     }
-    #end
 #end
 }

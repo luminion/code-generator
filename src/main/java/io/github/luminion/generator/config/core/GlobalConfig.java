@@ -137,6 +137,21 @@ public class GlobalConfig implements TemplateRender {
     protected boolean generateQuery = true;
 
     /**
+     * 生成id查询方法
+     */
+    protected boolean generateQueryVoById = true;
+    
+    /**
+     * 批量查询相关方法及配套类
+     */
+    protected boolean generateQueryVoList = true;
+    
+    /**
+     * 批量查询分页相关方法及配套类
+     */
+    protected boolean generateQueryPage = true;
+
+    /**
      * 生成新增方法及配套类
      */
     protected boolean generateCreate = true;
