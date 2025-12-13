@@ -46,13 +46,13 @@ public class ${entity} extends Model<${entity}> {
 #else
 public class ${entity}#if(${serializableUID}) implements Serializable#end {
 #end
-###if(${serializableUID})
-##
-##    #if(${serializableAnnotation})
-##    @Serial
-##    #end
-##    private static final long serialVersionUID = 1L;
-###end
+#if(${serializableUID})
+
+    #if(${serializableAnnotation})
+    @Serial
+    #end
+    private static final long serialVersionUID = 1L;
+#end
 ## ----------BEGIN 字段循环遍历----------
 #foreach($field in ${table.fields})
 

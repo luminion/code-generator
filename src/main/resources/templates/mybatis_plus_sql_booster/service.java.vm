@@ -40,7 +40,7 @@ public interface ${service} extends ${serviceSuperClass}<${entity}, ${queryVO}> 
 #if(${generateVoList})
         
     @Override
-    List<${queryVO}> voList(SqlContext <${entity}> sqlContext);
+    List<${queryVO}> voList(SqlContext<${entity}> sqlContext);
 #end
 #if(${generateVoPage})
 

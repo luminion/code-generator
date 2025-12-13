@@ -163,15 +163,15 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(RuntimeClass.LOMBOK_REQUIRED_ARGS_CONSTRUCTOR.getClassName());
         }
 
-        // 运行环境
-        switch (globalConfig.getRuntimeEnv()) {
-            case MY_BATIS_PLUS_SQL_BOOSTER:
-                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_BUILDER.getClassName());
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
-                break;
-            case MYBATIS_PLUS:
-                break;
-        }
+        //// 运行环境
+        //switch (globalConfig.getRuntimeEnv()) {
+        //    case MY_BATIS_PLUS_SQL_BOOSTER:
+        //        importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_BUILDER.getClassName());
+        //        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
+        //        break;
+        //    case MYBATIS_PLUS:
+        //        break;
+        //}
         
         // 文档类型
         switch (globalConfig.getDocType()) {
@@ -233,18 +233,23 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
             importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
-        }
-        // voPage
-        if (globalConfig.isGenerateVoPage()){
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
             if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
                 importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_BUILDER.getClassName());
                 importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
             }
+        }
+        // voPage
+        if (globalConfig.isGenerateVoPage()){
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
             if (pageMethod != null && pageMethod.isClassReady()) {
                 importPackages.add(pageMethod.getClassName());
+            }
+            if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
+                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_BUILDER.getClassName());
+                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
             }
         }
 
@@ -263,6 +268,11 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
             importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getClassName());
             importPackages.add(responseClass);
+            if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
+                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_BUILDER.getClassName());
+                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
+                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
+            }
         }
 
         Collection<String> frameworkPackages = importPackages.stream()

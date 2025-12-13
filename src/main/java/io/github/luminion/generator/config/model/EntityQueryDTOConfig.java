@@ -35,7 +35,7 @@ public class EntityQueryDTOConfig implements TemplateRender {
     /**
      * 是否继承实体类
      */
-    protected boolean extendsEntity = true;
+    protected boolean extendsEntity = false;
 
     @Override
     public List<TemplateFile> renderTemplateFiles() {
