@@ -81,7 +81,7 @@
         <dependency>
             <groupId>io.github.luminion</groupId>
             <artifactId>sql-booster</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.0</version>
             <optional>true</optional>
         </dependency>
     </dependencies>

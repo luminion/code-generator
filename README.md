@@ -92,7 +92,7 @@
 public class GeneratorTest {
     public static void main(String[] args) {
         // 1. 创建代码生成器
-        MyBatisPlusGenerator generator = GeneratorHelper.mybatisPlusGenerator(
+        MyBatisPlusGenerator generator = GeneratorHelper.mybatisPlus(
                 "jdbc:mysql://localhost:3306/your_database",
                 "username",
                 "password"
@@ -129,7 +129,7 @@ public class GeneratorTest {
 public class GeneratorTest {
     public static void main(String[] args) {
         // 1. 创建一个MyBatis-Plus和SQL-Booster结合的代码生成器
-        MybatisPlusSqlBoosterBuilder builder = GeneratorHelper.mybatisPlusSqlBoosterGenerator(
+        MybatisPlusSqlBoosterBuilder builder = GeneratorHelper.mybatisPlusBooster(
                 "jdbc:mysql://localhost:3306/your_database",
                 "username",
                 "password"
