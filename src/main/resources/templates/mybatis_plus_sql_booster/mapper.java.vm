@@ -20,7 +20,7 @@ import ${pkg};
  */
 $!{mapperAnnotationClass}
 public interface ${mapper} extends ${mapperSuperClass}<${entity}, ${queryVO}> {
-#if(${generateQuery})
+#if(${generateSelectByXml})
     
     @Override
     List<${queryVO}> selectByXml(SqlContext<${entity}> sqlContext, Object page);

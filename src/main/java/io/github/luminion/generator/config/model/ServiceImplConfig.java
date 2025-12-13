@@ -77,21 +77,33 @@ public class ServiceImplConfig implements TemplateRender {
             case MY_BATIS_PLUS_SQL_BOOSTER:
                 this.superClass = RuntimeClass.SQL_BOOSTER_MP_SERVICE_IMPL.getClassName();
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
-                if (globalConfig.isGenerateQuery()) {
+                if (globalConfig.isGenerateVoById()){
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
-                    importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
-                    importPackages.add(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getClassName());
+                }
+                if (globalConfig.isGenerateVoList()){
                     importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
-              
+                    importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
+                }
+                if (globalConfig.isGenerateVoPage()){
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getClassName());
                 }
                 break;
             case MYBATIS_PLUS:
                 this.superClass = RuntimeClass.MYBATIS_PLUS_SERVICE_IMPL.getClassName();
-                if (globalConfig.isGenerateQuery()) {
+                if (globalConfig.isGenerateVoById()){
+                    importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+                }
+                if (globalConfig.isGenerateVoList()){
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
-                    importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
+                }
+                if (globalConfig.isGenerateVoPage()){
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                     importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
                     importPackages.add(RuntimeClass.MYBATIS_PLUS_PAGE.getClassName());
                 }

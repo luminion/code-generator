@@ -19,39 +19,43 @@ import ${pkg};
  * @since ${date}
  */
 public interface ${service} extends ${serviceSuperClass}<${entity}, ${queryVO}> {
-    #if(${generateCreate})
+#if(${generateCreate})
 
     Serializable createByDTO(${createDTO} createDTO);
-    #end
-    #if(${generateUpdate})
+#end
+#if(${generateUpdate})
 
     boolean updateByDTO(${updateDTO} updateDTO);
-    #end
-    #if(${generateDelete})
+#end
+#if(${generateDelete} && ${table.havePrimaryKey})
 
     @Override
     boolean removeById(Serializable id);
-    #end
-    #if(${generateQuery})
+#end
+#if(${generateVoById} && ${table.havePrimaryKey})
 
     @Override
     ${queryVO} voById(Serializable id);
-
+#end
+#if(${generateVoList})
+        
     @Override
     List<${queryVO}> voList(SqlContext <${entity}> sqlContext);
+#end
+#if(${generateVoPage})
 
     @Override
     BPage<${queryVO}> voPage(SqlContext<${entity}> sqlContext, long current, long size);
-    #end
-    #if(${generateImport})
+#end
+#if(${generateImport})
 
     void excelTemplate(OutputStream os);
 
     int excelImport(InputStream is);
-    #end
-    #if(${generateExport})
+#end
+#if(${generateExport})
 
     void excelExport(SqlContext<${entity}> sqlContext, OutputStream os);
-    #end
+#end
 }
 

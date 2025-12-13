@@ -51,7 +51,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         return super.updateById(entity);
     }
 #end
-#if(${generateDelete})
+#if(${generateDelete} && ${table.havePrimaryKey})
 
     @Override
     public boolean removeById(Serializable id) {
@@ -62,17 +62,21 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         #end
     }
 #end
-#if(${generateQuery})
+#if(${generateVoById} && ${table.havePrimaryKey})
 
     @Override
     public ${queryVO} voById(Serializable id) { 
         return super.voById(id);
     }
+#end
+#if(${generateVoList})
 
     @Override
     public List<${queryVO}> voList(SqlContext<${entity}> sqlContext) {
         return super.voList(sqlContext);
     }
+#end
+#if(${generateVoPage})
 
     @Override
     public BPage<${queryVO}> voPage(SqlContext<${entity}> sqlContext, long current, long size) {

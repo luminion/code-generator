@@ -42,6 +42,7 @@ public class EntityQueryDTOConfig implements TemplateRender {
         return Collections.singletonList(templateFile);
     }
 
+    
 
 
     @Override
@@ -54,7 +55,7 @@ public class EntityQueryDTOConfig implements TemplateRender {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
 
         // 关闭功能
-        if (!globalConfig.isGenerateQuery()){
+        if (!globalConfig.isGenerateSelectByXml()){
             this.getTemplateFile().setGenerate(false);
         }
 

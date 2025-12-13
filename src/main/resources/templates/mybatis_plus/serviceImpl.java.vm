@@ -51,7 +51,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         return super.updateById(entity);
     }
 #end
-#if(${generateDelete})
+#if(${generateDelete} && ${table.havePrimaryKey})
 
     @Override
     public boolean removeById(Serializable id) {
@@ -62,7 +62,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         #end
     }
 #end
-#if(${generateQuery})
+#if(${generateQuery} && ${table.havePrimaryKey})
 
     #if(${generate.service})
     @Override
@@ -71,11 +71,13 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         #if(${table.primaryKeyField})
         ${queryDTO} queryDTO = new ${queryDTO}();
         queryDTO.set${table.primaryKeyField.capitalName}((${table.primaryKeyField.propertyType}) id);
-        return this.voList(queryDTO).stream().findFirst().orElse(null);
+        return getBaseMapper().selectByXml(queryDTO, null).stream().findFirst().orElse(null);
         #else
         throw new IllegalStateException("can't find id property");
         #end
     }
+#end
+#if(${generateVoList})
 
     #if(${generate.service})
     @Override
@@ -83,7 +85,8 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     public List<${queryVO}> voList(${queryDTO} queryDTO) {
         return getBaseMapper().selectByXml(queryDTO, null);
     }
-
+#end
+#if(${generateVoPage})
     #if(${generate.service})
     @Override
     #end
@@ -123,7 +126,8 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public void excelExport(${queryDTO} queryDTO, OutputStream os) {
-        ${excelApiClass}.write(os, ${excelExportDTO}.class).sheet().doWrite(this.voList(queryDTO));
+        ${excelApiClass}.write(os, ${excelExportDTO}.class).sheet()
+            .doWrite(getBaseMapper().selectByXml(queryDTO, null));
     }
 #end
 }

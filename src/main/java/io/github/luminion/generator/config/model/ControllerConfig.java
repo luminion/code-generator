@@ -214,28 +214,25 @@ public class ControllerConfig implements TemplateRender {
         if (globalConfig.isGenerateDelete()) {
             if (tableInfo.isHavePrimaryKey()) {
                 TableField primaryKeyTableField = tableInfo.getPrimaryKeyField();
-
                 Optional.ofNullable(primaryKeyTableField.getJavaType().getPkg()).ifPresent(importPackages::add);
-            } 
-            //else {
-            //    log.warn("table [{}] does not have a primary key, won't generate deleteById", tableInfo.getName());
-            //}
+            }
         }
 
-        // 查询
-        if (globalConfig.isGenerateQuery()) {
+        if (globalConfig.isGenerateVoById()){
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
             // 根据id查询
             if (tableInfo.isHavePrimaryKey()) {
                 TableField primaryKeyTableField = tableInfo.getPrimaryKeyField();
                 Optional.ofNullable(primaryKeyTableField.getJavaType().getPkg()).ifPresent(importPackages::add);
+            }else{
+                log.warn("table [{}] does not have a primary key, won't generate voById", tableInfo.getName());
             }
-            //else {
-            //    log.warn("table [{}] does not have a primary key, won't generate voById", tableInfo.getName());
-            //}
+        }
+        if (globalConfig.isGenerateVoList()){
             importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-
+        }
+        if (globalConfig.isGenerateVoPage()){
             if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
                 importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_BUILDER.getClassName());
                 importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
@@ -245,6 +242,7 @@ public class ControllerConfig implements TemplateRender {
                 importPackages.add(pageMethod.getClassName());
             }
         }
+
         String responseClass = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_SERVLET_RESPONSE.getClassName();
 
         // 导入

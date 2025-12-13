@@ -105,7 +105,7 @@ public class ${controller} {
         return ${returnMethod.invokeMethodStr("baseService.updateByDTO(updateDTO)")};
     }
 #end
-#if(${generateDelete})
+#if(${generateDelete} && ${table.havePrimaryKey})
 
     #if(${swagger3})
     @Operation(summary = "删除")
@@ -131,7 +131,7 @@ public class ${controller} {
         return ${returnMethod.invokeMethodStr("baseService.removeById(id)")};
     }
 #end
-#if(${generateQuery})
+#if(${generateVoById} && ${table.havePrimaryKey})
 
     #if(${swagger3})
     @Operation(summary = "根据id查询详情")
@@ -156,6 +156,8 @@ public class ${controller} {
     public ${returnMethod.returnGenericTypeStr("${queryVO}")} id($!{idMethodParams}${primaryKeyPropertyType} id) {
         return ${returnMethod.invokeMethodStr("baseService.voById(id)")};
     }
+#end
+#if(${generateVoList})
 
     #if(${swagger3})
     @Operation(summary = "列表查询")
@@ -181,6 +183,8 @@ public class ${controller} {
         return ${returnMethod.invokeMethodStr("baseService.voList(queryDTO)")};
         #end
     }
+#end
+#if(${generateVoPage})
 
     #if(${swagger3})
     @Operation(summary = "分页查询")
@@ -275,7 +279,8 @@ public class ${controller} {
         #end
     }
 #end
-#if(${sqlBooster})
+#if(${sqlBooster})## ---sqlBooster---
+#if(${generateVoList})
 
     #if(${swagger3})
     @Operation(summary = "列表查询-动态条件")
@@ -296,6 +301,8 @@ public class ${controller} {
     public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} advancedList($!{optionalBodyStr}SqlContext<${entity}> sqlContext) {
         return ${returnMethod.invokeMethodStr("baseService.voList(sqlContext)")};
     }
+#end
+#if(${generateVoPage})
 
     #if(${swagger3})
     @Operation(summary = "分页查询-动态条件")
@@ -318,6 +325,8 @@ public class ${controller} {
     public ${returnMethod.returnGenericTypeStr(${pageReturnType})} advancedPage($!{optionalBodyStr}SqlContext<${entity}> sqlContext, $!{pageMethodParams}) {
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlContext, current, size)")})};
     }
+#end
+#if(${generateExport})
 
     #if(${swagger3})
     @Operation(summary = "excel文件导出-动态条件")
@@ -338,4 +347,5 @@ public class ${controller} {
         baseService.excelExport(sqlContext, response.getOutputStream());
     }
 #end
+#end## ---sqlBooster---
 }

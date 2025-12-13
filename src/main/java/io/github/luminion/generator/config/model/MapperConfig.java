@@ -68,7 +68,7 @@ public class MapperConfig implements TemplateRender {
         switch (globalConfig.getRuntimeEnv()) {
             case MYBATIS_PLUS:
                 this.superClass = RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getClassName();
-                if (globalConfig.isGenerateQuery()) {
+                if (globalConfig.isGenerateSelectByXml()) {
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
@@ -78,7 +78,7 @@ public class MapperConfig implements TemplateRender {
             case MY_BATIS_PLUS_SQL_BOOSTER:
                 this.superClass = RuntimeClass.SQL_BOOSTER_MP_MAPPER.getClassName();
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
-                if (globalConfig.isGenerateQuery()) {
+                if (globalConfig.isGenerateSelectByXml()) {
                     importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                 }

@@ -20,7 +20,7 @@ import ${pkg};
  */
 $!{mapperAnnotationClass}
 public interface ${mapper} extends ${mapperSuperClass}<${entity}> {
-#if(${generateQuery})
+#if(${generateSelectByXml})
     
     List<${queryVO}> selectByXml(${queryDTO} queryDTO, IPage<${queryVO}> page);
 #end

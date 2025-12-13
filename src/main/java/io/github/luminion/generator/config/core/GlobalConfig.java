@@ -131,25 +131,25 @@ public class GlobalConfig implements TemplateRender {
      */
     protected boolean validated;
 
-    /**
-     * 生成查询相关方法及配套类
-     */
-    protected boolean generateQuery = true;
+    ///**
+    // * 生成查询相关方法及配套类
+    // */
+    //protected boolean generateQuery = true;
 
     /**
      * 生成id查询方法
      */
-    protected boolean generateQueryVoById = true;
-    
+    protected boolean generateVoById = true;
+
     /**
      * 批量查询相关方法及配套类
      */
-    protected boolean generateQueryVoList = true;
-    
+    protected boolean generateVoList = true;
+
     /**
      * 批量查询分页相关方法及配套类
      */
-    protected boolean generateQueryPage = true;
+    protected boolean generateVoPage = true;
 
     /**
      * 生成新增方法及配套类
@@ -178,13 +178,27 @@ public class GlobalConfig implements TemplateRender {
 
     @Override
     public void init() {
-        if (!generateQuery && generateExport) {
-            log.warn("已配置生成导出但未配置生成查询, 导出功能依赖查询功能, 将不会生成导出相关功能!!!");
-            generateExport = false;
-        }
+        //if (!isGenerateQuery() && generateExport) {
+        //    log.warn("The generated export has been configured but the generated query has not been configured. " +
+        //            "The export function depends on the query function. No export related functions will be generated!!!");
+        //    generateExport = false;
+        //}
         if (javaEEApi.equals(JavaEEApi.JAVAX)) {
             // javax一般为低版本, 不支持@serial
             this.serializableAnnotation = false;
+        }
+    }
+
+    @Override
+    public void renderDataPreProcess(TableInfo tableInfo) {
+        boolean havePrimaryKey = tableInfo.isHavePrimaryKey();
+        if (!havePrimaryKey) {
+            if (generateVoById) {
+                log.warn("Table [{}] has no primary key , voById() will not be generated", tableInfo.getName());
+            }
+            if (generateDelete) {
+                log.warn("Table [{}] has no primary key , removeById() will not be generated", tableInfo.getName());
+            }
         }
     }
 
@@ -219,16 +233,29 @@ public class GlobalConfig implements TemplateRender {
         data.put("excelApiPackagePrefix", excelApi.getPackagePrefix());
         data.put("excelApiClass", excelApi.getMainEntrance());
 
-        data.put("generateQuery", this.generateQuery);
+
         data.put("generateCreate", this.generateCreate);
         data.put("generateUpdate", this.generateUpdate);
         data.put("generateDelete", this.generateDelete);
+
+        data.put("generateVoById", this.generateVoById);
+        data.put("generateVoList", this.generateVoList);
+        data.put("generateVoPage", this.generateVoPage);
+        data.put("generateSelectByXml", this.isGenerateSelectByXml());
+        
         data.put("generateImport", this.generateImport);
         data.put("generateExport", this.generateExport);
 
         return data;
     }
 
+
+    /**
+     * 是否生成查询
+     */
+    public boolean isGenerateSelectByXml(){
+        return generateVoById || generateVoList || generateVoPage || generateExport;
+    }
 
     /**
      * 获取领域类序列化需要导入的包
