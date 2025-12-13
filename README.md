@@ -10,7 +10,7 @@
 ## 功能特性
 
 - **基础代码生成**：生成实体类、Mapper、Service、Controller 等基础代码
-- **Excel导入导出**：支持生成Excel相关代码，适配`EasyExcel`/`EasyExcel`
+- **Excel导入导出**：支持生成Excel相关代码，适配`EasyExcel`/`FastExcel`
 - **领域模型生成**：支持生成`新增DTO`、`修改DTO`、`查询DTO`、`查询VO`、`EXCEL导入DTO`、`EXCEL导出DTO` 等领域模型
 - **选择性方法生成**：支持选择性生成增删查改、导入导出等方法
 - **多种数据库支持**：支持 MySQL、PostgreSQL、Oracle 等主流数据库
