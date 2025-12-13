@@ -1,15 +1,16 @@
 # code-generator
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/mybatis-plus-generator)](https://mvnrepository.com/artifact/io.github.luminion/mybatis-plus-generator)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/code-generator)](https://mvnrepository.com/artifact/io.github.luminion/code-generator)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-代码生成器，通过数据库表信息, 一键生成`Controller`/`Service`/`Mapper`/`Entity` 等代码及配套`CRUD方法`/`领域模型`
+代码生成器，通过数据库表信息, 一键生成`Controller`/`Service`/`Mapper`/`Entity` 等代码及配套`CRUD方法`/`领域模型`/`Excel导入导出`
 
 旧版地址: https://github.com/bootystar/mybatis-plus-generator
 
 ## 功能特性
 
 - **基础代码生成**：生成实体类、Mapper、Service、Controller 等基础代码
+- **Excel导入导出**：支持生成Excel相关代码，适配`EasyExcel`/`EasyExcel`
 - **领域模型生成**：支持生成`新增DTO`、`修改DTO`、`查询DTO`、`查询VO`、`EXCEL导入DTO`、`EXCEL导出DTO` 等领域模型
 - **选择性方法生成**：支持选择性生成增删查改、导入导出等方法
 - **多种数据库支持**：支持 MySQL、PostgreSQL、Oracle 等主流数据库
@@ -27,12 +28,12 @@
 
 首先, 在您的项目中添加 `code-generator` 的依赖。由于它是一个开发工具, 通常建议将其放在 `test` 或 `provided` 作用域下。
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/mybatis-plus-generator)](https://mvnrepository.com/artifact/io.github.luminion/mybatis-plus-generator)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/code-generator)](https://mvnrepository.com/artifact/io.github.luminion/code-generator)
 
 ```xml
 <dependency>
     <groupId>io.github.luminion</groupId>
-    <artifactId>mybatis-plus-generator</artifactId>
+    <artifactId>code-generator</artifactId>
     <version>latest</version>
     <scope>test</scope> <!-- Or <scope>provided</scope> -->
 </dependency>
@@ -60,7 +61,7 @@
 <dependencies>
     <dependency>
         <groupId>io.github.luminion</groupId>
-        <artifactId>mybatis-plus-generator</artifactId>
+        <artifactId>code-generator</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </dependency>
 </dependencies>
