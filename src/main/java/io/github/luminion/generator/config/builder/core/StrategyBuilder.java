@@ -102,6 +102,17 @@ public class StrategyBuilder {
         return this;
     }
 
+     /**
+     * 是否显示数据库schema名
+     *
+     * @param enabled 是否显示
+     * @return this
+     */
+    public StrategyBuilder showSchema(boolean enabled) {
+        this.configurer.getStrategyConfig().setShowSchema(enabled);
+        return this;
+    }
+
     /**
      * 跳过视图
      *

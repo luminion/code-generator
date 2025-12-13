@@ -68,7 +68,7 @@
         #end
     #end
     #if(${table.extraFields.size()}>0)
-            <!-- 额外后缀查询条件 -->
+            <!-- suffix conditions -->
     #end
     #foreach($field in ${table.extraFields})
         #if(${field.sqlOperator}=="IN" || ${field.sqlOperator}=="NOT IN")
@@ -133,7 +133,7 @@
             #end
         </where>
         #if(${orderColumnSql})
-            ORDER BY ${orderColumnSql}
+        ORDER BY ${orderColumnSql}
         #end
     </select>
 

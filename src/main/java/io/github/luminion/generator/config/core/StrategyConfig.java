@@ -74,6 +74,10 @@ public class StrategyConfig implements TemplateRender {
 
     // ===================过滤相关===================
 
+    /**
+     * 是否显示schema
+     */
+    protected boolean showSchema;
 
     /**
      * 是否跳过视图（默认 false）

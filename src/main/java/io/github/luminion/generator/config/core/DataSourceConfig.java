@@ -65,13 +65,13 @@ public class DataSourceConfig {
         this.dbType = DatasourceUtils.getDbType(url);
     }
 
-    public DataSourceConfig(String url, String username, String password, String schemaName) {
-        this.url = url;
-        this.username = username;
-        this.password = password;
-        this.dbType = DatasourceUtils.getDbType(url);
-        this.schemaName = schemaName;
-    }
+    //public DataSourceConfig(String url, String username, String password, String schemaName) {
+    //    this.url = url;
+    //    this.username = username;
+    //    this.password = password;
+    //    this.dbType = DatasourceUtils.getDbType(url);
+    //    this.schemaName = schemaName;
+    //}
 
     /**
      * 创建数据库连接对象

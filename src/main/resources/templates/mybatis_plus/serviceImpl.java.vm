@@ -62,7 +62,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         #end
     }
 #end
-#if(${generateQuery} && ${table.havePrimaryKey})
+#if(${generateVoById} && ${table.havePrimaryKey})
 
     #if(${generate.service})
     @Override
@@ -103,14 +103,17 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public void excelTemplate(OutputStream os) {
-        ${excelApiClass}.write(os, ${excelImportDTO}.class).sheet().doWrite(Collections.emptyList());
+        ${excelApiClass}.write(os, ${excelImportDTO}.class).sheet()
+            .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+            .doWrite(Collections.emptyList());
     }
 
     #if(${generate.service})
     @Override
     #end
     public int excelImport(InputStream is) {
-        List<${excelImportDTO}> dataList = ${excelApiClass}.read(is).head(${excelImportDTO}.class).sheet().doReadSync();
+        List<${excelImportDTO}> dataList = ${excelApiClass}.read(is)
+            .head(${excelImportDTO}.class).sheet().doReadSync();
         List<${entity}> entityList = dataList.stream().map(excelImportDTO -> {
             ${entity} entity = new ${entity}();
             BeanUtils.copyProperties(excelImportDTO, entity);
@@ -127,6 +130,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #end
     public void excelExport(${queryDTO} queryDTO, OutputStream os) {
         ${excelApiClass}.write(os, ${excelExportDTO}.class).sheet()
+            .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
             .doWrite(getBaseMapper().selectByXml(queryDTO, null));
     }
 #end

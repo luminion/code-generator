@@ -79,12 +79,12 @@
                 #end
             #end
         </where>
-        #if(${orderColumnSql})
         <trim prefix="ORDER BY" prefixOverrides=",">
             <include refid="sqlbooster.sorts"/>
+            #if(${orderColumnSql})
             , ${orderColumnSql}
+            #end
         </trim>
-        #end
     </select>
 
 #end

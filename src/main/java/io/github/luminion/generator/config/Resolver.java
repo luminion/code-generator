@@ -9,6 +9,7 @@ import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.*;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
  * @author luminion
  * @since 1.0.0
  */
+@Slf4j
 public class Resolver {
     /**
      * 配置信息
@@ -61,23 +63,23 @@ public class Resolver {
         // 添加类渲染信息
         templateRenderList.add(this.configurer.getGlobalConfig());
         templateRenderList.add(this.configurer.getStrategyConfig());
-        
+
         templateRenderList.add(this.configurer.getControllerConfig());
-        
+
         templateRenderList.add(this.configurer.getServiceConfig());
         templateRenderList.add(this.configurer.getServiceImplConfig());
-        
+
         templateRenderList.add(this.configurer.getMapperConfig());
         templateRenderList.add(this.configurer.getMapperXmlConfig());
-        
+
         templateRenderList.add(this.configurer.getEntityConfig());
-        
-        templateRenderList.add(this.configurer.getEntityQueryDTOConfig());
-        templateRenderList.add(this.configurer.getEntityQueryVOConfig());
-        
+
         templateRenderList.add(this.configurer.getEntityCreateDTOConfig());
         templateRenderList.add(this.configurer.getEntityUpdateDTOConfig());
-        
+
+        templateRenderList.add(this.configurer.getEntityQueryDTOConfig());
+        templateRenderList.add(this.configurer.getEntityQueryVOConfig());
+
         templateRenderList.add(this.configurer.getEntityExcelImportDTOConfig());
         templateRenderList.add(this.configurer.getEntityExcelExportDTOConfig());
 
@@ -280,7 +282,7 @@ public class Resolver {
         for (TemplateRender templateRender : templateRenderList) {
             templateRender.renderDataPreProcess(tableInfo);
         }
-        
+
         // 此时配置已完全确定
         tableInfo.processExtraField();
 
@@ -299,15 +301,20 @@ public class Resolver {
         result.put("class", this.getOutputClassNameMap(tableInfo));
         // 类是否生成
         result.put("generate", this.getOutputClassGenerateMap());
-        if (this.configurer.getDataSourceConfig().getSchemaName() != null) {
-            result.put("schemaName", this.configurer.getDataSourceConfig().getSchemaName() + ".");
+        if (this.configurer.getStrategyConfig().isShowSchema()) {
+            String schemaName = this.configurer.getDataSourceConfig().getSchemaName();
+            if (schemaName == null) {
+                log.warn("showSchema is true, but the schemaName could not be obtained from the database information");
+            } else {
+                result.put("schemaName", schemaName + ".");
+            }
         }
-        
+
         // 渲染后处理
         for (TemplateRender templateRender : templateRenderList) {
             templateRender.renderDataPostProcess(tableInfo, result);
         }
-    
+
         return result;
     }
 

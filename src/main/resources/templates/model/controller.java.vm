@@ -153,7 +153,7 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("${queryVO}")} id($!{idMethodParams}${primaryKeyPropertyType} id) {
+    public ${returnMethod.returnGenericTypeStr("${queryVO}")} voById($!{idMethodParams}${primaryKeyPropertyType} id) {
         return ${returnMethod.invokeMethodStr("baseService.voById(id)")};
     }
 #end
@@ -283,12 +283,12 @@ public class ${controller} {
 #if(${generateVoList})
 
     #if(${swagger3})
-    @Operation(summary = "列表查询-动态条件")
+    @Operation(summary = "动态条件-列表查询")
     #elseif(${swagger2})
-    @ApiOperation(value = "列表查询-动态条件")
+    @ApiOperation(value = "动态条件-列表查询")
     #else
     /**
-     * 列表查询-动态条件
+     * 动态条件-列表查询
      *
      * @param sqlHelper 条件构造器
      * @return 查询结果
@@ -305,12 +305,12 @@ public class ${controller} {
 #if(${generateVoPage})
 
     #if(${swagger3})
-    @Operation(summary = "分页查询-动态条件")
+    @Operation(summary = "动态条件-分页查询")
     #elseif(${swagger2})
-    @ApiOperation(value = "分页查询-动态条件")
+    @ApiOperation(value = "动态条件-分页查询")
     #else
     /**
-     * 分页查询-动态条件
+     * 动态条件-分页查询
      *
      * @param sqlContext 条件构造器
      * @param current 页码
@@ -329,12 +329,12 @@ public class ${controller} {
 #if(${generateExport})
 
     #if(${swagger3})
-    @Operation(summary = "excel文件导出-动态条件")
+    @Operation(summary = "动态条件-excel文件导出")
     #elseif(${swagger2})
-    @ApiOperation(value = "excel文件导出-动态条件")
+    @ApiOperation(value = "动态条件-excel文件导出")
     #else
     /**
-     * excel文件导出-动态条件
+     * 动态条件-excel文件导出
      * 
      * @param sqlContext 条件构造器
      */

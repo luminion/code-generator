@@ -88,13 +88,16 @@ public class ServiceImplConfig implements TemplateRender {
                     importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
                     importPackages.add(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getClassName());
                 }
+                if (globalConfig.isGenerateExport()){
+                    importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
+                }
                 break;
             case MYBATIS_PLUS:
                 this.superClass = RuntimeClass.MYBATIS_PLUS_SERVICE_IMPL.getClassName();
                 if (globalConfig.isGenerateVoById()){
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                 }
                 if (globalConfig.isGenerateVoList()){
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
@@ -106,6 +109,9 @@ public class ServiceImplConfig implements TemplateRender {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
                     importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
                     importPackages.add(RuntimeClass.MYBATIS_PLUS_PAGE.getClassName());
+                }
+                if (globalConfig.isGenerateExport()){
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
                 }
                 break;
             default:
@@ -141,22 +147,27 @@ public class ServiceImplConfig implements TemplateRender {
         String excelMain = globalConfig.getExcelApi().getMainEntrance();
         String excelPackagePrefix = globalConfig.getExcelApi().getPackagePrefix();
         String excelClass = excelPackagePrefix + excelMain;
+        String longestMatchColumnWidthStyleStrategyClass = excelPackagePrefix + RuntimeClass.PREFIX_EXCEL_LONGEST_MATCH_COLUMN_WIDTH_STYLE_STRATEGY.getClassName();
         if (globalConfig.isGenerateImport()) {
             importPackages.add(excelClass);
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_IMPORT_DTO, tableInfo));
-            importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
+            // excelTemplate
+            importPackages.add(longestMatchColumnWidthStyleStrategyClass);
             importPackages.add(RuntimeClass.JAVA_UTIL_COLLECTIONS.getClassName());
             importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
+            // excelImport
             importPackages.add(RuntimeClass.JAVA_IO_INPUT_STREAM.getClassName());
             importPackages.add(RuntimeClass.JAVA_STREAM_COLLECTORS.getClassName());
+            importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
             importPackages.add(RuntimeClass.SPRING_BOOT_BEAN_UTILS.getClassName());
+            
         }
 
         if (globalConfig.isGenerateExport()) {
             importPackages.add(excelClass);
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO, tableInfo));
             importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
-            //importPackages.add(RuntimeClass.PREFIX_EXCEL_LONGEST_MATCH_COLUMN_WIDTH_STYLE_STRATEGY.getClassName());
+            importPackages.add(longestMatchColumnWidthStyleStrategyClass);
         }
 
         Collection<String> frameworkPackages = importPackages.stream()

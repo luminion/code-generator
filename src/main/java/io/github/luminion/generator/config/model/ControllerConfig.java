@@ -217,7 +217,7 @@ public class ControllerConfig implements TemplateRender {
                 Optional.ofNullable(primaryKeyTableField.getJavaType().getPkg()).ifPresent(importPackages::add);
             }
         }
-
+        // voById
         if (globalConfig.isGenerateVoById()){
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
             // 根据id查询
@@ -228,11 +228,16 @@ public class ControllerConfig implements TemplateRender {
                 log.warn("table [{}] does not have a primary key, won't generate voById", tableInfo.getName());
             }
         }
+        // voList
         if (globalConfig.isGenerateVoList()){
-            importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+            importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
         }
+        // voPage
         if (globalConfig.isGenerateVoPage()){
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
             if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
                 importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_BUILDER.getClassName());
                 importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
@@ -255,6 +260,7 @@ public class ControllerConfig implements TemplateRender {
 
         // 导出
         if (globalConfig.isGenerateExport()) {
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
             importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getClassName());
             importPackages.add(responseClass);
         }

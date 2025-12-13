@@ -89,7 +89,9 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public void excelTemplate(OutputStream os) {
-        ${excelApiClass}.write(os, ${excelImportDTO}.class).sheet().doWrite(Collections.emptyList());
+        ${excelApiClass}.write(os, ${excelImportDTO}.class).sheet()
+            .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+            .doWrite(Collections.emptyList());
     }
 
     #if(${generate.service})
@@ -112,7 +114,9 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public void excelExport(SqlContext<${entity}> sqlContext, OutputStream os) {
-        ${excelApiClass}.write(os, ${excelExportDTO}.class).sheet().doWrite(this.voList(sqlContext));
+        ${excelApiClass}.write(os, ${excelExportDTO}.class).sheet()
+            .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+            .doWrite(this.voList(sqlContext));
     }
 #end
 }
