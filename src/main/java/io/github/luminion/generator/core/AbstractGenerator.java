@@ -116,14 +116,15 @@ public abstract class AbstractGenerator<C extends TemplateRender,B> implements L
         templateEngine.batchOutput().open();
         log.debug("========================== generate success！！！==========================");
         String banner =
-                "  _  _                                      ___             _  _      _                               ___             _  _  \n" +
-                        " | || |   __ _    __ __   __ _      o O O  /   \\     o O O | \\| |    (_)     __      ___      o O O  |   \\   __ _    | || | \n" +
-                        " | __ |  / _` |   \\ V /  / _` |    o       | - |    o      | .` |    | |    / _|    / -_)    o       | |) | / _` |    \\_, | \n" +
-                        " |_||_|  \\__,_|   _\\_/_  \\__,_|   TS__[O]  |_|_|   TS__[O] |_|\\_|   _|_|_   \\__|_   \\___|   TS__[O]  |___/  \\__,_|   _|__/  \n" +
-                        "_|\"\"\"\"\"|_|\"\"\"\"\"|_|\"\"\"\"\"|_|\"\"\"\"\"| {======|_|\"\"\"\"\"| {======|_|\"\"\"\"\"|_|\"\"\"\"\"|_|\"\"\"\"\"|_|\"\"\"\"\"| {======|_|\"\"\"\"\"|_|\"\"\"\"\"|_| \"\"\"\"| \n" +
-                        "\"`-0-0-'\"`-0-0-'\"`-0-0-'\"`-0-0-'./o--000'\"`-0-0-'./o--000'\"`-0-0-'\"`-0-0-'\"`-0-0-'\"`-0-0-'./o--000'\"`-0-0-'\"`-0-0-'\"`-0-0-' ";
+                "  _________                                        \n" +
+                        " /   _____/__ __   ____  ____  ____   ______ ______\n" +
+                        " \\_____  \\|  |  \\_/ ___\\/ ___\\/ __ \\ /  ___//  ___/\n" +
+                        " /        \\  |  /\\  \\__\\  \\__\\  ___/ \\___ \\ \\___ \\ \n" +
+                        "/_______  /____/  \\___  >___  >___  >____  >____  >\n" +
+                        "        \\/            \\/    \\/    \\/     \\/     \\/ "+
+                        "\n(ﾉ>ω<)ﾉ  Code generation complete! Let's coding ~\n";
         System.out.println(banner);
-        System.out.println("execute success! check files in following folder:");
+        System.out.println("check files in following folder:");
         String path = configurer.getGlobalConfig().getOutputDir();
         System.out.println(new File(path).getAbsolutePath());
     }
