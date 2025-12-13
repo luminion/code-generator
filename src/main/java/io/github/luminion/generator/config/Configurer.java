@@ -118,15 +118,5 @@ public class Configurer<C extends TemplateRender> {
         this.customConfig = customConfig;
     }
 
-    public Configurer(String url, String username, String password, String schemaName) {
-        this.dataSourceConfig = new DataSourceConfig(url, username, password, schemaName);
-        this.customConfig = null;
-    }
-
-    public Configurer(String url, String username, String password, String schemaName, C customConfig) {
-        this.dataSourceConfig = new DataSourceConfig(url, username, password, schemaName);
-        this.customConfig = customConfig;
-    }
-
 
 }
