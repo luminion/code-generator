@@ -214,17 +214,6 @@ public class GlobalBuilder {
     }
 
     /**
-     * 生成查询方法
-     *
-     * @param enable 是否启用
-     * @return this
-     */
-    public GlobalBuilder generateQuery(boolean enable) {
-        this.configurer.getGlobalConfig().setGenerateQuery(enable);
-        return this;
-    }
-
-    /**
      * 生成新增方法
      *
      * @param enable 是否启用
@@ -254,6 +243,39 @@ public class GlobalBuilder {
      */
     public GlobalBuilder generateDelete(boolean enable) {
         this.configurer.getGlobalConfig().setGenerateDelete(enable);
+        return this;
+    }
+
+    /**
+     * 生成id查询方法
+     *
+     * @param enable 是否启用
+     * @return this
+     */
+    public GlobalBuilder generateVoById(boolean enable) {
+        this.configurer.getGlobalConfig().setGenerateVoById(enable);
+        return this;
+    }
+
+    /**
+     * 生成列表查询方法
+     *
+     * @param enable 是否启用
+     * @return this
+     */
+    public GlobalBuilder generateVoList(boolean enable) {
+        this.configurer.getGlobalConfig().setGenerateVoList(enable);
+        return this;
+    }
+
+    /**
+     * 生成分页查询方法
+     *
+     * @param enable 是否启用
+     * @return this
+     */
+    public GlobalBuilder generateVoPage(boolean enable) {
+        this.configurer.getGlobalConfig().setGenerateVoPage(enable);
         return this;
     }
 

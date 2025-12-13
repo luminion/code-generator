@@ -149,30 +149,32 @@ public class GeneratorTest {
 
 ### 全局配置 (GlobalBuilder)
 
-| 配置方法 | 参数类型 | 详细说明 |
-|---|---|---|
-| `lombok(boolean)` | `boolean` | 启用/禁用 lombok 模型 |
-| `chainModel(boolean)` | `boolean` | 启用/禁用链式 setter |
-| `serializableUID(boolean)` | `boolean` | 添加序列化 UID |
+| 配置方法                              | 参数类型 | 详细说明 |
+|-----------------------------------|---|---|
+| `lombok(boolean)`                 | `boolean` | 启用/禁用 lombok 模型 |
+| `chainModel(boolean)`             | `boolean` | 启用/禁用链式 setter |
+| `serializableUID(boolean)`        | `boolean` | 添加序列化 UID |
 | `serializableAnnotation(boolean)` | `boolean` | 添加 `@Serial` 注解 (需要 JDK 14+) |
-| `docType(DocType)` | `DocType` | 配置文档类型 (例如: `DocType.SWAGGER`) |
-| `docLink(boolean)` | `boolean` | 在文档注释中添加相关类链接 |
-| `author(String)` | `String` | 设置文档作者 |
-| `date(String)` | `String` | 指定注释日期格式 (例如: "yyyy-MM-dd") |
-| `javaEEApi(JavaEEApi)` | `JavaEEApi` | 设置 Java EE 框架 (例如: `JavaEEApi.JAKARTA`) |
-| `excelApi(ExcelApi)` | `ExcelApi` | 设置 Excel 框架 (例如: `ExcelApi.EASY_EXCEL`) |
-| `outputDir(String)` | `String` | 设置输出根目录 (全路径) |
-| `openOutputDir(boolean)` | `boolean` | 生成后是否打开输出目录 |
-| `fileOverride(boolean)` | `boolean` | 是否覆盖已有文件 (全局) |
-| `parentPackage(String)` | `String` | 设置父包名 |
-| `parentPackageModule(String)` | `String` | 设置父包模块名 |
-| `validated(boolean)` | `boolean` | 是否生成参数校验相关注解 |
-| `generateQuery(boolean)` | `boolean` | 是否生成查询方法 |
-| `generateInsert(boolean)` | `boolean` | 是否生成新增方法 |
-| `generateUpdate(boolean)` | `boolean` | 是否生成更新方法 |
-| `generateDelete(boolean)` | `boolean` | 是否生成删除方法 |
-| `generateImport(boolean)` | `boolean` | 是否生成导入方法 |
-| `generateExport(boolean)` | `boolean` | 是否生成导出方法 |
+| `docType(DocType)`                | `DocType` | 配置文档类型 (例如: `DocType.SWAGGER`) |
+| `docLink(boolean)`                | `boolean` | 在文档注释中添加相关类链接 |
+| `author(String)`                  | `String` | 设置文档作者 |
+| `date(String)`                    | `String` | 指定注释日期格式 (例如: "yyyy-MM-dd") |
+| `javaEEApi(JavaEEApi)`            | `JavaEEApi` | 设置 Java EE 框架 (例如: `JavaEEApi.JAKARTA`) |
+| `excelApi(ExcelApi)`              | `ExcelApi` | 设置 Excel 框架 (例如: `ExcelApi.EASY_EXCEL`) |
+| `outputDir(String)`               | `String` | 设置输出根目录 (全路径) |
+| `openOutputDir(boolean)`          | `boolean` | 生成后是否打开输出目录 |
+| `fileOverride(boolean)`           | `boolean` | 是否覆盖已有文件 (全局) |
+| `parentPackage(String)`           | `String` | 设置父包名 |
+| `parentPackageModule(String)`     | `String` | 设置父包模块名 |
+| `validated(boolean)`              | `boolean` | 是否生成参数校验相关注解 |
+| `generateInsert(boolean)`         | `boolean` | 是否生成新增方法 |
+| `generateUpdate(boolean)`         | `boolean` | 是否生成更新方法 |
+| `generateDelete(boolean)`         | `boolean` | 是否生成删除方法 |
+| `generateVoById(boolean)`         | `boolean` | 是否生成查询方法 |
+| `generateVoList(boolean)`         | `boolean` | 是否生成查询方法 |
+| `generateVoPage(boolean)`         | `boolean` | 是否生成查询方法 |
+| `generateImport(boolean)`         | `boolean` | 是否生成导入方法 |
+| `generateExport(boolean)`         | `boolean` | 是否生成导出方法 |
 
 ### 策略配置 (StrategyBuilder)
 
