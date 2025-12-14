@@ -279,7 +279,7 @@ public class ${controller} {
         #end
     }
 #end
-#if(${sqlBooster})## ---sqlBooster---
+#if(${sqlBooster} && ${sqlContextQuery})
 #if(${generateVoList})
 
     #if(${swagger3})
@@ -290,15 +290,15 @@ public class ${controller} {
     /**
      * 动态条件-列表查询
      *
-     * @param sqlHelper 条件构造器
+     * @param sqlContext 条件构造器
      * @return 查询结果
      */
     #end
-    @PostMapping("/advanced/list")
+    @PostMapping("/booster/list")
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} advancedList($!{optionalBodyStr}SqlContext<${entity}> sqlContext) {
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} list($!{optionalBodyStr}SqlContext<${entity}> sqlContext) {
         return ${returnMethod.invokeMethodStr("baseService.voList(sqlContext)")};
     }
 #end
@@ -318,11 +318,11 @@ public class ${controller} {
      * @return 查询结果
      */
     #end
-    @PostMapping("/advanced/page$!{pagePathParams}")
+    @PostMapping("/booster/page$!{pagePathParams}")
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} advancedPage($!{optionalBodyStr}SqlContext<${entity}> sqlContext, $!{pageMethodParams}) {
+    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} page($!{optionalBodyStr}SqlContext<${entity}> sqlContext, $!{pageMethodParams}) {
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlContext, current, size)")})};
     }
 #end
@@ -339,13 +339,13 @@ public class ${controller} {
      * @param sqlContext 条件构造器
      */
     #end
-    @PostMapping("/advanced/excel/export")
-    public void advancedExcelExport($!{optionalBodyStr}SqlContext<${entity}> sqlContext, HttpServletResponse response) throws IOException {
+    @PostMapping("/booster/excel/export")
+    public void excelExport($!{optionalBodyStr}SqlContext<${entity}> sqlContext, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
 ##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
         baseService.excelExport(sqlContext, response.getOutputStream());
     }
 #end
-#end## ---sqlBooster---
+#end
 }

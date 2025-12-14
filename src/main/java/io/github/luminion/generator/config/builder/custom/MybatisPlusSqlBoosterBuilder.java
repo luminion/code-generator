@@ -32,4 +32,17 @@ public class MybatisPlusSqlBoosterBuilder extends AbstractMybatisPlusBuilder<Myb
     }
 
 
+    /**
+     * controller是否启用sql-booster的sqlContext入参查询
+     *
+     * @param enabled 是否启用
+     * @return this
+     */
+    public <T, R> MybatisPlusSqlBoosterBuilder sqlContextQuery(boolean enabled) {
+        this.configurer.getControllerConfig().setSqlContextQuery(enabled);
+        return this;
+    }
+    
+
+
 }

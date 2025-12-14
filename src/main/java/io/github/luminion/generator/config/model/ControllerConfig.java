@@ -92,6 +92,11 @@ public class ControllerConfig implements TemplateRender {
      * 批量查询使用post请求
      */
     protected boolean batchQueryPost = true;
+    
+    /**
+     * 追加SqlContext查询
+     */
+    private boolean sqlContextQuery = true;
 
     /**
      * 返回结果方法
@@ -121,6 +126,7 @@ public class ControllerConfig implements TemplateRender {
         data.put("crossOrigin", this.crossOrigin);
         data.put("restController", this.restController);
         data.put("controllerSuperClass", ClassUtils.getSimpleName(this.superClass));
+        data.put("sqlContextQuery", this.sqlContextQuery);
         // 首字母小写
         String entityName = tableInfo.getEntityName();
         String entityPath = entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
