@@ -3,21 +3,23 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/code-generator)](https://mvnrepository.com/artifact/io.github.luminion/code-generator)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-代码生成器，通过数据库表信息, 一键生成`Controller`/`Service`/`Mapper`/`Entity` 等代码及配套`CRUD方法`/`领域模型`/`Excel导入导出`
+一个代码生成器, 用于快速生成代码, 提升开发效率
 
 旧版地址: https://github.com/bootystar/mybatis-plus-generator
 
 ## 功能特性
 
 - **基础代码生成**：生成实体类、Mapper、Service、Controller 等基础代码
-- **Excel导入导出**：支持生成Excel相关代码，适配`EasyExcel`/`FastExcel`
 - **领域模型生成**：支持生成`新增DTO`、`修改DTO`、`查询DTO`、`查询VO`、`EXCEL导入DTO`、`EXCEL导出DTO` 等领域模型
-- **选择性方法生成**：支持选择性生成增删查改、导入导出等方法
-- **多种数据库支持**：支持 MySQL、PostgreSQL、Oracle 等主流数据库
+- **CRUD方法生成**：生成增删查改方法
+- **参数校验**：生成参数校验相关注解
+- **快捷查询** xml默认生成绝大多数场景的sql查询, 并封装了dto供前端调用, 无需手动编写
+- **Excel导入导出**：支持生成Excel导入导出相关代码，支持`EasyExcel`/`FastExcel`
+- **多配置集成**：提供多种配置, 适配各种场景格式
+- **多种数据库支持**：支持 MySQL、PostgreSQL、Oracle等主流数据库
 - **模板引擎支持**：使用 Velocity 模板引擎，支持自定义模板
-- **配置灵活**：提供链式调用的配置方式，配置简单易用
-- **高扩展性**: 支持自定义模板、自定义注入、自定义名称转换等
-- **便利性** xml默认生成绝大多数场景的sql查询, 并封装了dto供前端调用, 无需手动编写
+- **链式调用**：提供链式调用的配置方式
+- **自定义扩展**:支持自定义模板及参数扩展
 - **SQL-Booster 集成**: 集成SQL-Booster，提供更丰富的动态SQL查询能力
 
 ---
