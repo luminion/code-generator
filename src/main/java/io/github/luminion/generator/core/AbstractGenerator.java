@@ -122,9 +122,9 @@ public abstract class AbstractGenerator<C extends TemplateRender,B> implements L
                         " /        \\  |  /\\  \\__\\  \\__\\  ___/ \\___ \\ \\___ \\ \n" +
                         "/_______  /____/  \\___  >___  >___  >____  >____  >\n" +
                         "        \\/            \\/    \\/    \\/     \\/     \\/ "+
-                        "\n(ﾉ>ω<)ﾉ  Code generation complete! Let's coding ~\n";
+                        "\n(ﾉ>ω<)ﾉ  Code generation complete! Let's start coding ~\n";
         System.out.println(banner);
-        System.out.println("check files in following folder:");
+        System.out.println("generated file output dir:");
         String path = configurer.getGlobalConfig().getOutputDir();
         System.out.println(new File(path).getAbsolutePath());
     }
