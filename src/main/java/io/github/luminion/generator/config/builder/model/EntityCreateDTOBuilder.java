@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public class EntityInsertDTOBuilder {
+public class EntityCreateDTOBuilder {
     private final Configurer<?> configurer;
 
     /**
@@ -20,7 +20,7 @@ public class EntityInsertDTOBuilder {
      * @param nameFormat 格式
      * @return this
      */
-    public EntityInsertDTOBuilder nameFormat(@NonNull String nameFormat) {
+    public EntityCreateDTOBuilder nameFormat(@NonNull String nameFormat) {
         this.configurer.getEntityCreateDTOConfig().getTemplateFile().setNameFormat(nameFormat);
         return this;
     }
@@ -32,7 +32,7 @@ public class EntityInsertDTOBuilder {
      * @param subPackage 子包名
      * @return this
      */
-    public EntityInsertDTOBuilder subPackage(@NonNull String subPackage) {
+    public EntityCreateDTOBuilder subPackage(@NonNull String subPackage) {
         this.configurer.getEntityCreateDTOConfig().getTemplateFile().setSubPackage(subPackage);
         return this;
     }
@@ -45,7 +45,7 @@ public class EntityInsertDTOBuilder {
      * @param templatePath 模板文件路径
      * @return this
      */
-    public EntityInsertDTOBuilder templatePath(@NonNull String templatePath) {
+    public EntityCreateDTOBuilder templatePath(@NonNull String templatePath) {
         this.configurer.getEntityCreateDTOConfig().getTemplateFile().setTemplatePath(templatePath);
         return this;
     }
@@ -57,7 +57,7 @@ public class EntityInsertDTOBuilder {
      * @param outputDir 输出文件路径
      * @return this
      */
-    public EntityInsertDTOBuilder outputDir(@NonNull String outputDir) {
+    public EntityCreateDTOBuilder outputDir(@NonNull String outputDir) {
         this.configurer.getEntityCreateDTOConfig().getTemplateFile().setOutputDir(outputDir);
         return this;
     }
@@ -68,7 +68,7 @@ public class EntityInsertDTOBuilder {
      * @param enable 是否启用
      * @return this
      */
-    public EntityInsertDTOBuilder fileOverride(boolean enable) {
+    public EntityCreateDTOBuilder fileOverride(boolean enable) {
         this.configurer.getEntityCreateDTOConfig().getTemplateFile().setFileOverride(enable);
         return this;
     }
