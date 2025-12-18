@@ -8,6 +8,7 @@ import io.github.luminion.generator.config.model.MapperXmlConfig;
 import io.github.luminion.generator.enums.JavaFieldType;
 import io.github.luminion.generator.enums.JdbcType;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -47,7 +48,7 @@ public abstract class InitializeUtils {
         StrategyConfig strategyConfig = configurer.getStrategyConfig();
         Map<String, String> extraFieldSuffixMap = strategyConfig.getExtraFieldSuffixMap();
 
-        extraFieldSuffixMap.put("Ne" , "!=");
+        //extraFieldSuffixMap.put("Ne" , "!=");
 
         extraFieldSuffixMap.put("Lt" , "<");
         extraFieldSuffixMap.put("Gt" , ">");
@@ -56,18 +57,44 @@ public abstract class InitializeUtils {
         extraFieldSuffixMap.put("Gte" , ">=");
 
         extraFieldSuffixMap.put("Like" , "LIKE");
-        extraFieldSuffixMap.put("NotLike" , "NOT LIKE");
+        //extraFieldSuffixMap.put("NotLike" , "NOT LIKE");
 
         extraFieldSuffixMap.put("In" , "IN");
-        extraFieldSuffixMap.put("NotIn" , "NOT IN");
+        //extraFieldSuffixMap.put("NotIn" , "NOT IN");
+        //
+        //extraFieldSuffixMap.put("IsNull" , "IS NULL");
+        //extraFieldSuffixMap.put("IsNotNull" , "IS NOT NULL");
+        //
+        //extraFieldSuffixMap.put("BitAny" , "BIT ANY");
+        //extraFieldSuffixMap.put("BitAll" , "BIT ALL");
+        //extraFieldSuffixMap.put("BitNone" , "BIT NONE");
 
-        extraFieldSuffixMap.put("IsNull" , "IS NULL");
-        extraFieldSuffixMap.put("IsNotNull" , "IS NOT NULL");
+    }
+    
+    public static Map<String,String> getFullExtraFieldSuffixMap() {
+        Map<String, String> extraFieldSuffixMap = new HashMap<>();
 
-        extraFieldSuffixMap.put("BitAny" , "BIT ANY");
-        extraFieldSuffixMap.put("BitAll" , "BIT ALL");
-        extraFieldSuffixMap.put("BitNone" , "BIT NONE");
+        extraFieldSuffixMap.put("Ne", "!=");
 
+        extraFieldSuffixMap.put("Lt", "<");
+        extraFieldSuffixMap.put("Gt", ">");
+
+        extraFieldSuffixMap.put("Lte", "<=");
+        extraFieldSuffixMap.put("Gte", ">=");
+
+        extraFieldSuffixMap.put("Like", "LIKE");
+        extraFieldSuffixMap.put("NotLike", "NOT LIKE");
+
+        extraFieldSuffixMap.put("In", "IN");
+        extraFieldSuffixMap.put("NotIn", "NOT IN");
+
+        extraFieldSuffixMap.put("IsNull", "IS NULL");
+        extraFieldSuffixMap.put("IsNotNull", "IS NOT NULL");
+
+        extraFieldSuffixMap.put("BitAny", "BIT ANY");
+        extraFieldSuffixMap.put("BitAll", "BIT ALL");
+        extraFieldSuffixMap.put("BitNone", "BIT NONE");
+        return extraFieldSuffixMap;
     }
 
 

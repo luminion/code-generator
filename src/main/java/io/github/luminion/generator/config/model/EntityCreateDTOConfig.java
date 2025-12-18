@@ -80,7 +80,8 @@ public class EntityCreateDTOConfig implements TemplateRender {
             Optional.ofNullable(field.getJavaType().getPkg()).ifPresent(importPackages::add);
             TableField.MetaInfo metaInfo = field.getMetaInfo();
             boolean isString = "String".equals(field.getPropertyType());
-            boolean notnullFlag = !metaInfo.isNullable() && metaInfo.getDefaultValue() == null;
+            //boolean notnullFlag = !metaInfo.isNullable() && metaInfo.getDefaultValue() == null;
+            boolean notnullFlag = !metaInfo.isNullable();
         
             if (globalConfig.isValidated()) {
                 if (notnullFlag) {

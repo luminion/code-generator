@@ -62,7 +62,7 @@ public class ${createDTO}#if(${serializableUID}) implements Serializable#end {
         #end
     #end
     #if(${validated})## 参数校验
-        #if(!${field.metaInfo.nullable} && !${field.metaInfo.defaultValue})## 非空
+        #if(!${field.metaInfo.nullable})## 非空
             #if(${field.propertyType} == "String")
     @NotBlank(message = "${field.comment}为必填项")
             #else

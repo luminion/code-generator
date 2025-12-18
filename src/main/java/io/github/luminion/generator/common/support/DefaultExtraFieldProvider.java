@@ -64,7 +64,7 @@ public class DefaultExtraFieldProvider implements ExtraFieldProvider {
         boolean isString = "String".equals(propertyType);
         int length = tableField.getMetaInfo().getLength();
         boolean isShortString = isString && length > 0 && length <= 32;
-        boolean isIdColumn = tableField.getColumnName().endsWith("id");
+        boolean isIdColumn = tableField.getColumnName().endsWith("id") || tableField.getColumnName().endsWith("by");
 
 
         JavaFieldInfo javaType = tableField.getJavaType();

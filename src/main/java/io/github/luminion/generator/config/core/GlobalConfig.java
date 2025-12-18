@@ -74,7 +74,8 @@ public class GlobalConfig implements TemplateRender {
     /**
      * doc作者
      */
-    protected String author = System.getProperty("user.name");
+    //protected String author = System.getProperty("user.name");
+    protected String author = "luminion";
     /**
      * 注释日期
      */
