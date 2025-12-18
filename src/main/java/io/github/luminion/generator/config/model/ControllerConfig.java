@@ -153,7 +153,7 @@ public class ControllerConfig implements TemplateRender {
         }
         data.put("validatedStr", globalConfig.isValidated() ? "@Validated " : null);
         String requestBodyStr = requestBody ? "@RequestBody " : null;
-        data.put("requestBodyStr", requestBodyStr);
+        data.put("requiredBodyStr", requestBodyStr);
         data.put("optionalBodyStr", batchQueryPost ? requestBodyStr : null);
         Optional.ofNullable(tableInfo.getPrimaryKeyField()).ifPresent(e -> data.put("primaryKeyPropertyType", e.getJavaType().getType()));
         // 分页
