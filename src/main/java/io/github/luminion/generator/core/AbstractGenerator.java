@@ -6,6 +6,7 @@ import io.github.luminion.generator.config.builder.core.GlobalBuilder;
 import io.github.luminion.generator.config.builder.core.StrategyBuilder;
 import io.github.luminion.generator.config.builder.model.*;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
+import io.github.luminion.generator.util.InitializeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,10 +17,17 @@ import java.util.function.Consumer;
 /**
  * @author luminion
  */
-@RequiredArgsConstructor
 @Slf4j
 public abstract class AbstractGenerator<C extends TemplateRender,B> implements LambdaGenerator<B> {
     protected final Configurer<C> configurer;
+
+    public AbstractGenerator(Configurer<C> configurer) {
+        this.configurer = configurer;
+        InitializeUtils.initializeExtraFieldSuffix(configurer);
+        InitializeUtils.initializeMapperSortColumn(configurer);
+        InitializeUtils.initializeDtoExcludeColumn(configurer);
+        InitializeUtils.initJdbcTypeConverter(configurer);
+    }
 
     @Override
     public LambdaGenerator<B> global(Consumer<GlobalBuilder> consumer) {

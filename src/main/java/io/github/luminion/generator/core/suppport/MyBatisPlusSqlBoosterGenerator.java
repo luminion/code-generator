@@ -29,9 +29,6 @@ public class MyBatisPlusSqlBoosterGenerator extends AbstractGenerator<MybatisPlu
         configurer.getServiceImplConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/serviceImpl.java");
         configurer.getMapperConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/mapper.java");
         configurer.getMapperXmlConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/mapper.xml");
-        InitializeUtils.initializeExtraFieldSuffix(configurer);
-        InitializeUtils.initializeMapperSortColumn(configurer);
-        InitializeUtils.initJdbcTypeConverter(configurer);
         InitializeUtils.initializeMybatisPlus(configurer);
     }
 

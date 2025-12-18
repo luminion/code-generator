@@ -26,9 +26,7 @@ public class MyBatisPlusGenerator extends AbstractGenerator<MybatisPlusConfig, M
         controllerConfig.setPageMethod(classMethodPayload);
         
         configurer.getEntityConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus/entity.java");
-        InitializeUtils.initializeExtraFieldSuffix(configurer);
-        InitializeUtils.initializeMapperSortColumn(configurer);
-        InitializeUtils.initJdbcTypeConverter(configurer);
+
         InitializeUtils.initializeMybatisPlus(configurer);
     }
 

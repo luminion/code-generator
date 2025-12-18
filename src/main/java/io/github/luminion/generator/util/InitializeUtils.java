@@ -8,8 +8,10 @@ import io.github.luminion.generator.config.model.MapperXmlConfig;
 import io.github.luminion.generator.enums.JavaFieldType;
 import io.github.luminion.generator.enums.JdbcType;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author luminion
@@ -43,6 +45,73 @@ public abstract class InitializeUtils {
         sortColumnMap.put("id" , true);
     }
 
+
+    public static void initializeDtoExcludeColumn(Configurer<?> configurer) {
+        Set<String> editExcludeColumns = configurer.getStrategyConfig().getEditExcludeColumns();
+        // 1. 创建时间类
+        editExcludeColumns.addAll(Arrays.asList(
+                "create_time",      // 您的规范
+                "created_time",
+                "create_at",
+                "created_at",
+                "create_date",
+                "gmt_create"        // 阿里系
+        ));
+
+        // 2. 创建人类
+        editExcludeColumns.addAll(Arrays.asList(
+                "create_by",        // 您的规范
+                "created_by",
+                "creator",
+                "creator_id",
+                "create_id"
+        ));
+
+        // 3. 更新时间类
+        editExcludeColumns.addAll(Arrays.asList(
+                "update_time",      // 您的规范
+                "updated_time",
+                "update_at",
+                "updated_at",
+                "update_date",
+                "modify_time",
+                "gmt_modified"      // 阿里系
+        ));
+
+        // 4. 更新人类
+        editExcludeColumns.addAll(Arrays.asList(
+                "update_by",        // 您的规范
+                "updated_by",
+                "updater",
+                "updater_id",
+                "update_id",
+                "modify_by"
+        ));
+        //
+        //// 5. 逻辑删除类 (通常不需要前端编辑)
+        //editExcludeColumns.addAll(Arrays.asList(
+        //        "deleted",          // 您的规范
+        //        "is_deleted",
+        //        "del_flag",
+        //        "delete_flag",
+        //        "remove_flag"
+        //));
+        //
+        //// 6. 乐观锁/版本类 (通常由后端自动处理)
+        //editExcludeColumns.addAll(Arrays.asList(
+        //        "version",          // 您的规范
+        //        "lock_version",
+        //        "opt_lock",
+        //        "revision"
+        //));
+        //
+        //// 7. 租户隔离类 (严禁前端篡改)
+        //editExcludeColumns.addAll(Arrays.asList(
+        //        "tenant_id",
+        //        "corp_id",
+        //        "company_id"
+        //));
+    }
 
     public static void initializeExtraFieldSuffix(Configurer<?> configurer) {
         StrategyConfig strategyConfig = configurer.getStrategyConfig();
