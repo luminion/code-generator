@@ -7,7 +7,6 @@ import io.github.luminion.generator.config.builder.core.StrategyBuilder;
 import io.github.luminion.generator.config.builder.model.*;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
 import io.github.luminion.generator.util.InitializeUtils;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;

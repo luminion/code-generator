@@ -27,7 +27,7 @@ public class EntityUpdateDTOConfig implements TemplateRender {
     protected TemplateFile templateFile = new TemplateFile(
             TemplateFileEnum.ENTITY_UPDATE_DTO.getKey(),
             "%sUpdateDTO",
-            "model.command",
+            "model.dto",
             "/templates/model/entityUpdateDTO.java",
             ".java"
     );

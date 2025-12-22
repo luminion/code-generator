@@ -27,7 +27,7 @@ public class EntityCreateDTOConfig implements TemplateRender {
     protected TemplateFile templateFile = new TemplateFile(
             TemplateFileEnum.ENTITY_CREATE_DTO.getKey(),
             "%sCreateDTO",
-            "model.command",
+            "model.dto",
             "/templates/model/entityCreateDTO.java",
             ".java"
     );

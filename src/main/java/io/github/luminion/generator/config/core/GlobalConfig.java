@@ -53,7 +53,7 @@ public class GlobalConfig implements TemplateRender {
     /**
      * 实体是否生成 serialVersionUID
      */
-    protected boolean serializableUID = true;
+    protected boolean serializableUID = false;
 
     /**
      * 实体是否启用java.io.Serial (需JAVA 14) 注解
