@@ -70,7 +70,7 @@ public class GlobalConfig implements TemplateRender {
     /**
      * 文档注释添加相关类链接
      */
-    protected boolean docLink = true;
+    protected boolean docLink = false;
     /**
      * doc作者
      */
