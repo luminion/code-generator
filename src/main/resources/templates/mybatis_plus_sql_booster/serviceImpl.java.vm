@@ -114,7 +114,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public void excelExport(SqlContext<${entity}> sqlContext, OutputStream os) {
-        ${excelApiClass}.write(os, ${excelExportDTO}.class).sheet()
+        ${excelApiClass}.write(os, ${excelExportVO}.class).sheet()
             .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
             .doWrite(this.voList(sqlContext));
     }

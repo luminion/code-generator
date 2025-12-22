@@ -101,7 +101,7 @@ public abstract class AbstractGenerator<C extends TemplateRender,B> implements L
     }
 
     @Override
-    public LambdaGenerator<B> excelExportDTO(Consumer<EntityExcelExportDTOBuilder> consumer) {
+    public LambdaGenerator<B> excelExportVO(Consumer<EntityExcelExportDTOBuilder> consumer) {
         consumer.accept(new EntityExcelExportDTOBuilder(this.configurer));
         return this;
     }

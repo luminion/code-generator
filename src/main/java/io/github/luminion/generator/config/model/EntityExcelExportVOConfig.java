@@ -22,15 +22,15 @@ import java.util.stream.Collectors;
  */
 @Data
 @Slf4j
-public class EntityExcelExportDTOConfig implements TemplateRender {
+public class EntityExcelExportVOConfig implements TemplateRender {
     /**
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO.getKey(),
-            "%sExcelExportDTO",
-            "model.excel",
-            "/templates/model/entityExcelExportDTO.java",
+            TemplateFileEnum.ENTITY_EXCEL_EXPORT_VO.getKey(),
+            "%sExcelExportVO",
+            "model.vo",
+            "/templates/model/entityExcelExportVO.java",
             ".java"
     );
 
@@ -85,8 +85,8 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("excelExportDTOFramePkg", frameworkPackages);
-        data.put("excelExportDTOJavaPkg", javaPackages);
+        data.put("excelExportVOFramePkg", frameworkPackages);
+        data.put("excelExportVOJavaPkg", javaPackages);
         return data;
     }
 }

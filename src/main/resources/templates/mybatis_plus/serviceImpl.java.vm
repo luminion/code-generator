@@ -129,7 +129,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public void excelExport(${queryDTO} queryDTO, OutputStream os) {
-        ${excelApiClass}.write(os, ${excelExportDTO}.class).sheet()
+        ${excelApiClass}.write(os, ${excelExportVO}.class).sheet()
             .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
             .doWrite(getBaseMapper().selectByXml(queryDTO, null));
     }

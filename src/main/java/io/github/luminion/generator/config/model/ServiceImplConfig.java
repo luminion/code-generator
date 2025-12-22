@@ -165,7 +165,7 @@ public class ServiceImplConfig implements TemplateRender {
 
         if (globalConfig.isGenerateExport()) {
             importPackages.add(excelClass);
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_EXCEL_EXPORT_VO, tableInfo));
             importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
             importPackages.add(longestMatchColumnWidthStyleStrategyClass);
         }
