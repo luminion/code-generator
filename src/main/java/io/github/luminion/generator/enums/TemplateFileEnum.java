@@ -34,15 +34,15 @@ public enum TemplateFileEnum {
     MAPPER_XML("mapperXml"),
     
     ENTITY("entity"),
-
-    ENTITY_CREATE_DTO("createDTO"),
-    ENTITY_UPDATE_DTO("updateDTO"),
     
     ENTITY_QUERY_DTO("queryDTO"),
     ENTITY_QUERY_VO("queryVO"),
     
+    ENTITY_CREATE_DTO("createDTO"),
+    ENTITY_UPDATE_DTO("updateDTO"),
+    
     ENTITY_EXCEL_IMPORT_DTO("excelImportDTO"),
-    ENTITY_EXCEL_EXPORT_VO("excelExportVO"),
+    ENTITY_EXCEL_EXPORT_DTO("excelExportDTO"),
     ;
     @Getter
     private final String key;

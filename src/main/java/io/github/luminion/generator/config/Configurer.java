@@ -100,7 +100,7 @@ public class Configurer<C extends TemplateRender> {
     /**
      * Excel导出DTO配置
      */
-    private final EntityExcelExportVOConfig entityExcelExportDTOConfig = new EntityExcelExportVOConfig();
+    private final EntityExcelExportDTOConfig entityExcelExportDTOConfig = new EntityExcelExportDTOConfig();
     /**
      * 特殊配置
      */

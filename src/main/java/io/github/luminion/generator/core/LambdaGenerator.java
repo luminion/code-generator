@@ -36,7 +36,7 @@ public interface LambdaGenerator<B> {
 
     LambdaGenerator<B> updateDTO(Consumer<EntityUpdateDTOBuilder> consumer);
 
-    LambdaGenerator<B> excelExportVO(Consumer<EntityExcelExportDTOBuilder> consumer);
+    LambdaGenerator<B> excelExportDTO(Consumer<EntityExcelExportDTOBuilder> consumer);
 
     LambdaGenerator<B> excelImportDTO(Consumer<EntityExcelImportDTOBuilder> consumer);
 
