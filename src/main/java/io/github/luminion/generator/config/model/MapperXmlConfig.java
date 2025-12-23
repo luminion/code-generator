@@ -31,7 +31,7 @@ public class MapperXmlConfig implements TemplateRender {
     protected TemplateFile templateFile = new TemplateFile(
             TemplateFileEnum.MAPPER_XML.getKey(),
             "%sMapper",
-            "mapper.xml",
+            "xml",
             "/templates/mybatis_plus/mapper.xml",
             ".xml"
     );
