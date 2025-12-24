@@ -87,6 +87,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     }
 #end
 #if(${generateVoPage})
+
     #if(${generate.service})
     @Override
     #end
