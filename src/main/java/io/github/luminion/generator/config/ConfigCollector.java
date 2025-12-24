@@ -23,14 +23,14 @@ import io.github.luminion.generator.config.model.*;
 import lombok.Getter;
 
 /**
- * 配置汇总 传递给文件生成工具
+ * 配置汇总器具 传递给文件生成工具
  *
  * @author YangHu, tangguo, hubin, Juzi, lanjerry
  * @author luminion
  * @since 1.0.0
  */
 @Getter
-public class Configurer<C extends TemplateRender> {
+public class ConfigCollector<C extends TemplateRender> {
     /**
      * 数据库配置信息
      */
@@ -78,29 +78,29 @@ public class Configurer<C extends TemplateRender> {
     /**
      * 查询DTO配置
      */
-    private final EntityQueryDTOConfig entityQueryDTOConfig = new EntityQueryDTOConfig();
+    private final QueryDTOConfig queryDTOConfig = new QueryDTOConfig();
     /**
      * 查询VO配置
      */
-    private final EntityQueryVOConfig entityQueryVOConfig = new EntityQueryVOConfig();
+    private final QueryVOConfig queryVOConfig = new QueryVOConfig();
 
     /**
      * 新增DTO配置
      */
-    private final EntityCreateDTOConfig entityCreateDTOConfig = new EntityCreateDTOConfig();
+    private final CreateDTOConfig createDTOConfig = new CreateDTOConfig();
     /**
      * 修改DTO配置
      */
-    private final EntityUpdateDTOConfig entityUpdateDTOConfig = new EntityUpdateDTOConfig();
+    private final UpdateDTOConfig updateDTOConfig = new UpdateDTOConfig();
 
     /**
      * Excel导入DTO配置
      */
-    private final EntityExcelImportDTOConfig entityExcelImportDTOConfig = new EntityExcelImportDTOConfig();
+    private final ImportDTOConfig importDTOConfig = new ImportDTOConfig();
     /**
      * Excel导出DTO配置
      */
-    private final EntityExcelExportDTOConfig entityExcelExportDTOConfig = new EntityExcelExportDTOConfig();
+    private final ExportDTOConfig exportDTOConfig = new ExportDTOConfig();
     /**
      * 特殊配置
      */
@@ -108,12 +108,12 @@ public class Configurer<C extends TemplateRender> {
 
     //====================模型配置--结束====================
 
-    public Configurer(String url, String username, String password) {
+    public ConfigCollector(String url, String username, String password) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
         this.customConfig = null;
     }
 
-    public Configurer(String url, String username, String password, C customConfig) {
+    public ConfigCollector(String url, String username, String password, C customConfig) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
         this.customConfig = customConfig;
     }

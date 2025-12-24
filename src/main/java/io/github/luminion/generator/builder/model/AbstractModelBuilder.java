@@ -25,7 +25,7 @@ public abstract class AbstractModelBuilder<C extends TemplateRender, B extends A
      * @return this
      */
     public B generate(boolean generate) {
-        this.config.getTemplateFile().setGenerate(false);
+        this.config.renderTemplateFile().setGenerate(false);
         return self();
     }
 
@@ -39,7 +39,7 @@ public abstract class AbstractModelBuilder<C extends TemplateRender, B extends A
      * @return this
      */
     public B nameFormat(String nameFormat) {
-        this.config.getTemplateFile().setNameFormat(nameFormat);
+        this.config.renderTemplateFile().setNameFormat(nameFormat);
         return self();
     }
 
@@ -52,7 +52,7 @@ public abstract class AbstractModelBuilder<C extends TemplateRender, B extends A
      * @return this
      */
     public B subPackage(String subPackage) {
-        this.config.getTemplateFile().setSubPackage(subPackage);
+        this.config.renderTemplateFile().setSubPackage(subPackage);
         return self();
     }
 
@@ -65,7 +65,7 @@ public abstract class AbstractModelBuilder<C extends TemplateRender, B extends A
      * @return this
      */
     public B templatePath(String templatePath) {
-        this.config.getTemplateFile().setTemplatePath(templatePath);
+        this.config.renderTemplateFile().setTemplatePath(templatePath);
         return self();
     }
 
@@ -78,7 +78,7 @@ public abstract class AbstractModelBuilder<C extends TemplateRender, B extends A
      * @return this
      */
     public B outputDir(String outputDir) {
-        this.config.getTemplateFile().setOutputDir(outputDir);
+        this.config.renderTemplateFile().setOutputDir(outputDir);
         return self();
     }
 
@@ -89,7 +89,7 @@ public abstract class AbstractModelBuilder<C extends TemplateRender, B extends A
      * @return this
      */
     public B fileOverride(boolean enable) {
-        this.config.getTemplateFile().setFileOverride(enable);
+        this.config.renderTemplateFile().setFileOverride(enable);
         return self();
     }
 }

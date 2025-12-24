@@ -1,6 +1,6 @@
 package io.github.luminion.generator;
 
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import io.github.luminion.generator.core.suppport.MyBatisPlusGenerator;
 import io.github.luminion.generator.core.suppport.MyBatisPlusSqlBoosterGenerator;
@@ -26,7 +26,7 @@ public class GeneratorHelper {
      * @return MyBatis-Plus代码生成器实例
      */
     public static MyBatisPlusGenerator mybatisPlus(String url, String username, String password) {
-        return new MyBatisPlusGenerator(new Configurer<>(url, username, password, new MybatisPlusConfig()));
+        return new MyBatisPlusGenerator(new ConfigCollector<>(url, username, password, new MybatisPlusConfig()));
     }
     
     /**
@@ -38,7 +38,7 @@ public class GeneratorHelper {
      * @return SQL-Booster代码生成器实例
      */
     public static MyBatisPlusSqlBoosterGenerator mybatisPlusBooster(String url, String username, String password) {
-        return new MyBatisPlusSqlBoosterGenerator(new Configurer<>(url, username, password,new MybatisPlusConfig()));
+        return new MyBatisPlusSqlBoosterGenerator(new ConfigCollector<>(url, username, password,new MybatisPlusConfig()));
     }
     
 }

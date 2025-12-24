@@ -1,6 +1,6 @@
 package io.github.luminion.generator.builder.core;
 
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.enums.DocType;
 import io.github.luminion.generator.enums.ExcelApi;
 import io.github.luminion.generator.enums.JavaEEApi;
@@ -17,7 +17,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @SuppressWarnings("unused")
 public class GlobalBuilder {
-    private final Configurer<?> configurer;
+    private final ConfigCollector<?> configCollector;
 
     /**
      * lombok模型
@@ -27,7 +27,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder lombok(boolean enable) {
-        this.configurer.getGlobalConfig().setLombok(enable);
+        this.configCollector.getGlobalConfig().setLombok(enable);
         return this;
     }
 
@@ -39,7 +39,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder chainModel(boolean enable) {
-        this.configurer.getGlobalConfig().setChainModel(enable);
+        this.configCollector.getGlobalConfig().setChainModel(enable);
         return this;
     }
 
@@ -52,7 +52,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder serializableUID(boolean enable){
-        this.configurer.getGlobalConfig().setSerializableUID(enable);
+        this.configCollector.getGlobalConfig().setSerializableUID(enable);
         return this;
     }
 
@@ -63,7 +63,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder serializableAnnotation(boolean enable){
-        this.configurer.getGlobalConfig().setSerializableAnnotation(enable);
+        this.configCollector.getGlobalConfig().setSerializableAnnotation(enable);
         return this;
     }
 
@@ -75,7 +75,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder docType(@NonNull DocType docType) {
-        this.configurer.getGlobalConfig().setDocType(docType);
+        this.configCollector.getGlobalConfig().setDocType(docType);
         return this;
     }
 
@@ -87,7 +87,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder docLink(boolean enable) {
-        this.configurer.getGlobalConfig().setDocLink(enable);
+        this.configCollector.getGlobalConfig().setDocLink(enable);
         return this;
     }
 
@@ -99,7 +99,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder author(@NonNull String author) {
-        this.configurer.getGlobalConfig().setAuthor(author);
+        this.configCollector.getGlobalConfig().setAuthor(author);
         return this;
     }
 
@@ -112,7 +112,7 @@ public class GlobalBuilder {
      */
     public GlobalBuilder date(@NonNull String pattern) {
         String format = new SimpleDateFormat(pattern).format(new Date());
-        this.configurer.getGlobalConfig().setDate(format);
+        this.configCollector.getGlobalConfig().setDate(format);
         return this;
     }
 
@@ -125,7 +125,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder javaEEApi(@NonNull JavaEEApi javaEEApi) {
-        this.configurer.getGlobalConfig().setJavaEEApi(javaEEApi);
+        this.configCollector.getGlobalConfig().setJavaEEApi(javaEEApi);
         return this;
     }
 
@@ -137,7 +137,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder excelApi(@NonNull ExcelApi excelApi) {
-        this.configurer.getGlobalConfig().setExcelApi(excelApi);
+        this.configCollector.getGlobalConfig().setExcelApi(excelApi);
         return this;
     }
 
@@ -150,7 +150,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder outputDir(@NonNull String outputDir) {
-        this.configurer.getGlobalConfig().setOutputDir(outputDir);
+        this.configCollector.getGlobalConfig().setOutputDir(outputDir);
         return this;
     }
 
@@ -162,7 +162,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder openOutputDir(boolean enable) {
-        this.configurer.getGlobalConfig().setOpenOutputDir(enable);
+        this.configCollector.getGlobalConfig().setOpenOutputDir(enable);
         return this;
     }
 
@@ -174,7 +174,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder fileOverride(boolean enable) {
-        this.configurer.getGlobalConfig().setFileOverride(enable);
+        this.configCollector.getGlobalConfig().setFileOverride(enable);
         return this;
     }
 
@@ -186,7 +186,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder parentPackage(@NonNull String packageName) {
-        this.configurer.getGlobalConfig().setParentPackage(packageName);
+        this.configCollector.getGlobalConfig().setParentPackage(packageName);
         return this;
     }
 
@@ -198,7 +198,7 @@ public class GlobalBuilder {
      * @since 1.0.0
      */
     public GlobalBuilder parentPackageModule(@NonNull String parentPackageModule) {
-        this.configurer.getGlobalConfig().setParentPackageModule(parentPackageModule);
+        this.configCollector.getGlobalConfig().setParentPackageModule(parentPackageModule);
         return this;
     }
     
@@ -209,7 +209,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder validated(boolean enable) {
-        this.configurer.getGlobalConfig().setValidated(enable);
+        this.configCollector.getGlobalConfig().setValidated(enable);
         return this;
     }
 
@@ -220,7 +220,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder generateCreate(boolean enable) {
-        this.configurer.getGlobalConfig().setGenerateCreate(enable);
+        this.configCollector.getGlobalConfig().setGenerateCreate(enable);
         return this;
     }
 
@@ -231,7 +231,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder generateUpdate(boolean enable) {
-        this.configurer.getGlobalConfig().setGenerateUpdate(enable);
+        this.configCollector.getGlobalConfig().setGenerateUpdate(enable);
         return this;
     }
 
@@ -242,7 +242,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder generateDelete(boolean enable) {
-        this.configurer.getGlobalConfig().setGenerateDelete(enable);
+        this.configCollector.getGlobalConfig().setGenerateDelete(enable);
         return this;
     }
 
@@ -253,7 +253,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder generateVoById(boolean enable) {
-        this.configurer.getGlobalConfig().setGenerateVoById(enable);
+        this.configCollector.getGlobalConfig().setGenerateVoById(enable);
         return this;
     }
 
@@ -264,7 +264,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder generateVoList(boolean enable) {
-        this.configurer.getGlobalConfig().setGenerateVoList(enable);
+        this.configCollector.getGlobalConfig().setGenerateVoList(enable);
         return this;
     }
 
@@ -275,7 +275,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder generateVoPage(boolean enable) {
-        this.configurer.getGlobalConfig().setGenerateVoPage(enable);
+        this.configCollector.getGlobalConfig().setGenerateVoPage(enable);
         return this;
     }
 
@@ -286,7 +286,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder generateImport(boolean enable) {
-        this.configurer.getGlobalConfig().setGenerateImport(enable);
+        this.configCollector.getGlobalConfig().setGenerateImport(enable);
         return this;
     }
 
@@ -297,7 +297,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder generateExport(boolean enable) {
-        this.configurer.getGlobalConfig().setGenerateExport(enable);
+        this.configCollector.getGlobalConfig().setGenerateExport(enable);
         return this;
     }
 

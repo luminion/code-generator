@@ -62,6 +62,11 @@ public class MapperXmlConfig implements TemplateRender {
     protected Map<String, Boolean> sortColumnMap = new LinkedHashMap<>();
 
     @Override
+    public TemplateFile renderTemplateFile() {
+        return templateFile;
+    }
+
+    @Override
     @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);

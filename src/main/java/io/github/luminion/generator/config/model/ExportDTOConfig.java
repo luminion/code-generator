@@ -2,7 +2,7 @@ package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
@@ -11,6 +11,7 @@ import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,30 +21,36 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Data
-public class EntityExcelImportDTOConfig implements TemplateRender {
+@Slf4j
+public class ExportDTOConfig implements TemplateRender {
     /**
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.IMPORT_DTO.getKey(),
-            "%sExcelImportDTO",
+            TemplateFileEnum.EXPORT_DTO.getKey(),
+            "%sExportDTO",
             "model.excel",
-            "/templates/model/entityExcelImportDTO.java",
+            "/templates/model/exportDTO.java",
             ".java"
     );
 
+    @Override
+    public TemplateFile renderTemplateFile() {
+        return templateFile;
+    }
+    
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
 
         Resolver resolver = tableInfo.getResolver();
-        Configurer<?> configurer = resolver.getConfigurer();
-        GlobalConfig globalConfig = configurer.getGlobalConfig();
+        ConfigCollector<?> configCollector = resolver.getConfigCollector();
+        GlobalConfig globalConfig = configCollector.getGlobalConfig();
 
         // 关闭功能
-        if (!globalConfig.isGenerateImport()) {
-            this.getTemplateFile().setGenerate(false);
+        if (!globalConfig.isGenerateExport()) {
+            this.renderTemplateFile().setGenerate(false);
         }
 
         // excel包
@@ -53,23 +60,8 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
 
         // 属性过滤
         importPackages.add(excelProperty);
-        Set<String> editExcludeColumns = configurer.getStrategyConfig().getEditExcludeColumns();
         for (TableField field : tableInfo.getFields()) {
             if (field.isLogicDeleteField()) {
-                continue;
-            }
-            if (field.isKeyFlag()) {
-                continue;
-            }
-            if (field.isVersionField()) {
-                continue;
-            }
-            if (field.getFill() != null &&
-                    ("INSERT".equals(field.getFill()) || "INSERT_UPDATE".equals(field.getFill()))
-            ) {
-                continue;
-            }
-            if (editExcludeColumns.contains(field.getColumnName())) {
                 continue;
             }
             JavaFieldInfo columnType = field.getJavaType();
@@ -84,7 +76,6 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
         importPackages.addAll(globalConfig.getModelLombokImportPackages());
         importPackages.remove(RuntimeClass.LOMBOK_ACCESSORS.getClassName());
 
-
         // 导入包
         Collection<String> frameworkPackages = importPackages.stream()
                 .filter(pkg -> !pkg.startsWith("java"))
@@ -92,9 +83,8 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("importDTOFramePkg", frameworkPackages);
-        data.put("importDTOJavaPkg", javaPackages);
+        data.put("exportDTOFramePkg", frameworkPackages);
+        data.put("exportDTOJavaPkg", javaPackages);
         return data;
     }
-
 }

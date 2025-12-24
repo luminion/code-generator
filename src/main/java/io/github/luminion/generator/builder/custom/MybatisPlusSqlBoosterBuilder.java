@@ -1,7 +1,7 @@
 package io.github.luminion.generator.builder.custom;
 
 import io.github.luminion.generator.common.MethodReference;
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.util.ReflectUtils;
@@ -15,8 +15,8 @@ import lombok.NonNull;
 @SuppressWarnings("unused")
 public class MybatisPlusSqlBoosterBuilder extends AbstractMybatisPlusBuilder<MybatisPlusSqlBoosterBuilder> {
 
-    public MybatisPlusSqlBoosterBuilder(Configurer<MybatisPlusConfig> configurer) {
-        super(configurer);
+    public MybatisPlusSqlBoosterBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
+        super(configCollector);
     }
 
     /**
@@ -27,7 +27,7 @@ public class MybatisPlusSqlBoosterBuilder extends AbstractMybatisPlusBuilder<Myb
      */
     public <T, R> MybatisPlusSqlBoosterBuilder pageMethod(@NonNull MethodReference<BPage<T>, R> methodReference) {
         ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, BPage.class);
-        this.configurer.getControllerConfig().setPageMethod(payload);
+        this.configCollector.getControllerConfig().setPageMethod(payload);
         return this;
     }
 
@@ -39,7 +39,7 @@ public class MybatisPlusSqlBoosterBuilder extends AbstractMybatisPlusBuilder<Myb
      * @return this
      */
     public <T, R> MybatisPlusSqlBoosterBuilder sqlContextQuery(boolean enabled) {
-        this.configurer.getControllerConfig().setSqlContextQuery(enabled);
+        this.configCollector.getControllerConfig().setSqlContextQuery(enabled);
         return this;
     }
     

@@ -1,22 +1,7 @@
-/*
- * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
@@ -49,7 +34,13 @@ public class ControllerConfig implements TemplateRender {
     /**
      * 模板文件
      */
-    protected TemplateFile templateFile = new TemplateFile(TemplateFileEnum.CONTROLLER.getKey(), "%sController", "controller", "/templates/model/controller.java", ".java");
+    protected TemplateFile templateFile = new TemplateFile(
+            TemplateFileEnum.CONTROLLER.getKey(), 
+            "%sController", 
+            "controller", 
+            "/templates/model/controller.java", 
+            ".java"
+    );
 
     /**
      * 自定义继承的Controller类全称，带包名
@@ -112,13 +103,18 @@ public class ControllerConfig implements TemplateRender {
     protected ClassMethodPayload pageMethod = new ClassMethodPayload();
 
     @Override
+    public TemplateFile renderTemplateFile() {
+        return templateFile;
+    }
+
+    @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
 
         Resolver resolver = tableInfo.getResolver();
-        Configurer<?> configurer = resolver.getConfigurer();
-        GlobalConfig globalConfig = configurer.getGlobalConfig();
+        ConfigCollector<?> configCollector = resolver.getConfigCollector();
+        GlobalConfig globalConfig = configCollector.getGlobalConfig();
 
         data.put("crossOrigin", this.crossOrigin);
         data.put("restController", this.restController);

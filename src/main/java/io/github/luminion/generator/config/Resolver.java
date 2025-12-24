@@ -27,7 +27,7 @@ public class Resolver {
      * 配置信息
      */
     @Getter
-    private final Configurer<?> configurer;
+    private final ConfigCollector<?> configCollector;
     /**
      * 数据库表信息
      */
@@ -46,8 +46,8 @@ public class Resolver {
     @Getter
     private final Map<String, TemplateFile> templateFileMap = new HashMap<>();
 
-    public Resolver(@NonNull Configurer<?> configurer) {
-        this.configurer = configurer;
+    public Resolver(@NonNull ConfigCollector<?> configCollector) {
+        this.configCollector = configCollector;
         // 添加表信息
         try {
             DefaultDatabaseQuery defaultQuery = new DefaultDatabaseQuery(this);
@@ -61,37 +61,37 @@ public class Resolver {
         }
 
         // 添加类渲染信息
-        templateRenderList.add(this.configurer.getGlobalConfig());
-        templateRenderList.add(this.configurer.getStrategyConfig());
+        templateRenderList.add(this.configCollector.getGlobalConfig());
+        templateRenderList.add(this.configCollector.getStrategyConfig());
 
-        templateRenderList.add(this.configurer.getControllerConfig());
+        templateRenderList.add(this.configCollector.getControllerConfig());
 
-        templateRenderList.add(this.configurer.getServiceConfig());
-        templateRenderList.add(this.configurer.getServiceImplConfig());
+        templateRenderList.add(this.configCollector.getServiceConfig());
+        templateRenderList.add(this.configCollector.getServiceImplConfig());
 
-        templateRenderList.add(this.configurer.getMapperConfig());
-        templateRenderList.add(this.configurer.getMapperXmlConfig());
+        templateRenderList.add(this.configCollector.getMapperConfig());
+        templateRenderList.add(this.configCollector.getMapperXmlConfig());
 
-        templateRenderList.add(this.configurer.getEntityConfig());
+        templateRenderList.add(this.configCollector.getEntityConfig());
 
-        templateRenderList.add(this.configurer.getEntityCreateDTOConfig());
-        templateRenderList.add(this.configurer.getEntityUpdateDTOConfig());
+        templateRenderList.add(this.configCollector.getCreateDTOConfig());
+        templateRenderList.add(this.configCollector.getUpdateDTOConfig());
 
-        templateRenderList.add(this.configurer.getEntityQueryDTOConfig());
-        templateRenderList.add(this.configurer.getEntityQueryVOConfig());
+        templateRenderList.add(this.configCollector.getQueryDTOConfig());
+        templateRenderList.add(this.configCollector.getQueryVOConfig());
 
-        templateRenderList.add(this.configurer.getEntityExcelImportDTOConfig());
-        templateRenderList.add(this.configurer.getEntityExcelExportDTOConfig());
+        templateRenderList.add(this.configCollector.getImportDTOConfig());
+        templateRenderList.add(this.configCollector.getExportDTOConfig());
 
         // 自定义配置
-        if (this.configurer.getCustomConfig() != null) {
-            templateRenderList.add(this.configurer.getCustomConfig());
+        if (this.configCollector.getCustomConfig() != null) {
+            templateRenderList.add(this.configCollector.getCustomConfig());
         }
         templateRenderList.sort(Comparator.comparingInt(TemplateRender::order));
         // 遍历渲染, 初始化, 添加模板
         for (TemplateRender templateRender : templateRenderList) {
             templateRender.init();
-            TemplateFile templateFile = templateRender.getTemplate();
+            TemplateFile templateFile = templateRender.renderTemplateFile();
             if (templateFile != null) {
                 templateFileMap.put(templateFile.getKey(), templateFile);
             }
@@ -106,8 +106,8 @@ public class Resolver {
      * @since 1.0.0
      */
     public String getParentPackage() {
-        String outputModule = configurer.getGlobalConfig().getParentPackageModule();
-        String outputParentPackage = configurer.getGlobalConfig().getParentPackage();
+        String outputModule = configCollector.getGlobalConfig().getParentPackageModule();
+        String outputParentPackage = configCollector.getGlobalConfig().getParentPackage();
         if (StringUtils.isNotBlank(outputModule)) {
             return outputParentPackage + "." + outputModule;
         }
@@ -187,7 +187,7 @@ public class Resolver {
      * @since 1.0.0
      */
     public List<TemplateFile> getTemplateFiles() {
-        GlobalConfig globalConfig = configurer.getGlobalConfig();
+        GlobalConfig globalConfig = configCollector.getGlobalConfig();
         return templateFileMap.values()
                 .stream().filter(TemplateFile::isGenerate)
                 .peek(e -> {
@@ -302,13 +302,13 @@ public class Resolver {
         result.put("generate", this.getOutputClassGenerateMap());
 
         // 策略配置
-        result.put("booleanColumnRemoveIsPrefix", this.configurer.getStrategyConfig().isBooleanColumnRemoveIsPrefix());
-        result.put("editExcludeColumns", this.configurer.getStrategyConfig().getEditExcludeColumns());
-        result.put("extraFieldSuffixMap", this.configurer.getStrategyConfig().getExtraFieldSuffixMap());
-        result.put("extraFieldProvider", this.configurer.getStrategyConfig().getExtraFieldProvider());
+        result.put("booleanColumnRemoveIsPrefix", this.configCollector.getStrategyConfig().isBooleanColumnRemoveIsPrefix());
+        result.put("editExcludeColumns", this.configCollector.getStrategyConfig().getEditExcludeColumns());
+        result.put("extraFieldSuffixMap", this.configCollector.getStrategyConfig().getExtraFieldSuffixMap());
+        result.put("extraFieldProvider", this.configCollector.getStrategyConfig().getExtraFieldProvider());
         
-        if (this.configurer.getStrategyConfig().isShowSchema()) {
-            String schemaName = this.configurer.getDataSourceConfig().getSchemaName();
+        if (this.configCollector.getStrategyConfig().isShowSchema()) {
+            String schemaName = this.configCollector.getDataSourceConfig().getSchemaName();
             if (schemaName == null) {
                 log.warn("showSchema is true, but the schemaName could not be obtained from the database information");
             } else {

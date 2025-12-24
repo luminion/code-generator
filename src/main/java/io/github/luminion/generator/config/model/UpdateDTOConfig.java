@@ -1,7 +1,7 @@
 package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Data
-public class EntityUpdateDTOConfig implements TemplateRender {
+public class UpdateDTOConfig implements TemplateRender {
 
     /**
      * 模板文件
@@ -28,9 +28,14 @@ public class EntityUpdateDTOConfig implements TemplateRender {
             TemplateFileEnum.UPDATE_DTO.getKey(),
             "%sUpdateDTO",
             "model.dto",
-            "/templates/model/entityUpdateDTO.java",
+            "/templates/model/updateDTO.java",
             ".java"
     );
+
+    @Override
+    public TemplateFile renderTemplateFile() {
+        return templateFile;
+    }
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
@@ -38,12 +43,12 @@ public class EntityUpdateDTOConfig implements TemplateRender {
         Set<String> importPackages = new TreeSet<>();
 
         Resolver resolver = tableInfo.getResolver();
-        Configurer<?> configurer = resolver.getConfigurer();
-        GlobalConfig globalConfig = configurer.getGlobalConfig();
+        ConfigCollector<?> configCollector = resolver.getConfigCollector();
+        GlobalConfig globalConfig = configCollector.getGlobalConfig();
 
         // 关闭功能
         if (!globalConfig.isGenerateUpdate()) {
-            this.getTemplateFile().setGenerate(false);
+            this.renderTemplateFile().setGenerate(false);
         }
 
 
@@ -52,7 +57,7 @@ public class EntityUpdateDTOConfig implements TemplateRender {
         String notNull = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_NOT_NULL.getClassName();
 
         // 属性过滤
-        Set<String> editExcludeColumns = configurer.getStrategyConfig().getEditExcludeColumns();
+        Set<String> editExcludeColumns = configCollector.getStrategyConfig().getEditExcludeColumns();
         for (TableField field : tableInfo.getFields()) {
             if (field.isLogicDeleteField()) {
                 continue;

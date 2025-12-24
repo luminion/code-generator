@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.po.TableField;
@@ -85,7 +85,7 @@ public class MybatisPlusConfig implements TemplateRender {
     @SuppressWarnings("unchecked")
     public void renderDataPostProcess(TableInfo tableInfo, Map<String, Object> renderData) {
         Resolver resolver = tableInfo.getResolver();
-        Configurer<?> configurer = resolver.getConfigurer();
+        ConfigCollector<?> configCollector = resolver.getConfigCollector();
       
         // 追加导入包
         Set<String> entityImportPackages = new TreeSet<>();
@@ -102,7 +102,7 @@ public class MybatisPlusConfig implements TemplateRender {
             entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_ACTIVE_RECORD_MODEL.getClassName());
             entityImportPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
         }
-        if (configurer.getGlobalConfig().isLombok() && this.activeRecord) {
+        if (configCollector.getGlobalConfig().isLombok() && this.activeRecord) {
             entityImportPackages.add(RuntimeClass.LOMBOK_EQUALS_AND_HASH_CODE.getClassName());
         }
         tableInfo.getFields().forEach(field -> {

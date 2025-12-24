@@ -2,7 +2,7 @@ package io.github.luminion.generator.builder.custom;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import lombok.NonNull;
 
@@ -12,10 +12,10 @@ import lombok.NonNull;
  */
 @SuppressWarnings("unused")
 public abstract class AbstractMybatisPlusBuilder<B extends AbstractMybatisPlusBuilder<B>> {
-    protected final Configurer<MybatisPlusConfig> configurer;
+    protected final ConfigCollector<MybatisPlusConfig> configCollector;
 
-    public AbstractMybatisPlusBuilder(Configurer<MybatisPlusConfig> configurer) {
-        this.configurer = configurer;
+    public AbstractMybatisPlusBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
+        this.configCollector = configCollector;
     }
 
     @SuppressWarnings("unchecked")
@@ -31,7 +31,7 @@ public abstract class AbstractMybatisPlusBuilder<B extends AbstractMybatisPlusBu
      * @return this
      */
     public B idType(@NonNull IdType idType) {
-        this.configurer.getCustomConfig().setIdType(idType);
+        this.configCollector.getCustomConfig().setIdType(idType);
         return self();
     }
 
@@ -42,7 +42,7 @@ public abstract class AbstractMybatisPlusBuilder<B extends AbstractMybatisPlusBu
      * @return this
      */
     public B versionColumnName(@NonNull String versionColumnName) {
-        this.configurer.getCustomConfig().setVersionColumnName(versionColumnName);
+        this.configCollector.getCustomConfig().setVersionColumnName(versionColumnName);
         return self();
     }
 
@@ -53,7 +53,7 @@ public abstract class AbstractMybatisPlusBuilder<B extends AbstractMybatisPlusBu
      * @return this
      */
     public B logicDeleteColumnName(@NonNull String logicDeleteColumnName) {
-        this.configurer.getCustomConfig().setLogicDeleteColumnName(logicDeleteColumnName);
+        this.configCollector.getCustomConfig().setLogicDeleteColumnName(logicDeleteColumnName);
         return self();
     }
 
@@ -64,7 +64,7 @@ public abstract class AbstractMybatisPlusBuilder<B extends AbstractMybatisPlusBu
      * @return this
      */
     public B activeRecord(boolean enable) {
-        this.configurer.getCustomConfig().setActiveRecord(enable);
+        this.configCollector.getCustomConfig().setActiveRecord(enable);
         return self();
     }
 
@@ -76,7 +76,7 @@ public abstract class AbstractMybatisPlusBuilder<B extends AbstractMybatisPlusBu
      * @return this
      */
     public B tableFieldAnnotation(boolean enable) {
-        this.configurer.getCustomConfig().setTableFieldAnnotation(enable);
+        this.configCollector.getCustomConfig().setTableFieldAnnotation(enable);
         return self();
     }
 
@@ -88,7 +88,7 @@ public abstract class AbstractMybatisPlusBuilder<B extends AbstractMybatisPlusBu
      * @return this
      */
     public B tableFill(String columnName, FieldFill fieldFill) {
-        this.configurer.getCustomConfig().getTableFillMap().put(columnName, fieldFill);
+        this.configCollector.getCustomConfig().getTableFillMap().put(columnName, fieldFill);
         return self();
     }
 

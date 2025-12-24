@@ -4,43 +4,43 @@ import io.github.luminion.generator.builder.core.GlobalBuilder;
 import io.github.luminion.generator.builder.core.StrategyBuilder;
 import io.github.luminion.generator.builder.model.*;
 
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
 public interface LambdaGenerator<B> {
-    
-    LambdaGenerator<B> global(Consumer<GlobalBuilder> consumer);
 
-    LambdaGenerator<B> strategy(Consumer<StrategyBuilder> consumer);
+    LambdaGenerator<B> global(Function<GlobalBuilder, GlobalBuilder> func);
 
-    LambdaGenerator<B> controller(Consumer<ControllerBuilder> consumer);
+    LambdaGenerator<B> strategy(Function<StrategyBuilder, StrategyBuilder> func);
 
-    LambdaGenerator<B> service(Consumer<ServiceBuilder> consumer);
+    LambdaGenerator<B> controller(Function<ControllerBuilder, ControllerBuilder> func);
 
-    LambdaGenerator<B> serviceImpl(Consumer<ServiceImplBuilder> consumer);
+    LambdaGenerator<B> service(Function<ServiceBuilder, ServiceBuilder> func);
 
-    LambdaGenerator<B> mapper(Consumer<MapperBuilder> consumer);
+    LambdaGenerator<B> serviceImpl(Function<ServiceImplBuilder, ServiceImplBuilder> func);
 
-    LambdaGenerator<B> mapperXml(Consumer<MapperXmlBuilder> consumer);
+    LambdaGenerator<B> mapper(Function<MapperBuilder, MapperBuilder> func);
 
-    LambdaGenerator<B> entity(Consumer<EntityBuilder> consumer);
+    LambdaGenerator<B> mapperXml(Function<MapperXmlBuilder, MapperXmlBuilder> func);
 
-    LambdaGenerator<B> queryDTO(Consumer<EntityQueryDTOBuilder> consumer);
+    LambdaGenerator<B> entity(Function<EntityBuilder, EntityBuilder> func);
 
-    LambdaGenerator<B> queryVO(Consumer<EntityQueryVOBuilder> consumer);
+    LambdaGenerator<B> queryDTO(Function<QueryDTOBuilder, QueryDTOBuilder> func);
 
-    LambdaGenerator<B> createDTO(Consumer<EntityCreateDTOBuilder> consumer);
+    LambdaGenerator<B> queryVO(Function<QueryVOBuilder, QueryVOBuilder> func);
 
-    LambdaGenerator<B> updateDTO(Consumer<EntityUpdateDTOBuilder> consumer);
+    LambdaGenerator<B> createDTO(Function<CreateDTOBuilder, CreateDTOBuilder> func);
 
-    LambdaGenerator<B> exportDTO(Consumer<EntityExcelExportDTOBuilder> consumer);
+    LambdaGenerator<B> updateDTO(Function<UpdateDTOBuilder, UpdateDTOBuilder> func);
 
-    LambdaGenerator<B> importDTO(Consumer<EntityExcelImportDTOBuilder> consumer);
+    LambdaGenerator<B> exportDTO(Function<ExportDTOBuilder, ExportDTOBuilder> func);
 
-    LambdaGenerator<B> custom(Consumer<B> consumer);
+    LambdaGenerator<B> importDTO(Function<ImportDTOBuilder, ImportDTOBuilder> func);
+
+    LambdaGenerator<B> custom(Function<B, B> func);
 
     void execute(String... tables);
 

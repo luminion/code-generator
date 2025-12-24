@@ -1,7 +1,7 @@
 package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Data
-public class EntityQueryDTOConfig implements TemplateRender {
+public class QueryDTOConfig implements TemplateRender {
 
     /**
      * 模板文件
@@ -28,7 +28,7 @@ public class EntityQueryDTOConfig implements TemplateRender {
             TemplateFileEnum.QUERY_DTO.getKey(),
             "%sQueryDTO",
             "model.dto",
-            "/templates/model/entityQueryDTO.java",
+            "/templates/model/queryDTO.java",
             ".java"
     );
 
@@ -38,17 +38,22 @@ public class EntityQueryDTOConfig implements TemplateRender {
     protected boolean extendsEntity = false;
 
     @Override
+    public TemplateFile renderTemplateFile() {
+        return templateFile;
+    }
+
+    @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
 
         Resolver resolver = tableInfo.getResolver();
-        Configurer<?> configurer = resolver.getConfigurer();
-        GlobalConfig globalConfig = configurer.getGlobalConfig();
+        ConfigCollector<?> configCollector = resolver.getConfigCollector();
+        GlobalConfig globalConfig = configCollector.getGlobalConfig();
 
         // 关闭功能
         if (!globalConfig.isGenerateSelectByXml()) {
-            this.getTemplateFile().setGenerate(false);
+            this.renderTemplateFile().setGenerate(false);
         }
 
         importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());

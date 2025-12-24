@@ -1,7 +1,7 @@
 package io.github.luminion.generator.core;
 
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.builder.core.GlobalBuilder;
 import io.github.luminion.generator.builder.core.StrategyBuilder;
 import io.github.luminion.generator.builder.model.*;
@@ -11,114 +11,114 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author luminion
  */
 @Slf4j
 public abstract class AbstractGenerator<C extends TemplateRender,B> implements LambdaGenerator<B> {
-    protected final Configurer<C> configurer;
+    protected final ConfigCollector<C> configCollector;
 
-    public AbstractGenerator(Configurer<C> configurer) {
-        this.configurer = configurer;
-        InitializeUtils.initializeExtraFieldSuffix(configurer);
-        InitializeUtils.initializeMapperSortColumn(configurer);
-        InitializeUtils.initializeDtoExcludeColumn(configurer);
-        InitializeUtils.initJdbcTypeConverter(configurer);
+    public AbstractGenerator(ConfigCollector<C> configCollector) {
+        this.configCollector = configCollector;
+        InitializeUtils.initializeExtraFieldSuffix(configCollector);
+        InitializeUtils.initializeMapperSortColumn(configCollector);
+        InitializeUtils.initializeDtoExcludeColumn(configCollector);
+        InitializeUtils.initJdbcTypeConverter(configCollector);
     }
 
     @Override
-    public LambdaGenerator<B> global(Consumer<GlobalBuilder> consumer) {
-        consumer.accept(new GlobalBuilder(this.configurer));
+    public LambdaGenerator<B> global(Function<GlobalBuilder, GlobalBuilder> func) {
+        func.apply(new GlobalBuilder(this.configCollector));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> strategy(Consumer<StrategyBuilder> consumer) {
-        consumer.accept(new StrategyBuilder(this.configurer));
+    public LambdaGenerator<B> strategy(Function<StrategyBuilder, StrategyBuilder> func) {
+        func.apply(new StrategyBuilder(this.configCollector));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> controller(Consumer<ControllerBuilder> consumer) {
-        consumer.accept(new ControllerBuilder(this.configurer.getControllerConfig()));
+    public LambdaGenerator<B> controller(Function<ControllerBuilder, ControllerBuilder> func) {
+        func.apply(new ControllerBuilder(this.configCollector.getControllerConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> service(Consumer<ServiceBuilder> consumer) {
-        consumer.accept(new ServiceBuilder(this.configurer.getServiceConfig()));
+    public LambdaGenerator<B> service(Function<ServiceBuilder, ServiceBuilder> func) {
+        func.apply(new ServiceBuilder(this.configCollector.getServiceConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> serviceImpl(Consumer<ServiceImplBuilder> consumer) {
-        consumer.accept(new ServiceImplBuilder(this.configurer.getServiceImplConfig()));
+    public LambdaGenerator<B> serviceImpl(Function<ServiceImplBuilder, ServiceImplBuilder>  func) {
+        func.apply(new ServiceImplBuilder(this.configCollector.getServiceImplConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> mapper(Consumer<MapperBuilder> consumer) {
-        consumer.accept(new MapperBuilder(this.configurer.getMapperConfig()));
+    public LambdaGenerator<B> mapper(Function<MapperBuilder, MapperBuilder> func) {
+        func.apply(new MapperBuilder(this.configCollector.getMapperConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> mapperXml(Consumer<MapperXmlBuilder> consumer) {
-        consumer.accept(new MapperXmlBuilder(this.configurer.getMapperXmlConfig()));
+    public LambdaGenerator<B> mapperXml(Function<MapperXmlBuilder, MapperXmlBuilder> func) {
+        func.apply(new MapperXmlBuilder(this.configCollector.getMapperXmlConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> entity(Consumer<EntityBuilder> consumer) {
-        consumer.accept(new EntityBuilder(this.configurer.getEntityConfig()));
+    public LambdaGenerator<B> entity(Function<EntityBuilder, EntityBuilder> func) {
+        func.apply(new EntityBuilder(this.configCollector.getEntityConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> queryDTO(Consumer<EntityQueryDTOBuilder> consumer) {
-        consumer.accept(new EntityQueryDTOBuilder(this.configurer.getEntityQueryDTOConfig()));
+    public LambdaGenerator<B> queryDTO(Function<QueryDTOBuilder, QueryDTOBuilder> func) {
+        func.apply(new QueryDTOBuilder(this.configCollector.getQueryDTOConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> queryVO(Consumer<EntityQueryVOBuilder> consumer) {
-        consumer.accept(new EntityQueryVOBuilder(this.configurer.getEntityQueryVOConfig()));
+    public LambdaGenerator<B> queryVO(Function<QueryVOBuilder, QueryVOBuilder> func) {
+        func.apply(new QueryVOBuilder(this.configCollector.getQueryVOConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> createDTO(Consumer<EntityCreateDTOBuilder> consumer) {
-        consumer.accept(new EntityCreateDTOBuilder(this.configurer));
+    public LambdaGenerator<B> createDTO(Function<CreateDTOBuilder, CreateDTOBuilder> func) {
+        func.apply(new CreateDTOBuilder(this.configCollector.getCreateDTOConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> updateDTO(Consumer<EntityUpdateDTOBuilder> consumer) {
-        consumer.accept(new EntityUpdateDTOBuilder(this.configurer.getEntityUpdateDTOConfig()));
+    public LambdaGenerator<B> updateDTO(Function<UpdateDTOBuilder, UpdateDTOBuilder> func) {
+        func.apply(new UpdateDTOBuilder(this.configCollector.getUpdateDTOConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> exportDTO(Consumer<EntityExcelExportDTOBuilder> consumer) {
-        consumer.accept(new EntityExcelExportDTOBuilder(this.configurer.getEntityExcelExportDTOConfig()));
+    public LambdaGenerator<B> exportDTO(Function<ExportDTOBuilder, ExportDTOBuilder> func) {
+        func.apply(new ExportDTOBuilder(this.configCollector.getExportDTOConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> importDTO(Consumer<EntityExcelImportDTOBuilder> consumer) {
-        consumer.accept(new EntityExcelImportDTOBuilder(this.configurer.getEntityExcelImportDTOConfig()));
+    public LambdaGenerator<B> importDTO(Function<ImportDTOBuilder, ImportDTOBuilder> func) {
+        func.apply(new ImportDTOBuilder(this.configCollector.getImportDTOConfig()));
         return this;
     }
 
     @Override
     public void execute(String... tableNames) {
         if (tableNames.length > 0) {
-            configurer.getStrategyConfig().getInclude().addAll(Arrays.asList(tableNames));
+            configCollector.getStrategyConfig().getInclude().addAll(Arrays.asList(tableNames));
         }
         log.debug("========================== ready to generate...==========================");
-        VelocityTemplateEngine templateEngine = new VelocityTemplateEngine(this.configurer);
+        VelocityTemplateEngine templateEngine = new VelocityTemplateEngine(this.configCollector);
         // 模板引擎初始化执行文件输出
         templateEngine.batchOutput().open();
         log.debug("========================== generate success！！！==========================");
@@ -132,7 +132,7 @@ public abstract class AbstractGenerator<C extends TemplateRender,B> implements L
                         "\n(ﾉ>ω<)ﾉ  Code generation complete! Let's start coding ~\n";
         System.out.println(banner);
         System.out.println("generated file output dir:");
-        String path = configurer.getGlobalConfig().getOutputDir();
+        String path = configCollector.getGlobalConfig().getOutputDir();
         System.out.println(new File(path).getAbsolutePath());
     }
 }

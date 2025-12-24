@@ -16,7 +16,7 @@
 package io.github.luminion.generator.config.model;
 
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
@@ -57,14 +57,19 @@ public class ServiceImplConfig implements TemplateRender {
     protected String superClass;
 
     @Override
+    public TemplateFile renderTemplateFile() {
+        return templateFile;
+    }
+
+    @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
 
 
         Resolver resolver = tableInfo.getResolver();
-        Configurer<?> configurer = resolver.getConfigurer();
-        GlobalConfig globalConfig = configurer.getGlobalConfig();
+        ConfigCollector<?> configCollector = resolver.getConfigCollector();
+        GlobalConfig globalConfig = configCollector.getGlobalConfig();
 
         switch (globalConfig.getRuntimeEnv()) {
             case MY_BATIS_PLUS_SQL_BOOSTER:

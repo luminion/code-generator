@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.engine;
 
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
@@ -47,8 +47,8 @@ public abstract class AbstractTemplateEngine {
     @Getter
     protected final Resolver resolver;
 
-    public AbstractTemplateEngine(Configurer<?> configurer) {
-        this.resolver = new Resolver(configurer);
+    public AbstractTemplateEngine(ConfigCollector<?> configCollector) {
+        this.resolver = new Resolver(configCollector);
     }
 
     /**
@@ -126,10 +126,10 @@ public abstract class AbstractTemplateEngine {
      * 打开输出目录
      */
     public void open() {
-        String outDir = getResolver().getConfigurer().getGlobalConfig().getOutputDir();
+        String outDir = getResolver().getConfigCollector().getGlobalConfig().getOutputDir();
         if (StringUtils.isBlank(outDir) || !new File(outDir).exists()) {
             System.err.println("Output directory not found：" + outDir);
-        } else if (getResolver().getConfigurer().getGlobalConfig().isOpenOutputDir()) {
+        } else if (getResolver().getConfigCollector().getGlobalConfig().isOpenOutputDir()) {
             try {
                 RuntimeUtils.openDir(outDir);
             } catch (IOException e) {

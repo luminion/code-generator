@@ -96,7 +96,7 @@ public class TableInfo {
 
     public TableInfo(Resolver resolver, DefaultDatabaseQueryMetaDataWrapper.Table table) {
         this.resolver = resolver;
-        StrategyConfig strategyConfig = resolver.getConfigurer().getStrategyConfig();
+        StrategyConfig strategyConfig = resolver.getConfigCollector().getStrategyConfig();
         String tableName = table.getName();
         this.name = tableName;
         String remarks = table.getRemarks();
@@ -127,12 +127,12 @@ public class TableInfo {
      * @since 3.5.0
      */
     public void addField(TableField field) {
-        if (getResolver().getConfigurer().getStrategyConfig().matchIgnoreColumns(field.getColumnName())) {
+        if (getResolver().getConfigCollector().getStrategyConfig().matchIgnoreColumns(field.getColumnName())) {
             // 忽略字段不在处理
             return;
         }
         tableFieldMap.put(field.getName(), field);
-        if (getResolver().getConfigurer().getStrategyConfig().matchSuperEntityColumns(field.getColumnName())) {
+        if (getResolver().getConfigCollector().getStrategyConfig().matchSuperEntityColumns(field.getColumnName())) {
             this.commonFields.add(field);
         } else {
             this.fields.add(field);
@@ -169,10 +169,10 @@ public class TableInfo {
             if (field.isLogicDeleteField()) {
                 continue;
             }
-            for (Map.Entry<String, String> entry : getResolver().getConfigurer().getStrategyConfig().getExtraFieldSuffixMap().entrySet()) {
+            for (Map.Entry<String, String> entry : getResolver().getConfigCollector().getStrategyConfig().getExtraFieldSuffixMap().entrySet()) {
                 String suffix = entry.getKey();
                 String sqlOperator = entry.getValue();
-                if (getResolver().getConfigurer().getStrategyConfig().getExtraFieldProvider().whetherGenerate(sqlOperator, field)) {
+                if (getResolver().getConfigCollector().getStrategyConfig().getExtraFieldProvider().whetherGenerate(sqlOperator, field)) {
                     String suffixPropertyName = field.getPropertyName() + suffix;
                     if (existPropertyNames.contains(suffixPropertyName)) {
                         continue;

@@ -1,14 +1,14 @@
 package io.github.luminion.generator.builder.model;
 
-import io.github.luminion.generator.config.model.EntityQueryVOConfig;
+import io.github.luminion.generator.config.model.QueryVOConfig;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
-public class EntityQueryVOBuilder extends AbstractModelBuilder<EntityQueryVOConfig, EntityQueryVOBuilder> {
+public class QueryVOBuilder extends AbstractModelBuilder<QueryVOConfig, QueryVOBuilder> {
 
-    public EntityQueryVOBuilder(EntityQueryVOConfig render) {
+    public QueryVOBuilder(QueryVOConfig render) {
         super(render);
     }
 
@@ -18,7 +18,7 @@ public class EntityQueryVOBuilder extends AbstractModelBuilder<EntityQueryVOConf
      * @param enable 是否启用
      * @return this
      */
-    public EntityQueryVOBuilder extendsEntity(boolean enable) {
+    public QueryVOBuilder extendsEntity(boolean enable) {
         this.config.setExtendsEntity(enable);
         return this;
     }

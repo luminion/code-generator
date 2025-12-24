@@ -1,7 +1,7 @@
 package io.github.luminion.generator.util;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.core.StrategyConfig;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import io.github.luminion.generator.config.model.MapperXmlConfig;
@@ -20,8 +20,8 @@ import java.util.Set;
 public abstract class InitializeUtils {
 
 
-    public static void initJdbcTypeConverter(Configurer<?> configurer) {
-        StrategyConfig strategyConfig = configurer.getStrategyConfig();
+    public static void initJdbcTypeConverter(ConfigCollector<?> configCollector) {
+        StrategyConfig strategyConfig = configCollector.getStrategyConfig();
         strategyConfig.setJavaFieldProvider(metaInfo -> {
             if (JdbcType.TINYINT == metaInfo.getJdbcType()) {
                 return JavaFieldType.INTEGER;
@@ -33,8 +33,8 @@ public abstract class InitializeUtils {
         });
     }
 
-    public static void initializeMapperSortColumn(Configurer<?> configurer) {
-        MapperXmlConfig mapperXmlConfig = configurer.getMapperXmlConfig();
+    public static void initializeMapperSortColumn(ConfigCollector<?> configCollector) {
+        MapperXmlConfig mapperXmlConfig = configCollector.getMapperXmlConfig();
         Map<String, Boolean> sortColumnMap = mapperXmlConfig.getSortColumnMap();
         sortColumnMap.put("order" , false);
         sortColumnMap.put("rank" , false);
@@ -46,8 +46,8 @@ public abstract class InitializeUtils {
     }
 
 
-    public static void initializeDtoExcludeColumn(Configurer<?> configurer) {
-        Set<String> editExcludeColumns = configurer.getStrategyConfig().getEditExcludeColumns();
+    public static void initializeDtoExcludeColumn(ConfigCollector<?> configCollector) {
+        Set<String> editExcludeColumns = configCollector.getStrategyConfig().getEditExcludeColumns();
         // 1. 创建时间类
         editExcludeColumns.addAll(Arrays.asList(
                 "create_time",      // 您的规范
@@ -113,8 +113,8 @@ public abstract class InitializeUtils {
         //));
     }
 
-    public static void initializeExtraFieldSuffix(Configurer<?> configurer) {
-        StrategyConfig strategyConfig = configurer.getStrategyConfig();
+    public static void initializeExtraFieldSuffix(ConfigCollector<?> configCollector) {
+        StrategyConfig strategyConfig = configCollector.getStrategyConfig();
         Map<String, String> extraFieldSuffixMap = strategyConfig.getExtraFieldSuffixMap();
 
         //extraFieldSuffixMap.put("Ne" , "!=");
@@ -167,8 +167,8 @@ public abstract class InitializeUtils {
     }
 
 
-    public static void initializeMybatisPlus(Configurer<MybatisPlusConfig> configurer) {
-        MybatisPlusConfig customConfig = configurer.getCustomConfig();
+    public static void initializeMybatisPlus(ConfigCollector<MybatisPlusConfig> configCollector) {
+        MybatisPlusConfig customConfig = configCollector.getCustomConfig();
         customConfig.setIdType(IdType.ASSIGN_ID);
         customConfig.setVersionColumnName("version");
         customConfig.setLogicDeleteColumnName("deleted");

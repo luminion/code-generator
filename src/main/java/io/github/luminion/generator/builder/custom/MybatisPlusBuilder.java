@@ -2,7 +2,7 @@ package io.github.luminion.generator.builder.custom;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.github.luminion.generator.common.MethodReference;
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.util.ReflectUtils;
@@ -15,8 +15,8 @@ import lombok.NonNull;
 @SuppressWarnings("unused")
 public class MybatisPlusBuilder extends AbstractMybatisPlusBuilder<MybatisPlusBuilder> {
 
-    public MybatisPlusBuilder(Configurer<MybatisPlusConfig> configurer) {
-        super(configurer);
+    public MybatisPlusBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
+        super(configCollector);
     }
 
     /**
@@ -27,7 +27,7 @@ public class MybatisPlusBuilder extends AbstractMybatisPlusBuilder<MybatisPlusBu
      */
     public <T, R> MybatisPlusBuilder pageMethod(@NonNull MethodReference<IPage<T>, R> methodReference) {
         ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, IPage.class);
-        this.configurer.getControllerConfig().setPageMethod(payload);
+        this.configCollector.getControllerConfig().setPageMethod(payload);
         return this;
     }
 

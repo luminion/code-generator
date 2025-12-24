@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.engine;
 
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -46,7 +46,7 @@ public class VelocityTemplateEngine extends AbstractTemplateEngine {
         }
     }
 
-    public VelocityTemplateEngine(Configurer<?> configAdapter) {
+    public VelocityTemplateEngine(ConfigCollector<?> configAdapter) {
         super(configAdapter);
         Properties p = new Properties();
         p.setProperty(Velocity.ENCODING_DEFAULT, StandardCharsets.UTF_8.name());

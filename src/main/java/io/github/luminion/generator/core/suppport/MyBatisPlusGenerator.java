@@ -1,6 +1,6 @@
 package io.github.luminion.generator.core.suppport;
 
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.builder.custom.MybatisPlusBuilder;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import io.github.luminion.generator.config.model.ControllerConfig;
@@ -11,28 +11,28 @@ import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.util.InitializeUtils;
 
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
 public class MyBatisPlusGenerator extends AbstractGenerator<MybatisPlusConfig, MybatisPlusBuilder> {
-    public MyBatisPlusGenerator(Configurer<MybatisPlusConfig> configurer) {
-        super(configurer);
-        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PLUS);
-        ControllerConfig controllerConfig = configurer.getControllerConfig();
+    public MyBatisPlusGenerator(ConfigCollector<MybatisPlusConfig> configCollector) {
+        super(configCollector);
+        configCollector.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PLUS);
+        ControllerConfig controllerConfig = configCollector.getControllerConfig();
         ClassMethodPayload classMethodPayload = new ClassMethodPayload(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName(), 1);
         controllerConfig.setPageMethod(classMethodPayload);
         
-        configurer.getEntityConfig().getTemplateFile().setTemplatePath("/templates/mybatis_plus/entity.java");
+        configCollector.getEntityConfig().renderTemplateFile().setTemplatePath("/templates/mybatis_plus/entity.java");
 
-        InitializeUtils.initializeMybatisPlus(configurer);
+        InitializeUtils.initializeMybatisPlus(configCollector);
     }
 
     @Override
-    public LambdaGenerator<MybatisPlusBuilder> custom(Consumer<MybatisPlusBuilder> consumer) {
-        consumer.accept(new MybatisPlusBuilder(this.configurer));
+    public LambdaGenerator<MybatisPlusBuilder> custom(Function<MybatisPlusBuilder,MybatisPlusBuilder> func) {
+        func.apply(new MybatisPlusBuilder(this.configCollector));
         return this;
     }
 }

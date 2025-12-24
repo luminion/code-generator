@@ -16,7 +16,6 @@
 package io.github.luminion.generator.common.support;
 
 import io.github.luminion.generator.common.TableInfoProvider;
-import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.Resolver;
 import io.github.luminion.generator.config.core.DataSourceConfig;
 import io.github.luminion.generator.po.TableField;
@@ -56,8 +55,8 @@ public class DefaultDatabaseQuery implements TableInfoProvider {
 
     public DefaultDatabaseQuery(Resolver resolver) {
         this.resolver = resolver;
-        this.strategyConfig = resolver.getConfigurer().getStrategyConfig();
-        DataSourceConfig dataSourceConfig = resolver.getConfigurer().getDataSourceConfig();
+        this.strategyConfig = resolver.getConfigCollector().getStrategyConfig();
+        DataSourceConfig dataSourceConfig = resolver.getConfigCollector().getDataSourceConfig();
         this.databaseMetaDataWrapper = new DefaultDatabaseQueryMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchemaName());
     }
 

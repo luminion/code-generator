@@ -4,7 +4,7 @@ import io.github.luminion.generator.common.DatabaseKeywordsHandler;
 import io.github.luminion.generator.common.ExtraFieldProvider;
 import io.github.luminion.generator.common.JavaFieldProvider;
 import io.github.luminion.generator.common.NameConverter;
-import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.enums.DateType;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @SuppressWarnings("unused")
 public class StrategyBuilder {
-    private final Configurer<?> configurer;
+    private final ConfigCollector<?> configCollector;
 
     /**
      * 数据库表/字段名转实体属性名策略
@@ -30,7 +30,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder nameConverter(@NonNull NameConverter nameConverter) {
-        this.configurer.getStrategyConfig().setNameConverter(nameConverter);
+        this.configCollector.getStrategyConfig().setNameConverter(nameConverter);
         return this;
     }
 
@@ -41,7 +41,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder javaFieldProvider(@NonNull JavaFieldProvider javaFieldProvider) {
-        this.configurer.getStrategyConfig().setJavaFieldProvider(javaFieldProvider);
+        this.configCollector.getStrategyConfig().setJavaFieldProvider(javaFieldProvider);
         return this;
     }
 
@@ -52,7 +52,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder keyWordsHandler(@NonNull DatabaseKeywordsHandler keyWordsHandler) {
-        this.configurer.getStrategyConfig().setKeyWordsHandler(keyWordsHandler);
+        this.configCollector.getStrategyConfig().setKeyWordsHandler(keyWordsHandler);
         return this;
     }
 
@@ -65,7 +65,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder dateType(@NonNull DateType dateType) {
-        this.configurer.getStrategyConfig().setDateType(dateType);
+        this.configCollector.getStrategyConfig().setDateType(dateType);
         return this;
     }
 
@@ -76,7 +76,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder booleanColumnRemoveIsPrefix(boolean enabled) {
-        this.configurer.getStrategyConfig().setBooleanColumnRemoveIsPrefix(enabled);
+        this.configCollector.getStrategyConfig().setBooleanColumnRemoveIsPrefix(enabled);
         return this;
     }
 
@@ -87,7 +87,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder superEntityColumns(String... superEntityColumns) {
-        this.configurer.getStrategyConfig().getSuperEntityColumns().addAll(Arrays.asList(superEntityColumns));
+        this.configCollector.getStrategyConfig().getSuperEntityColumns().addAll(Arrays.asList(superEntityColumns));
         return this;
     }
 
@@ -98,7 +98,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder ignoreColumns(String... ignoreColumns) {
-        this.configurer.getStrategyConfig().getIgnoreColumns().addAll(Arrays.asList(ignoreColumns));
+        this.configCollector.getStrategyConfig().getIgnoreColumns().addAll(Arrays.asList(ignoreColumns));
         return this;
     }
 
@@ -109,7 +109,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder showSchema(boolean enabled) {
-        this.configurer.getStrategyConfig().setShowSchema(enabled);
+        this.configCollector.getStrategyConfig().setShowSchema(enabled);
         return this;
     }
 
@@ -120,7 +120,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder skipView(boolean enabled) {
-        this.configurer.getStrategyConfig().setSkipView(enabled);
+        this.configCollector.getStrategyConfig().setSkipView(enabled);
         return this;
     }
 
@@ -131,7 +131,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder tableNamePattern(@NonNull String tableNamePattern) {
-        this.configurer.getStrategyConfig().setTableNamePattern(tableNamePattern);
+        this.configCollector.getStrategyConfig().setTableNamePattern(tableNamePattern);
         return this;
     }
 
@@ -142,7 +142,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder tablePrefix(String... tablePrefix) {
-        this.configurer.getStrategyConfig().getTablePrefix().addAll(Arrays.asList(tablePrefix));
+        this.configCollector.getStrategyConfig().getTablePrefix().addAll(Arrays.asList(tablePrefix));
         return this;
     }
 
@@ -153,7 +153,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder tableSuffix(String... tableSuffix) {
-        this.configurer.getStrategyConfig().getTableSuffix().addAll(Arrays.asList(tableSuffix));
+        this.configCollector.getStrategyConfig().getTableSuffix().addAll(Arrays.asList(tableSuffix));
         return this;
     }
 
@@ -164,7 +164,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder fieldPrefix(String... fieldPrefix) {
-        this.configurer.getStrategyConfig().getFieldPrefix().addAll(Arrays.asList(fieldPrefix));
+        this.configCollector.getStrategyConfig().getFieldPrefix().addAll(Arrays.asList(fieldPrefix));
         return this;
     }
 
@@ -175,7 +175,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder fieldSuffix(String... fieldSuffix) {
-        this.configurer.getStrategyConfig().getFieldSuffix().addAll(Arrays.asList(fieldSuffix));
+        this.configCollector.getStrategyConfig().getFieldSuffix().addAll(Arrays.asList(fieldSuffix));
         return this;
     }
 
@@ -186,7 +186,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder include(String... include) {
-        this.configurer.getStrategyConfig().getInclude().addAll(Arrays.asList(include));
+        this.configCollector.getStrategyConfig().getInclude().addAll(Arrays.asList(include));
         return this;
     }
 
@@ -197,7 +197,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder exclude(String... exclude) {
-        this.configurer.getStrategyConfig().getExclude().addAll(Arrays.asList(exclude));
+        this.configCollector.getStrategyConfig().getExclude().addAll(Arrays.asList(exclude));
         return this;
     }
 
@@ -208,7 +208,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder editExcludeColumn(String... editExcludeColumns) {
-        this.configurer.getStrategyConfig().getEditExcludeColumns().addAll(Arrays.asList(editExcludeColumns));
+        this.configCollector.getStrategyConfig().getEditExcludeColumns().addAll(Arrays.asList(editExcludeColumns));
         return this;
     }
 
@@ -218,7 +218,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder editExcludeColumnsClear() {
-        this.configurer.getStrategyConfig().getEditExcludeColumns().clear();
+        this.configCollector.getStrategyConfig().getEditExcludeColumns().clear();
         return this;
     }
     
@@ -232,7 +232,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder extraFieldSuffix(@NonNull String suffix, @NonNull String operator) {
-        this.configurer.getStrategyConfig().getExtraFieldSuffixMap().put(suffix, operator);
+        this.configCollector.getStrategyConfig().getExtraFieldSuffixMap().put(suffix, operator);
         return this;
     }
 
@@ -243,7 +243,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder extraFieldSuffix(@NonNull Map<String, String> extraFieldSuffixMap) {
-        this.configurer.getStrategyConfig().getExtraFieldSuffixMap().putAll(extraFieldSuffixMap);
+        this.configCollector.getStrategyConfig().getExtraFieldSuffixMap().putAll(extraFieldSuffixMap);
         return this;
     }
 
@@ -253,7 +253,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder clearExtraFieldSuffix() {
-        this.configurer.getStrategyConfig().getExtraFieldSuffixMap().clear();
+        this.configCollector.getStrategyConfig().getExtraFieldSuffixMap().clear();
         return this;
     }
 
@@ -264,7 +264,7 @@ public class StrategyBuilder {
      * @return this
      */
     public StrategyBuilder extraFieldProvider(@NonNull ExtraFieldProvider extraFieldProvider) {
-        this.configurer.getStrategyConfig().setExtraFieldProvider(extraFieldProvider);
+        this.configCollector.getStrategyConfig().setExtraFieldProvider(extraFieldProvider);
         return this;
     }
 }

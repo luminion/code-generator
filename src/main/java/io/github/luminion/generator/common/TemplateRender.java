@@ -22,7 +22,6 @@ import lombok.SneakyThrows;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -51,7 +50,7 @@ public interface TemplateRender extends Serializable {
      * 输出的模板文件
      *
      */
-    default TemplateFile getTemplate() {
+    default TemplateFile renderTemplateFile(){
         return null;
     }
 
