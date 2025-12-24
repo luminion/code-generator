@@ -25,38 +25,31 @@ public class EntityCreateDTOConfig implements TemplateRender {
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.ENTITY_CREATE_DTO.getKey(),
+            TemplateFileEnum.CREATE_DTO.getKey(),
             "%sCreateDTO",
             "model.dto",
             "/templates/model/entityCreateDTO.java",
             ".java"
     );
 
-
-    @Override
-    public List<TemplateFile> renderTemplateFiles() {
-        return Collections.singletonList(templateFile);
-    }
-
-
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
-        
+
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
 
         // 关闭功能
-        if (!globalConfig.isGenerateCreate()){
+        if (!globalConfig.isGenerateCreate()) {
             this.getTemplateFile().setGenerate(false);
         }
 
         String size = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_SIZE.getClassName();
         String notBlank = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_NOT_BLANK.getClassName();
         String notNull = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_NOT_NULL.getClassName();
-        
+
         // 属性过滤
         Set<String> editExcludeColumns = configurer.getStrategyConfig().getEditExcludeColumns();
         for (TableField field : tableInfo.getFields()) {
@@ -82,7 +75,7 @@ public class EntityCreateDTOConfig implements TemplateRender {
             boolean isString = "String".equals(field.getPropertyType());
             //boolean notnullFlag = !metaInfo.isNullable() && metaInfo.getDefaultValue() == null;
             boolean notnullFlag = !metaInfo.isNullable();
-        
+
             if (globalConfig.isValidated()) {
                 if (notnullFlag) {
                     if (isString) {

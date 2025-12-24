@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.builder.core;
+package io.github.luminion.generator.builder.core;
 
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.DocType;

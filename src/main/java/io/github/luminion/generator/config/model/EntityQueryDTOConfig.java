@@ -25,45 +25,37 @@ public class EntityQueryDTOConfig implements TemplateRender {
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.ENTITY_QUERY_DTO.getKey(),
+            TemplateFileEnum.QUERY_DTO.getKey(),
             "%sQueryDTO",
             "model.dto",
             "/templates/model/entityQueryDTO.java",
             ".java"
     );
-    
+
     /**
      * 是否继承实体类
      */
     protected boolean extendsEntity = false;
 
     @Override
-    public List<TemplateFile> renderTemplateFiles() {
-        return Collections.singletonList(templateFile);
-    }
-
-    
-
-
-    @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
-        
+
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
 
         // 关闭功能
-        if (!globalConfig.isGenerateSelectByXml()){
+        if (!globalConfig.isGenerateSelectByXml()) {
             this.getTemplateFile().setGenerate(false);
         }
 
         importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
-        
+
         if (extendsEntity) {
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
-            if (globalConfig.isLombok()){
+            if (globalConfig.isLombok()) {
                 importPackages.add(RuntimeClass.LOMBOK_EQUALS_AND_HASH_CODE.getClassName());
             }
             data.put("queryDTOExtendsEntity", extendsEntity);
@@ -89,7 +81,7 @@ public class EntityQueryDTOConfig implements TemplateRender {
                 .collect(Collectors.toCollection(TreeSet::new));
         data.put("queryDTOFramePkg", frameworkPackages);
         data.put("queryDTOJavaPkg", javaPackages);
-        
+
         return data;
     }
 }

@@ -22,7 +22,10 @@ import io.github.luminion.generator.config.core.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.enums.TemplateFileEnum;
-import io.github.luminion.generator.po.*;
+import io.github.luminion.generator.po.ClassMethodPayload;
+import io.github.luminion.generator.po.TableField;
+import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -92,7 +95,7 @@ public class ControllerConfig implements TemplateRender {
      * 批量查询使用post请求
      */
     protected boolean batchQueryPost = true;
-    
+
     /**
      * 追加SqlContext查询
      */
@@ -108,21 +111,15 @@ public class ControllerConfig implements TemplateRender {
      */
     protected ClassMethodPayload pageMethod = new ClassMethodPayload();
 
-
-    @Override
-    public List<TemplateFile> renderTemplateFiles() {
-        return Collections.singletonList(templateFile);
-    }
-
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
-        
+
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        
+
         data.put("crossOrigin", this.crossOrigin);
         data.put("restController", this.restController);
         data.put("controllerSuperClass", ClassUtils.getSimpleName(this.superClass));
@@ -157,8 +154,8 @@ public class ControllerConfig implements TemplateRender {
         data.put("optionalBodyStr", batchQueryPost ? requestBodyStr : null);
         Optional.ofNullable(tableInfo.getPrimaryKeyField()).ifPresent(e -> data.put("primaryKeyPropertyType", e.getJavaType().getType()));
         // 分页
-        data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo)));
-        
+        data.put("pageReturnType", pageMethod.returnGenericTypeStr(resolver.getClassSimpleName(TemplateFileEnum.QUERY_VO, tableInfo)));
+
         // ======================导包======================
         // spring组件
         importPackages.add(RuntimeClass.SPRING_BOOT_WEB_ANNOTATION_S.getClassName());
@@ -178,7 +175,7 @@ public class ControllerConfig implements TemplateRender {
         //    case MYBATIS_PLUS:
         //        break;
         //}
-        
+
         // 文档类型
         switch (globalConfig.getDocType()) {
             case SWAGGER_V3:
@@ -210,11 +207,11 @@ public class ControllerConfig implements TemplateRender {
         // 新增
         if (globalConfig.isGenerateCreate()) {
             importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_CREATE_DTO, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.CREATE_DTO, tableInfo));
         }
         // 修改
         if (globalConfig.isGenerateUpdate()) {
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.UPDATE_DTO, tableInfo));
         }
         // 删除
         if (globalConfig.isGenerateDelete()) {
@@ -224,20 +221,20 @@ public class ControllerConfig implements TemplateRender {
             }
         }
         // voById
-        if (globalConfig.isGenerateVoById()){
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+        if (globalConfig.isGenerateVoById()) {
+            importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
             // 根据id查询
             if (tableInfo.isHavePrimaryKey()) {
                 TableField primaryKeyTableField = tableInfo.getPrimaryKeyField();
                 Optional.ofNullable(primaryKeyTableField.getJavaType().getPkg()).ifPresent(importPackages::add);
-            }else{
+            } else {
                 log.warn("table [{}] does not have a primary key, won't generate voById", tableInfo.getName());
             }
         }
         // voList
-        if (globalConfig.isGenerateVoList()){
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+        if (globalConfig.isGenerateVoList()) {
+            importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
             importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
             if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
                 importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_BUILDER.getClassName());
@@ -246,9 +243,9 @@ public class ControllerConfig implements TemplateRender {
             }
         }
         // voPage
-        if (globalConfig.isGenerateVoPage()){
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+        if (globalConfig.isGenerateVoPage()) {
+            importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
             if (pageMethod != null && pageMethod.isClassReady()) {
                 importPackages.add(pageMethod.getClassName());
             }
@@ -271,7 +268,7 @@ public class ControllerConfig implements TemplateRender {
 
         // 导出
         if (globalConfig.isGenerateExport()) {
-            importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+            importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
             importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getClassName());
             importPackages.add(responseClass);
             if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
@@ -289,7 +286,7 @@ public class ControllerConfig implements TemplateRender {
                 .collect(Collectors.toCollection(TreeSet::new));
         data.put("controllerFrameworkPkg", frameworkPackages);
         data.put("controllerJavaPkg", javaPackages);
-        
+
         return data;
     }
 

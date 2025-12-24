@@ -27,39 +27,32 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.ENTITY_EXCEL_EXPORT_DTO.getKey(),
+            TemplateFileEnum.EXPORT_DTO.getKey(),
             "%sExcelExportDTO",
             "model.excel",
             "/templates/model/entityExcelExportDTO.java",
             ".java"
     );
-
-
-
-    @Override
-    public List<TemplateFile> renderTemplateFiles() {
-        return Collections.singletonList(templateFile);
-    }
     
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
-        
+
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        
+
         // 关闭功能
-        if (!globalConfig.isGenerateExport()){
+        if (!globalConfig.isGenerateExport()) {
             this.getTemplateFile().setGenerate(false);
         }
-        
+
         // excel包
         String excelIgnoreUnannotated = globalConfig.getExcelApi().getPackagePrefix() + RuntimeClass.PREFIX_EXCEL_EXCEL_IGNORE_UNANNOTATED.getClassName();
         String excelProperty = globalConfig.getExcelApi().getPackagePrefix() + RuntimeClass.PREFIX_EXCEL_EXCEL_PROPERTY.getClassName();
         importPackages.add(excelIgnoreUnannotated);
-        
+
         // 属性过滤
         importPackages.add(excelProperty);
         for (TableField field : tableInfo.getFields()) {
@@ -85,8 +78,8 @@ public class EntityExcelExportDTOConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("excelExportDTOFramePkg", frameworkPackages);
-        data.put("excelExportDTOJavaPkg", javaPackages);
+        data.put("exportDTOFramePkg", frameworkPackages);
+        data.put("exportDTOJavaPkg", javaPackages);
         return data;
     }
 }

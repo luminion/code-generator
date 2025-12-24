@@ -1,14 +1,14 @@
-package ${package.excelExportDTO};
-#if($excelExportDTOFramePkg.size()>0)
+package ${package.exportDTO};
+#if($exportDTOFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${excelExportDTOFramePkg})
+#foreach($pkg in ${exportDTOFramePkg})
 import ${pkg};
 #end
-#if($excelExportDTOJavaPkg.size()>0)
+#if($exportDTOJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${excelExportDTOJavaPkg})
+#foreach($pkg in ${exportDTOJavaPkg})
 import ${pkg};
 #end
 
@@ -27,7 +27,7 @@ import ${pkg};
 @Data
 #end
 @ExcelIgnoreUnannotated
-public class ${excelExportDTO}#if(${serializableUID}) implements Serializable#end {
+public class ${exportDTO}#if(${serializableUID}) implements Serializable#end {
 #if(${serializableUID})
 
     #if(${serializableAnnotation})

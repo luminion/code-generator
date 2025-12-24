@@ -89,7 +89,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public void excelTemplate(OutputStream os) {
-        ${excelApiClass}.write(os, ${excelImportDTO}.class).sheet()
+        ${excelApiClass}.write(os, ${importDTO}.class).sheet()
             .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
             .doWrite(Collections.emptyList());
     }
@@ -98,10 +98,10 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public int excelImport(InputStream is) {
-        List<${excelImportDTO}> dataList = ${excelApiClass}.read(is).head(${excelImportDTO}.class).sheet().doReadSync();
-        List<${entity}> entityList = dataList.stream().map(excelImportDTO -> {
+        List<${importDTO}> dataList = ${excelApiClass}.read(is).head(${importDTO}.class).sheet().doReadSync();
+        List<${entity}> entityList = dataList.stream().map(importDTO -> {
             ${entity} entity = new ${entity}();
-            BeanUtils.copyProperties(excelImportDTO, entity);
+            BeanUtils.copyProperties(importDTO, entity);
             return entity;
         }).collect(Collectors.toList());
         super.saveBatch(entityList);
@@ -114,7 +114,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public void excelExport(SqlContext<${entity}> sqlContext, OutputStream os) {
-        ${excelApiClass}.write(os, ${excelExportDTO}.class).sheet()
+        ${excelApiClass}.write(os, ${exportDTO}.class).sheet()
             .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
             .doWrite(this.voList(sqlContext));
     }

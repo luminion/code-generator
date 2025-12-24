@@ -58,19 +58,14 @@ public class EntityConfig implements TemplateRender {
     protected String superClass;
 
     @Override
-    public List<TemplateFile> renderTemplateFiles() {
-        return Collections.singletonList(templateFile);
-    }
-    
-    @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
-        
+
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        
+
         if (StringUtils.isNotBlank(this.superClass)) {
             data.put("entitySuperClass", ClassUtils.getSimpleName(this.superClass));
             importPackages.add(this.superClass);

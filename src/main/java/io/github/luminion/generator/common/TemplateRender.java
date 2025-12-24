@@ -51,7 +51,7 @@ public interface TemplateRender extends Serializable {
      * 输出的模板文件
      *
      */
-    default List<TemplateFile> renderTemplateFiles() {
+    default TemplateFile getTemplate() {
         return null;
     }
 

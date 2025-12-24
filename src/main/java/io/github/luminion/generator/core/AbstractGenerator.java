@@ -2,9 +2,9 @@ package io.github.luminion.generator.core;
 
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.config.builder.core.GlobalBuilder;
-import io.github.luminion.generator.config.builder.core.StrategyBuilder;
-import io.github.luminion.generator.config.builder.model.*;
+import io.github.luminion.generator.builder.core.GlobalBuilder;
+import io.github.luminion.generator.builder.core.StrategyBuilder;
+import io.github.luminion.generator.builder.model.*;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
 import io.github.luminion.generator.util.InitializeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -42,49 +42,49 @@ public abstract class AbstractGenerator<C extends TemplateRender,B> implements L
 
     @Override
     public LambdaGenerator<B> controller(Consumer<ControllerBuilder> consumer) {
-        consumer.accept(new ControllerBuilder(this.configurer));
+        consumer.accept(new ControllerBuilder(this.configurer.getControllerConfig()));
         return this;
     }
 
     @Override
     public LambdaGenerator<B> service(Consumer<ServiceBuilder> consumer) {
-        consumer.accept(new ServiceBuilder(this.configurer));
+        consumer.accept(new ServiceBuilder(this.configurer.getServiceConfig()));
         return this;
     }
 
     @Override
     public LambdaGenerator<B> serviceImpl(Consumer<ServiceImplBuilder> consumer) {
-        consumer.accept(new ServiceImplBuilder(this.configurer));
+        consumer.accept(new ServiceImplBuilder(this.configurer.getServiceImplConfig()));
         return this;
     }
 
     @Override
     public LambdaGenerator<B> mapper(Consumer<MapperBuilder> consumer) {
-        consumer.accept(new MapperBuilder(this.configurer));
+        consumer.accept(new MapperBuilder(this.configurer.getMapperConfig()));
         return this;
     }
 
     @Override
     public LambdaGenerator<B> mapperXml(Consumer<MapperXmlBuilder> consumer) {
-        consumer.accept(new MapperXmlBuilder(this.configurer));
+        consumer.accept(new MapperXmlBuilder(this.configurer.getMapperXmlConfig()));
         return this;
     }
 
     @Override
     public LambdaGenerator<B> entity(Consumer<EntityBuilder> consumer) {
-        consumer.accept(new EntityBuilder(this.configurer));
+        consumer.accept(new EntityBuilder(this.configurer.getEntityConfig()));
         return this;
     }
 
     @Override
     public LambdaGenerator<B> queryDTO(Consumer<EntityQueryDTOBuilder> consumer) {
-        consumer.accept(new EntityQueryDTOBuilder(this.configurer));
+        consumer.accept(new EntityQueryDTOBuilder(this.configurer.getEntityQueryDTOConfig()));
         return this;
     }
 
     @Override
     public LambdaGenerator<B> queryVO(Consumer<EntityQueryVOBuilder> consumer) {
-        consumer.accept(new EntityQueryVOBuilder(this.configurer));
+        consumer.accept(new EntityQueryVOBuilder(this.configurer.getEntityQueryVOConfig()));
         return this;
     }
 
@@ -96,19 +96,19 @@ public abstract class AbstractGenerator<C extends TemplateRender,B> implements L
 
     @Override
     public LambdaGenerator<B> updateDTO(Consumer<EntityUpdateDTOBuilder> consumer) {
-        consumer.accept(new EntityUpdateDTOBuilder(this.configurer));
+        consumer.accept(new EntityUpdateDTOBuilder(this.configurer.getEntityUpdateDTOConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> excelExportDTO(Consumer<EntityExcelExportDTOBuilder> consumer) {
-        consumer.accept(new EntityExcelExportDTOBuilder(this.configurer));
+    public LambdaGenerator<B> exportDTO(Consumer<EntityExcelExportDTOBuilder> consumer) {
+        consumer.accept(new EntityExcelExportDTOBuilder(this.configurer.getEntityExcelExportDTOConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> excelImportDTO(Consumer<EntityExcelImportDTOBuilder> consumer) {
-        consumer.accept(new EntityExcelImportDTOBuilder(this.configurer));
+    public LambdaGenerator<B> importDTO(Consumer<EntityExcelImportDTOBuilder> consumer) {
+        consumer.accept(new EntityExcelImportDTOBuilder(this.configurer.getEntityExcelImportDTOConfig()));
         return this;
     }
 

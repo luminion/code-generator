@@ -1,8 +1,8 @@
 package io.github.luminion.generator.core;
 
-import io.github.luminion.generator.config.builder.core.GlobalBuilder;
-import io.github.luminion.generator.config.builder.core.StrategyBuilder;
-import io.github.luminion.generator.config.builder.model.*;
+import io.github.luminion.generator.builder.core.GlobalBuilder;
+import io.github.luminion.generator.builder.core.StrategyBuilder;
+import io.github.luminion.generator.builder.model.*;
 
 import java.util.function.Consumer;
 
@@ -36,9 +36,9 @@ public interface LambdaGenerator<B> {
 
     LambdaGenerator<B> updateDTO(Consumer<EntityUpdateDTOBuilder> consumer);
 
-    LambdaGenerator<B> excelExportDTO(Consumer<EntityExcelExportDTOBuilder> consumer);
+    LambdaGenerator<B> exportDTO(Consumer<EntityExcelExportDTOBuilder> consumer);
 
-    LambdaGenerator<B> excelImportDTO(Consumer<EntityExcelImportDTOBuilder> consumer);
+    LambdaGenerator<B> importDTO(Consumer<EntityExcelImportDTOBuilder> consumer);
 
     LambdaGenerator<B> custom(Consumer<B> consumer);
 

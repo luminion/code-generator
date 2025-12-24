@@ -25,30 +25,24 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.ENTITY_EXCEL_IMPORT_DTO.getKey(),
+            TemplateFileEnum.IMPORT_DTO.getKey(),
             "%sExcelImportDTO",
             "model.excel",
             "/templates/model/entityExcelImportDTO.java",
             ".java"
     );
 
-
-    @Override
-    public List<TemplateFile> renderTemplateFiles() {
-        return Collections.singletonList(templateFile);
-    }
-
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
-        
+
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        
+
         // 关闭功能
-        if (!globalConfig.isGenerateImport()){
+        if (!globalConfig.isGenerateImport()) {
             this.getTemplateFile().setGenerate(false);
         }
 
@@ -98,8 +92,8 @@ public class EntityExcelImportDTOConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("excelImportDTOFramePkg", frameworkPackages);
-        data.put("excelImportDTOJavaPkg", javaPackages);
+        data.put("importDTOFramePkg", frameworkPackages);
+        data.put("importDTOJavaPkg", javaPackages);
         return data;
     }
 

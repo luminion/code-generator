@@ -1,7 +1,7 @@
 package io.github.luminion.generator.core.suppport;
 
 import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.config.builder.custom.MybatisPlusBuilder;
+import io.github.luminion.generator.builder.custom.MybatisPlusBuilder;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import io.github.luminion.generator.config.model.ControllerConfig;
 import io.github.luminion.generator.core.AbstractGenerator;

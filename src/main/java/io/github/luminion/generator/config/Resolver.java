@@ -91,13 +91,12 @@ public class Resolver {
         // 遍历渲染, 初始化, 添加模板
         for (TemplateRender templateRender : templateRenderList) {
             templateRender.init();
-            List<TemplateFile> templateFiles = templateRender.renderTemplateFiles();
-            if (templateFiles != null) {
-                for (TemplateFile templateFile : templateFiles) {
-                    templateFileMap.put(templateFile.getKey(), templateFile);
-                }
+            TemplateFile templateFile = templateRender.getTemplate();
+            if (templateFile != null) {
+                templateFileMap.put(templateFile.getKey(), templateFile);
             }
         }
+        
     }
 
     /**
@@ -301,6 +300,13 @@ public class Resolver {
         result.put("class", this.getOutputClassNameMap(tableInfo));
         // 类是否生成
         result.put("generate", this.getOutputClassGenerateMap());
+
+        // 策略配置
+        result.put("booleanColumnRemoveIsPrefix", this.configurer.getStrategyConfig().isBooleanColumnRemoveIsPrefix());
+        result.put("editExcludeColumns", this.configurer.getStrategyConfig().getEditExcludeColumns());
+        result.put("extraFieldSuffixMap", this.configurer.getStrategyConfig().getExtraFieldSuffixMap());
+        result.put("extraFieldProvider", this.configurer.getStrategyConfig().getExtraFieldProvider());
+        
         if (this.configurer.getStrategyConfig().isShowSchema()) {
             String schemaName = this.configurer.getDataSourceConfig().getSchemaName();
             if (schemaName == null) {

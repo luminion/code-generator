@@ -26,7 +26,7 @@ public class EntityQueryVOConfig implements TemplateRender {
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.ENTITY_QUERY_VO.getKey(),
+            TemplateFileEnum.QUERY_VO.getKey(),
             "%sQueryVO",
             "model.vo",
             "/templates/model/entityQueryVO.java",
@@ -39,12 +39,6 @@ public class EntityQueryVOConfig implements TemplateRender {
     protected boolean extendsEntity = false;
 
     @Override
-    public List<TemplateFile> renderTemplateFiles() {
-        return Collections.singletonList(templateFile);
-    }
-
-
-    @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
@@ -54,13 +48,13 @@ public class EntityQueryVOConfig implements TemplateRender {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
 
         // 关闭功能
-        if (!globalConfig.isGenerateSelectByXml() && !RuntimeEnv.isSqlBooster(globalConfig.getRuntimeEnv())){
+        if (!globalConfig.isGenerateSelectByXml() && !RuntimeEnv.isSqlBooster(globalConfig.getRuntimeEnv())) {
             this.getTemplateFile().setGenerate(false);
         }
-    
+
         if (extendsEntity) {
             importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
-            if (globalConfig.isLombok()){
+            if (globalConfig.isLombok()) {
                 importPackages.add(RuntimeClass.LOMBOK_EQUALS_AND_HASH_CODE.getClassName());
             }
             data.put("queryVOExtendsEntity", extendsEntity);
@@ -86,11 +80,11 @@ public class EntityQueryVOConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-     
+
         data.put("queryVOFramePkg", frameworkPackages);
         data.put("queryVOJavaPkg", javaPackages);
-        
-        
+
+
         return data;
     }
 }

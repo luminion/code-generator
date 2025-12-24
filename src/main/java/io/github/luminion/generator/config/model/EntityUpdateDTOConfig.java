@@ -25,18 +25,12 @@ public class EntityUpdateDTOConfig implements TemplateRender {
      * 模板文件
      */
     protected TemplateFile templateFile = new TemplateFile(
-            TemplateFileEnum.ENTITY_UPDATE_DTO.getKey(),
+            TemplateFileEnum.UPDATE_DTO.getKey(),
             "%sUpdateDTO",
             "model.dto",
             "/templates/model/entityUpdateDTO.java",
             ".java"
     );
-
-    @Override
-    public List<TemplateFile> renderTemplateFiles() {
-        return Collections.singletonList(templateFile);
-    }
-
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
@@ -106,10 +100,10 @@ public class EntityUpdateDTOConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        
+
         data.put("updateDTOFramePkg", frameworkPackages);
         data.put("updateDTOJavaPkg", javaPackages);
-    
+
         return data;
     }
 

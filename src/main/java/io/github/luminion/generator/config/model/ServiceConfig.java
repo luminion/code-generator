@@ -58,12 +58,6 @@ public class ServiceConfig implements TemplateRender {
     protected String superClass;
 
     @Override
-    public List<TemplateFile> renderTemplateFiles() {
-        return Collections.singletonList(templateFile);
-    }
-
-
-    @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         Set<String> importPackages = new TreeSet<>();
@@ -71,30 +65,30 @@ public class ServiceConfig implements TemplateRender {
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-      
+
 
         switch (globalConfig.getRuntimeEnv()) {
             case MY_BATIS_PLUS_SQL_BOOSTER:
                 this.superClass = RuntimeClass.SQL_BOOSTER_MP_SERVICE.getClassName();
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+                importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateCreate()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_CREATE_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.CREATE_DTO, tableInfo));
                 }
                 if (globalConfig.isGenerateUpdate()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.UPDATE_DTO, tableInfo));
                 }
                 if (globalConfig.isGenerateDelete()) {
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                 }
-                if (globalConfig.isGenerateVoById()){
+                if (globalConfig.isGenerateVoById()) {
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                 }
-                if (globalConfig.isGenerateVoList()){
+                if (globalConfig.isGenerateVoList()) {
                     importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                 }
-                if (globalConfig.isGenerateVoPage()){
+                if (globalConfig.isGenerateVoPage()) {
                     importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
                     importPackages.add(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getClassName());
                 }
@@ -111,27 +105,27 @@ public class ServiceConfig implements TemplateRender {
                 this.superClass = RuntimeClass.MYBATIS_PLUS_I_SERVICE.getClassName();
                 importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 if (globalConfig.isGenerateCreate()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_CREATE_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.CREATE_DTO, tableInfo));
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                 }
                 if (globalConfig.isGenerateUpdate()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_UPDATE_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.UPDATE_DTO, tableInfo));
                 }
                 if (globalConfig.isGenerateDelete()) {
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                 }
-                if (globalConfig.isGenerateVoById()){
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+                if (globalConfig.isGenerateVoById()) {
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                 }
-                if (globalConfig.isGenerateVoList()){
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+                if (globalConfig.isGenerateVoList()) {
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                 }
-                if (globalConfig.isGenerateVoPage()){
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+                if (globalConfig.isGenerateVoPage()) {
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                     importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
                 }
                 if (globalConfig.isGenerateImport()) {
@@ -139,7 +133,7 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
                 }
                 if (globalConfig.isGenerateExport()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
                     importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
                 }
                 break;
@@ -162,7 +156,7 @@ public class ServiceConfig implements TemplateRender {
                 .collect(Collectors.toCollection(TreeSet::new));
         data.put("serviceFrameworkPkg", frameworkPackages);
         data.put("serviceJavaPkg", javaPackages);
-        
+
         return data;
     }
 

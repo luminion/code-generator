@@ -49,12 +49,6 @@ public class MapperConfig implements TemplateRender {
     protected String mapperAnnotationClass = "org.apache.ibatis.annotations.Mapper";
 
     @Override
-    public List<TemplateFile> renderTemplateFiles() {
-        return Collections.singletonList(templateFile);
-    }
-
-
-    @Override
     @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
@@ -63,21 +57,21 @@ public class MapperConfig implements TemplateRender {
         Resolver resolver = tableInfo.getResolver();
         Configurer<?> configurer = resolver.getConfigurer();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        
+
         importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
         switch (globalConfig.getRuntimeEnv()) {
             case MYBATIS_PLUS:
                 this.superClass = RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getClassName();
                 if (globalConfig.isGenerateSelectByXml()) {
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_DTO, tableInfo));
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
+                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                     importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
                 }
                 break;
             case MY_BATIS_PLUS_SQL_BOOSTER:
                 this.superClass = RuntimeClass.SQL_BOOSTER_MP_MAPPER.getClassName();
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY_QUERY_VO, tableInfo));
+                importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateSelectByXml()) {
                     importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
@@ -87,7 +81,7 @@ public class MapperConfig implements TemplateRender {
                 throw new RuntimeException("Unknown runtime environment:" + globalConfig.getRuntimeEnv());
         }
         if (mapperAnnotationClass != null) {
-            data.put("mapperAnnotationClass","@"+ ClassUtils.getSimpleName(mapperAnnotationClass));
+            data.put("mapperAnnotationClass", "@" + ClassUtils.getSimpleName(mapperAnnotationClass));
             importPackages.add(mapperAnnotationClass);
         }
         if (superClass != null) {
@@ -101,7 +95,7 @@ public class MapperConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        
+
         data.put("mapperFrameworkPkg", frameworkPackages);
         data.put("mapperJavaPkg", javaPackages);
 

@@ -230,11 +230,7 @@ public class StrategyConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-        data.put("booleanColumnRemoveIsPrefix",this.booleanColumnRemoveIsPrefix);
-        
-        data.put("editExcludeColumns",this.editExcludeColumns);
-        data.put("extraFieldSuffixMap",this.extraFieldSuffixMap);
-        data.put("extraFieldProvider",this.extraFieldProvider);
+     
         return data;
     }
 }
