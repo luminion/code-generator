@@ -1,6 +1,6 @@
 package io.github.luminion.generator.core.suppport;
 
-import io.github.luminion.generator.builder.custom.MybatisPlusSqlBoosterBuilder;
+import io.github.luminion.generator.builder.custom.MpBoosterBuilder;
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import io.github.luminion.generator.config.model.ControllerConfig;
@@ -17,8 +17,8 @@ import java.util.function.Function;
  * @author luminion
  * @since 1.0.0
  */
-public class MyBatisPlusSqlBoosterGenerator extends AbstractGenerator<MybatisPlusConfig, MybatisPlusSqlBoosterBuilder> {
-    public MyBatisPlusSqlBoosterGenerator(ConfigCollector<MybatisPlusConfig> configCollector) {
+public class MybatisPlusBoosterGenerator extends AbstractGenerator<MybatisPlusConfig, MpBoosterBuilder> {
+    public MybatisPlusBoosterGenerator(ConfigCollector<MybatisPlusConfig> configCollector) {
         super(configCollector);
         configCollector.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER);
         ControllerConfig controllerConfig = configCollector.getControllerConfig();
@@ -33,8 +33,8 @@ public class MyBatisPlusSqlBoosterGenerator extends AbstractGenerator<MybatisPlu
     }
 
     @Override
-    public LambdaGenerator<MybatisPlusSqlBoosterBuilder> custom(Function<MybatisPlusSqlBoosterBuilder, MybatisPlusSqlBoosterBuilder> func) {
-        func.apply(new MybatisPlusSqlBoosterBuilder(this.configCollector));
+    public LambdaGenerator<MpBoosterBuilder> custom(Function<MpBoosterBuilder, MpBoosterBuilder> func) {
+        func.apply(new MpBoosterBuilder(this.configCollector));
         return this;
     }
 }
