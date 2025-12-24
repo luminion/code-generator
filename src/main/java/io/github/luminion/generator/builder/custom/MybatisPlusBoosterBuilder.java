@@ -11,9 +11,9 @@ import io.github.luminion.sqlbooster.model.BPage;
  * @author luminion
  * @since 1.0.0
  */
-public class MpBoosterBuilder extends AbstractMpBuilder<MpBoosterBuilder> {
+public class MybatisPlusBoosterBuilder extends AbstractMpBuilder<MybatisPlusBoosterBuilder> {
 
-    public MpBoosterBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
+    public MybatisPlusBoosterBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
         super(configCollector);
     }
 
@@ -23,7 +23,7 @@ public class MpBoosterBuilder extends AbstractMpBuilder<MpBoosterBuilder> {
      * @param methodReference 分页返回的包装方法
      * @return this
      */
-    public <T, R> MpBoosterBuilder pageMethod(MethodReference<BPage<T>, R> methodReference) {
+    public <T, R> MybatisPlusBoosterBuilder pageMethod(MethodReference<BPage<T>, R> methodReference) {
         ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, BPage.class);
         this.configCollector.getControllerConfig().setPageMethod(payload);
         return this;
@@ -36,7 +36,7 @@ public class MpBoosterBuilder extends AbstractMpBuilder<MpBoosterBuilder> {
      * @param enabled 是否启用
      * @return this
      */
-    public <T, R> MpBoosterBuilder sqlContextQuery(boolean enabled) {
+    public <T, R> MybatisPlusBoosterBuilder sqlContextQuery(boolean enabled) {
         this.configCollector.getControllerConfig().setSqlContextQuery(enabled);
         return this;
     }

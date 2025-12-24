@@ -11,9 +11,9 @@ import io.github.luminion.generator.util.ReflectUtils;
  * @author luminion
  * @since 1.0.0
  */
-public class MpBuilder extends AbstractMpBuilder<MpBuilder> {
+public class MybatisPlusBuilder extends AbstractMpBuilder<MybatisPlusBuilder> {
 
-    public MpBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
+    public MybatisPlusBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
         super(configCollector);
     }
 
@@ -23,7 +23,7 @@ public class MpBuilder extends AbstractMpBuilder<MpBuilder> {
      * @param methodReference 包装方法, 方法的入参数类型必须为IPage
      * @return this
      */
-    public <T, R> MpBuilder pageMethod(MethodReference<IPage<T>, R> methodReference) {
+    public <T, R> MybatisPlusBuilder pageMethod(MethodReference<IPage<T>, R> methodReference) {
         ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, IPage.class);
         this.configCollector.getControllerConfig().setPageMethod(payload);
         return this;

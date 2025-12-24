@@ -1,7 +1,7 @@
 package io.github.luminion.generator.core.suppport;
 
 import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.builder.custom.MpBuilder;
+import io.github.luminion.generator.builder.custom.MybatisPlusBuilder;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
 import io.github.luminion.generator.config.model.ControllerConfig;
 import io.github.luminion.generator.core.AbstractGenerator;
@@ -17,7 +17,7 @@ import java.util.function.Function;
  * @author luminion
  * @since 1.0.0
  */
-public class MybatisPlusGenerator extends AbstractGenerator<MybatisPlusConfig, MpBuilder> {
+public class MybatisPlusGenerator extends AbstractGenerator<MybatisPlusConfig, MybatisPlusBuilder> {
     public MybatisPlusGenerator(ConfigCollector<MybatisPlusConfig> configCollector) {
         super(configCollector);
         configCollector.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PLUS);
@@ -31,8 +31,8 @@ public class MybatisPlusGenerator extends AbstractGenerator<MybatisPlusConfig, M
     }
 
     @Override
-    public LambdaGenerator<MpBuilder> custom(Function<MpBuilder, MpBuilder> func) {
-        func.apply(new MpBuilder(this.configCollector));
+    public LambdaGenerator<MybatisPlusBuilder> custom(Function<MybatisPlusBuilder, MybatisPlusBuilder> func) {
+        func.apply(new MybatisPlusBuilder(this.configCollector));
         return this;
     }
 }
