@@ -107,6 +107,7 @@ public class ServiceImplConfig implements TemplateRender {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                     importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
                     importPackages.add(RuntimeClass.MYBATIS_PLUS_PAGE.getClassName());
+                    importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                 }
                 if (globalConfig.isGenerateExport()) {
                     importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
