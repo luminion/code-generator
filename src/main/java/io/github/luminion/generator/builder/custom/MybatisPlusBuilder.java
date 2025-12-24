@@ -12,7 +12,6 @@ import lombok.NonNull;
  * @author luminion
  * @since 1.0.0
  */
-@SuppressWarnings("unused")
 public class MybatisPlusBuilder extends AbstractMybatisPlusBuilder<MybatisPlusBuilder> {
 
     public MybatisPlusBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
@@ -25,7 +24,7 @@ public class MybatisPlusBuilder extends AbstractMybatisPlusBuilder<MybatisPlusBu
      * @param methodReference 包装方法, 方法的入参数类型必须为IPage
      * @return this
      */
-    public <T, R> MybatisPlusBuilder pageMethod(@NonNull MethodReference<IPage<T>, R> methodReference) {
+    public <T, R> MybatisPlusBuilder pageMethod(MethodReference<IPage<T>, R> methodReference) {
         ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, IPage.class);
         this.configCollector.getControllerConfig().setPageMethod(payload);
         return this;

@@ -4,13 +4,11 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.custom.MybatisPlusConfig;
-import lombok.NonNull;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
-@SuppressWarnings("unused")
 public abstract class AbstractMybatisPlusBuilder<B extends AbstractMybatisPlusBuilder<B>> {
     protected final ConfigCollector<MybatisPlusConfig> configCollector;
 
@@ -30,7 +28,7 @@ public abstract class AbstractMybatisPlusBuilder<B extends AbstractMybatisPlusBu
      * @param idType 主键类型
      * @return this
      */
-    public B idType(@NonNull IdType idType) {
+    public B idType(IdType idType) {
         this.configCollector.getCustomConfig().setIdType(idType);
         return self();
     }
@@ -41,7 +39,7 @@ public abstract class AbstractMybatisPlusBuilder<B extends AbstractMybatisPlusBu
      * @param versionColumnName 字段名
      * @return this
      */
-    public B versionColumnName(@NonNull String versionColumnName) {
+    public B versionColumnName(String versionColumnName) {
         this.configCollector.getCustomConfig().setVersionColumnName(versionColumnName);
         return self();
     }
@@ -52,7 +50,7 @@ public abstract class AbstractMybatisPlusBuilder<B extends AbstractMybatisPlusBu
      * @param logicDeleteColumnName 字段名
      * @return this
      */
-    public B logicDeleteColumnName(@NonNull String logicDeleteColumnName) {
+    public B logicDeleteColumnName(String logicDeleteColumnName) {
         this.configCollector.getCustomConfig().setLogicDeleteColumnName(logicDeleteColumnName);
         return self();
     }

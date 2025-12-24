@@ -12,7 +12,6 @@ import lombok.NonNull;
  * @author luminion
  * @since 1.0.0
  */
-@SuppressWarnings("unused")
 public class MybatisPlusSqlBoosterBuilder extends AbstractMybatisPlusBuilder<MybatisPlusSqlBoosterBuilder> {
 
     public MybatisPlusSqlBoosterBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
@@ -25,7 +24,7 @@ public class MybatisPlusSqlBoosterBuilder extends AbstractMybatisPlusBuilder<Myb
      * @param methodReference 分页返回的包装方法
      * @return this
      */
-    public <T, R> MybatisPlusSqlBoosterBuilder pageMethod(@NonNull MethodReference<BPage<T>, R> methodReference) {
+    public <T, R> MybatisPlusSqlBoosterBuilder pageMethod(MethodReference<BPage<T>, R> methodReference) {
         ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, BPage.class);
         this.configCollector.getControllerConfig().setPageMethod(payload);
         return this;
