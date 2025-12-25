@@ -1,38 +1,18 @@
-/*
- * Copyright (c) 2011-2025, baomidou (jobob@qq.com).
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package io.github.luminion.generator.common;
 
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.po.TemplateFile;
-import lombok.SneakyThrows;
 
-
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
-
 /**
- * 配置属性渲染器
- *
  * @author luminion
  * @since 1.0.0
  */
-public interface TemplateRender extends Serializable {
+public interface TemplateRender {
 
+    /**
+     * 决定该配置的执行顺序,越小的越先执行
+     */
     default int order() {
         return 100;
     }
@@ -45,16 +25,7 @@ public interface TemplateRender extends Serializable {
     default void init() {
 
     }
-
-    /**
-     * 输出的模板文件
-     *
-     */
-    default TemplateFile renderTemplateFile(){
-        return null;
-    }
-
-
+    
     /**
      * 渲染前处理, 允许在这一步读取修改配置及表信息
      *
@@ -72,26 +43,17 @@ public interface TemplateRender extends Serializable {
      * @return map
      * @since 1.0.0
      */
-    @SneakyThrows
-    default Map<String, Object> renderData(TableInfo tableInfo) {
-        // 添加自定义配置字段信息
-//        HashMap<String, Object> data = new HashMap<>();
-//        Collection<Field> fields = ReflectUtils.fieldMap(getClass()).values();
-//        for (Field field : fields) {
-//            data.put(field.getName(), field.get(this));
-//        }
-//        return data;
-        return new HashMap<>();
-    }
+     Map<String, Object> renderData(TableInfo tableInfo);
 
     /**
      * 渲染后, 对渲染的map进行修改
      *
      * @param tableInfo  表信息
-     * @param renderData 渲染的数据
+     * @param renderData 渲染数据
      * @since 1.0.0
      */
-    default void renderDataPostProcess(TableInfo tableInfo, Map<String, Object> renderData) {
-
+    default void renderDataPostProcess(TableInfo tableInfo, Map<String, Object> renderData){
+        
     }
+    
 }

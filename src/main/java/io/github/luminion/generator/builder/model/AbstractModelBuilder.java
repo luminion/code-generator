@@ -1,12 +1,12 @@
 package io.github.luminion.generator.builder.model;
 
-import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.common.TemplateModelRender;
 
 /**
  * @author luminion
  * @since 1.0.0
  */
-public abstract class AbstractModelBuilder<C extends TemplateRender, B extends AbstractModelBuilder<C, B>> {
+public abstract class AbstractModelBuilder<C extends TemplateModelRender, B extends AbstractModelBuilder<C, B>> {
     protected C config;
 
     public AbstractModelBuilder(C render) {

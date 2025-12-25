@@ -1,6 +1,6 @@
 package io.github.luminion.generator.config.model;
 
-import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.common.TemplateModelRender;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class MapperXmlConfig implements TemplateRender {
+public class MapperXmlConfig implements TemplateModelRender {
     /**
      * 模板文件
      */
@@ -69,7 +69,7 @@ public class MapperXmlConfig implements TemplateRender {
     @Override
     @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
+        Map<String, Object> data = new HashMap<>();
         if (cacheClass != null) {
             data.put("mapperCacheClass", cacheClass);
         }

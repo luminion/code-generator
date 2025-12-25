@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.config.Resolver;
+import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
@@ -71,7 +71,7 @@ public class MybatisPlusConfig implements TemplateRender {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
+        Map<String, Object> data = new HashMap<>();
         data.put("idType", idType == null ? null : idType.toString());
         data.put("logicDeleteColumnName", this.logicDeleteColumnName);
         data.put("versionColumnName", this.versionColumnName);
@@ -84,9 +84,9 @@ public class MybatisPlusConfig implements TemplateRender {
     @Override
     @SuppressWarnings("unchecked")
     public void renderDataPostProcess(TableInfo tableInfo, Map<String, Object> renderData) {
-        Resolver resolver = tableInfo.getResolver();
-        ConfigCollector<?> configCollector = resolver.getConfigCollector();
-      
+        ConfigResolver configResolver = tableInfo.getConfigResolver();
+        ConfigCollector<?> configCollector = configResolver.getConfigCollector();
+
         // 追加导入包
         Set<String> entityImportPackages = new TreeSet<>();
         if (this.tableFieldAnnotation) {
@@ -132,7 +132,7 @@ public class MybatisPlusConfig implements TemplateRender {
         });
         Collection<String> entityJavaPackages = entityImportPackages.stream().filter(pkg -> pkg.startsWith("java")).collect(Collectors.toList());
         Collection<String> entityFramePackages = entityImportPackages.stream().filter(pkg -> !pkg.startsWith("java")).collect(Collectors.toList());
-        Collection<String> entityFramePkg =(Collection<String>)  renderData.get("entityFramePkg");
+        Collection<String> entityFramePkg = (Collection<String>) renderData.get("entityFramePkg");
         Collection<String> entityJavaPkg = (Collection<String>) renderData.get("entityJavaPkg");
         entityFramePkg.addAll(entityFramePackages);
         entityJavaPkg.addAll(entityJavaPackages);

@@ -15,9 +15,9 @@
  */
 package io.github.luminion.generator.config.model;
 
-import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.common.TemplateModelRender;
 import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.config.Resolver;
+import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class ServiceConfig implements TemplateRender {
+public class ServiceConfig implements TemplateModelRender {
 
     /**
      * 模板文件
@@ -64,24 +64,24 @@ public class ServiceConfig implements TemplateRender {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
+        Map<String, Object> data = new HashMap<>();
         Set<String> importPackages = new TreeSet<>();
 
-        Resolver resolver = tableInfo.getResolver();
-        ConfigCollector<?> configCollector = resolver.getConfigCollector();
+        ConfigResolver configResolver = tableInfo.getConfigResolver();
+        ConfigCollector<?> configCollector = configResolver.getConfigCollector();
         GlobalConfig globalConfig = configCollector.getGlobalConfig();
 
 
         switch (globalConfig.getRuntimeEnv()) {
             case MY_BATIS_PLUS_SQL_BOOSTER:
                 this.superClass = RuntimeClass.SQL_BOOSTER_MP_SERVICE.getClassName();
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
-                importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
+                importPackages.add(configResolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
+                importPackages.add(configResolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateCreate()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.CREATE_DTO, tableInfo));
+                    importPackages.add(configResolver.getClassName(TemplateFileEnum.CREATE_DTO, tableInfo));
                 }
                 if (globalConfig.isGenerateUpdate()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.UPDATE_DTO, tableInfo));
+                    importPackages.add(configResolver.getClassName(TemplateFileEnum.UPDATE_DTO, tableInfo));
                 }
                 if (globalConfig.isGenerateDelete()) {
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
@@ -108,29 +108,29 @@ public class ServiceConfig implements TemplateRender {
                 break;
             case MYBATIS_PLUS:
                 this.superClass = RuntimeClass.MYBATIS_PLUS_I_SERVICE.getClassName();
-                importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
+                importPackages.add(configResolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
                 if (globalConfig.isGenerateCreate()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.CREATE_DTO, tableInfo));
+                    importPackages.add(configResolver.getClassName(TemplateFileEnum.CREATE_DTO, tableInfo));
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                 }
                 if (globalConfig.isGenerateUpdate()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.UPDATE_DTO, tableInfo));
+                    importPackages.add(configResolver.getClassName(TemplateFileEnum.UPDATE_DTO, tableInfo));
                 }
                 if (globalConfig.isGenerateDelete()) {
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                 }
                 if (globalConfig.isGenerateVoById()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
+                    importPackages.add(configResolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                     importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
                 }
                 if (globalConfig.isGenerateVoList()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
+                    importPackages.add(configResolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
+                    importPackages.add(configResolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                 }
                 if (globalConfig.isGenerateVoPage()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
+                    importPackages.add(configResolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
+                    importPackages.add(configResolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                     importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
                 }
                 if (globalConfig.isGenerateImport()) {
@@ -138,7 +138,7 @@ public class ServiceConfig implements TemplateRender {
                     importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
                 }
                 if (globalConfig.isGenerateExport()) {
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
+                    importPackages.add(configResolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
                     importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
                 }
                 break;

@@ -16,7 +16,7 @@
 package io.github.luminion.generator.engine;
 
 import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.config.Resolver;
+import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.FileUtils;
@@ -45,10 +45,10 @@ public abstract class AbstractTemplateEngine {
      * 配置信息
      */
     @Getter
-    protected final Resolver resolver;
+    protected final ConfigResolver configResolver;
 
     public AbstractTemplateEngine(ConfigCollector<?> configCollector) {
-        this.resolver = new Resolver(configCollector);
+        this.configResolver = new ConfigResolver(configCollector);
     }
 
     /**
@@ -81,12 +81,12 @@ public abstract class AbstractTemplateEngine {
      */
     public AbstractTemplateEngine batchOutput() {
         try {
-            List<TableInfo> tableInfoList = resolver.getTableInfoList();
+            List<TableInfo> tableInfoList = configResolver.getTableInfoList();
             tableInfoList.forEach(tableInfo -> {
-                Map<String, Object> objectMap = resolver.renderMap(tableInfo);
-                List<TemplateFile> templateFiles = resolver.getTemplateFiles();
+                Map<String, Object> objectMap = configResolver.renderMap(tableInfo);
+                List<TemplateFile> templateFiles = configResolver.getTemplateFiles();
                 for (TemplateFile file : templateFiles) {
-                    file.validate();
+                    file.beforeOutputValidate();
                     String outputDir = file.getOutputDir();
                     String format = String.format(file.getNameFormat(), tableInfo.getEntityName());
                     String fileName = outputDir + File.separator + format + file.getOutputFileSuffix();
@@ -126,10 +126,10 @@ public abstract class AbstractTemplateEngine {
      * 打开输出目录
      */
     public void open() {
-        String outDir = getResolver().getConfigCollector().getGlobalConfig().getOutputDir();
+        String outDir = getConfigResolver().getConfigCollector().getGlobalConfig().getOutputDir();
         if (StringUtils.isBlank(outDir) || !new File(outDir).exists()) {
             System.err.println("Output directory not found：" + outDir);
-        } else if (getResolver().getConfigCollector().getGlobalConfig().isOpenOutputDir()) {
+        } else if (getConfigResolver().getConfigCollector().getGlobalConfig().isOpenOutputDir()) {
             try {
                 RuntimeUtils.openDir(outDir);
             } catch (IOException e) {

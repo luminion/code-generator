@@ -29,7 +29,7 @@ public abstract class AbstractMpBuilder<B extends AbstractMpBuilder<B>> {
      * @return this
      */
     public B idType(IdType idType) {
-        this.configCollector.getCustomConfig().setIdType(idType);
+        this.configCollector.getSpecialConfig().setIdType(idType);
         return self();
     }
 
@@ -40,7 +40,7 @@ public abstract class AbstractMpBuilder<B extends AbstractMpBuilder<B>> {
      * @return this
      */
     public B versionColumnName(String versionColumnName) {
-        this.configCollector.getCustomConfig().setVersionColumnName(versionColumnName);
+        this.configCollector.getSpecialConfig().setVersionColumnName(versionColumnName);
         return self();
     }
 
@@ -51,7 +51,7 @@ public abstract class AbstractMpBuilder<B extends AbstractMpBuilder<B>> {
      * @return this
      */
     public B logicDeleteColumnName(String logicDeleteColumnName) {
-        this.configCollector.getCustomConfig().setLogicDeleteColumnName(logicDeleteColumnName);
+        this.configCollector.getSpecialConfig().setLogicDeleteColumnName(logicDeleteColumnName);
         return self();
     }
 
@@ -62,7 +62,7 @@ public abstract class AbstractMpBuilder<B extends AbstractMpBuilder<B>> {
      * @return this
      */
     public B activeRecord(boolean enable) {
-        this.configCollector.getCustomConfig().setActiveRecord(enable);
+        this.configCollector.getSpecialConfig().setActiveRecord(enable);
         return self();
     }
 
@@ -74,7 +74,7 @@ public abstract class AbstractMpBuilder<B extends AbstractMpBuilder<B>> {
      * @return this
      */
     public B tableFieldAnnotation(boolean enable) {
-        this.configCollector.getCustomConfig().setTableFieldAnnotation(enable);
+        this.configCollector.getSpecialConfig().setTableFieldAnnotation(enable);
         return self();
     }
 
@@ -86,7 +86,7 @@ public abstract class AbstractMpBuilder<B extends AbstractMpBuilder<B>> {
      * @return this
      */
     public B tableFill(String columnName, FieldFill fieldFill) {
-        this.configCollector.getCustomConfig().getTableFillMap().put(columnName, fieldFill);
+        this.configCollector.getSpecialConfig().getTableFillMap().put(columnName, fieldFill);
         return self();
     }
 

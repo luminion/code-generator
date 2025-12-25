@@ -16,7 +16,7 @@
 package io.github.luminion.generator.po;
 
 import io.github.luminion.generator.common.support.DefaultDatabaseQueryMetaDataWrapper;
-import io.github.luminion.generator.config.Resolver;
+import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.enums.NameConvertType;
 import lombok.Data;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @Data
 public class TableInfo {
 
-    private final Resolver resolver;
+    private final ConfigResolver configResolver;
 
     /**
      * 表名是否转化
@@ -94,9 +94,9 @@ public class TableInfo {
 
     private String schemaName;
 
-    public TableInfo(Resolver resolver, DefaultDatabaseQueryMetaDataWrapper.Table table) {
-        this.resolver = resolver;
-        StrategyConfig strategyConfig = resolver.getConfigCollector().getStrategyConfig();
+    public TableInfo(ConfigResolver configResolver, DefaultDatabaseQueryMetaDataWrapper.Table table) {
+        this.configResolver = configResolver;
+        StrategyConfig strategyConfig = configResolver.getConfigCollector().getStrategyConfig();
         String tableName = table.getName();
         this.name = tableName;
         String remarks = table.getRemarks();
@@ -127,12 +127,12 @@ public class TableInfo {
      * @since 3.5.0
      */
     public void addField(TableField field) {
-        if (getResolver().getConfigCollector().getStrategyConfig().matchIgnoreColumns(field.getColumnName())) {
+        if (getConfigResolver().getConfigCollector().getStrategyConfig().matchIgnoreColumns(field.getColumnName())) {
             // 忽略字段不在处理
             return;
         }
         tableFieldMap.put(field.getName(), field);
-        if (getResolver().getConfigCollector().getStrategyConfig().matchSuperEntityColumns(field.getColumnName())) {
+        if (getConfigResolver().getConfigCollector().getStrategyConfig().matchSuperEntityColumns(field.getColumnName())) {
             this.commonFields.add(field);
         } else {
             this.fields.add(field);
@@ -169,10 +169,10 @@ public class TableInfo {
             if (field.isLogicDeleteField()) {
                 continue;
             }
-            for (Map.Entry<String, String> entry : getResolver().getConfigCollector().getStrategyConfig().getExtraFieldSuffixMap().entrySet()) {
+            for (Map.Entry<String, String> entry : getConfigResolver().getConfigCollector().getStrategyConfig().getExtraFieldSuffixMap().entrySet()) {
                 String suffix = entry.getKey();
                 String sqlOperator = entry.getValue();
-                if (getResolver().getConfigCollector().getStrategyConfig().getExtraFieldProvider().whetherGenerate(sqlOperator, field)) {
+                if (getConfigResolver().getConfigCollector().getStrategyConfig().getExtraFieldProvider().whetherGenerate(sqlOperator, field)) {
                     String suffixPropertyName = field.getPropertyName() + suffix;
                     if (existPropertyNames.contains(suffixPropertyName)) {
                         continue;

@@ -18,6 +18,7 @@ package io.github.luminion.generator.config;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.config.base.GlobalConfig;
+import io.github.luminion.generator.config.base.InjectionConfig;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.config.model.*;
 import lombok.Getter;
@@ -42,6 +43,10 @@ public class ConfigCollector<C extends TemplateRender> {
      * 全局配置信息
      */
     private final GlobalConfig globalConfig = new GlobalConfig();
+    /**
+     * 注入配置
+     */
+    private final InjectionConfig injectionConfig = new InjectionConfig();
     /**
      * 策略配置信息
      */
@@ -104,18 +109,18 @@ public class ConfigCollector<C extends TemplateRender> {
     /**
      * 特殊配置
      */
-    private final C customConfig;
+    private final C specialConfig;
 
     //====================模型配置--结束====================
 
     public ConfigCollector(String url, String username, String password) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
-        this.customConfig = null;
+        this.specialConfig = null;
     }
 
-    public ConfigCollector(String url, String username, String password, C customConfig) {
+    public ConfigCollector(String url, String username, String password, C specialConfig) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
-        this.customConfig = customConfig;
+        this.specialConfig = specialConfig;
     }
 
 

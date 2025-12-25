@@ -1,8 +1,8 @@
 package io.github.luminion.generator.config.model;
 
-import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.common.TemplateModelRender;
 import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.config.Resolver;
+import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Data
-public class UpdateDTOConfig implements TemplateRender {
+public class UpdateDTOConfig implements TemplateModelRender {
 
     /**
      * 模板文件
@@ -39,11 +39,11 @@ public class UpdateDTOConfig implements TemplateRender {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
+        Map<String, Object> data = new HashMap<>();
         Set<String> importPackages = new TreeSet<>();
 
-        Resolver resolver = tableInfo.getResolver();
-        ConfigCollector<?> configCollector = resolver.getConfigCollector();
+        ConfigResolver configResolver = tableInfo.getConfigResolver();
+        ConfigCollector<?> configCollector = configResolver.getConfigCollector();
         GlobalConfig globalConfig = configCollector.getGlobalConfig();
 
         // 关闭功能

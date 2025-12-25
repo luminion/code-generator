@@ -1,18 +1,20 @@
 package io.github.luminion.generator.config;
 
+import io.github.luminion.generator.common.TemplateModelRender;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.common.support.DefaultDatabaseQuery;
 import io.github.luminion.generator.config.base.GlobalConfig;
+import io.github.luminion.generator.config.base.InjectionConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 /**
@@ -22,7 +24,7 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Slf4j
-public class Resolver {
+public class ConfigResolver {
     /**
      * 配置信息
      */
@@ -35,7 +37,7 @@ public class Resolver {
     private final List<TableInfo> tableInfoList = new ArrayList<>();
 
     /**
-     * 模板渲染列表
+     * 模板提供者列表
      */
     @Getter
     private final List<TemplateRender> templateRenderList = new ArrayList<>();
@@ -46,7 +48,7 @@ public class Resolver {
     @Getter
     private final Map<String, TemplateFile> templateFileMap = new HashMap<>();
 
-    public Resolver(@NonNull ConfigCollector<?> configCollector) {
+    public ConfigResolver(ConfigCollector<?> configCollector) {
         this.configCollector = configCollector;
         // 添加表信息
         try {
@@ -60,9 +62,12 @@ public class Resolver {
             throw new RuntimeException("创建IDatabaseQuery实例出现错误:", exception);
         }
 
-        // 添加类渲染信息
+        // 基础配置
         templateRenderList.add(this.configCollector.getGlobalConfig());
         templateRenderList.add(this.configCollector.getStrategyConfig());
+        templateRenderList.add(this.configCollector.getInjectionConfig());
+
+        // 模型配置
 
         templateRenderList.add(this.configCollector.getControllerConfig());
 
@@ -83,20 +88,32 @@ public class Resolver {
         templateRenderList.add(this.configCollector.getImportDTOConfig());
         templateRenderList.add(this.configCollector.getExportDTOConfig());
 
-        // 自定义配置
-        if (this.configCollector.getCustomConfig() != null) {
-            templateRenderList.add(this.configCollector.getCustomConfig());
+        // 特殊配置
+        if (this.configCollector.getSpecialConfig() != null) {
+            templateRenderList.add(this.configCollector.getSpecialConfig());
         }
         templateRenderList.sort(Comparator.comparingInt(TemplateRender::order));
         // 遍历渲染, 初始化, 添加模板
         for (TemplateRender templateRender : templateRenderList) {
             templateRender.init();
-            TemplateFile templateFile = templateRender.renderTemplateFile();
-            if (templateFile != null) {
+            if (templateRender instanceof TemplateModelRender) {
+                TemplateFile templateFile = ((TemplateModelRender) templateRender).renderTemplateFile();
                 templateFileMap.put(templateFile.getKey(), templateFile);
             }
         }
-        
+        // 添加额外模板
+        List<TemplateFile> customTemplateFiles = this.getConfigCollector().getInjectionConfig().getTemplateFiles();
+        for (TemplateFile templateFile : customTemplateFiles) {
+            if (templateFile.getKey()==null){
+                throw new IllegalStateException("the custom template file key is null, please redefine");
+            }
+            if (templateFileMap.containsKey(templateFile.getKey())) {
+                throw new IllegalStateException(
+                        "the custom template file key is duplicate, please redefine, key => " +
+                        templateFile.getKey());
+            }
+            templateFileMap.put(templateFile.getKey(), templateFile);
+        }
     }
 
     /**
@@ -278,17 +295,18 @@ public class Resolver {
         HashMap<String, Object> result = new HashMap<>();
 
         // 渲染前处理, 这一步提供给配置器, 允许其修改配置
-        for (TemplateRender templateRender : templateRenderList) {
-            templateRender.renderDataPreProcess(tableInfo);
+        for (TemplateModelRender modelTemplateModelRender : templateRenderList) {
+            modelTemplateModelRender.renderDataPreProcess(tableInfo);
         }
 
         // 此时配置已完全确定
         tableInfo.processExtraField();
 
         // 渲染数据
-        for (TemplateRender templateRender : templateRenderList) {
-            result.putAll(templateRender.renderData(tableInfo));
+        for (TemplateModelRender modelTemplateModelRender : templateRenderList) {
+            result.putAll(modelTemplateModelRender.renderData(tableInfo));
         }
+
 
         // 表信息
         result.put("table", tableInfo);
@@ -301,12 +319,7 @@ public class Resolver {
         // 类是否生成
         result.put("generate", this.getOutputClassGenerateMap());
 
-        // 策略配置
-        result.put("booleanColumnRemoveIsPrefix", this.configCollector.getStrategyConfig().isBooleanColumnRemoveIsPrefix());
-        result.put("editExcludeColumns", this.configCollector.getStrategyConfig().getEditExcludeColumns());
-        result.put("extraFieldSuffixMap", this.configCollector.getStrategyConfig().getExtraFieldSuffixMap());
-        result.put("extraFieldProvider", this.configCollector.getStrategyConfig().getExtraFieldProvider());
-        
+
         if (this.configCollector.getStrategyConfig().isShowSchema()) {
             String schemaName = this.configCollector.getDataSourceConfig().getSchemaName();
             if (schemaName == null) {
@@ -315,10 +328,16 @@ public class Resolver {
                 result.put("schemaName", schemaName + ".");
             }
         }
-
+    
         // 渲染后处理
         for (TemplateRender templateRender : templateRenderList) {
             templateRender.renderDataPostProcess(tableInfo, result);
+        }
+
+        // 允许注入
+        BiConsumer<TableInfo, Map<String, Object>> beforeGenerate = configCollector.getInjectionConfig().getBeforeGenerate();
+        if (beforeGenerate != null) {
+            beforeGenerate.accept(tableInfo, result);
         }
 
         return result;

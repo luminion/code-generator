@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class TemplateFile {
     /**
-     * 用于标识文件的key,重复时覆盖
+     * 用于标识文件的key,不可重复
      */
     protected String key;
     /**
@@ -43,6 +43,19 @@ public class TemplateFile {
      */
     protected boolean generate = true;
 
+    /**
+     * 
+
+     * <pre>
+     * TemplateFile templateFile = new TemplateFile(
+     *             TemplateFileEnum.CREATE_DTO.getKey(),
+     *             "%sCreateDTO",
+     *             "model.dto",
+     *             "/templates/model/createDTO.java",
+     *             ".java"
+     *     );
+     * </pre>
+     */
     public TemplateFile(String key, String nameFormat, String subPackage, String templatePath, String outputFileSuffix) {
         this.key = key;
         this.nameFormat = nameFormat;
@@ -60,12 +73,15 @@ public class TemplateFile {
         return String.format(nameFormat, tableInfo.getEntityName());
     }
 
-    public void validate() {
+    /**
+     * 模板引擎输出之前, 验证输出文件信息
+     */
+    public void beforeOutputValidate() {
         if (templatePath == null) {
             throw new IllegalArgumentException("Template path cannot be empty");
         }
         if (outputDir == null) {
-            throw new IllegalArgumentException("File output folder cannot be empty");
+            throw new IllegalArgumentException("File outputDir cannot be empty");
         }
         if (nameFormat == null) {
             throw new IllegalArgumentException("File name formatting function cannot be empty");

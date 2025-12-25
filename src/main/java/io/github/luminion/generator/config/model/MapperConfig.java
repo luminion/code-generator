@@ -1,8 +1,8 @@
 package io.github.luminion.generator.config.model;
 
-import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.common.TemplateModelRender;
 import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.config.Resolver;
+import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class MapperConfig implements TemplateRender {
+public class MapperConfig implements TemplateModelRender {
     /**
      * 模板文件
      */
@@ -56,27 +56,27 @@ public class MapperConfig implements TemplateRender {
     @Override
     @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
+        Map<String, Object> data = new HashMap<>();
         Set<String> importPackages = new TreeSet<>();
 
-        Resolver resolver = tableInfo.getResolver();
-        ConfigCollector<?> configCollector = resolver.getConfigCollector();
+        ConfigResolver configResolver = tableInfo.getConfigResolver();
+        ConfigCollector<?> configCollector = configResolver.getConfigCollector();
         GlobalConfig globalConfig = configCollector.getGlobalConfig();
 
-        importPackages.add(resolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
+        importPackages.add(configResolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
         switch (globalConfig.getRuntimeEnv()) {
             case MYBATIS_PLUS:
                 this.superClass = RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getClassName();
                 if (globalConfig.isGenerateSelectByXml()) {
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
-                    importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
+                    importPackages.add(configResolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
+                    importPackages.add(configResolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                     importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
                 }
                 break;
             case MY_BATIS_PLUS_SQL_BOOSTER:
                 this.superClass = RuntimeClass.SQL_BOOSTER_MP_MAPPER.getClassName();
-                importPackages.add(resolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
+                importPackages.add(configResolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateSelectByXml()) {
                     importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());

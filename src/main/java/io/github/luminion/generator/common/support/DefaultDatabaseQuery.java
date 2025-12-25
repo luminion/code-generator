@@ -16,7 +16,7 @@
 package io.github.luminion.generator.common.support;
 
 import io.github.luminion.generator.common.TableInfoProvider;
-import io.github.luminion.generator.config.Resolver;
+import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
@@ -51,12 +51,12 @@ import java.util.stream.Collectors;
 public class DefaultDatabaseQuery implements TableInfoProvider {
     protected final DefaultDatabaseQueryMetaDataWrapper databaseMetaDataWrapper;
     protected final StrategyConfig strategyConfig;
-    protected final Resolver resolver;
+    protected final ConfigResolver configResolver;
 
-    public DefaultDatabaseQuery(Resolver resolver) {
-        this.resolver = resolver;
-        this.strategyConfig = resolver.getConfigCollector().getStrategyConfig();
-        DataSourceConfig dataSourceConfig = resolver.getConfigCollector().getDataSourceConfig();
+    public DefaultDatabaseQuery(ConfigResolver configResolver) {
+        this.configResolver = configResolver;
+        this.strategyConfig = configResolver.getConfigCollector().getStrategyConfig();
+        DataSourceConfig dataSourceConfig = configResolver.getConfigCollector().getDataSourceConfig();
         this.databaseMetaDataWrapper = new DefaultDatabaseQueryMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchemaName());
     }
 
@@ -74,7 +74,7 @@ public class DefaultDatabaseQuery implements TableInfoProvider {
             tables.forEach(table -> {
                 String tableName = table.getName();
                 if (StringUtils.isNotBlank(tableName)) {
-                    TableInfo tableInfo = new TableInfo(resolver, table);
+                    TableInfo tableInfo = new TableInfo(configResolver, table);
                     if (isInclude && strategyConfig.matchIncludeTable(tableName)) {
                         includeTableList.add(tableInfo);
                     } else if (isExclude && strategyConfig.matchExcludeTable(tableName)) {

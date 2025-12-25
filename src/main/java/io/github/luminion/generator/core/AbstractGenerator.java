@@ -1,6 +1,7 @@
 package io.github.luminion.generator.core;
 
-import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.builder.base.InjectionBuilder;
+import io.github.luminion.generator.common.TemplateModelRender;
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.builder.base.GlobalBuilder;
 import io.github.luminion.generator.builder.base.StrategyBuilder;
@@ -17,7 +18,7 @@ import java.util.function.Function;
  * @author luminion
  */
 @Slf4j
-public abstract class AbstractGenerator<C extends TemplateRender,B> implements LambdaGenerator<B> {
+public abstract class AbstractGenerator<C extends TemplateModelRender,B> implements LambdaGenerator<B> {
     protected final ConfigCollector<C> configCollector;
 
     public AbstractGenerator(ConfigCollector<C> configCollector) {
@@ -32,6 +33,11 @@ public abstract class AbstractGenerator<C extends TemplateRender,B> implements L
     public LambdaGenerator<B> global(Function<GlobalBuilder, GlobalBuilder> func) {
         func.apply(new GlobalBuilder(this.configCollector));
         return this;
+    }
+
+    @Override
+    public LambdaGenerator<B> injection(Function<InjectionBuilder, InjectionBuilder> func) {
+        return null;
     }
 
     @Override
