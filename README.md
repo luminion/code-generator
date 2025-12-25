@@ -127,6 +127,7 @@ Disconnected from the target VM, address: '127.0.0.1:49687', transport: 'socket'
                                 .author("luminion") // 作者
                                 .docType(DocType.SWAGGER_V3) // 文档类型(支持javadoc, swaggerV2, swaggerV3)
                         )// 全局配置
+                .injection(e->e) // 注入配置
                 .strategy(e->e)// 策略配置
                 .special(e->e)// 特殊配置(配置内容具体取决于创建的生成器, 比如mybatisPlus相关配置)
                 .controller(e->e)// controller配置
@@ -179,7 +180,7 @@ public class GeneratorTest {
 
 ## 配置说明
 
-### 全局配置 (GlobalBuilder)
+### `global()`全局配置
 
 | 配置方法                              | 参数类型 | 详细说明 |
 |-----------------------------------|---|---|
@@ -208,7 +209,7 @@ public class GeneratorTest {
 | `generateImport(boolean)`         | `boolean` | 是否生成导入方法 |
 | `generateExport(boolean)`         | `boolean` | 是否生成导出方法 |
 
-### 策略配置 (StrategyBuilder)
+### `strategy()`策略配置
 
 | 配置方法 | 参数类型 | 详细说明 |
 |---|---|---|
@@ -234,19 +235,19 @@ public class GeneratorTest {
 | `clearExtraFieldSuffix()` | - | 清空额外字段后缀 |
 | `extraFieldProvider(ExtraFieldProvider)` | `ExtraFieldProvider` | 自定义额外字段提供者 |
 
-### MyBatis-Plus 特定策略配置 (MybatisPlusBuilder / MybatisPlusBoosterBuilder)
 
-| 配置方法 | 参数类型 | 详细说明 |
-|---|---|---|
-| `entityActiveRecord(boolean)` | `boolean` | 开启 ActiveRecord 模式 |
-| `entityTableFieldAnnotation(boolean)` | `boolean` | 生成实体时, 生成字段注解 |
-| `strategyIdType(IdType)` | `IdType` | 全局主键类型 |
-| `strategyVersionColumnName(String)` | `String` | 乐观锁字段名 |
-| `strategyLogicDeleteColumnName(String)` | `String` | 逻辑删除字段名 |
-| `strategyTableFills(IFill...)` | `IFill...` | 添加表填充字段 |
+### `injection()`注入配置
+
+| 配置方法                                                 | 参数类型                                       | 详细说明                                                     |
+| -------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------ |
+| `beforeGenerate(BiConsumer<TableInfo, Map<String, Object>>)` | `BiConsumer<TableInfo, Map<String, Object>>` | 在生成文件之前的操作, 可通过此方法添加一些自定义操作<br />其中 tableInfo是数据库表信息<br />Map<String, Object> 是最终模板使用的参数集合 |
+| `customMap(Map<String, Object>)`                         | `Map<String, Object>`                          | 添加自定义参数                                               |
+| `addCustomFiles(TemplateFile...)`                        | `TemplateFile...`                              | 添加自定义模板文件                                           |
 
 
-### 模型配置 (EntityBuilder, MapperBuilder, etc.)
+
+
+### 模型配置
 
 所有模型配置都支持以下通用方法:
 
@@ -259,32 +260,32 @@ public class GeneratorTest {
 | `fileOverride(boolean)` | `boolean` | 生成时覆盖已存在的文件                       |
 | `generate(boolean)`     | `boolean` | 是否生成该文件                           |
 
-#### Entity 配置 (EntityBuilder)
+#### `entity()` 配置
 
 | 配置方法 | 参数类型 | 详细说明 |
 |---|---|---|
 | `superClass(String)` | `String` | 自定义继承的 Entity 类 (全限定名) |
 
-#### Mapper 配置 (MapperBuilder)
+#### `mapper()` 配置
 
 | 配置方法 | 参数类型 | 详细说明 |
 |---|---|---|
 | `superClass(String)` | `String` | 自定义继承的 Mapper 类 (全限定名) |
 | `mapperAnnotationClass(String)` | `String` | Mapper 标记注解 (全限定名) |
 
-#### Service 配置 (ServiceBuilder)
+#### `service()` 配置
 
 | 配置方法 | 参数类型 | 详细说明 |
 |---|---|---|
 | `superClass(String)` | `String` | 自定义继承的 Service 接口 (全限定名) |
 
-#### ServiceImpl 配置 (ServiceImplBuilder)
+#### `ServiceImpl` 配置
 
 | 配置方法 | 参数类型 | 详细说明 |
 |---|---|---|
 | `superClass(String)` | `String` | 自定义继承的 ServiceImpl 类 (全限定名) |
 
-#### Controller 配置 (ControllerBuilder)
+#### `controller()` 配置
 
 | 配置方法 | 参数类型 | 详细说明 |
 |---|---|---|
@@ -297,6 +298,19 @@ public class GeneratorTest {
 | `baseUrl(String)` | `String` | Controller 请求前缀 |
 
 ---
+
+### `special()`特殊配置
+该配置内容根据不同生成器而异
+
+| 配置方法 | 参数类型 | 详细说明 |
+|---|---|---|
+| `entityActiveRecord(boolean)` | `boolean` | 开启 ActiveRecord 模式 |
+| `entityTableFieldAnnotation(boolean)` | `boolean` | 生成实体时, 生成字段注解 |
+| `strategyIdType(IdType)` | `IdType` | 全局主键类型 |
+| `strategyVersionColumnName(String)` | `String` | 乐观锁字段名 |
+| `strategyLogicDeleteColumnName(String)` | `String` | 逻辑删除字段名 |
+| `strategyTableFills(IFill...)` | `IFill...` | 添加表填充字段 |
+
 
 ## 注意事项
 
