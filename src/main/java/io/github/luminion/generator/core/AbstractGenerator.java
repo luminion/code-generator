@@ -31,18 +31,19 @@ public abstract class AbstractGenerator<C extends TemplateModelRender,B> impleme
 
     @Override
     public LambdaGenerator<B> global(Function<GlobalBuilder, GlobalBuilder> func) {
-        func.apply(new GlobalBuilder(this.configCollector));
+        func.apply(new GlobalBuilder(this.configCollector.getGlobalConfig()));
         return this;
     }
 
     @Override
     public LambdaGenerator<B> injection(Function<InjectionBuilder, InjectionBuilder> func) {
+        func.apply(new InjectionBuilder(this.configCollector.getInjectionConfig()));
         return null;
     }
 
     @Override
     public LambdaGenerator<B> strategy(Function<StrategyBuilder, StrategyBuilder> func) {
-        func.apply(new StrategyBuilder(this.configCollector));
+        func.apply(new StrategyBuilder(this.configCollector.getStrategyConfig()));
         return this;
     }
 
