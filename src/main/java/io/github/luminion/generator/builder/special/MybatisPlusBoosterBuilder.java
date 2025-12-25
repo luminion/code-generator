@@ -11,7 +11,7 @@ import io.github.luminion.sqlbooster.model.BPage;
  * @author luminion
  * @since 1.0.0
  */
-public class MybatisPlusBoosterBuilder extends AbstractMpBuilder<MybatisPlusBoosterBuilder> {
+public class MybatisPlusBoosterBuilder extends AbstractMyBatisPlusBuilder<MybatisPlusBoosterBuilder> {
 
     public MybatisPlusBoosterBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
         super(configCollector);

@@ -295,16 +295,16 @@ public class ConfigResolver {
         HashMap<String, Object> result = new HashMap<>();
 
         // 渲染前处理, 这一步提供给配置器, 允许其修改配置
-        for (TemplateModelRender modelTemplateModelRender : templateRenderList) {
-            modelTemplateModelRender.renderDataPreProcess(tableInfo);
+        for (TemplateRender templateRender : templateRenderList) {
+            templateRender.renderDataPreProcess(tableInfo);
         }
 
         // 此时配置已完全确定
         tableInfo.processExtraField();
 
         // 渲染数据
-        for (TemplateModelRender modelTemplateModelRender : templateRenderList) {
-            result.putAll(modelTemplateModelRender.renderData(tableInfo));
+        for (TemplateRender templateRender : templateRenderList) {
+            result.putAll(templateRender.renderData(tableInfo));
         }
 
 

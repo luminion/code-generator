@@ -11,7 +11,7 @@ import io.github.luminion.generator.util.ReflectUtils;
  * @author luminion
  * @since 1.0.0
  */
-public class MybatisPlusBuilder extends AbstractMpBuilder<MybatisPlusBuilder> {
+public class MybatisPlusBuilder extends AbstractMyBatisPlusBuilder<MybatisPlusBuilder> {
 
     public MybatisPlusBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
         super(configCollector);

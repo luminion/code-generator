@@ -9,10 +9,10 @@ import io.github.luminion.generator.config.special.MybatisPlusConfig;
  * @author luminion
  * @since 1.0.0
  */
-public abstract class AbstractMpBuilder<B extends AbstractMpBuilder<B>> {
+public abstract class AbstractMyBatisPlusBuilder<B extends AbstractMyBatisPlusBuilder<B>> {
     protected final ConfigCollector<MybatisPlusConfig> configCollector;
 
-    public AbstractMpBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
+    public AbstractMyBatisPlusBuilder(ConfigCollector<MybatisPlusConfig> configCollector) {
         this.configCollector = configCollector;
     }
 
