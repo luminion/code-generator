@@ -41,7 +41,7 @@
 </dependency>
 ```
 
-可添加maven中央快照仓库(可能需网络代理)获取快照版本
+目前暂未release, 可添加maven中央快照仓库(可能需网络代理)获取快照版本
 
 
 ```xml
@@ -89,24 +89,59 @@
 
 ## 快速开始
 
-完成上述准备工作后, 您可以在一个测试类或 `main` 方法中使用 `GeneratorHelper` 来生成代码：
+完成上述准备工作后, 您可以在一个测试类或 `main` 方法中使用 `GeneratorHelper` 来生成代码,
+代码默认会生成到运行所在项目的`src/main/java`目录下, 可通过以下控制台输出确认生成文件路径
 
 ```java
-public class GeneratorTest {
     public static void main(String[] args) {
-        // 1. 创建代码生成器
-        MyBatisPlusGenerator generator = GeneratorHelper.mybatisPlus(
-                "jdbc:mysql://localhost:3306/your_database",
-                "username",
-                "password"
-        );
-
-        // 2. 配置并执行生成
-        generator.global(global -> global.outputDir("D:/project/src/main/java")) // 设置输出目录
-                 .strategy(strategy -> strategy.include("user", "role")) // 设置需要生成的表名
-                 .execute();
+        GeneratorHelper.mybatisPlus("jdbc:mysql://localhost:3306/your_database",
+                        "username",
+                        "password")
+                .execute("user", "role");
     }
-}
+```
+```text
+Connected to the target VM, address: '127.0.0.1:49687', transport: 'socket'
+  _________                                        
+ /   _____/__ __   ____  ____  ____   ______ ______
+ \_____  \|  |  \_/ ___\/ ___\/ __ \ /  ___//  ___/
+ /        \  |  /\  \__\  \__\  ___/ \___ \ \___ \ 
+/_______  /____/  \___  >___  >___  >____  >____  >
+        \/            \/    \/    \/     \/     \/ 
+(ﾉ>ω<)ﾉ  Code generation complete! Let's start coding ~
+
+generated file output dir:
+D:\Project\github\luminion\demo-test\generator-test-sp3\src\main\java
+Disconnected from the target VM, address: '127.0.0.1:49687', transport: 'socket'
+```
+
+可以通过链式表达, 自定义配置内容, 具体可用配置方法见
+[配置说明](#配置说明)
+
+```java
+    public static void main(String[] args) {
+        GeneratorHelper.mybatisPlus("jdbc:mysql://localhost:3306/your_database",
+                        "username",
+                        "password") // 创建mybatisPlus的生成器
+                .global(e -> e.outputDir("D:\\Project\\src\\main\\java")//输出目录
+                                .author("luminion") // 作者
+                                .docType(DocType.SWAGGER_V3) // 文档类型(支持javadoc, swaggerV2, swaggerV3)
+                        )// 全局配置
+                .strategy(e->e)// 策略配置
+                .special(e->e)// 特殊配置(配置内容具体取决于创建的生成器, 比如mybatisPlus相关配置)
+                .controller(e->e)// controller配置
+                .service(e->e)// service配置
+                .serviceImpl(e->e)// serviceImpl配置
+                .mapper(e->e)// mapper配置
+                .mapperXml(e->e)// mapper.xml配置
+                .createDTO(e->e)// 创建入参DTO配置
+                .updateDTO(e->e)// 修改入参DTO配置
+                .queryDTO(e->e)// 查询入参DTO配置
+                .queryVO(e->e)// 查询返回值VO配置
+                .importDTO(e->e)// Excel导入入参DTO配置
+                .exportDTO(e->e)// Excel导出返回值VO配置
+                .execute("user", "role"); // 需要生成的表
+    }
 ```
 
 ---
@@ -131,17 +166,11 @@ public class GeneratorTest {
 ```java
 public class GeneratorTest {
     public static void main(String[] args) {
-        // 1. 创建一个MyBatis-Plus和SQL-Booster结合的代码生成器
-        MybatisPlusSqlBoosterBuilder builder = GeneratorHelper.mybatisPlusBooster(
-                "jdbc:mysql://localhost:3306/your_database",
-                "username",
-                "password"
-        );
-
-        // 2. 进行相关配置并生成
-        builder.global(global -> global.outputDir("D:/project/src/main/java"))
-               .strategy(strategy -> strategy.include("user", "role"))
-               .execute();
+        // 使用mybatisPlusBooster()方法, 创建一个MyBatis-Plus和SQL-Booster结合的代码生成器
+        GeneratorHelper.mybatisPlusBooster("jdbc:mysql://localhost:3306/your_database",
+                        "username", 
+                        "password")
+                .execute("user", "role");
     }
 }
 ```
@@ -205,7 +234,7 @@ public class GeneratorTest {
 | `clearExtraFieldSuffix()` | - | 清空额外字段后缀 |
 | `extraFieldProvider(ExtraFieldProvider)` | `ExtraFieldProvider` | 自定义额外字段提供者 |
 
-### MyBatis-Plus 特定策略配置 (MybatisPlusBuilder / MybatisPlusSqlBoosterBuilder)
+### MyBatis-Plus 特定策略配置 (MybatisPlusBuilder / MybatisPlusBoosterBuilder)
 
 | 配置方法 | 参数类型 | 详细说明 |
 |---|---|---|
@@ -221,13 +250,14 @@ public class GeneratorTest {
 
 所有模型配置都支持以下通用方法:
 
-| 配置方法 | 参数类型 | 详细说明 |
-|---|---|---|
-| `nameFormat(String)` | `String` | 名称格式化 (例如: `%sEntity`) |
-| `subPackage(String)` | `String` | 模板文件子包名 |
-| `templatePath(String)` | `String` | 模板文件路径 (classpath 相对路径) |
-| `outputDir(String)` | `String` | 输出文件路径 (全路径) |
-| `fileOverride(boolean)` | `boolean` | 生成时覆盖已存在的文件 |
+| 配置方法                    | 参数类型      | 详细说明                              |
+|-------------------------|-----------|-----------------------------------|
+| `nameFormat(String)`    | `String`  | 名称格式化 (例如: `%sEntity`)            |
+| `subPackage(String)`    | `String`  | 模板文件子包名                           |
+| `templatePath(String)`  | `String`  | 模板文件路径 (classpath 相对路径)           |
+| `outputDir(String)`     | `String`  | 输出文件路径 (全路径), 不配置时默认值为全局路径+包名+子包名 |
+| `fileOverride(boolean)` | `boolean` | 生成时覆盖已存在的文件                       |
+| `generate(boolean)`     | `boolean` | 是否生成该文件                           |
 
 #### Entity 配置 (EntityBuilder)
 
