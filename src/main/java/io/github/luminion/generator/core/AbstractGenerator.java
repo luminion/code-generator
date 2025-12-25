@@ -1,11 +1,11 @@
 package io.github.luminion.generator.core;
 
-import io.github.luminion.generator.builder.base.InjectionBuilder;
-import io.github.luminion.generator.common.TemplateModelRender;
-import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.builder.base.GlobalBuilder;
+import io.github.luminion.generator.builder.base.InjectionBuilder;
 import io.github.luminion.generator.builder.base.StrategyBuilder;
 import io.github.luminion.generator.builder.model.*;
+import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
 import io.github.luminion.generator.util.InitializeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.util.function.Function;
  * @author luminion
  */
 @Slf4j
-public abstract class AbstractGenerator<C extends TemplateModelRender,B> implements LambdaGenerator<B> {
+public abstract class AbstractGenerator<C extends TemplateRender, B> implements LambdaGenerator<B> {
     protected final ConfigCollector<C> configCollector;
 
     public AbstractGenerator(ConfigCollector<C> configCollector) {
@@ -60,7 +60,7 @@ public abstract class AbstractGenerator<C extends TemplateModelRender,B> impleme
     }
 
     @Override
-    public LambdaGenerator<B> serviceImpl(Function<ServiceImplBuilder, ServiceImplBuilder>  func) {
+    public LambdaGenerator<B> serviceImpl(Function<ServiceImplBuilder, ServiceImplBuilder> func) {
         func.apply(new ServiceImplBuilder(this.configCollector.getServiceImplConfig()));
         return this;
     }
@@ -135,7 +135,7 @@ public abstract class AbstractGenerator<C extends TemplateModelRender,B> impleme
                         " \\_____  \\|  |  \\_/ ___\\/ ___\\/ __ \\ /  ___//  ___/\n" +
                         " /        \\  |  /\\  \\__\\  \\__\\  ___/ \\___ \\ \\___ \\ \n" +
                         "/_______  /____/  \\___  >___  >___  >____  >____  >\n" +
-                        "        \\/            \\/    \\/    \\/     \\/     \\/ "+
+                        "        \\/            \\/    \\/    \\/     \\/     \\/ " +
                         "\n(ﾉ>ω<)ﾉ  Code generation complete! Let's start coding ~\n";
         System.out.println(banner);
         System.out.println("generated file output dir:");
