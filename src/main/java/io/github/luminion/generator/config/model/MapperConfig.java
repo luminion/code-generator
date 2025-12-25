@@ -3,7 +3,7 @@ package io.github.luminion.generator.config.model;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.Resolver;
-import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;

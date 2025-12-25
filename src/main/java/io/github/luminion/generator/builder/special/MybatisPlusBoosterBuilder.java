@@ -1,8 +1,8 @@
-package io.github.luminion.generator.builder.custom;
+package io.github.luminion.generator.builder.special;
 
 import io.github.luminion.generator.common.MethodReference;
 import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.config.custom.MybatisPlusConfig;
+import io.github.luminion.generator.config.special.MybatisPlusConfig;
 import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.util.ReflectUtils;
 import io.github.luminion.sqlbooster.model.BPage;

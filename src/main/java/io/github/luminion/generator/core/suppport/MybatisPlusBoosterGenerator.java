@@ -1,8 +1,8 @@
 package io.github.luminion.generator.core.suppport;
 
-import io.github.luminion.generator.builder.custom.MybatisPlusBoosterBuilder;
+import io.github.luminion.generator.builder.special.MybatisPlusBoosterBuilder;
 import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.config.custom.MybatisPlusConfig;
+import io.github.luminion.generator.config.special.MybatisPlusConfig;
 import io.github.luminion.generator.config.model.ControllerConfig;
 import io.github.luminion.generator.core.AbstractGenerator;
 import io.github.luminion.generator.core.LambdaGenerator;
@@ -33,7 +33,7 @@ public class MybatisPlusBoosterGenerator extends AbstractGenerator<MybatisPlusCo
     }
 
     @Override
-    public LambdaGenerator<MybatisPlusBoosterBuilder> custom(Function<MybatisPlusBoosterBuilder, MybatisPlusBoosterBuilder> func) {
+    public LambdaGenerator<MybatisPlusBoosterBuilder> special(Function<MybatisPlusBoosterBuilder, MybatisPlusBoosterBuilder> func) {
         func.apply(new MybatisPlusBoosterBuilder(this.configCollector));
         return this;
     }

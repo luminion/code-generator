@@ -1,7 +1,7 @@
 package io.github.luminion.generator;
 
 import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.config.custom.MybatisPlusConfig;
+import io.github.luminion.generator.config.special.MybatisPlusConfig;
 import io.github.luminion.generator.core.suppport.MybatisPlusGenerator;
 import io.github.luminion.generator.core.suppport.MybatisPlusBoosterGenerator;
 

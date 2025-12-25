@@ -17,10 +17,10 @@ package io.github.luminion.generator.common.support;
 
 import io.github.luminion.generator.common.TableInfoProvider;
 import io.github.luminion.generator.config.Resolver;
-import io.github.luminion.generator.config.core.DataSourceConfig;
+import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.config.core.StrategyConfig;
+import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 

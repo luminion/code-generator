@@ -1,4 +1,4 @@
-package io.github.luminion.generator.config.custom;
+package io.github.luminion.generator.config.special;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;

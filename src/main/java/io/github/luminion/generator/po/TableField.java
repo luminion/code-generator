@@ -21,7 +21,7 @@ import io.github.luminion.generator.common.JavaFieldProvider;
 import io.github.luminion.generator.common.support.DefaultDatabaseQueryMetaDataWrapper;
 import io.github.luminion.generator.common.support.DefaultJavaFieldProvider;
 import io.github.luminion.generator.common.support.DefaultNameConverter;
-import io.github.luminion.generator.config.core.StrategyConfig;
+import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.enums.JdbcType;
 import io.github.luminion.generator.enums.NameConvertType;
 import io.github.luminion.generator.util.StringUtils;

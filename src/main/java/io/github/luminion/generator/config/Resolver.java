@@ -2,7 +2,7 @@ package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.common.support.DefaultDatabaseQuery;
-import io.github.luminion.generator.config.core.GlobalConfig;
+import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;

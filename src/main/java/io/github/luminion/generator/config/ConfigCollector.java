@@ -16,9 +16,9 @@
 package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.config.core.DataSourceConfig;
-import io.github.luminion.generator.config.core.GlobalConfig;
-import io.github.luminion.generator.config.core.StrategyConfig;
+import io.github.luminion.generator.config.base.DataSourceConfig;
+import io.github.luminion.generator.config.base.GlobalConfig;
+import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.config.model.*;
 import lombok.Getter;
 

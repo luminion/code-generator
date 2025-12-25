@@ -2,8 +2,8 @@ package io.github.luminion.generator.util;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.config.core.StrategyConfig;
-import io.github.luminion.generator.config.custom.MybatisPlusConfig;
+import io.github.luminion.generator.config.base.StrategyConfig;
+import io.github.luminion.generator.config.special.MybatisPlusConfig;
 import io.github.luminion.generator.config.model.MapperXmlConfig;
 import io.github.luminion.generator.enums.JavaFieldType;
 import io.github.luminion.generator.enums.JdbcType;
