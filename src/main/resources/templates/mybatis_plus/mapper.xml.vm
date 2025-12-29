@@ -56,6 +56,35 @@
     </sql>
 #end
 #if(${generateSelectByXml})
+    #if(${baseResultMap})
+    <select id="selectByXml" resultMap="voResultMap">
+    #else
+    <select id="selectByXml" resultType="${class.queryVO}">
+    #end
+        SELECT
+        a.*
+        FROM
+        $!{schemaName}${table.name} a
+        <where>
+            <include refid="conditions"/>
+            #foreach($field in ${table.fields})
+                #if(${field.logicDeleteField})
+                    #if(${field.metaInfo.defaultValue})
+            AND a.${field.columnName} = ${field.metaInfo.defaultValue}
+                    #else
+            AND a.${field.columnName} IS NULL
+                    #end
+                    #break
+                #end
+            #end
+        </where>
+        #if(${orderColumnSql})
+        ORDER BY ${orderColumnSql}
+        #end
+    </select>
+
+#end
+#if(${generateSelectByXml})
 
     <sql id="conditions">
         <if test="param1 != null">
@@ -107,35 +136,6 @@
     #end
         </if>
     </sql>
-
-#end
-#if(${generateSelectByXml})
-    #if(${baseResultMap})
-    <select id="selectByXml" resultMap="voResultMap">
-    #else
-    <select id="selectByXml" resultType="${class.queryVO}">
-    #end
-        SELECT
-        a.*
-        FROM
-        $!{schemaName}${table.name} a
-        <where>
-            <include refid="conditions"/>
-            #foreach($field in ${table.fields})
-                #if(${field.logicDeleteField})
-                    #if(${field.metaInfo.defaultValue})
-            AND a.${field.columnName} = ${field.metaInfo.defaultValue}
-                    #else
-            AND a.${field.columnName} IS NULL
-                    #end
-                    #break
-                #end
-            #end
-        </where>
-        #if(${orderColumnSql})
-        ORDER BY ${orderColumnSql}
-        #end
-    </select>
 
 #end
 </mapper>
