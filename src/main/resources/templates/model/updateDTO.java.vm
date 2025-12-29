@@ -44,6 +44,7 @@ public class ${updateDTO}#if(${serializableUID}) implements Serializable#end {
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${table.fields})
 #if(${field.fill} && (${field.fill}=="UPDATE" || ${field.fill}=="INSERT_UPDATE" || ${field.fill}=="INSERT"))
+#elseif(${field.logicDeleteField})
 #elseif(${editExcludeColumns.contains(${field.columnName})})
 #else
 
