@@ -56,6 +56,7 @@
     </sql>
 #end
 #if(${generateSelectByXml})
+
     #if(${baseResultMap})
     <select id="selectByXml" resultMap="voResultMap">
     #else
@@ -136,6 +137,6 @@
     #end
         </if>
     </sql>
-
 #end
+
 </mapper>
