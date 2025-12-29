@@ -67,11 +67,12 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #if(${generate.service})
     @Override
     #end
-    public ${queryVO} voById(Serializable id) { 
+    public ${queryVO} voById(Serializable id) {
         #if(${table.primaryKeyField})
         ${queryDTO} queryDTO = new ${queryDTO}();
         queryDTO.set${table.primaryKeyField.capitalName}((${table.primaryKeyField.propertyType}) id);
-        return getBaseMapper().selectByXml(queryDTO, null).stream().findFirst().orElse(null);
+        ${queryVO} vo = getBaseMapper().selectByXml(queryDTO, null).stream().findFirst().orElse(null);
+        return vo;
         #else
         throw new IllegalStateException("can't find id property");
         #end
@@ -83,7 +84,8 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     @Override
     #end
     public List<${queryVO}> voList(${queryDTO} queryDTO) {
-        return getBaseMapper().selectByXml(queryDTO, null);
+        List<${queryVO}> voList = getBaseMapper().selectByXml(queryDTO, null);
+        return voList;
     }
 #end
 #if(${generateVoPage})
