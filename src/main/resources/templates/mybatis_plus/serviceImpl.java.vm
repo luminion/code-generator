@@ -29,9 +29,9 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #if(${generate.service})
     @Override
     #end
-    public Serializable createByDTO(${createDTO} createDTO) {
+    public Serializable createByDTO(${createDTO} dto) {
         ${entity} entity = new ${entity}();
-        BeanUtils.copyProperties(createDTO, entity);
+        BeanUtils.copyProperties(dto, entity);
         super.save(entity);
         #if(${table.primaryKeyField})
         return entity.get${table.primaryKeyField.capitalName}();
@@ -45,9 +45,9 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #if(${generate.service})
     @Override
     #end
-    public boolean updateByDTO(${updateDTO} updateDTO) {
+    public boolean updateByDTO(${updateDTO} dto) {
         ${entity} entity = new ${entity}();
-        BeanUtils.copyProperties(updateDTO, entity);
+        BeanUtils.copyProperties(dto, entity);
         return super.updateById(entity);
     }
 #end
@@ -69,9 +69,9 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #end
     public ${queryVO} voById(Serializable id) {
         #if(${table.primaryKeyField})
-        ${queryDTO} queryDTO = new ${queryDTO}();
-        queryDTO.set${table.primaryKeyField.capitalName}((${table.primaryKeyField.propertyType}) id);
-        ${queryVO} vo = getBaseMapper().selectByXml(queryDTO, null).stream().findFirst().orElse(null);
+        ${queryDTO} dto = new ${queryDTO}();
+        dto.set${table.primaryKeyField.capitalName}((${table.primaryKeyField.propertyType}) id);
+        ${queryVO} vo = getBaseMapper().selectByXml(dto, null).stream().findFirst().orElse(null);
         return vo;
         #else
         throw new IllegalStateException("can't find id property");
@@ -83,8 +83,8 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #if(${generate.service})
     @Override
     #end
-    public List<${queryVO}> voList(${queryDTO} queryDTO) {
-        List<${queryVO}> voList = getBaseMapper().selectByXml(queryDTO, null);
+    public List<${queryVO}> voList(${queryDTO} dto) {
+        List<${queryVO}> voList = getBaseMapper().selectByXml(dto, null);
         return voList;
     }
 #end
@@ -93,9 +93,9 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #if(${generate.service})
     @Override
     #end
-    public IPage<${queryVO}> voPage(${queryDTO} queryDTO, long current, long size) {
+    public IPage<${queryVO}> voPage(${queryDTO} dto, long current, long size) {
         Page<${queryVO}> page = new Page<>(current, size);
-        List<${queryVO}> voList = getBaseMapper().selectByXml(queryDTO, page);
+        List<${queryVO}> voList = getBaseMapper().selectByXml(dto, page);
         page.setRecords(voList);
         return page;
     }
@@ -131,10 +131,10 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #if(${generate.service})
     @Override
     #end
-    public void excelExport(${queryDTO} queryDTO, OutputStream os) {
+    public void excelExport(${queryDTO} dto, OutputStream os) {
         ${excelApiClass}.write(os, ${exportDTO}.class).sheet()
             .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
-            .doWrite(getBaseMapper().selectByXml(queryDTO, null));
+            .doWrite(getBaseMapper().selectByXml(dto, null));
     }
 #end
 }

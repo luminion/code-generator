@@ -63,7 +63,7 @@ public class ${controller} {
     /**
      * 新增
      *
-     * @param createDTO 新增入参对象
+     * @param dto 新增入参对象
      * @return 新增后的数据id
      */
     #end
@@ -75,8 +75,8 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Serializable")} create($!{requiredBodyStr}$!{validatedStr}${createDTO} createDTO) {
-        return ${returnMethod.invokeMethodStr("baseService.createByDTO(createDTO)")};
+    public ${returnMethod.returnGenericTypeStr("Serializable")} create($!{requiredBodyStr}$!{validatedStr}${createDTO} dto) {
+        return ${returnMethod.invokeMethodStr("baseService.createByDTO(dto)")};
     }
 #end
 #if(${generateUpdate})
@@ -89,7 +89,7 @@ public class ${controller} {
     /**
      * 修改
      *
-     * @param updateDTO 修改入参对象
+     * @param dto 修改入参对象
      * @return 是否成功
      */
     #end
@@ -101,8 +101,8 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Boolean")} update($!{requiredBodyStr}$!{validatedStr}${updateDTO} updateDTO) {
-        return ${returnMethod.invokeMethodStr("baseService.updateByDTO(updateDTO)")};
+    public ${returnMethod.returnGenericTypeStr("Boolean")} update($!{requiredBodyStr}$!{validatedStr}${updateDTO} dto) {
+        return ${returnMethod.invokeMethodStr("baseService.updateByDTO(dto)")};
     }
 #end
 #if(${generateDelete} && ${table.havePrimaryKey})
@@ -167,7 +167,7 @@ public class ${controller} {
     /**
      * 列表查询
      *
-     * @param queryDTO 查询条件
+     * @param dto 查询条件
      * @return 查询结果
      */
     #end
@@ -175,12 +175,12 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} list($!{optionalBodyStr}${queryDTO} queryDTO) {
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} list($!{optionalBodyStr}${queryDTO} dto) {
         #if($sqlBooster)
-        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(queryDTO).build();
+        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(dto).build();
         return ${returnMethod.invokeMethodStr("baseService.voList(build)")};    
         #else
-        return ${returnMethod.invokeMethodStr("baseService.voList(queryDTO)")};
+        return ${returnMethod.invokeMethodStr("baseService.voList(dto)")};
         #end
     }
 #end
@@ -194,7 +194,7 @@ public class ${controller} {
     /**
      * 分页查询
      *
-     * @param queryDTO 查询条件
+     * @param dto 查询条件
      * @param current 页码
      * @param size 每页大小
      * @return 查询结果
@@ -204,12 +204,12 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} page($!{optionalBodyStr}${queryDTO} queryDTO, $!{pageMethodParams}) {
+    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} page($!{optionalBodyStr}${queryDTO} dto, $!{pageMethodParams}) {
         #if($sqlBooster)
-        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(queryDTO).build();
+        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(dto).build();
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(build, current, size)")})};
         #else
-        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(queryDTO, current, size)")})};
+        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(dto, current, size)")})};
         #end
     }
 #end
@@ -263,19 +263,19 @@ public class ${controller} {
     /**
      * excel文件导出
      * 
-     * @param queryDTO 查询条件
+     * @param dto 查询条件
      */
     #end
     ${batchQueryMethod}("/excel/export")
-    public void excelExport($!{optionalBodyStr}${queryDTO} queryDTO, HttpServletResponse response) throws IOException {
+    public void excelExport($!{optionalBodyStr}${queryDTO} dto, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
 ##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
         #if($sqlBooster)
-        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(queryDTO).build();
+        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(dto).build();
         baseService.excelExport(build, response.getOutputStream());
         #else
-        baseService.excelExport(queryDTO, response.getOutputStream());
+        baseService.excelExport(dto, response.getOutputStream());
         #end
     }
 #end

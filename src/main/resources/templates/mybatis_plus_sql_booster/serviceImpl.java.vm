@@ -29,9 +29,9 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #if(${generate.service})
     @Override
     #end
-    public Serializable createByDTO(${createDTO} createDTO) {
+    public Serializable createByDTO(${createDTO} dto) {
         ${entity} entity = new ${entity}();
-        BeanUtils.copyProperties(createDTO, entity);
+        BeanUtils.copyProperties(dto, entity);
         super.save(entity);
         #if(${table.primaryKeyField})
         return entity.get${table.primaryKeyField.capitalName}();
@@ -45,9 +45,9 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     #if(${generate.service})
     @Override
     #end
-    public boolean updateByDTO(${updateDTO} updateDTO) {
+    public boolean updateByDTO(${updateDTO} dto) {
         ${entity} entity = new ${entity}();
-        BeanUtils.copyProperties(updateDTO, entity);
+        BeanUtils.copyProperties(dto, entity);
         return super.updateById(entity);
     }
 #end
