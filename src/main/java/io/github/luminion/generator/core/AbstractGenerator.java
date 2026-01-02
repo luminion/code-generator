@@ -38,7 +38,7 @@ public abstract class AbstractGenerator<C extends TemplateRender, B> implements 
     @Override
     public LambdaGenerator<B> injection(Function<InjectionBuilder, InjectionBuilder> func) {
         func.apply(new InjectionBuilder(this.configCollector.getInjectionConfig()));
-        return null;
+        return this;
     }
 
     @Override
