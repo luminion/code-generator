@@ -55,7 +55,6 @@
         ${table.fieldNames}
     </sql>
 #end
-#if(${generateSelectByXml})
     
     #if(${baseResultMap})
     <select id="selectByXml" resultMap="voResultMap">
@@ -86,6 +85,5 @@
             #end
         </trim>
     </select>
-
-#end
+    
 </mapper>
