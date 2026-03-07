@@ -1,5 +1,6 @@
 package io.github.luminion.generator.config;
 
+import io.github.luminion.generator.common.MultiTemplateModelRender;
 import io.github.luminion.generator.common.TemplateModelRender;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.common.support.DefaultDatabaseQuery;
@@ -72,21 +73,13 @@ public class ConfigResolver {
         templateRenderList.add(this.configCollector.getControllerConfig());
 
         templateRenderList.add(this.configCollector.getServiceConfig());
-        templateRenderList.add(this.configCollector.getServiceImplConfig());
-
         templateRenderList.add(this.configCollector.getMapperConfig());
-        templateRenderList.add(this.configCollector.getMapperXmlConfig());
 
         templateRenderList.add(this.configCollector.getEntityConfig());
 
-        templateRenderList.add(this.configCollector.getCreateDTOConfig());
-        templateRenderList.add(this.configCollector.getUpdateDTOConfig());
-
-        templateRenderList.add(this.configCollector.getQueryDTOConfig());
-        templateRenderList.add(this.configCollector.getQueryVOConfig());
-
-        templateRenderList.add(this.configCollector.getImportDTOConfig());
-        templateRenderList.add(this.configCollector.getExportDTOConfig());
+        templateRenderList.add(this.configCollector.getQueryConfig());
+        templateRenderList.add(this.configCollector.getCreateUpdateConfig());
+        templateRenderList.add(this.configCollector.getExcelConfig());
 
         // 特殊配置
         if (this.configCollector.getSpecialConfig() != null) {
@@ -96,7 +89,13 @@ public class ConfigResolver {
         // 遍历渲染, 初始化, 添加模板
         for (TemplateRender templateRender : templateRenderList) {
             templateRender.init();
-            if (templateRender instanceof TemplateModelRender) {
+            if (templateRender instanceof MultiTemplateModelRender) {
+                // 处理多模板文件配置
+                List<TemplateFile> templateFiles = ((MultiTemplateModelRender) templateRender).renderTemplateFiles();
+                for (TemplateFile templateFile : templateFiles) {
+                    templateFileMap.put(templateFile.getKey(), templateFile);
+                }
+            } else if (templateRender instanceof TemplateModelRender) {
                 TemplateFile templateFile = ((TemplateModelRender) templateRender).renderTemplateFile();
                 templateFileMap.put(templateFile.getKey(), templateFile);
             }

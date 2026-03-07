@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.config.special.MybatisPlusConfig;
-import io.github.luminion.generator.config.model.MapperXmlConfig;
+import io.github.luminion.generator.config.model.MapperConfig;
 import io.github.luminion.generator.enums.JavaFieldType;
 import io.github.luminion.generator.enums.JdbcType;
 
@@ -34,8 +34,8 @@ public abstract class InitializeUtils {
     }
 
     public static void initializeMapperSortColumn(ConfigCollector<?> configCollector) {
-        MapperXmlConfig mapperXmlConfig = configCollector.getMapperXmlConfig();
-        Map<String, Boolean> sortColumnMap = mapperXmlConfig.getSortColumnMap();
+        MapperConfig mapperConfig = configCollector.getMapperConfig();
+        Map<String, Boolean> sortColumnMap = mapperConfig.getSortColumnMap();
         sortColumnMap.put("order" , false);
         sortColumnMap.put("rank" , false);
         sortColumnMap.put("sort" , false);
