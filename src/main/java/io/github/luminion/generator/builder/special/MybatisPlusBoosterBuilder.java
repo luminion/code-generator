@@ -8,6 +8,15 @@ import io.github.luminion.generator.util.ReflectUtils;
 import io.github.luminion.sqlbooster.model.BPage;
 
 /**
+ * MyBatisPlus-SqlBooster代码生成器构建器
+ * <p>
+ * 继承自AbstractMyBatisPlusBuilder，提供MyBatisPlus和SqlBooster框架的通用配置
+ * 用于配置相关的代码生成选项：
+ * <ul>
+ *   <li>分页返回包装方法</li>
+ *   <li>sqlContext查询</li>
+ * </ul>
+ *
  * @author luminion
  * @since 1.0.0
  */
@@ -31,13 +40,14 @@ public class MybatisPlusBoosterBuilder extends AbstractMyBatisPlusBuilder<Mybati
 
 
     /**
-     * controller是否启用sql-booster的sqlContext入参查询
+     * 禁用controller的sqlContext入参查询（默认启用）
+     * <p>
+     * sql-booster的sqlContext用于在查询时传入额外的SQL条件
      *
-     * @param enabled 是否启用
      * @return this
      */
-    public <T, R> MybatisPlusBoosterBuilder sqlContextQuery(boolean enabled) {
-        this.configCollector.getControllerConfig().setSqlContextQuery(enabled);
+    public MybatisPlusBoosterBuilder sqlContextQueryDisable() {
+        this.configCollector.getControllerConfig().setSqlContextQuery(false);
         return this;
     }
     

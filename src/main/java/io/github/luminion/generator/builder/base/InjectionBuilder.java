@@ -11,6 +11,15 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 /**
+ * 注入配置构建器
+ * <p>
+ * 用于配置代码生成过程中的自定义注入配置：
+ * <ul>
+ *   <li>生成前自定义操作</li>
+ *   <li>自定义模板参数</li>
+ *   <li>自定义模板文件</li>
+ * </ul>
+ *
  * @author luminion
  * @since 1.0.0
  */

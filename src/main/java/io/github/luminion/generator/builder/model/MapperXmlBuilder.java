@@ -3,6 +3,17 @@ package io.github.luminion.generator.builder.model;
 import io.github.luminion.generator.config.model.MapperXmlConfig;
 
 /**
+ * MapperXml配置构建器
+ * <p>
+ * 用于配置Mapper XML文件的生成选项：
+ * <ul>
+ *   <li>BaseResultMap</li>
+ *   <li>baseColumnList</li>
+ *   <li>缓存实现类</li>
+ *   <li>排序字段</li>
+ * </ul>
+ * 继承自AbstractModelBuilder，提供通用配置方法
+ *
  * @author luminion
  * @since 1.0.0
  */
@@ -14,24 +25,22 @@ public class MapperXmlBuilder extends AbstractModelBuilder<MapperXmlConfig, Mapp
     }
 
     /**
-     * 是否开启BaseResultMap
+     * 启用BaseResultMap（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public MapperXmlBuilder baseResultMap(boolean enable) {
-        this.config.setBaseResultMap(enable);
+    public MapperXmlBuilder baseResultMapEnable() {
+        this.config.setBaseResultMap(true);
         return this;
     }
 
     /**
-     * 是否开启baseColumnList
+     * 启用baseColumnList（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public MapperXmlBuilder baseColumnList(boolean enable) {
-        this.config.setBaseColumnList(enable);
+    public MapperXmlBuilder baseColumnListEnable() {
+        this.config.setBaseColumnList(true);
         return this;
     }
 

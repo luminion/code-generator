@@ -8,6 +8,14 @@ import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.util.ReflectUtils;
 
 /**
+ * MyBatisPlus代码生成器构建器
+ * <p>
+ * 继承自AbstractMyBatisPlusBuilder，提供MyBatisPlus框架的通用配置
+ * 用于配置MyBatisPlus相关的代码生成选项：
+ * <ul>
+ *   <li>分页返回包装方法</li>
+ * </ul>
+ *
  * @author luminion
  * @since 1.0.0
  */

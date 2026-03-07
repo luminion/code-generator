@@ -3,6 +3,14 @@ package io.github.luminion.generator.builder.model;
 import io.github.luminion.generator.config.model.QueryVOConfig;
 
 /**
+ * 查询VO配置构建器
+ * <p>
+ * 用于配置查询VO类的生成选项：
+ * <ul>
+ *   <li>继承实体类</li>
+ * </ul>
+ * 继承自AbstractModelBuilder，提供通用配置方法
+ *
  * @author luminion
  * @since 1.0.0
  */
@@ -13,13 +21,12 @@ public class QueryVOBuilder extends AbstractModelBuilder<QueryVOConfig, QueryVOB
     }
 
     /**
-     * 是否继承实体类
+     * 启用继承实体类（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public QueryVOBuilder extendsEntity(boolean enable) {
-        this.config.setExtendsEntity(enable);
+    public QueryVOBuilder extendsEntityEnable() {
+        this.config.setExtendsEntity(true);
         return this;
     }
 }

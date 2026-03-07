@@ -13,7 +13,16 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
- * 策略构建
+ * 策略配置构建器
+ * <p>
+ * 用于配置代码生成的策略选项，包括：
+ * <ul>
+ *   <li>名称转换策略（表名、字段名转换为实体名、属性名）</li>
+ *   <li>数据库类型转换策略</li>
+ *   <li>表和字段过滤策略（表前缀、后缀、包含、排除等）</li>
+ *   <li>时间类型配置</li>
+ *   <li>额外字段配置</li>
+ * </ul>
  *
  * @author luminion
  * @since 1.0.0
@@ -69,13 +78,15 @@ public class StrategyBuilder {
     }
 
     /**
-     * Boolean类型字段是否移除is前缀
+     * 启用Boolean类型字段移除is前缀（默认关闭）
+     * <p>
+     * 例如：数据库字段名称 'is_xxx'，类型为 tinyint，
+     * 映射实体时会去掉is，最终结果为 xxx
      *
-     * @param enabled 是否移除
      * @return this
      */
-    public StrategyBuilder booleanColumnRemoveIsPrefix(boolean enabled) {
-        this.config.setBooleanColumnRemoveIsPrefix(enabled);
+    public StrategyBuilder booleanColumnRemoveIsPrefixEnable() {
+        this.config.setBooleanColumnRemoveIsPrefix(true);
         return this;
     }
 
@@ -101,25 +112,23 @@ public class StrategyBuilder {
         return this;
     }
 
-     /**
-     * 是否显示数据库schema名
+    /**
+     * 启用显示数据库schema名（默认关闭）
      *
-     * @param enabled 是否显示
      * @return this
      */
-    public StrategyBuilder showSchema(boolean enabled) {
-        this.config.setShowSchema(enabled);
+    public StrategyBuilder showSchemaEnable() {
+        this.config.setShowSchema(true);
         return this;
     }
 
     /**
-     * 跳过视图
+     * 启用跳过视图（默认关闭）
      *
-     * @param enabled 是否跳过
      * @return this
      */
-    public StrategyBuilder skipView(boolean enabled) {
-        this.config.setSkipView(enabled);
+    public StrategyBuilder skipViewEnable() {
+        this.config.setSkipView(true);
         return this;
     }
 

@@ -31,7 +31,7 @@ public class MybatisPlusGenerator extends AbstractGenerator<MybatisPlusConfig, M
     }
 
     @Override
-    public LambdaGenerator<MybatisPlusBuilder> special(Function<MybatisPlusBuilder, MybatisPlusBuilder> func) {
+    public LambdaGenerator<MybatisPlusBuilder> extension(Function<MybatisPlusBuilder, MybatisPlusBuilder> func) {
         func.apply(new MybatisPlusBuilder(this.configCollector));
         return this;
     }

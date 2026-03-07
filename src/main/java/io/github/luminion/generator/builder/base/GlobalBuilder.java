@@ -11,6 +11,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * 全局配置构建器
+ * <p>
+ * 用于配置代码生成的全局选项，包括：
+ * <ul>
+ *   <li>代码生成的基本信息（作者、日期、包名等）</li>
+ *   <li>实体模型配置（lombok、链式调用、序列化等）</li>
+ *   <li>生成内容配置（是否生成增删改查等方法）</li>
+ *   <li>输出配置（输出目录、是否覆盖等）</li>
+ * </ul>
+ *
  * @author luminion
  * @since 1.0.0
  */
@@ -19,49 +29,45 @@ public class GlobalBuilder {
     private final GlobalConfig config;
 
     /**
-     * lombok模型
+     * 禁用lombok模型（默认启用）
      *
-     * @param enable 是否启用
      * @return this
      * @since 1.0.0
      */
-    public GlobalBuilder lombok(boolean enable) {
-        this.config.setLombok(enable);
+    public GlobalBuilder lombokDisable() {
+        this.config.setLombok(false);
         return this;
     }
 
     /**
-     * 链式setter
+     * 启用链式setter（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      * @since 1.0.0
      */
-    public GlobalBuilder chainModel(boolean enable) {
-        this.config.setChainModel(enable);
+    public GlobalBuilder chainModelEnable() {
+        this.config.setChainModel(true);
         return this;
     }
 
 
     /**
-     * 添加序列化UID
+     * 添加序列化UID（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder serializableUID(boolean enable) {
-        this.config.setSerializableUID(enable);
+    public GlobalBuilder serializableUIDEnable() {
+        this.config.setSerializableUID(true);
         return this;
     }
 
     /**
-     * 添加序列化UID的@serial注解, 需要jdk14+
+     * 禁用@serial注解（默认启用,需要jdk14+）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder serializableAnnotation(boolean enable) {
-        this.config.setSerializableAnnotation(enable);
+    public GlobalBuilder serializableAnnotationDisable() {
+        this.config.setSerializableAnnotation(false);
         return this;
     }
 
@@ -78,14 +84,13 @@ public class GlobalBuilder {
     }
 
     /**
-     * 文档注释添加相关类链接
+     * 启用文档注释添加相关类链接（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      * @since 1.0.0
      */
-    public GlobalBuilder docLink(boolean enable) {
-        this.config.setDocLink(enable);
+    public GlobalBuilder docLinkEnable() {
+        this.config.setDocLink(true);
         return this;
     }
 
@@ -153,26 +158,24 @@ public class GlobalBuilder {
     }
 
     /**
-     * 是否打开输出目录
+     * 启用打开输出目录（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      * @since 1.0.0
      */
-    public GlobalBuilder openOutputDir(boolean enable) {
-        this.config.setOpenOutputDir(enable);
+    public GlobalBuilder openOutputDirEnable() {
+        this.config.setOpenOutputDir(true);
         return this;
     }
 
     /**
-     * 是否覆盖已有文件(全局,为true时始终覆盖)
+     * 启用覆盖已有文件(全局,为true时始终覆盖)（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      * @since 1.0.0
      */
-    public GlobalBuilder fileOverride(boolean enable) {
-        this.config.setFileOverride(enable);
+    public GlobalBuilder fileOverrideEnable() {
+        this.config.setFileOverride(true);
         return this;
     }
 
@@ -201,101 +204,92 @@ public class GlobalBuilder {
     }
 
     /**
-     * 生成参数校验相关注解
+     * 启用生成参数校验相关注解（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder validated(boolean enable) {
-        this.config.setValidated(enable);
+    public GlobalBuilder validatedEnable() {
+        this.config.setValidated(true);
         return this;
     }
 
     /**
-     * 生成新增方法
+     * 禁用生成新增方法（默认启用）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder generateCreate(boolean enable) {
-        this.config.setGenerateCreate(enable);
+    public GlobalBuilder generateCreateDisable() {
+        this.config.setGenerateCreate(false);
         return this;
     }
 
     /**
-     * 生成更新方法
+     * 禁用生成更新方法（默认启用）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder generateUpdate(boolean enable) {
-        this.config.setGenerateUpdate(enable);
+    public GlobalBuilder generateUpdateDisable() {
+        this.config.setGenerateUpdate(false);
         return this;
     }
 
     /**
-     * 生成删除方法
+     * 禁用生成删除方法（默认启用）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder generateDelete(boolean enable) {
-        this.config.setGenerateDelete(enable);
+    public GlobalBuilder generateDeleteDisable() {
+        this.config.setGenerateDelete(false);
         return this;
     }
 
     /**
-     * 生成id查询方法
+     * 禁用生成id查询方法（默认启用）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder generateVoById(boolean enable) {
-        this.config.setGenerateVoById(enable);
+    public GlobalBuilder generateVoByIdDisable() {
+        this.config.setGenerateVoById(false);
         return this;
     }
 
     /**
-     * 生成列表查询方法
+     * 禁用生成列表查询方法（默认启用）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder generateVoList(boolean enable) {
-        this.config.setGenerateVoList(enable);
+    public GlobalBuilder generateVoListDisable() {
+        this.config.setGenerateVoList(false);
         return this;
     }
 
     /**
-     * 生成分页查询方法
+     * 禁用生成分页查询方法（默认启用）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder generateVoPage(boolean enable) {
-        this.config.setGenerateVoPage(enable);
+    public GlobalBuilder generateVoPageDisable() {
+        this.config.setGenerateVoPage(false);
         return this;
     }
 
     /**
-     * 生成导入方法
+     * 禁用生成导入方法（默认启用）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder generateImport(boolean enable) {
-        this.config.setGenerateImport(enable);
+    public GlobalBuilder generateImportDisable() {
+        this.config.setGenerateImport(false);
         return this;
     }
 
     /**
-     * 生成导出方法
+     * 禁用生成导出方法（默认启用）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public GlobalBuilder generateExport(boolean enable) {
-        this.config.setGenerateExport(enable);
+    public GlobalBuilder generateExportDisable() {
+        this.config.setGenerateExport(false);
         return this;
     }
 

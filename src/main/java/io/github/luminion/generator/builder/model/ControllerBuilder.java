@@ -28,26 +28,26 @@ public class ControllerBuilder extends AbstractModelBuilder<ControllerConfig, Co
     }
 
     /**
-     * 使用@RestController
+     * 禁用@RestController，使用@Controller（默认启用）
      *
-     * @param enable 是否启用
      * @return this
      * @since 3.5.0
      */
-    public ControllerBuilder restController(boolean enable) {
-        this.config.setRestController(enable);
+    public ControllerBuilder restControllerDisable() {
+        this.config.setRestController(false);
         return this;
     }
 
     /**
-     * 驼峰转连字符
+     * 禁用驼峰转连字符（默认启用）
+     * <p>
+     * 例如：managerUserActionHistory -> manager-user-action-history
      *
-     * @param enable 是否启用
      * @return this
      * @since 3.5.0
      */
-    public ControllerBuilder hyphenStyle(boolean enable) {
-        this.config.setHyphenStyle(enable);
+    public ControllerBuilder hyphenStyleDisable() {
+        this.config.setHyphenStyle(false);
         return this;
     }
 
@@ -73,58 +73,55 @@ public class ControllerBuilder extends AbstractModelBuilder<ControllerConfig, Co
     }
 
     /**
-     * 跨域注解@CrossOrigin
+     * 启用跨域注解@CrossOrigin（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public ControllerBuilder crossOrigin(boolean enable) {
-        this.config.setCrossOrigin(enable);
+    public ControllerBuilder crossOriginEnable() {
+        this.config.setCrossOrigin(true);
         return this;
     }
 
 
     /**
-     * 增删查改使用restful风格
+     * 启用restful风格（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public ControllerBuilder restful(boolean enable) {
-        this.config.setRestful(enable);
+    public ControllerBuilder restfulEnable() {
+        this.config.setRestful(true);
         return this;
     }
 
     /**
-     * 请求路径参数@PathVariable
+     * 禁用请求路径参数@PathVariable（默认启用）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public ControllerBuilder pathVariable(boolean enable) {
-        this.config.setPathVariable(enable);
+    public ControllerBuilder pathVariableDisable() {
+        this.config.setPathVariable(false);
         return this;
     }
 
     /**
-     * 请求体参数@RequestBody
+     * 禁用请求体参数@RequestBody（默认启用）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public ControllerBuilder requestBody(boolean enable) {
-        this.config.setRequestBody(enable);
+    public ControllerBuilder requestBodyDisable() {
+        this.config.setRequestBody(false);
         return this;
     }
 
     /**
-     * 批量数据查询使用post请求(list/page/excelExport)
+     * 禁用批量查询使用post请求（默认启用）
+     * <p>
+     * 批量数据查询(list/page/excelExport)将使用GET请求
      *
-     * @param enable 是否启用
      * @return this
      */
-    public ControllerBuilder batchQueryPost(boolean enable) {
-        this.config.setBatchQueryPost(enable);
+    public ControllerBuilder batchQueryPostDisable() {
+        this.config.setBatchQueryPost(false);
         return this;
     }
 

@@ -3,6 +3,20 @@ package io.github.luminion.generator.builder.model;
 import io.github.luminion.generator.common.TemplateModelRender;
 
 /**
+ * 模型配置构建器基类
+ * <p>
+ * 提供各类型模型（Entity、DTO、VO等）的通用配置方法：
+ * <ul>
+ *   <li>是否生成</li>
+ *   <li>名称格式化</li>
+ *   <li>子包名</li>
+ *   <li>模板路径</li>
+ *   <li>输出目录</li>
+ *   <li>文件覆盖</li>
+ * </ul>
+ *
+ * @param <C> 配置类型
+ * @param <B> 构建器子类型
  * @author luminion
  * @since 1.0.0
  */
@@ -19,12 +33,11 @@ public abstract class AbstractModelBuilder<C extends TemplateModelRender, B exte
     }
 
     /**
-     * 是否生成
+     * 禁用生成（默认启用）
      *
-     * @param generate 是否生成
      * @return this
      */
-    public B generate(boolean generate) {
+    public B generateDisable() {
         this.config.renderTemplateFile().setGenerate(false);
         return self();
     }
@@ -83,13 +96,12 @@ public abstract class AbstractModelBuilder<C extends TemplateModelRender, B exte
     }
 
     /**
-     * 生成时覆盖已存在的文件
+     * 启用生成时覆盖已存在的文件（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public B fileOverride(boolean enable) {
-        this.config.renderTemplateFile().setFileOverride(enable);
+    public B fileOverrideEnable() {
+        this.config.renderTemplateFile().setFileOverride(true);
         return self();
     }
 }

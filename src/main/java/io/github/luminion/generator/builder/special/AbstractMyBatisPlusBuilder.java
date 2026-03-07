@@ -6,6 +6,19 @@ import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.special.MybatisPlusConfig;
 
 /**
+ * MyBatisPlus配置构建器基类
+ * <p>
+ * 提供MyBatisPlus框架的通用配置：
+ * <ul>
+ *   <li>主键类型</li>
+ *   <li>乐观锁字段</li>
+ *   <li>逻辑删除字段</li>
+ *   <li>ActiveRecord模式</li>
+ *   <li>字段注解</li>
+ *   <li>表填充字段</li>
+ * </ul>
+ *
+ * @param <B> 构建器子类型
  * @author luminion
  * @since 1.0.0
  */
@@ -56,25 +69,23 @@ public abstract class AbstractMyBatisPlusBuilder<B extends AbstractMyBatisPlusBu
     }
 
     /**
-     * 开启 ActiveRecord 模式
+     * 启用ActiveRecord模式（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public B activeRecord(boolean enable) {
-        this.configCollector.getSpecialConfig().setActiveRecord(enable);
+    public B activeRecordEnable() {
+        this.configCollector.getSpecialConfig().setActiveRecord(true);
         return self();
     }
 
 
     /**
-     * 是否生成实体时，生成字段注解
+     * 启用生成实体时生成字段注解（默认关闭）
      *
-     * @param enable 是否启用
      * @return this
      */
-    public B tableFieldAnnotation(boolean enable) {
-        this.configCollector.getSpecialConfig().setTableFieldAnnotation(enable);
+    public B tableFieldAnnotationEnable() {
+        this.configCollector.getSpecialConfig().setTableFieldAnnotation(true);
         return self();
     }
 
