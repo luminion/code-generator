@@ -1,4 +1,4 @@
-package io.github.luminion.generator.common;
+package io.github.luminion.generator.core.naming;
 
 
 /**
@@ -16,7 +16,7 @@ public interface NameConverter {
      * @since 1.0.0
      */
     String convertEntityName(String tableName);
-    
+
     /**
      * 转换字段名
      *
@@ -25,5 +25,5 @@ public interface NameConverter {
      * @since 1.0.0
      */
     String convertFieldName(String columnName);
-    
+
 }

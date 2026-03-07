@@ -1,6 +1,6 @@
 package io.github.luminion.generator.common.support;
 
-import io.github.luminion.generator.common.NameConverter;
+import io.github.luminion.generator.core.naming.NameConverter;
 import io.github.luminion.generator.enums.NameConvertType;
 
 /**

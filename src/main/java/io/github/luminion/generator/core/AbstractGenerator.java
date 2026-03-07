@@ -4,7 +4,7 @@ import io.github.luminion.generator.builder.base.GlobalBuilder;
 import io.github.luminion.generator.builder.base.InjectionBuilder;
 import io.github.luminion.generator.builder.base.StrategyBuilder;
 import io.github.luminion.generator.builder.model.*;
-import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.render.engine.TemplateRender;
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
 import io.github.luminion.generator.util.InitializeUtils;
@@ -84,8 +84,8 @@ public abstract class AbstractGenerator<C extends TemplateRender, B> implements 
     }
 
     @Override
-    public LambdaGenerator<B> createUpdate(Function<CreateUpdateBuilder, CreateUpdateBuilder> func) {
-        func.apply(new CreateUpdateBuilder(this.configCollector.getCreateUpdateConfig()));
+    public LambdaGenerator<B> command(Function<CommandBuilder, CommandBuilder> func) {
+        func.apply(new CommandBuilder(this.configCollector.getCommandConfig()));
         return this;
     }
 

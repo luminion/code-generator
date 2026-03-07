@@ -1,7 +1,7 @@
 package io.github.luminion.generator.builder.special;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import io.github.luminion.generator.common.MethodReference;
+import io.github.luminion.generator.util.MethodReference;
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.special.MybatisPlusConfig;
 import io.github.luminion.generator.po.ClassMethodPayload;

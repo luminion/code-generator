@@ -15,9 +15,9 @@
  */
 package io.github.luminion.generator.po;
 
-import io.github.luminion.generator.common.DatabaseKeywordsHandler;
-import io.github.luminion.generator.common.JavaFieldInfo;
-import io.github.luminion.generator.common.JavaFieldProvider;
+import io.github.luminion.generator.core.keywords.DatabaseKeywordsHandler;
+import io.github.luminion.generator.po.JavaFieldInfo;
+import io.github.luminion.generator.core.metadata.JavaFieldProvider;
 import io.github.luminion.generator.common.support.DefaultDatabaseQueryMetaDataWrapper;
 import io.github.luminion.generator.common.support.DefaultJavaFieldProvider;
 import io.github.luminion.generator.common.support.DefaultNameConverter;

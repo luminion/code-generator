@@ -1,8 +1,8 @@
 package io.github.luminion.generator.config;
 
-import io.github.luminion.generator.common.MultiTemplateModelRender;
-import io.github.luminion.generator.common.TemplateModelRender;
-import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.render.api.MultiTemplateModelRender;
+import io.github.luminion.generator.render.api.TemplateModelRender;
+import io.github.luminion.generator.render.engine.TemplateRender;
 import io.github.luminion.generator.common.support.DefaultDatabaseQuery;
 import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.config.base.InjectionConfig;
@@ -78,7 +78,7 @@ public class ConfigResolver {
         templateRenderList.add(this.configCollector.getEntityConfig());
 
         templateRenderList.add(this.configCollector.getQueryConfig());
-        templateRenderList.add(this.configCollector.getCreateUpdateConfig());
+        templateRenderList.add(this.configCollector.getCommandConfig());
         templateRenderList.add(this.configCollector.getExcelConfig());
 
         // 特殊配置

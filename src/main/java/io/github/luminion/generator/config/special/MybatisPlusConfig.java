@@ -2,8 +2,8 @@ package io.github.luminion.generator.config.special;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
-import io.github.luminion.generator.common.JavaFieldInfo;
-import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.po.JavaFieldInfo;
+import io.github.luminion.generator.render.engine.TemplateRender;
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.enums.RuntimeClass;

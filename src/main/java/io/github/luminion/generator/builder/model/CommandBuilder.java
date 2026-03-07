@@ -1,33 +1,33 @@
 package io.github.luminion.generator.builder.model;
 
-import io.github.luminion.generator.config.model.CreateUpdateConfig;
+import io.github.luminion.generator.config.model.CommandConfig;
 
 /**
- * 创建更新功能配置构建器
+ * 命令功能配置构建器
  * <p>
- * 整合创建DTO和更新DTO的配置
+ * 整合创建DTO和更新DTO的配置，对应CQRS模式的Command
  *
  * @author luminion
  * @since 1.0.0
  */
-public class CreateUpdateBuilder {
+public class CommandBuilder {
 
-    private final CreateUpdateConfig config;
+    private final CommandConfig config;
 
     /**
      * 创建参数构建器 (对应 CreateDTO)
      */
-    private final CreateParamBuilder createParamBuilder;
+    private final CreateBuilder createBuilder;
 
     /**
      * 更新参数构建器 (对应 UpdateDTO)
      */
-    private final UpdateParamBuilder updateParamBuilder;
+    private final UpdateBuilder updateBuilder;
 
-    public CreateUpdateBuilder(CreateUpdateConfig config) {
+    public CommandBuilder(CommandConfig config) {
         this.config = config;
-        this.createParamBuilder = new CreateParamBuilder(config);
-        this.updateParamBuilder = new UpdateParamBuilder(config);
+        this.createBuilder = new CreateBuilder(config);
+        this.updateBuilder = new UpdateBuilder(config);
     }
 
     /**
@@ -36,8 +36,8 @@ public class CreateUpdateBuilder {
      * @param consumer 创建配置
      * @return this
      */
-    public CreateUpdateBuilder createParam(java.util.function.Consumer<CreateParamBuilder> consumer) {
-        consumer.accept(createParamBuilder);
+    public CommandBuilder create(java.util.function.Consumer<CreateBuilder> consumer) {
+        consumer.accept(createBuilder);
         return this;
     }
 
@@ -47,8 +47,8 @@ public class CreateUpdateBuilder {
      * @param consumer 更新配置
      * @return this
      */
-    public CreateUpdateBuilder updateParam(java.util.function.Consumer<UpdateParamBuilder> consumer) {
-        consumer.accept(updateParamBuilder);
+    public CommandBuilder update(java.util.function.Consumer<UpdateBuilder> consumer) {
+        consumer.accept(updateBuilder);
         return this;
     }
 
@@ -56,10 +56,10 @@ public class CreateUpdateBuilder {
      * 创建参数构建器
      * 对应 CreateDTO 配置
      */
-    public static class CreateParamBuilder {
-        private final CreateUpdateConfig config;
+    public static class CreateBuilder {
+        private final CommandConfig config;
 
-        public CreateParamBuilder(CreateUpdateConfig config) {
+        public CreateBuilder(CommandConfig config) {
             this.config = config;
         }
 
@@ -68,7 +68,7 @@ public class CreateUpdateBuilder {
          *
          * @return this
          */
-        public CreateParamBuilder generateDisable() {
+        public CreateBuilder generateDisable() {
             config.getCreateTemplateFile().setGenerate(false);
             return this;
         }
@@ -76,10 +76,10 @@ public class CreateUpdateBuilder {
         /**
          * 设置名称格式
          *
-         * @param nameFormat 名称格式，如 "%sCreateDTO"
+         * @param nameFormat 名称格式，如 "%sCreateDTO" 或 "%sAddDTO"
          * @return this
          */
-        public CreateParamBuilder nameFormat(String nameFormat) {
+        public CreateBuilder nameFormat(String nameFormat) {
             config.getCreateTemplateFile().setNameFormat(nameFormat);
             return this;
         }
@@ -90,7 +90,7 @@ public class CreateUpdateBuilder {
          * @param subPackage 子包名
          * @return this
          */
-        public CreateParamBuilder subPackage(String subPackage) {
+        public CreateBuilder subPackage(String subPackage) {
             config.getCreateTemplateFile().setSubPackage(subPackage);
             return this;
         }
@@ -101,7 +101,7 @@ public class CreateUpdateBuilder {
          * @param templatePath 模板路径
          * @return this
          */
-        public CreateParamBuilder templatePath(String templatePath) {
+        public CreateBuilder templatePath(String templatePath) {
             config.getCreateTemplateFile().setTemplatePath(templatePath);
             return this;
         }
@@ -112,7 +112,7 @@ public class CreateUpdateBuilder {
          * @param outputDir 输出目录
          * @return this
          */
-        public CreateParamBuilder outputDir(String outputDir) {
+        public CreateBuilder outputDir(String outputDir) {
             config.getCreateTemplateFile().setOutputDir(outputDir);
             return this;
         }
@@ -122,7 +122,7 @@ public class CreateUpdateBuilder {
          *
          * @return this
          */
-        public CreateParamBuilder fileOverrideEnable() {
+        public CreateBuilder fileOverrideEnable() {
             config.getCreateTemplateFile().setFileOverride(true);
             return this;
         }
@@ -132,10 +132,10 @@ public class CreateUpdateBuilder {
      * 更新参数构建器
      * 对应 UpdateDTO 配置
      */
-    public static class UpdateParamBuilder {
-        private final CreateUpdateConfig config;
+    public static class UpdateBuilder {
+        private final CommandConfig config;
 
-        public UpdateParamBuilder(CreateUpdateConfig config) {
+        public UpdateBuilder(CommandConfig config) {
             this.config = config;
         }
 
@@ -144,7 +144,7 @@ public class CreateUpdateBuilder {
          *
          * @return this
          */
-        public UpdateParamBuilder generateDisable() {
+        public UpdateBuilder generateDisable() {
             config.getUpdateTemplateFile().setGenerate(false);
             return this;
         }
@@ -152,10 +152,10 @@ public class CreateUpdateBuilder {
         /**
          * 设置名称格式
          *
-         * @param nameFormat 名称格式，如 "%sUpdateDTO"
+         * @param nameFormat 名称格式，如 "%sUpdateDTO" 或 "%sEditDTO"
          * @return this
          */
-        public UpdateParamBuilder nameFormat(String nameFormat) {
+        public UpdateBuilder nameFormat(String nameFormat) {
             config.getUpdateTemplateFile().setNameFormat(nameFormat);
             return this;
         }
@@ -166,7 +166,7 @@ public class CreateUpdateBuilder {
          * @param subPackage 子包名
          * @return this
          */
-        public UpdateParamBuilder subPackage(String subPackage) {
+        public UpdateBuilder subPackage(String subPackage) {
             config.getUpdateTemplateFile().setSubPackage(subPackage);
             return this;
         }
@@ -177,7 +177,7 @@ public class CreateUpdateBuilder {
          * @param templatePath 模板路径
          * @return this
          */
-        public UpdateParamBuilder templatePath(String templatePath) {
+        public UpdateBuilder templatePath(String templatePath) {
             config.getUpdateTemplateFile().setTemplatePath(templatePath);
             return this;
         }
@@ -188,7 +188,7 @@ public class CreateUpdateBuilder {
          * @param outputDir 输出目录
          * @return this
          */
-        public UpdateParamBuilder outputDir(String outputDir) {
+        public UpdateBuilder outputDir(String outputDir) {
             config.getUpdateTemplateFile().setOutputDir(outputDir);
             return this;
         }
@@ -198,7 +198,7 @@ public class CreateUpdateBuilder {
          *
          * @return this
          */
-        public UpdateParamBuilder fileOverrideEnable() {
+        public UpdateBuilder fileOverrideEnable() {
             config.getUpdateTemplateFile().setFileOverride(true);
             return this;
         }

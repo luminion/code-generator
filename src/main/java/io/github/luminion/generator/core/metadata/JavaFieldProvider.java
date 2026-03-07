@@ -1,5 +1,6 @@
-package io.github.luminion.generator.common;
+package io.github.luminion.generator.core.metadata;
 
+import io.github.luminion.generator.po.JavaFieldInfo;
 import io.github.luminion.generator.po.TableField;
 
 /**
@@ -19,5 +20,5 @@ public interface JavaFieldProvider {
      * @since 1.0.0
      */
     JavaFieldInfo convert(TableField.MetaInfo metaInfo);
-    
+
 }

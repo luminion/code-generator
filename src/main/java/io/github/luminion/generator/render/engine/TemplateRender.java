@@ -1,4 +1,4 @@
-package io.github.luminion.generator.common;
+package io.github.luminion.generator.render.engine;
 
 import io.github.luminion.generator.po.TableInfo;
 
@@ -25,7 +25,7 @@ public interface TemplateRender {
     default void init() {
 
     }
-    
+
     /**
      * 渲染前处理, 允许在这一步读取修改配置及表信息
      *
@@ -53,7 +53,7 @@ public interface TemplateRender {
      * @since 1.0.0
      */
     default void renderDataPostProcess(TableInfo tableInfo, Map<String, Object> renderData){
-        
+
     }
-    
+
 }

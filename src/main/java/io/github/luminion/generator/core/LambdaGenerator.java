@@ -3,7 +3,13 @@ package io.github.luminion.generator.core;
 import io.github.luminion.generator.builder.base.GlobalBuilder;
 import io.github.luminion.generator.builder.base.InjectionBuilder;
 import io.github.luminion.generator.builder.base.StrategyBuilder;
-import io.github.luminion.generator.builder.model.*;
+import io.github.luminion.generator.builder.model.CommandBuilder;
+import io.github.luminion.generator.builder.model.ControllerBuilder;
+import io.github.luminion.generator.builder.model.EntityBuilder;
+import io.github.luminion.generator.builder.model.ExcelBuilder;
+import io.github.luminion.generator.builder.model.MapperBuilder;
+import io.github.luminion.generator.builder.model.QueryBuilder;
+import io.github.luminion.generator.builder.model.ServiceBuilder;
 
 import java.util.function.Function;
 
@@ -135,28 +141,28 @@ public interface LambdaGenerator<B> {
     LambdaGenerator<B> excel(Function<ExcelBuilder, ExcelBuilder> func);
 
     /**
-     * 配置创建更新功能（整合CreateDTO和UpdateDTO）
+     * 配置命令功能（整合CreateDTO和UpdateDTO）
      *
      * <p>使用示例:
      * <pre>
-     * .createUpdate(cu -> cu
-     *     .createParam(c -> c.generateDisable())
-     *     .updateParam(u -> u.generateDisable())
+     * .command(c -> c
+     *     .create(cr -> cr.generateDisable())
+     *     .update(up -> up.generateDisable())
      * )
      * </pre>
      *
-     * @param func 创建更新功能配置构建器函数
+     * @param func 命令功能配置构建器函数
      * @return this
      */
-    LambdaGenerator<B> createUpdate(Function<CreateUpdateBuilder, CreateUpdateBuilder> func);
+    LambdaGenerator<B> command(Function<CommandBuilder, CommandBuilder> func);
 
     /**
-     * 配置扩展选项
+     * 配置功能特性选项
      *
-     * @param func 扩展配置构建器函数
+     * @param func 功能特性配置构建器函数
      * @return this
      */
-    LambdaGenerator<B> extension(Function<B, B> func);
+    LambdaGenerator<B> feature(Function<B, B> func);
 
     /**
      * 执行生成

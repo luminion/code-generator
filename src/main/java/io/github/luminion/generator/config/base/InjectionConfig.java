@@ -1,6 +1,6 @@
 package io.github.luminion.generator.config.base;
 
-import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.render.engine.TemplateRender;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import lombok.Data;

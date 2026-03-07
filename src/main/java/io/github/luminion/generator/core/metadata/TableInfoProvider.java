@@ -13,23 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.common;
+package io.github.luminion.generator.core.metadata;
 
-import io.github.luminion.generator.po.TemplateFile;
+import io.github.luminion.generator.po.TableInfo;
 
+
+import java.util.List;
 
 /**
- * 配置属性渲染器扩展
- *
+ * 表信息提供者
+ * @author nieqiurong 2021/1/6.
  * @author luminion
  * @since 1.0.0
  */
-public interface TemplateModelRender extends TemplateRender {
+@FunctionalInterface
+public interface TableInfoProvider {
 
     /**
-     * 输出的模板文件
+     * 获取表信息
      *
+     * @return 表信息
      */
-    TemplateFile renderTemplateFile();
+    List<TableInfo> queryTables();
 
 }
