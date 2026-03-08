@@ -107,20 +107,20 @@ public class ConfigCollector<C extends TemplateRender> {
      */
     private final ExportDTOConfig exportDTOConfig = new ExportDTOConfig();
     /**
-     * 特殊配置
+     * 特性配置
      */
-    private final C specialConfig;
+    private final C featureConfig;
 
     //====================模型配置--结束====================
 
     public ConfigCollector(String url, String username, String password) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
-        this.specialConfig = null;
+        this.featureConfig = null;
     }
 
-    public ConfigCollector(String url, String username, String password, C specialConfig) {
+    public ConfigCollector(String url, String username, String password, C featureConfig) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
-        this.specialConfig = specialConfig;
+        this.featureConfig = featureConfig;
     }
 
 

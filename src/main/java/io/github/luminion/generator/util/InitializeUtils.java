@@ -168,7 +168,7 @@ public abstract class InitializeUtils {
 
 
     public static void initializeMybatisPlus(ConfigCollector<MybatisPlusConfig> configCollector) {
-        MybatisPlusConfig customConfig = configCollector.getSpecialConfig();
+        MybatisPlusConfig customConfig = configCollector.getFeatureConfig();
         customConfig.setIdType(IdType.ASSIGN_ID);
         customConfig.setVersionColumnName("version");
         customConfig.setLogicDeleteColumnName("deleted");

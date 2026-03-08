@@ -4,7 +4,6 @@ import io.github.luminion.generator.common.TemplateModelRender;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.common.support.DefaultDatabaseQuery;
 import io.github.luminion.generator.config.base.GlobalConfig;
-import io.github.luminion.generator.config.base.InjectionConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
@@ -89,8 +88,8 @@ public class ConfigResolver {
         templateRenderList.add(this.configCollector.getExportDTOConfig());
 
         // 特殊配置
-        if (this.configCollector.getSpecialConfig() != null) {
-            templateRenderList.add(this.configCollector.getSpecialConfig());
+        if (this.configCollector.getFeatureConfig() != null) {
+            templateRenderList.add(this.configCollector.getFeatureConfig());
         }
         templateRenderList.sort(Comparator.comparingInt(TemplateRender::order));
         // 遍历渲染, 初始化, 添加模板

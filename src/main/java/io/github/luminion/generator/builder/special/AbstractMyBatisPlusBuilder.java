@@ -42,7 +42,7 @@ public abstract class AbstractMyBatisPlusBuilder<B extends AbstractMyBatisPlusBu
      * @return this
      */
     public B idType(IdType idType) {
-        this.configCollector.getSpecialConfig().setIdType(idType);
+        this.configCollector.getFeatureConfig().setIdType(idType);
         return self();
     }
 
@@ -53,7 +53,7 @@ public abstract class AbstractMyBatisPlusBuilder<B extends AbstractMyBatisPlusBu
      * @return this
      */
     public B versionColumnName(String versionColumnName) {
-        this.configCollector.getSpecialConfig().setVersionColumnName(versionColumnName);
+        this.configCollector.getFeatureConfig().setVersionColumnName(versionColumnName);
         return self();
     }
 
@@ -64,7 +64,7 @@ public abstract class AbstractMyBatisPlusBuilder<B extends AbstractMyBatisPlusBu
      * @return this
      */
     public B logicDeleteColumnName(String logicDeleteColumnName) {
-        this.configCollector.getSpecialConfig().setLogicDeleteColumnName(logicDeleteColumnName);
+        this.configCollector.getFeatureConfig().setLogicDeleteColumnName(logicDeleteColumnName);
         return self();
     }
 
@@ -74,7 +74,7 @@ public abstract class AbstractMyBatisPlusBuilder<B extends AbstractMyBatisPlusBu
      * @return this
      */
     public B activeRecordEnable() {
-        this.configCollector.getSpecialConfig().setActiveRecord(true);
+        this.configCollector.getFeatureConfig().setActiveRecord(true);
         return self();
     }
 
@@ -85,7 +85,7 @@ public abstract class AbstractMyBatisPlusBuilder<B extends AbstractMyBatisPlusBu
      * @return this
      */
     public B tableFieldAnnotationEnable() {
-        this.configCollector.getSpecialConfig().setTableFieldAnnotation(true);
+        this.configCollector.getFeatureConfig().setTableFieldAnnotation(true);
         return self();
     }
 
@@ -97,7 +97,7 @@ public abstract class AbstractMyBatisPlusBuilder<B extends AbstractMyBatisPlusBu
      * @return this
      */
     public B tableFill(String columnName, FieldFill fieldFill) {
-        this.configCollector.getSpecialConfig().getTableFillMap().put(columnName, fieldFill);
+        this.configCollector.getFeatureConfig().getTableFillMap().put(columnName, fieldFill);
         return self();
     }
 
