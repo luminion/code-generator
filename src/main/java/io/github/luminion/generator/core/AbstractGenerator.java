@@ -60,8 +60,20 @@ public abstract class AbstractGenerator<C extends TemplateRender, B> implements 
     }
 
     @Override
+    public LambdaGenerator<B> serviceImpl(Function<ServiceImplBuilder, ServiceImplBuilder> func) {
+        func.apply(new ServiceImplBuilder(this.configCollector.getServiceImplConfig()));
+        return this;
+    }
+
+    @Override
     public LambdaGenerator<B> mapper(Function<MapperBuilder, MapperBuilder> func) {
         func.apply(new MapperBuilder(this.configCollector.getMapperConfig()));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<B> mapperXml(Function<MapperXmlBuilder, MapperXmlBuilder> func) {
+        func.apply(new MapperXmlBuilder(this.configCollector.getMapperXmlConfig()));
         return this;
     }
 
@@ -72,20 +84,38 @@ public abstract class AbstractGenerator<C extends TemplateRender, B> implements 
     }
 
     @Override
-    public LambdaGenerator<B> query(Function<QueryBuilder, QueryBuilder> func) {
-        func.apply(new QueryBuilder(this.configCollector.getQueryConfig()));
+    public LambdaGenerator<B> queryDTO(Function<QueryDTOBuilder, QueryDTOBuilder> func) {
+        func.apply(new QueryDTOBuilder(this.configCollector.getQueryDTOConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> excel(Function<ExcelBuilder, ExcelBuilder> func) {
-        func.apply(new ExcelBuilder(this.configCollector.getExcelConfig()));
+    public LambdaGenerator<B> queryVO(Function<QueryVOBuilder, QueryVOBuilder> func) {
+        func.apply(new QueryVOBuilder(this.configCollector.getQueryVOConfig()));
         return this;
     }
 
     @Override
-    public LambdaGenerator<B> createUpdate(Function<CreateUpdateBuilder, CreateUpdateBuilder> func) {
-        func.apply(new CreateUpdateBuilder(this.configCollector.getCreateUpdateConfig()));
+    public LambdaGenerator<B> createDTO(Function<CreateDTOBuilder, CreateDTOBuilder> func) {
+        func.apply(new CreateDTOBuilder(this.configCollector.getCreateDTOConfig()));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<B> updateDTO(Function<UpdateDTOBuilder, UpdateDTOBuilder> func) {
+        func.apply(new UpdateDTOBuilder(this.configCollector.getUpdateDTOConfig()));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<B> exportDTO(Function<ExportDTOBuilder, ExportDTOBuilder> func) {
+        func.apply(new ExportDTOBuilder(this.configCollector.getExportDTOConfig()));
+        return this;
+    }
+
+    @Override
+    public LambdaGenerator<B> importDTO(Function<ImportDTOBuilder, ImportDTOBuilder> func) {
+        func.apply(new ImportDTOBuilder(this.configCollector.getImportDTOConfig()));
         return this;
     }
 

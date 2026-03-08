@@ -25,10 +25,10 @@ public class MybatisPlusBoosterGenerator extends AbstractGenerator<MybatisPlusCo
         ClassMethodPayload classMethodPayload = new ClassMethodPayload(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getClassName(), 1);
         controllerConfig.setPageMethod(classMethodPayload);
         configCollector.getEntityConfig().renderTemplateFile().setTemplatePath("/templates/mybatis_plus/entity.java");
-        configCollector.getServiceConfig().getServiceTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/service.java");
-        configCollector.getServiceConfig().getServiceImplTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/serviceImpl.java");
-        configCollector.getMapperConfig().getMapperTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/mapper.java");
-        configCollector.getMapperConfig().getMapperXmlTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/mapper.xml");
+        configCollector.getServiceConfig().renderTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/service.java");
+        configCollector.getServiceImplConfig().renderTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/serviceImpl.java");
+        configCollector.getMapperConfig().renderTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/mapper.java");
+        configCollector.getMapperXmlConfig().renderTemplateFile().setTemplatePath("/templates/mybatis_plus_sql_booster/mapper.xml");
         InitializeUtils.initializeMybatisPlus(configCollector);
     }
 

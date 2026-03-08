@@ -60,33 +60,52 @@ public class ConfigCollector<C extends TemplateRender> {
      */
     private final ControllerConfig controllerConfig = new ControllerConfig();
     /**
-     * Service功能配置 (整合Service和ServiceImpl)
+     * 服务配置
      */
     private final ServiceConfig serviceConfig = new ServiceConfig();
     /**
-     * Mapper功能配置 (整合Mapper和MapperXml)
+     * 服务实现配置
+     */
+    private final ServiceImplConfig serviceImplConfig = new ServiceImplConfig();
+    /**
+     * 映射器配置
      */
     private final MapperConfig mapperConfig = new MapperConfig();
+    /**
+     * 映射器XML配置
+     */
+    private final MapperXmlConfig mapperXmlConfig = new MapperXmlConfig();
     /**
      * 实体配置
      */
     private final EntityConfig entityConfig = new EntityConfig();
 
     /**
-     * 查询功能配置 (整合QueryDTO和QueryVO)
+     * 查询DTO配置
      */
-    private final QueryConfig queryConfig = new QueryConfig();
+    private final QueryDTOConfig queryDTOConfig = new QueryDTOConfig();
+    /**
+     * 查询VO配置
+     */
+    private final QueryVOConfig queryVOConfig = new QueryVOConfig();
 
     /**
-     * 创建更新功能配置 (整合CreateDTO和UpdateDTO)
+     * 新增DTO配置
      */
-    private final CreateUpdateConfig createUpdateConfig = new CreateUpdateConfig();
+    private final CreateDTOConfig createDTOConfig = new CreateDTOConfig();
+    /**
+     * 修改DTO配置
+     */
+    private final UpdateDTOConfig updateDTOConfig = new UpdateDTOConfig();
 
     /**
-     * Excel功能配置 (整合ImportDTO和ExportDTO)
+     * Excel导入DTO配置
      */
-    private final ExcelConfig excelConfig = new ExcelConfig();
-
+    private final ImportDTOConfig importDTOConfig = new ImportDTOConfig();
+    /**
+     * Excel导出DTO配置
+     */
+    private final ExportDTOConfig exportDTOConfig = new ExportDTOConfig();
     /**
      * 特殊配置
      */

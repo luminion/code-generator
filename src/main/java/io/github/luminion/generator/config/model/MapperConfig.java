@@ -1,12 +1,11 @@
 package io.github.luminion.generator.config.model;
 
-import io.github.luminion.generator.common.MultiTemplateModelRender;
+import io.github.luminion.generator.common.TemplateModelRender;
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
-import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
 import io.github.luminion.generator.util.ClassUtils;
@@ -18,21 +17,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Mapper功能配置
- * <p>
- * 整合Mapper接口和MapperXml的配置
+ * Mapper属性配置
  *
  * @author luminion
  * @since 1.0.0
  */
 @Slf4j
 @Data
-public class MapperConfig implements MultiTemplateModelRender {
-
+public class MapperConfig implements TemplateModelRender {
     /**
-     * Mapper接口模板文件
+     * 模板文件
      */
-    private TemplateFile mapperTemplateFile = new TemplateFile(
+    protected TemplateFile templateFile = new TemplateFile(
             TemplateFileEnum.MAPPER.getKey(),
             "%sMapper",
             "mapper",
@@ -41,95 +37,36 @@ public class MapperConfig implements MultiTemplateModelRender {
     );
 
     /**
-     * MapperXml模板文件
+     * 自定义继承的Mapper类全称，带包名
      */
-    private TemplateFile mapperXmlTemplateFile = new TemplateFile(
-            TemplateFileEnum.MAPPER_XML.getKey(),
-            "%sMapper",
-            "xml",
-            "/templates/mybatis_plus/mapper.xml",
-            ".xml"
-    );
-
-    /**
-     * Mapper接口自定义父类
-     */
-    private String mapperSuperClass;
+    protected String superClass;
 
     /**
      * Mapper标记注解
+     *
      */
-    private String mapperAnnotationClass = "org.apache.ibatis.annotations.Mapper";
-
-    /**
-     * 是否启用MapperXml生成（默认启用）
-     */
-    private boolean generateMapperXml = true;
-
-    /**
-     * 是否开启BaseResultMap（默认关闭）
-     */
-    private boolean baseResultMap = false;
-
-    /**
-     * 是否开启baseColumnList（默认关闭）
-     */
-    private boolean baseColumnList = false;
-
-    /**
-     * 缓存实现类
-     */
-    private String cacheClass;
-
-    /**
-     * 排序字段map
-     * 字段名 -> 是否倒序
-     */
-    private Map<String, Boolean> sortColumnMap = new LinkedHashMap<>();
+//    protected Class<? extends Annotation> mapperAnnotationClass = org.apache.ibatis.annotations.Mapper.class;
+    protected String mapperAnnotationClass = "org.apache.ibatis.annotations.Mapper";
 
     @Override
-    public void init() {
+    public TemplateFile renderTemplateFile() {
+        return templateFile;
     }
 
     @Override
-    public void renderDataPreProcess(TableInfo tableInfo) {
-        if (!generateMapperXml) {
-            mapperXmlTemplateFile.setGenerate(false);
-        }
-    }
-
-    @Override
-    public int order() {
-        return 0;
-    }
-
-    @Override
+    @SneakyThrows
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
+        Set<String> importPackages = new TreeSet<>();
 
         ConfigResolver configResolver = tableInfo.getConfigResolver();
         ConfigCollector<?> configCollector = configResolver.getConfigCollector();
         GlobalConfig globalConfig = configCollector.getGlobalConfig();
 
-        // Mapper接口渲染数据
-        renderMapperData(tableInfo, data, configResolver, globalConfig);
-
-        // MapperXml渲染数据
-        if (generateMapperXml) {
-            renderMapperXmlData(tableInfo, data);
-        }
-
-        return data;
-    }
-
-    private void renderMapperData(TableInfo tableInfo, Map<String, Object> data,
-                                  ConfigResolver configResolver, GlobalConfig globalConfig) {
-        Set<String> importPackages = new TreeSet<>();
-
         importPackages.add(configResolver.getClassName(TemplateFileEnum.ENTITY, tableInfo));
         switch (globalConfig.getRuntimeEnv()) {
             case MYBATIS_PLUS:
-                this.mapperSuperClass = RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getClassName();
+                this.superClass = RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getClassName();
                 if (globalConfig.isGenerateSelectByXml()) {
                     importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
                     importPackages.add(configResolver.getClassName(TemplateFileEnum.QUERY_DTO, tableInfo));
@@ -138,7 +75,7 @@ public class MapperConfig implements MultiTemplateModelRender {
                 }
                 break;
             case MY_BATIS_PLUS_SQL_BOOSTER:
-                this.mapperSuperClass = RuntimeClass.SQL_BOOSTER_MP_MAPPER.getClassName();
+                this.superClass = RuntimeClass.SQL_BOOSTER_MP_MAPPER.getClassName();
                 importPackages.add(configResolver.getClassName(TemplateFileEnum.QUERY_VO, tableInfo));
                 if (globalConfig.isGenerateSelectByXml()) {
                     importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getClassName());
@@ -152,9 +89,9 @@ public class MapperConfig implements MultiTemplateModelRender {
             data.put("mapperAnnotationClass", "@" + ClassUtils.getSimpleName(mapperAnnotationClass));
             importPackages.add(mapperAnnotationClass);
         }
-        if (mapperSuperClass != null) {
-            importPackages.add(mapperSuperClass);
-            data.put("mapperSuperClass", ClassUtils.getSimpleName(this.mapperSuperClass));
+        if (superClass != null) {
+            importPackages.add(superClass);
+            data.put("mapperSuperClass", ClassUtils.getSimpleName(this.superClass));
         }
 
         Collection<String> frameworkPackages = importPackages.stream()
@@ -166,37 +103,9 @@ public class MapperConfig implements MultiTemplateModelRender {
 
         data.put("mapperFrameworkPkg", frameworkPackages);
         data.put("mapperJavaPkg", javaPackages);
+
+
+        return data;
     }
 
-    @SneakyThrows
-    private void renderMapperXmlData(TableInfo tableInfo, Map<String, Object> data) {
-        if (cacheClass != null) {
-            data.put("mapperCacheClass", cacheClass);
-        }
-
-        data.put("baseResultMap", this.baseResultMap);
-        data.put("baseColumnList", this.baseColumnList);
-        // 排序字段sql
-        List<TableField> sortFields = tableInfo.getFields();
-        List<String> existColumnNames = sortFields.stream().map(TableField::getColumnName).collect(Collectors.toList());
-        if (sortColumnMap != null && !sortColumnMap.isEmpty()) {
-            sortColumnMap.entrySet().stream()
-                    .filter(e -> existColumnNames.contains(e.getKey()))
-                    .map(e -> String.format("a.%s%s", e.getKey(), e.getValue() ? " DESC" : ""))
-                    .reduce((e1, e2) -> e1 + ", " + e2)
-                    .ifPresent(e -> data.put("orderColumnSql", e));
-        }
-    }
-
-    @Override
-    public void renderDataPostProcess(TableInfo tableInfo, Map<String, Object> renderData) {
-    }
-
-    @Override
-    public List<TemplateFile> renderTemplateFiles() {
-        List<TemplateFile> files = new ArrayList<>();
-        files.add(mapperTemplateFile);
-        files.add(mapperXmlTemplateFile);
-        return files;
-    }
 }

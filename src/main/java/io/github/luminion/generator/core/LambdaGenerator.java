@@ -63,15 +63,7 @@ public interface LambdaGenerator<B> {
     LambdaGenerator<B> controller(Function<ControllerBuilder, ControllerBuilder> func);
 
     /**
-     * 配置Service选项（整合Service和ServiceImpl）
-     *
-     * <p>使用示例:
-     * <pre>
-     * .service(s -> s
-     *     .service(svc -> svc.superClass("BaseService"))
-     *     .serviceImpl(impl -> impl.superClass("BaseServiceImpl"))
-     * )
-     * </pre>
+     * 配置Service选项
      *
      * @param func Service配置构建器函数
      * @return this
@@ -79,20 +71,28 @@ public interface LambdaGenerator<B> {
     LambdaGenerator<B> service(Function<ServiceBuilder, ServiceBuilder> func);
 
     /**
-     * 配置Mapper选项（整合Mapper和MapperXml）
+     * 配置ServiceImpl选项
      *
-     * <p>使用示例:
-     * <pre>
-     * .mapper(m -> m
-     *     .mapper(mapper -> mapper.superClass("BaseMapper"))
-     *     .mapperXml(xml -> xml.baseResultMapEnable())
-     * )
-     * </pre>
+     * @param func ServiceImpl配置构建器函数
+     * @return this
+     */
+    LambdaGenerator<B> serviceImpl(Function<ServiceImplBuilder, ServiceImplBuilder> func);
+
+    /**
+     * 配置Mapper选项
      *
      * @param func Mapper配置构建器函数
      * @return this
      */
     LambdaGenerator<B> mapper(Function<MapperBuilder, MapperBuilder> func);
+
+    /**
+     * 配置MapperXml选项
+     *
+     * @param func MapperXml配置构建器函数
+     * @return this
+     */
+    LambdaGenerator<B> mapperXml(Function<MapperXmlBuilder, MapperXmlBuilder> func);
 
     /**
      * 配置Entity选项
@@ -103,52 +103,52 @@ public interface LambdaGenerator<B> {
     LambdaGenerator<B> entity(Function<EntityBuilder, EntityBuilder> func);
 
     /**
-     * 配置查询功能（整合QueryDTO和QueryVO）
+     * 配置QueryDTO选项
      *
-     * <p>使用示例:
-     * <pre>
-     * .query(q -> q
-     *     .queryParam(p -> p.extendsEntityEnable())
-     *     .queryResult(r -> r.extendsEntityEnable())
-     * )
-     * </pre>
-     *
-     * @param func 查询功能配置构建器函数
+     * @param func QueryDTO配置构建器函数
      * @return this
      */
-    LambdaGenerator<B> query(Function<QueryBuilder, QueryBuilder> func);
+    LambdaGenerator<B> queryDTO(Function<QueryDTOBuilder, QueryDTOBuilder> func);
 
     /**
-     * 配置Excel功能（整合ImportDTO和ExportDTO）
+     * 配置QueryVO选项
      *
-     * <p>使用示例:
-     * <pre>
-     * .excel(ex -> ex
-     *     .importExcel(i -> i.generateDisable())
-     *     .exportExcel(e -> e.generateDisable())
-     * )
-     * </pre>
-     *
-     * @param func Excel功能配置构建器函数
+     * @param func QueryVO配置构建器函数
      * @return this
      */
-    LambdaGenerator<B> excel(Function<ExcelBuilder, ExcelBuilder> func);
+    LambdaGenerator<B> queryVO(Function<QueryVOBuilder, QueryVOBuilder> func);
 
     /**
-     * 配置创建更新功能（整合CreateDTO和UpdateDTO）
+     * 配置CreateDTO选项
      *
-     * <p>使用示例:
-     * <pre>
-     * .createUpdate(cu -> cu
-     *     .createParam(c -> c.generateDisable())
-     *     .updateParam(u -> u.generateDisable())
-     * )
-     * </pre>
-     *
-     * @param func 创建更新功能配置构建器函数
+     * @param func CreateDTO配置构建器函数
      * @return this
      */
-    LambdaGenerator<B> createUpdate(Function<CreateUpdateBuilder, CreateUpdateBuilder> func);
+    LambdaGenerator<B> createDTO(Function<CreateDTOBuilder, CreateDTOBuilder> func);
+
+    /**
+     * 配置UpdateDTO选项
+     *
+     * @param func UpdateDTO配置构建器函数
+     * @return this
+     */
+    LambdaGenerator<B> updateDTO(Function<UpdateDTOBuilder, UpdateDTOBuilder> func);
+
+    /**
+     * 配置ExportDTO选项
+     *
+     * @param func ExportDTO配置构建器函数
+     * @return this
+     */
+    LambdaGenerator<B> exportDTO(Function<ExportDTOBuilder, ExportDTOBuilder> func);
+
+    /**
+     * 配置ImportDTO选项
+     *
+     * @param func ImportDTO配置构建器函数
+     * @return this
+     */
+    LambdaGenerator<B> importDTO(Function<ImportDTOBuilder, ImportDTOBuilder> func);
 
     /**
      * 配置扩展选项
