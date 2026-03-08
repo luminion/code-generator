@@ -59,7 +59,7 @@ public class TemplateConfig {
     protected TemplateFile entity = new TemplateFile(
             TemplateFileEnum.ENTITY.getKey(),
             "%s",
-            "entity",
+            "model.entity",
             "/templates/model/entity.java",
             ".java"
     );
@@ -68,8 +68,8 @@ public class TemplateConfig {
     protected TemplateFile queryDto = new TemplateFile(
             TemplateFileEnum.QUERY_DTO.getKey(),
             "%sQueryDTO",
-            "model.dto",
-            "/templates/model/queryDTO.java",
+            "model.query",
+            "/templates/model/queryDto.java",
             ".java"
     );
 
@@ -78,39 +78,39 @@ public class TemplateConfig {
             TemplateFileEnum.QUERY_VO.getKey(),
             "%sVO",
             "model.vo",
-            "/templates/model/queryVO.java",
+            "/templates/model/queryVo.java",
             ".java"
     );
 
     protected TemplateFile createDto = new TemplateFile(
             TemplateFileEnum.CREATE_DTO.getKey(),
             "%sCreateDTO",
-            "model.dto",
-            "/templates/model/createDTO.java",
+            "model.command",
+            "/templates/model/createDto.java",
             ".java"
     );
 
     protected TemplateFile updateDto = new TemplateFile(
             TemplateFileEnum.UPDATE_DTO.getKey(),
             "%sUpdateDTO",
-            "model.dto",
-            "/templates/model/updateDTO.java",
+            "model.command",
+            "/templates/model/updateDto.java",
             ".java"
     );
 
-    protected TemplateFile excelExportDto = new TemplateFile(
+    protected TemplateFile exportDto = new TemplateFile(
             TemplateFileEnum.EXPORT_DTO.getKey(),
             "%sExportDTO",
             "model.excel",
-            "/templates/model/exportDTO.java",
+            "/templates/model/exportDto.java",
             ".java"
     );
 
-    protected TemplateFile excelImportDto = new TemplateFile(
+    protected TemplateFile importDto = new TemplateFile(
             TemplateFileEnum.IMPORT_DTO.getKey(),
             "%sImportDTO",
             "model.excel",
-            "/templates/model/importDTO.java",
+            "/templates/model/importDto.java",
             ".java"
     );
     
@@ -128,8 +128,8 @@ public class TemplateConfig {
         templateFiles.add(queryVo);
         templateFiles.add(createDto);
         templateFiles.add(updateDto);
-        templateFiles.add(excelExportDto);
-        templateFiles.add(excelImportDto);
+        templateFiles.add(exportDto);
+        templateFiles.add(importDto);
     }
 
 }
