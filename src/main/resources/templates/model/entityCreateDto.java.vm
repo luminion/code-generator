@@ -1,19 +1,19 @@
-package ${package.importDTO};
-#if($importDTOFramePkg.size()>0)
+package ${package.createDto};
+#if($createDtoFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${importDTOFramePkg})
+#foreach($pkg in ${createDtoFramePkg})
 import ${pkg};
 #end
-#if($importDTOJavaPkg.size()>0)
+#if($createDtoJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${importDTOJavaPkg})
+#foreach($pkg in ${createDtoJavaPkg})
 import ${pkg};
 #end
 
 /**
- * $!{table.comment}-导入DTO
+ * $!{table.comment}-新增Dto
  *
  * @author ${author}
 #if(${docLink})
@@ -24,9 +24,16 @@ import ${pkg};
  */
 #if(${lombok})
 @Data
+    #if(${chainModel})
+@Accessors(chain = true)
+    #end
 #end
-@ExcelIgnoreUnannotated
-public class ${importDTO}#if(${serializableUID}) implements Serializable#end {
+#if(${swagger3})
+@Schema(description = "$!{table.comment}-新增Dto")
+#elseif(${swagger2})
+@ApiModel(description = "$!{table.comment}-新增Dto")
+#end
+public class ${createDto}#if(${serializableUID}) implements Serializable#end {
 #if(${serializableUID})
 
     #if(${serializableAnnotation})
@@ -43,23 +50,33 @@ public class ${importDTO}#if(${serializableUID}) implements Serializable#end {
 #elseif(${editExcludeColumns.contains(${field.columnName})})
 #else
 
-##    #if("$!field.comment" != "")
-##        #if(${swagger3})
-##    @Schema(description = "${field.comment}")
-##        #elseif(${swagger2})
-##    @ApiModelProperty("${field.comment}")
-##        #else
-##    /**
-##     * ${field.comment}
-##     */
-##        #end
-##    #end
-    @ExcelProperty(value = "${field.comment}")
+    #if("$!field.comment" != "")
+        #if(${swagger3})
+    @Schema(description = "${field.comment}")
+        #elseif(${swagger2})
+    @ApiModelProperty("${field.comment}")
+        #else
+    /**
+     * ${field.comment}
+     */
+        #end
+    #end
+    #if(${validated})## 参数校验
+        #if(!${field.metaInfo.nullable})## 非空
+            #if(${field.propertyType} == "String")
+    @NotBlank(message = "${field.comment}为必填项")
+            #else
+    @NotNull(message = "${field.comment}为必填项")
+            #end
+        #end
+        #if(${field.propertyType} == "String")## 字符串长度
+    @Size(message = "${field.comment}长度不能超过${field.metaInfo.length}", max = ${field.metaInfo.length})
+        #end
+    #end
     private ${field.propertyType} ${field.propertyName};
 #end
 #end
 ## ----------  END 字段循环遍历  ----------
-## ----------BEGIN getter/setter----------
 #if(!${lombok})
 #foreach($field in ${table.fields})
 #if(${field.keyFlag})
@@ -78,11 +95,17 @@ public class ${importDTO}#if(${serializableUID}) implements Serializable#end {
         return ${field.propertyName};
     }
 
+    #if(${chainModel})
+    public ${createDto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    #end
         this.${field.propertyName} = ${field.propertyName};
+    #if(${chainModel})
+        return this;
+    #end
     }
 #end
 #end
 #end
-## ----------  END getter/setter  ----------
 }

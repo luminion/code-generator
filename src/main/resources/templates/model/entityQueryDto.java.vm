@@ -1,19 +1,19 @@
-package ${package.queryDTO};
-#if($queryDTOFramePkg.size()>0)
+package ${package.queryDto};
+#if($queryDtoFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${queryDTOFramePkg})
+#foreach($pkg in ${queryDtoFramePkg})
 import ${pkg};
 #end
-#if($queryDTOJavaPkg.size()>0)
+#if($queryDtoJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${queryDTOJavaPkg})
+#foreach($pkg in ${queryDtoJavaPkg})
 import ${pkg};
 #end
 
 /**
- * $!{table.comment}-查询DTO
+ * $!{table.comment}-查询Dto
  *
  * @author ${author}
 #if(${docLink})
@@ -28,19 +28,19 @@ import ${pkg};
     #if(${chainModel})
 @Accessors(chain = true)
     #end
-    #if(${queryDTOExtendsEntity})
+    #if(${queryDtoExtendsEntity})
 @EqualsAndHashCode(callSuper = true)
     #end
 #end
 #if(${swagger3})
-@Schema(description = "$!{table.comment}-查询DTO")
+@Schema(description = "$!{table.comment}-查询Dto")
 #elseif(${swagger2})
-@ApiModel(description = "$!{table.comment}-查询DTO")
+@ApiModel(description = "$!{table.comment}-查询Dto")
 #end
-#if(${queryDTOExtendsEntity})
-public class ${queryDTO} extends ${entity}#if(${serializableUID}) implements Serializable#end {
+#if(${queryDtoExtendsEntity})
+public class ${queryDto} extends ${entity}#if(${serializableUID}) implements Serializable#end {
 #else
-public class ${queryDTO}#if(${serializableUID}) implements Serializable#end {
+public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
 #end
 #if(${serializableUID})
 
@@ -50,7 +50,7 @@ public class ${queryDTO}#if(${serializableUID}) implements Serializable#end {
     private static final long serialVersionUID = 1L;
 #end
 ## ----------  BEGIN 字段循环遍历  ----------
-#if(!${queryDTOExtendsEntity})
+#if(!${queryDtoExtendsEntity})
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #else
@@ -87,7 +87,7 @@ public class ${queryDTO}#if(${serializableUID}) implements Serializable#end {
     private ${field.propertyType} ${field.propertyName};
 #end
 ## --基础getter/setter start--
-#if(!${lombok} && !${queryDTOExtendsEntity})
+#if(!${lombok} && !${queryDtoExtendsEntity})
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #else
@@ -102,7 +102,7 @@ public class ${queryDTO}#if(${serializableUID}) implements Serializable#end {
     }
 
     #if(${chainModel})
-    public ${queryDTO} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    public ${queryDto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
@@ -129,7 +129,7 @@ public class ${queryDTO}#if(${serializableUID}) implements Serializable#end {
     }
 
     #if(${chainModel})
-    public ${queryDTO} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    public ${queryDto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end

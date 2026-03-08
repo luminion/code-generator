@@ -22,6 +22,6 @@ $!{mapperAnnotationClass}
 public interface ${mapper} extends ${mapperSuperClass}<${entity}> {
 #if(${generateSelectByXml})
     
-    List<${queryVO}> selectByXml(${queryDTO} queryDTO, IPage<${queryVO}> page);
+    List<${queryVO}> selectByXml(${queryDto} queryDto, IPage<${queryVO}> page);
 #end
 }

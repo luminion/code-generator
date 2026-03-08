@@ -75,8 +75,8 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Serializable")} create($!{requiredBodyStr}$!{validatedStr}${createDTO} dto) {
-        return ${returnMethod.invokeMethodStr("baseService.createByDTO(dto)")};
+    public ${returnMethod.returnGenericTypeStr("Serializable")} create($!{requiredBodyStr}$!{validatedStr}${createDto} dto) {
+        return ${returnMethod.invokeMethodStr("baseService.createByDto(dto)")};
     }
 #end
 #if(${generateUpdate})
@@ -101,8 +101,8 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Boolean")} update($!{requiredBodyStr}$!{validatedStr}${updateDTO} dto) {
-        return ${returnMethod.invokeMethodStr("baseService.updateByDTO(dto)")};
+    public ${returnMethod.returnGenericTypeStr("Boolean")} update($!{requiredBodyStr}$!{validatedStr}${updateDto} dto) {
+        return ${returnMethod.invokeMethodStr("baseService.updateByDto(dto)")};
     }
 #end
 #if(${generateDelete} && ${table.havePrimaryKey})
@@ -175,7 +175,7 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} list($!{optionalBodyStr}${queryDTO} dto) {
+    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} list($!{optionalBodyStr}${queryDto} dto) {
         #if($sqlBooster)
         SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(dto).build();
         return ${returnMethod.invokeMethodStr("baseService.voList(build)")};    
@@ -204,7 +204,7 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} page($!{optionalBodyStr}${queryDTO} dto, $!{pageMethodParams}) {
+    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} page($!{optionalBodyStr}${queryDto} dto, $!{pageMethodParams}) {
         #if($sqlBooster)
         SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(dto).build();
         return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(build, current, size)")})};
@@ -267,7 +267,7 @@ public class ${controller} {
      */
     #end
     ${batchQueryMethod}("/excel/export")
-    public void excelExport($!{optionalBodyStr}${queryDTO} dto, HttpServletResponse response) throws IOException {
+    public void excelExport($!{optionalBodyStr}${queryDto} dto, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
 ##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");

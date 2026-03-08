@@ -21,11 +21,11 @@ import ${pkg};
 public interface ${service} extends ${serviceSuperClass}<${entity}, ${queryVO}> {
 #if(${generateCreate})
 
-    Serializable createByDTO(${createDTO} createDTO);
+    Serializable createByDto(${createDto} createDto);
 #end
 #if(${generateUpdate})
 
-    boolean updateByDTO(${updateDTO} updateDTO);
+    boolean updateByDto(${updateDto} updateDto);
 #end
 #if(${generateDelete} && ${table.havePrimaryKey})
 

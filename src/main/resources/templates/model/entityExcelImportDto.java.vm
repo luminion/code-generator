@@ -1,24 +1,23 @@
-package ${package.exportDTO};
-#if($exportDTOFramePkg.size()>0)
+package ${package.importDto};
+#if($importDtoFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${exportDTOFramePkg})
+#foreach($pkg in ${importDtoFramePkg})
 import ${pkg};
 #end
-#if($exportDTOJavaPkg.size()>0)
+#if($importDtoJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${exportDTOJavaPkg})
+#foreach($pkg in ${importDtoJavaPkg})
 import ${pkg};
 #end
 
 /**
- * $!{table.comment}-导出DTO
+ * $!{table.comment}-导入Dto
  *
  * @author ${author}
 #if(${docLink})
  * @see ${class.entity}
- * @see ${class.mapper}
  * @see ${class.serviceImpl}
 #end
  * @since ${date}
@@ -27,7 +26,7 @@ import ${pkg};
 @Data
 #end
 @ExcelIgnoreUnannotated
-public class ${exportDTO}#if(${serializableUID}) implements Serializable#end {
+public class ${importDto}#if(${serializableUID}) implements Serializable#end {
 #if(${serializableUID})
 
     #if(${serializableAnnotation})
@@ -37,7 +36,11 @@ public class ${exportDTO}#if(${serializableUID}) implements Serializable#end {
 #end
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${table.fields})
-#if(${field.logicDeleteField})
+#if(${field.keyFlag})
+#elseif(${field.versionField})
+#elseif(${field.logicDeleteField})
+#elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
+#elseif(${editExcludeColumns.contains(${field.columnName})})
 #else
 
 ##    #if("$!field.comment" != "")
@@ -59,7 +62,11 @@ public class ${exportDTO}#if(${serializableUID}) implements Serializable#end {
 ## ----------BEGIN getter/setter----------
 #if(!${lombok})
 #foreach($field in ${table.fields})
-#if(${field.logicDeleteField})
+#if(${field.keyFlag})
+#elseif(${field.versionField})
+#elseif(${field.logicDeleteField})
+#elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
+#elseif(${editExcludeColumns.contains(${field.columnName})})
 #else
     #if(${field.propertyType.equals("boolean")})
         #set($getprefix="is")
@@ -70,7 +77,7 @@ public class ${exportDTO}#if(${serializableUID}) implements Serializable#end {
     public ${field.propertyType} ${getprefix}${field.capitalName}() {
         return ${field.propertyName};
     }
-    
+
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
         this.${field.propertyName} = ${field.propertyName};
     }
@@ -78,5 +85,4 @@ public class ${exportDTO}#if(${serializableUID}) implements Serializable#end {
 #end
 #end
 ## ----------  END getter/setter  ----------
-
 }

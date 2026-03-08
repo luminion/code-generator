@@ -21,11 +21,11 @@ import ${pkg};
 public interface ${service} extends ${serviceSuperClass}<${entity}> {
 #if(${generateCreate})
 
-    Serializable createByDTO(${createDTO} dto);
+    Serializable createByDto(${createDto} dto);
 #end
 #if(${generateUpdate})
 
-    boolean updateByDTO(${updateDTO} dto);
+    boolean updateByDto(${updateDto} dto);
 #end
 #if(${generateDelete} && ${table.havePrimaryKey})
 
@@ -38,11 +38,11 @@ public interface ${service} extends ${serviceSuperClass}<${entity}> {
 #end
 #if(${generateVoList})
 
-    List<${queryVO}> voList(${queryDTO} dto);
+    List<${queryVO}> voList(${queryDto} dto);
 #end
 #if(${generateVoPage})
 
-    IPage<${queryVO}> voPage(${queryDTO} dto, long current, long size);
+    IPage<${queryVO}> voPage(${queryDto} dto, long current, long size);
 #end
 #if(${generateImport})
 
@@ -52,7 +52,7 @@ public interface ${service} extends ${serviceSuperClass}<${entity}> {
 #end
 #if(${generateExport})
 
-    void excelExport(${queryDTO} dto, OutputStream os);
+    void excelExport(${queryDto} dto, OutputStream os);
 #end
 }
 

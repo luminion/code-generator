@@ -35,14 +35,14 @@ public enum TemplateFileEnum {
     
     ENTITY("entity"),
     
-    QUERY_DTO("queryDTO"),
-    QUERY_VO("queryVO"),
+    QUERY_DTO("queryDto"),
+    QUERY_VO("queryVo"),
     
-    CREATE_DTO("createDTO"),
-    UPDATE_DTO("updateDTO"),
+    CREATE_DTO("createDto"),
+    UPDATE_DTO("updateDto"),
     
-    IMPORT_DTO("importDTO"),
-    EXPORT_DTO("exportDTO"),
+    IMPORT_DTO("importDto"),
+    EXPORT_DTO("exportDto"),
     ;
     @Getter
     private final String key;
