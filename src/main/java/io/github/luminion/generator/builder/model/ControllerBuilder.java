@@ -1,6 +1,6 @@
 package io.github.luminion.generator.builder.model;
 
-import io.github.luminion.generator.util.MethodReference;
+import io.github.luminion.generator.common.MethodReference;
 import io.github.luminion.generator.config.model.ControllerConfig;
 import io.github.luminion.generator.po.ClassMethodPayload;
 import io.github.luminion.generator.util.ReflectUtils;

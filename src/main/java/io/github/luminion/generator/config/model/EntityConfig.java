@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.config.model;
 
-import io.github.luminion.generator.render.api.TemplateModelRender;
+import io.github.luminion.generator.common.TemplateModelRender;
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.config.base.GlobalConfig;

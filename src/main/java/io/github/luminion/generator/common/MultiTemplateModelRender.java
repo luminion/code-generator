@@ -1,7 +1,6 @@
-package io.github.luminion.generator.render.api;
+package io.github.luminion.generator.common;
 
 import io.github.luminion.generator.po.TemplateFile;
-import io.github.luminion.generator.render.engine.TemplateRender;
 
 import java.util.List;
 

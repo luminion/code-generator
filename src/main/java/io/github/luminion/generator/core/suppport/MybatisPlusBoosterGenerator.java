@@ -33,7 +33,7 @@ public class MybatisPlusBoosterGenerator extends AbstractGenerator<MybatisPlusCo
     }
 
     @Override
-    public LambdaGenerator<MybatisPlusBoosterBuilder> feature(Function<MybatisPlusBoosterBuilder, MybatisPlusBoosterBuilder> func) {
+    public LambdaGenerator<MybatisPlusBoosterBuilder> extension(Function<MybatisPlusBoosterBuilder, MybatisPlusBoosterBuilder> func) {
         func.apply(new MybatisPlusBoosterBuilder(this.configCollector));
         return this;
     }

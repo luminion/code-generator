@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.enums;
 
-import io.github.luminion.generator.po.JavaFieldInfo;
+import io.github.luminion.generator.common.JavaFieldInfo;
 
 
 /**

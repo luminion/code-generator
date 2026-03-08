@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.config;
 
-import io.github.luminion.generator.render.engine.TemplateRender;
+import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.config.base.InjectionConfig;
@@ -78,9 +78,9 @@ public class ConfigCollector<C extends TemplateRender> {
     private final QueryConfig queryConfig = new QueryConfig();
 
     /**
-     * 命令功能配置 (整合CreateDTO和UpdateDTO)，对应CQRS模式的Command
+     * 创建更新功能配置 (整合CreateDTO和UpdateDTO)
      */
-    private final CommandConfig commandConfig = new CommandConfig();
+    private final CreateUpdateConfig createUpdateConfig = new CreateUpdateConfig();
 
     /**
      * Excel功能配置 (整合ImportDTO和ExportDTO)

@@ -15,15 +15,11 @@
  */
 package io.github.luminion.generator.config.base;
 
+import io.github.luminion.generator.common.*;
 import io.github.luminion.generator.common.support.DefaultExtraFieldProvider;
 import io.github.luminion.generator.common.support.DefaultNameConverter;
-import io.github.luminion.generator.core.keywords.DatabaseKeywordsHandler;
-import io.github.luminion.generator.core.metadata.ExtraFieldProvider;
-import io.github.luminion.generator.core.metadata.JavaFieldProvider;
-import io.github.luminion.generator.core.naming.NameConverter;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.render.engine.TemplateRender;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 

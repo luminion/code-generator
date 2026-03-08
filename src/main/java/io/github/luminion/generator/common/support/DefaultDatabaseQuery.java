@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.common.support;
 
-import io.github.luminion.generator.core.metadata.TableInfoProvider;
+import io.github.luminion.generator.common.TableInfoProvider;
 import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.config.base.DataSourceConfig;
 import io.github.luminion.generator.po.TableField;

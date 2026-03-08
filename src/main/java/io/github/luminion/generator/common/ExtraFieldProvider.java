@@ -1,4 +1,4 @@
-package io.github.luminion.generator.core.metadata;
+package io.github.luminion.generator.common;
 
 import io.github.luminion.generator.po.TableField;
 

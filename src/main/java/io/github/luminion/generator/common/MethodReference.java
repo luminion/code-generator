@@ -1,4 +1,4 @@
-package io.github.luminion.generator.util;
+package io.github.luminion.generator.common;
 
 import java.io.Serializable;
 import java.util.function.Function;

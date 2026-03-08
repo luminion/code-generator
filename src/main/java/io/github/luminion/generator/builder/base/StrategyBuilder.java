@@ -1,9 +1,9 @@
 package io.github.luminion.generator.builder.base;
 
-import io.github.luminion.generator.core.keywords.DatabaseKeywordsHandler;
-import io.github.luminion.generator.core.metadata.ExtraFieldProvider;
-import io.github.luminion.generator.core.metadata.JavaFieldProvider;
-import io.github.luminion.generator.core.naming.NameConverter;
+import io.github.luminion.generator.common.DatabaseKeywordsHandler;
+import io.github.luminion.generator.common.ExtraFieldProvider;
+import io.github.luminion.generator.common.JavaFieldProvider;
+import io.github.luminion.generator.common.NameConverter;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.enums.DateType;
 import lombok.NonNull;

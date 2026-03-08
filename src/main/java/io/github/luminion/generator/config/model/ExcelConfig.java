@@ -1,7 +1,7 @@
 package io.github.luminion.generator.config.model;
 
-import io.github.luminion.generator.po.JavaFieldInfo;
-import io.github.luminion.generator.render.api.MultiTemplateModelRender;
+import io.github.luminion.generator.common.JavaFieldInfo;
+import io.github.luminion.generator.common.MultiTemplateModelRender;
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.config.base.GlobalConfig;

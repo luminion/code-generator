@@ -1,6 +1,6 @@
 package io.github.luminion.generator.common.support;
 
-import io.github.luminion.generator.po.JavaFieldInfo;
+import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.enums.JavaFieldType;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.po.TableField;

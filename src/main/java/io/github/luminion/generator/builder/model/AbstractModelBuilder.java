@@ -1,6 +1,6 @@
 package io.github.luminion.generator.builder.model;
 
-import io.github.luminion.generator.render.api.TemplateModelRender;
+import io.github.luminion.generator.common.TemplateModelRender;
 
 /**
  * 模型配置构建器基类

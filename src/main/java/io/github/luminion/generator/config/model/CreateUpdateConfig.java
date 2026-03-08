@@ -1,6 +1,6 @@
 package io.github.luminion.generator.config.model;
 
-import io.github.luminion.generator.render.api.MultiTemplateModelRender;
+import io.github.luminion.generator.common.MultiTemplateModelRender;
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.config.base.GlobalConfig;
@@ -15,15 +15,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * 命令功能配置
+ * 创建更新功能配置
  * <p>
- * 整合创建DTO和更新DTO的命令配置，对应CQRS模式的Command概念
+ * 整合创建DTO和更新DTO的配置
  *
  * @author luminion
  * @since 1.0.0
  */
 @Data
-public class CommandConfig implements MultiTemplateModelRender {
+public class CreateUpdateConfig implements MultiTemplateModelRender {
 
     /**
      * 创建模板文件

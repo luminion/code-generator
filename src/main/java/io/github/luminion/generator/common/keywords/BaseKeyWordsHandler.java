@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.core.keywords;
+package io.github.luminion.generator.common.keywords;
+
+import io.github.luminion.generator.common.DatabaseKeywordsHandler;
+
 
 import java.util.*;
 

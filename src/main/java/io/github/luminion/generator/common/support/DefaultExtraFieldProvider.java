@@ -1,8 +1,8 @@
 package io.github.luminion.generator.common.support;
 
 
-import io.github.luminion.generator.core.metadata.ExtraFieldProvider;
-import io.github.luminion.generator.po.JavaFieldInfo;
+import io.github.luminion.generator.common.ExtraFieldProvider;
+import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.enums.SqlKeyword;
 import io.github.luminion.generator.po.TableField;
 import lombok.SneakyThrows;

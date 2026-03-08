@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.config.base;
 
-import io.github.luminion.generator.render.engine.TemplateRender;
+import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.enums.*;
 import io.github.luminion.generator.po.TableInfo;
 import lombok.Data;
