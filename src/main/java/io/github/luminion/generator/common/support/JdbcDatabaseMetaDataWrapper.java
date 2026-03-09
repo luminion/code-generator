@@ -35,9 +35,9 @@ import java.util.*;
  * @author luminion
  * @since 1.0.0
  */
-public class DefaultDatabaseMetaDataWrapper {
+public class JdbcDatabaseMetaDataWrapper {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultDatabaseMetaDataWrapper.class);
+    private static final Logger logger = LoggerFactory.getLogger(JdbcDatabaseMetaDataWrapper.class);
 
     @Getter
     private final Connection connection;
@@ -50,7 +50,7 @@ public class DefaultDatabaseMetaDataWrapper {
     // 暂时只支持一种
     private final String schema;
 
-    public DefaultDatabaseMetaDataWrapper(Connection connection, String schemaName) {
+    public JdbcDatabaseMetaDataWrapper(Connection connection, String schemaName) {
         try {
             if (null == connection) {
                 throw new RuntimeException("数据库连接不能为空");

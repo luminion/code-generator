@@ -15,22 +15,13 @@
  */
 package io.github.luminion.generator.po;
 
-import io.github.luminion.generator.common.DatabaseKeywordsHandler;
-import io.github.luminion.generator.common.FieldTypeConverter;
 import io.github.luminion.generator.common.JavaFieldInfo;
-import io.github.luminion.generator.common.support.DefaultDatabaseMetaDataWrapper;
-import io.github.luminion.generator.common.support.DefaultJavaFieldProvider;
-import io.github.luminion.generator.common.support.DefaultNamingConverter;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.enums.JdbcType;
-import io.github.luminion.generator.enums.NameConvertType;
-import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.Set;
 
 /**
  * 表字段信息
@@ -42,8 +33,6 @@ import java.util.Set;
 @Slf4j
 @Data
 public class TableField {
-
-    private final StrategyConfig strategyConfig;
 
     /**
      * 数据库字段名称(原始名)
@@ -116,65 +105,6 @@ public class TableField {
     private Map<String, Object> customMap;
 
 
-    public TableField(TableInfo tableInfo, DefaultDatabaseMetaDataWrapper.Column columnInfo) {
-        this.strategyConfig = tableInfo.getConfigResolver().getConfigCollector().getStrategyConfig();
-        if (columnInfo.isPrimaryKey()) {
-            this.keyFlag = true;
-            this.keyIdentityFlag = columnInfo.isAutoIncrement();
-            tableInfo.setHavePrimaryKey(true);
-            tableInfo.setPrimaryKeyField(this);
-        }
-        this.name = columnInfo.getName();
-        this.columnName = name;
-        // 数据库列关键字转化
-        DatabaseKeywordsHandler keyWordsHandler = strategyConfig.getKeyWordsHandler();
-        if (keyWordsHandler != null && keyWordsHandler.isKeyWords(columnName)) {
-            this.keyWords = true;
-            this.columnName = keyWordsHandler.formatColumn(columnName);
-        }
-        // 设置字段的元数据信息
-        TableField.MetaInfo metaInfo = new TableField.MetaInfo(columnInfo, tableInfo);
-        this.metaInfo = metaInfo;
-        // 注释双引号替换为单引号
-        if (columnInfo.getRemarks() != null) {
-            this.comment = columnInfo.getRemarks().replace("\"", "'");
-        }
-        Set<String> fieldPrefix = strategyConfig.getFieldPrefix();
-        Set<String> fieldSuffix = strategyConfig.getFieldSuffix();
-        String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(columnName, fieldPrefix, fieldSuffix);
-        String propertyName = strategyConfig.getNamingConverter().convertFieldName(removePrefixAndSuffix);
-        this.propertyName = propertyName;
-
-        JavaFieldInfo javaFieldInfo = null;
-        FieldTypeConverter fieldTypeConverter = strategyConfig.getFieldTypeConverter();
-        if (fieldTypeConverter != null) {
-            javaFieldInfo = fieldTypeConverter.convert(metaInfo);
-        }
-        if (javaFieldInfo == null) {
-            javaFieldInfo = DefaultJavaFieldProvider.getJavaFieldType(metaInfo, strategyConfig.getDateType());
-        }
-        this.JavaType = javaFieldInfo;
-        this.propertyType = javaFieldInfo.getType();
-        if (strategyConfig.isBooleanColumnRemoveIsPrefix()
-                && "boolean".equalsIgnoreCase(this.getPropertyType())
-                && propertyName.startsWith("is")
-        ) {
-            this.convert = true;
-            this.propertyName = StringUtils.removePrefixAfterPrefixToLower(propertyName, 2);
-        }
-        if (DefaultNamingConverter.class.equals(strategyConfig.getNamingConverter().getClass())) {
-            // 下划线转驼峰策略
-            this.convert = !propertyName.equalsIgnoreCase(NameConvertType.underlineToCamel(this.columnName));
-        } else {
-            this.convert = !propertyName.equalsIgnoreCase(this.columnName);
-        }
-        if (this.keyFlag) {
-            this.convert = !"id".equals(propertyName);
-        }
-
-    }
-
-
     /**
      * 按 JavaBean 规则来生成 get 和 set 方法后面的属性名称
      * 需要处理一下特殊情况：
@@ -200,74 +130,52 @@ public class TableField {
      * @author nieqiurong 2021/2/8
      * @since 3.5.0
      */
+    @Data
     public static class MetaInfo {
 
         /**
          * 表名称
          */
-        @Getter
         private String tableName;
 
         /**
          * 字段名称
          */
-        @Getter
         private String columnName;
 
         /**
          * 字段长度
          */
-        @Getter
         private int length;
 
         /**
          * 是否非空
          */
-        @Getter
         private boolean nullable;
 
         /**
          * 字段注释
          */
-        @Getter
         private String remarks;
 
         /**
          * 字段默认值
          */
-        @Getter
         private String defaultValue;
 
         /**
          * 字段精度
          */
-        @Getter
         private int scale;
 
         /**
          * JDBC类型
          */
-        @Getter
         private JdbcType jdbcType;
 
         /**
          * 类型名称(可用做额外判断处理,例如在pg下,json,uuid,jsonb,ts query这种都认为是OHTER 1111)
          */
-        @Getter
         private String typeName;
-
-        public MetaInfo(DefaultDatabaseMetaDataWrapper.Column column, TableInfo tableInfo) {
-            if (column != null) {
-                this.tableName = tableInfo.getName();
-                this.columnName = column.getName();
-                this.length = column.getLength();
-                this.nullable = column.isNullable();
-                this.remarks = column.getRemarks();
-                this.defaultValue = column.getDefaultValue();
-                this.scale = column.getScale();
-                this.jdbcType = column.getJdbcType();
-                this.typeName = column.getTypeName();
-            }
-        }
     }
 }

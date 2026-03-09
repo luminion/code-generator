@@ -1,4 +1,4 @@
-package io.github.luminion.generator.common.support;
+package io.github.luminion.generator.util;
 
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.enums.JavaFieldType;
@@ -15,7 +15,7 @@ import java.util.Map;
  * @author luminion
  * @since 1.0.0
  */
-public abstract class DefaultJavaFieldProvider {
+public abstract class FieldTypeConvertUtils {
     private static final Map<Integer, JavaFieldInfo> typeMap = new HashMap<>();
     static {
         // byte[]

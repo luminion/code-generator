@@ -2,7 +2,6 @@ package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.common.TemplateModelRender;
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.common.support.DefaultDatabaseQuery;
 import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableInfo;
@@ -50,16 +49,16 @@ public class ConfigResolver {
     public ConfigResolver(ConfigCollector<?> configCollector) {
         this.configCollector = configCollector;
         // 添加表信息
-        try {
-            DefaultDatabaseQuery defaultQuery = new DefaultDatabaseQuery(this);
-            // 设置表信息
-            List<TableInfo> tableInfos = defaultQuery.queryTables();
-            if (!tableInfos.isEmpty()) {
-                this.tableInfoList.addAll(tableInfos);
-            }
-        } catch (Exception exception) {
-            throw new RuntimeException("创建IDatabaseQuery实例出现错误:", exception);
-        }
+//        try {
+//            JdbcTableInfoProvider defaultQuery = new JdbcTableInfoProvider(this);
+//            // 设置表信息
+//            List<TableInfo> tableInfos = defaultQuery.queryTables();
+//            if (!tableInfos.isEmpty()) {
+//                this.tableInfoList.addAll(tableInfos);
+//            }
+//        } catch (Exception exception) {
+//            throw new RuntimeException("创建IDatabaseQuery实例出现错误:", exception);
+//        }
 
         // 基础配置
         templateRenderList.add(this.configCollector.getGlobalConfig());

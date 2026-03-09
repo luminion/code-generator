@@ -150,10 +150,13 @@ public class TemplateConfig {
         templateFiles.add(mapper);
         templateFiles.add(mapperXml);
         templateFiles.add(entity);
+        
         templateFiles.add(queryDto);
         templateFiles.add(queryVo);
+        
         templateFiles.add(createDto);
         templateFiles.add(updateDto);
+        
         templateFiles.add(exportDto);
         templateFiles.add(importDto);
     }

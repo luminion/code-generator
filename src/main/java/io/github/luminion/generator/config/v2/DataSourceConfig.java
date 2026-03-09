@@ -74,6 +74,11 @@ public class DataSourceConfig {
     protected boolean skipView;
 
     /**
+     * Boolean类型字段是否移除is前缀（默认 false）<br>
+     * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
+     */
+    protected boolean booleanColumnRemoveIsPrefix;
+    /**
      * 模糊查询包含的表名, 需要自行拼接(%)
      */
     protected String tableNamePattern;

@@ -1,8 +1,7 @@
 package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.common.ExtraFieldStrategy;
-import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.common.support.DefaultDatabaseQuery;
+import io.github.luminion.generator.common.support.JdbcTableInfoProvider;
 import io.github.luminion.generator.config.v2.*;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
@@ -61,7 +60,7 @@ public class Configurer {
 
     public List<TableInfo> queryTableInfos() {
         try {
-            DefaultDatabaseQuery defaultQuery = new DefaultDatabaseQuery(this.dataSourceConfig);
+            JdbcTableInfoProvider defaultQuery = new JdbcTableInfoProvider(this.dataSourceConfig);
             List<TableInfo> tableInfos = defaultQuery.queryTables();
             if (tableInfos.isEmpty()) {
                 log.warn("No matching tables found");
