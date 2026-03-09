@@ -167,7 +167,7 @@ public class ConfigResolver {
      */
     public boolean isGenerate(TemplateFileEnum templateFileEnum, TableInfo tableInfo) {
         TemplateFile templateFile = templateFileMap.get(templateFileEnum.getKey());
-        return templateFile.isGenerate();
+        return templateFile.isEnabled();
     }
 
     /**
@@ -204,13 +204,13 @@ public class ConfigResolver {
     public List<TemplateFile> getTemplateFiles() {
         GlobalConfig globalConfig = configCollector.getGlobalConfig();
         return templateFileMap.values()
-                .stream().filter(TemplateFile::isGenerate)
+                .stream().filter(TemplateFile::isEnabled)
                 .peek(e -> {
-                    String fileOutputDir = e.getOutputDir();
+                    String fileOutputDir = e.getFileOutputDir();
                     if (fileOutputDir == null) {
                         String joinPackage = joinPackage(e.getSubPackage());
                         fileOutputDir = joinPath(globalConfig.getOutputDir(), joinPackage);
-                        e.setOutputDir(fileOutputDir);
+                        e.setFileOutputDir(fileOutputDir);
                     }
                     e.setFileOverride(e.isFileOverride() || globalConfig.isFileOverride());
                 }).collect(Collectors.toList());
@@ -229,7 +229,7 @@ public class ConfigResolver {
         return templateFileMap.entrySet().stream()
                 .collect(Collectors.toMap(
                         e -> e.getValue().getKey(),
-                        e -> e.getValue().isGenerate()
+                        e -> e.getValue().isEnabled()
                 ));
     }
 
@@ -262,7 +262,7 @@ public class ConfigResolver {
         return templateFileMap.entrySet().stream()
                 .collect(Collectors.toMap(
                         e -> e.getValue().getKey(),
-                        e -> joinPackage(e.getValue().getSubPackage()) + "." + e.getValue().convertFormatName(tableInfo)
+                        e -> joinPackage(e.getValue().getSubPackage()) + "." + e.getValue().convertFormatName(tableInfo.getEntityName())
                 ));
     }
 

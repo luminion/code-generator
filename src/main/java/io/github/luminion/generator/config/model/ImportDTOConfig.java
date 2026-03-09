@@ -48,7 +48,7 @@ public class ImportDTOConfig implements TemplateModelRender {
 
         // 关闭功能
         if (!globalConfig.isGenerateImport()) {
-            this.renderTemplateFile().setGenerate(false);
+            this.renderTemplateFile().setEnabled(false);
         }
 
         // excel包

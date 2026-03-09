@@ -111,7 +111,7 @@ public class Configurer {
         // 渲染模板数据
         result.putAll(this.globalConfig.renderData(tableInfo));
         result.putAll(this.strategyConfig.renderData(tableInfo));
-        result.putAll(this.templateConfig.renderData(tableInfo));
+//        result.putAll(this.templateConfig.renderData(tableInfo));
         
         result.putAll(this.controllerConfig.renderData(tableInfo));
         result.putAll(this.serviceConfig.renderData(tableInfo));
@@ -126,6 +126,7 @@ public class Configurer {
         result.put("table", tableInfo);
         // 类名
         result.putAll(this.getOutputClassSimpleNameMap(tableInfo));
+        
         // 类包
         result.put("package", this.getOutputClassPackageInfoMap());
         // 类全名

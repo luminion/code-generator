@@ -48,7 +48,7 @@ public class UpdateDTOConfig implements TemplateModelRender {
 
         // 关闭功能
         if (!globalConfig.isGenerateUpdate()) {
-            this.renderTemplateFile().setGenerate(false);
+            this.renderTemplateFile().setEnabled(false);
         }
 
 

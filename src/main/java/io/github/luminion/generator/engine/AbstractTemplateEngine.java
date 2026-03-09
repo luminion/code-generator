@@ -86,8 +86,8 @@ public abstract class AbstractTemplateEngine {
                 Map<String, Object> objectMap = configResolver.renderMap(tableInfo);
                 List<TemplateFile> templateFiles = configResolver.getTemplateFiles();
                 for (TemplateFile file : templateFiles) {
-                    file.beforeOutputValidate();
-                    String outputDir = file.getOutputDir();
+                    file.validate();
+                    String outputDir = file.getFileOutputDir();
                     String format = String.format(file.getNameFormat(), tableInfo.getEntityName());
                     String fileName = outputDir + File.separator + format + file.getOutputFileSuffix();
                     outputFile(new File(fileName), objectMap, file.getTemplatePath(), file.isFileOverride());

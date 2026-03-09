@@ -54,7 +54,7 @@ public class QueryVOConfig implements TemplateModelRender {
 
         // 关闭功能
         if (!globalConfig.isGenerateSelectByXml() && !RuntimeEnv.isSqlBooster(globalConfig.getRuntimeEnv())) {
-            this.renderTemplateFile().setGenerate(false);
+            this.renderTemplateFile().setEnabled(false);
         }
 
         if (extendsEntity) {

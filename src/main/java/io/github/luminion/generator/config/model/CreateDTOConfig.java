@@ -48,7 +48,7 @@ public class CreateDTOConfig implements TemplateModelRender {
 
         // 关闭功能
         if (!globalConfig.isGenerateCreate()) {
-            this.renderTemplateFile().setGenerate(false);
+            this.renderTemplateFile().setEnabled(false);
         }
 
         String size = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_SIZE.getClassName();

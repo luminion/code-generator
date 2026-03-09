@@ -53,7 +53,7 @@ public class QueryDTOConfig implements TemplateModelRender {
 
         // 关闭功能
         if (!globalConfig.isGenerateSelectByXml()) {
-            this.renderTemplateFile().setGenerate(false);
+            this.renderTemplateFile().setEnabled(false);
         }
 
         importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());

@@ -10,6 +10,10 @@ import lombok.Data;
 @Data
 public class TemplateFile {
     /**
+     * 是否启用
+     */
+    protected boolean enabled = true;
+    /**
      * 用于标识文件的key,不可重复
      */
     protected String key;
@@ -29,19 +33,14 @@ public class TemplateFile {
      * 输出文件后缀
      */
     protected String outputFileSuffix;
-
-    /**
-     * 输出文件路径
-     */
-    protected String outputDir;
     /**
      * 文件覆盖
      */
     protected boolean fileOverride;
     /**
-     * 是否生成
+     * 输出文件路径
      */
-    protected boolean generate = true;
+    protected String fileOutputDir;
 
     /**
      * 
@@ -65,23 +64,20 @@ public class TemplateFile {
     }
 
     /**
-     * 根据表信息转化输出文件名称
+     * 根据entity名转化输出文件名称
      *
-     * @param tableInfo 表信息
+     * @param entityName entity名
      */
-    public String convertFormatName(TableInfo tableInfo) {
-        return String.format(nameFormat, tableInfo.getEntityName());
+    public String convertFormatName(String entityName) {
+        return String.format(nameFormat, entityName);
     }
 
     /**
      * 模板引擎输出之前, 验证输出文件信息
      */
-    public void beforeOutputValidate() {
+    public void validate() {
         if (templatePath == null) {
             throw new IllegalArgumentException("Template path cannot be empty");
-        }
-        if (outputDir == null) {
-            throw new IllegalArgumentException("File outputDir cannot be empty");
         }
         if (nameFormat == null) {
             throw new IllegalArgumentException("File name formatting function cannot be empty");

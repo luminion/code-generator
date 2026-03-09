@@ -50,7 +50,7 @@ public class ExportDTOConfig implements TemplateModelRender {
 
         // 关闭功能
         if (!globalConfig.isGenerateExport()) {
-            this.renderTemplateFile().setGenerate(false);
+            this.renderTemplateFile().setEnabled(false);
         }
 
         // excel包

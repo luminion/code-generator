@@ -2,11 +2,17 @@ package io.github.luminion.generator.config.v2;
 
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.TemplateFileEnum;
+import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateFile;
+import io.github.luminion.generator.po.TemplateClassFile;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author luminion
@@ -37,10 +43,10 @@ public class TemplateConfig {
     protected String parentPackage = "com.example";
 
     /**
-     * 父包模块名
+     * 父包模块名,会拼接在父包名之后
      */
-    protected String parentPackageModule = "";
-    
+    protected String parentModule = "";
+
 
     protected TemplateFile controller = new TemplateFile(
             TemplateFileEnum.CONTROLLER.getKey(),
@@ -139,9 +145,9 @@ public class TemplateConfig {
             "/templates/model/importDto.java",
             ".java"
     );
-    
+
     protected List<TemplateFile> templateFiles = new ArrayList<>();
-    
+
     {
         // 添加模板文件
         templateFiles.add(controller);
@@ -150,15 +156,62 @@ public class TemplateConfig {
         templateFiles.add(mapper);
         templateFiles.add(mapperXml);
         templateFiles.add(entity);
-        
+
         templateFiles.add(queryDto);
         templateFiles.add(queryVo);
-        
+
         templateFiles.add(createDto);
         templateFiles.add(updateDto);
-        
+
         templateFiles.add(exportDto);
         templateFiles.add(importDto);
+    }
+
+    public void setFileOverride(boolean fileOverride) {
+        this.fileOverride = fileOverride;
+        templateFiles.forEach(e -> e.setFileOverride(fileOverride));
+    }
+
+    private String getParentPackage() {
+        if (StringUtils.isNotBlank(parentModule)) {
+            return parentPackage + "." + parentModule;
+        }
+        return parentPackage;
+    }
+
+    private String joinPackage(String subPackage) {
+        String parent = getParentPackage();
+        return StringUtils.isBlank(parent) ? subPackage : (parent + "." + subPackage);
+    }
+
+    private String joinPath(String parentDir, String packageName) {
+        if (StringUtils.isBlank(parentDir)) {
+            parentDir = System.getProperty("java.io.tmpdir");
+        }
+        if (!StringUtils.endsWith(parentDir, File.separator)) {
+            parentDir += File.separator;
+        }
+        packageName = packageName.replaceAll("\\.", "\\" + File.separator);
+        return parentDir + packageName;
+    }
+
+    public Map<String, TemplateFile> getTemplateFileMap(TableInfo tableInfo) {
+        return templateFiles.stream().collect(Collectors.toMap(
+                e -> e.getKey(), e -> {
+                    e.validate();
+                    String fileOutputDir = e.getFileOutputDir();
+                    String joinPackage = this.joinPackage(e.getSubPackage());
+                    if (fileOutputDir == null) {
+                        fileOutputDir = joinPath(this.outputDir, joinPackage);
+                        e.setFileOutputDir(fileOutputDir);
+                    }
+                    TemplateClassFile templateClassFile = new TemplateClassFile(e);
+                    templateClassFile.setPackageName(joinPackage);
+                    String classSimpleName = e.convertFormatName(tableInfo.getEntityName());
+                    templateClassFile.setClassSimpleName(classSimpleName);
+                    templateClassFile.setClassCanonicalName(joinPackage + "." + classSimpleName);
+                    return templateClassFile;
+                }));
     }
 
 }
