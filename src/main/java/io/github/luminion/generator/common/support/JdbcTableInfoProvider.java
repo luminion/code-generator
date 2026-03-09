@@ -147,7 +147,8 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
             if (fieldTypeConverter != null) {
                 javaFieldInfo = fieldTypeConverter.convert(metaInfo);
             }
-            tableField.setJavaType(javaFieldInfo);
+            tableField.setPropertyClassSimpleName(javaFieldInfo.getClassSimpleName());
+            tableField.setPropertyClassCanonicalName(javaFieldInfo.getClassCanonicalName());
 
             // 注释双引号替换为单引号
             if (columnInfo.getRemarks() != null) {
@@ -159,7 +160,7 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
             String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(columnName, fieldPrefix, fieldSuffix);
             String propertyName = dataSourceConfig.getNamingConverter().convertFieldName(removePrefixAndSuffix);
             tableField.setPropertyName(propertyName);
-            tableField.setPropertyType(javaFieldInfo.getType());
+           
             boolean removeIsPrefix = dataSourceConfig.isBooleanColumnRemoveIsPrefix();
             boolean isBoolean = "boolean".equalsIgnoreCase(tableField.getPropertyType());
             boolean startsWithIs = propertyName.startsWith("is");

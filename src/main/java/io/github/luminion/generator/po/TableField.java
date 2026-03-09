@@ -15,8 +15,6 @@
  */
 package io.github.luminion.generator.po;
 
-import io.github.luminion.generator.common.JavaFieldInfo;
-import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.enums.JdbcType;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -60,20 +58,18 @@ public class TableField {
     /**
      * java属性类型
      */
-    private String propertyType;
-
+    private String propertyClassSimpleName;
+    
     /**
-     * java数据库字段类型
+     * java属性类型
      */
-    private JavaFieldInfo JavaType;
+    private String propertyClassCanonicalName;
 
     /**
      * 字段注释
      */
     private String comment;
     
-
-    // 特殊配置
     /**
      * 是否做注解转换
      */

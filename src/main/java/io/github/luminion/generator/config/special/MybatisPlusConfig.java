@@ -107,8 +107,8 @@ public class MybatisPlusConfig implements TemplateRender {
         }
         tableInfo.getFields().forEach(field -> {
             JavaFieldInfo columnType = field.getJavaType();
-            if (null != columnType && null != columnType.getPkg()) {
-                entityImportPackages.add(columnType.getPkg());
+            if (null != columnType && null != columnType.getClassCanonicalName()) {
+                entityImportPackages.add(columnType.getClassCanonicalName());
             }
             if (field.isKeyFlag()) {
                 // 主键

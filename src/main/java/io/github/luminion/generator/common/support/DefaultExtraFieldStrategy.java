@@ -69,10 +69,10 @@ public class DefaultExtraFieldStrategy implements ExtraFieldStrategy {
 
         JavaFieldInfo javaType = tableField.getJavaType();
         boolean isComparable;
-        if (javaType.getPkg()==null){
+        if (javaType.getClassCanonicalName()==null){
             isComparable = true;
         }else{
-            Class<?> clazz = Class.forName(javaType.getPkg());
+            Class<?> clazz = Class.forName(javaType.getClassCanonicalName());
             isComparable =  Comparable.class.isAssignableFrom(clazz);
         }
 

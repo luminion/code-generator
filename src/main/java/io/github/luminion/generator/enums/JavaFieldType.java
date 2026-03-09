@@ -85,12 +85,12 @@ public enum JavaFieldType implements JavaFieldInfo {
     }
 
     @Override
-    public String getType() {
+    public String getClassSimpleName() {
         return type;
     }
 
     @Override
-    public String getPkg() {
+    public String getClassCanonicalName() {
         return pkg;
     }
 }

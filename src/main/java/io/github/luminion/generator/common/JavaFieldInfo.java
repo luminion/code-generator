@@ -29,12 +29,12 @@ public interface JavaFieldInfo {
      *
      * @return 字段类型
      */
-    String getType();
+    String getClassSimpleName();
 
     /**
      * 获取字段类型完整名
      *
      * @return 字段类型完整名
      */
-    String getPkg();
+    String getClassCanonicalName();
 }

@@ -78,8 +78,8 @@ public class ImportDTOConfig implements TemplateModelRender {
                 continue;
             }
             JavaFieldInfo columnType = field.getJavaType();
-            if (null != columnType && null != columnType.getPkg()) {
-                importPackages.add(columnType.getPkg());
+            if (null != columnType && null != columnType.getClassCanonicalName()) {
+                importPackages.add(columnType.getClassCanonicalName());
             }
         }
 
