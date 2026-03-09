@@ -6,9 +6,7 @@ import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.enums.TemplateFileEnum;
-import io.github.luminion.generator.po.ClassMethodPayload;
-import io.github.luminion.generator.po.TableField;
-import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.po.*;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -84,6 +82,14 @@ public class ControllerConfig implements TemplateRender {
      * 分页返回方法
      */
     protected ClassMethodPayload pageMethod = new ClassMethodPayload();
+    /**
+     * 分页页码方法
+     */
+    protected ClassMethodPayload pageNum = new ClassMethodPayload();
+    /**
+     * 分页页大小方法
+     */
+    protected ClassMethodPayload pageSize = new ClassMethodPayload();
 
 
     @Override
@@ -105,21 +111,30 @@ public class ControllerConfig implements TemplateRender {
         }
         data.put("requestBaseUrl", requestBaseUrl);
         data.put("restful", this.restful);
-        boolean isGenerateService = configResolver.isGenerate(TemplateFileEnum.SERVICE, tableInfo);
-        data.put("baseService", isGenerateService ? configResolver.getClassSimpleName(TemplateFileEnum.SERVICE, tableInfo) : configResolver.getClassSimpleName(TemplateFileEnum.SERVICE_IMPL, tableInfo));
+        Map<String, TemplateClassFile> templateFileMap = configurer.getTemplateConfig().resolveTemplateFileMap(tableInfo);
+        TemplateClassFile baseService = templateFileMap.get(TemplateFileEnum.SERVICE.getKey());
+        if (!baseService.isEnabled()){
+            baseService= templateFileMap.get(TemplateFileEnum.SERVICE_IMPL.getKey());
+        }
+        
+        data.put("baseService", baseService.getClassSimpleName());
         data.put("returnMethod", this.returnMethod);
         data.put("pageMethod", this.pageMethod);
-        data.put("batchQueryMethod", queryWithBody ? "@PostMapping" : "@GetMapping");
+        data.put("queryWithBody", queryWithBody ? "@PostMapping" : "@GetMapping");
         // 路径参数
+        // todo 继续改造
         if (pathVariable) {
-            data.put("idPathParams", "/{id}");
-            data.put("idMethodParams", "@PathVariable(\"id\") ");
-            data.put("pagePathParams", "/{current}/{size}");
-            data.put("pageMethodParams", "@PathVariable(\"current\") Long current, @PathVariable(\"size\") Long size");
+            data.put("idPathParam", "/{id}");
+            data.put("idMethodParam", "@PathVariable(\"id\") ");
         } else {
             data.put("pageMethodParams", "Long current, Long size");
         }
-        data.put("validatedStr", globalConfig.isValidated() ? "@Validated " : null);
+        // 分页参数
+        if (pageNum.isMethodReady() && pageSize.isMethodReady()){
+            data.put("pageMethodParams", "Long current, Long size");
+        }
+        
+        data.put("validatedStr", configurer.getCommandConfig().isValid() ? "@Validated " : null);
         String requestBodyStr = requestBody ? "@RequestBody " : null;
         data.put("requiredBodyStr", requestBodyStr);
         data.put("optionalBodyStr", queryWithBody ? requestBodyStr : null);

@@ -120,14 +120,14 @@ public class ${controller} {
      */
     #end
     #if(${restful})
-    @DeleteMapping("$!{idPathParams}")
+    @DeleteMapping("$!{idPathParam}")
     #else
-    @PostMapping("/delete$!{idPathParams}")
+    @PostMapping("/delete$!{idPathParam}")
     #end
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Boolean")} delete($!{idMethodParams}${primaryKeyPropertyType} id) {
+    public ${returnMethod.returnGenericTypeStr("Boolean")} delete($!{idMethodParam}${primaryKeyPropertyType} id) {
         return ${returnMethod.invokeMethodStr("baseService.removeById(id)")};
     }
 #end
@@ -146,14 +146,14 @@ public class ${controller} {
      */
     #end
     #if(${restful})
-    @GetMapping("$!{idPathParams}")
+    @GetMapping("$!{idPathParam}")
     #else
-    @GetMapping("/select$!{idPathParams}")
+    @GetMapping("/detail$!{idPathParam}")
     #end
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("${queryVO}")} voById($!{idMethodParams}${primaryKeyPropertyType} id) {
+    public ${returnMethod.returnGenericTypeStr("${queryVO}")} voById($!{idMethodParam}${primaryKeyPropertyType} id) {
         return ${returnMethod.invokeMethodStr("baseService.voById(id)")};
     }
 #end

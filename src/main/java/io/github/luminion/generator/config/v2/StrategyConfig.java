@@ -53,7 +53,6 @@ public class StrategyConfig implements TemplateRender {
         data.put("serializableUID", this.serializableUID);
         data.put("serializableAnnotation", this.serializableAnnotation);
 
-        data.put("booleanColumnRemoveIsPrefix", booleanColumnRemoveIsPrefix);
 
  
         return data;

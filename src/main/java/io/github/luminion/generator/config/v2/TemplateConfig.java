@@ -195,7 +195,7 @@ public class TemplateConfig {
         return parentDir + packageName;
     }
 
-    public Map<String, TemplateFile> getTemplateFileMap(TableInfo tableInfo) {
+    public Map<String, TemplateClassFile> resolveTemplateFileMap(TableInfo tableInfo) {
         return templateFiles.stream().collect(Collectors.toMap(
                 e -> e.getKey(), e -> {
                     e.validate();

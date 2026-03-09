@@ -74,7 +74,6 @@ public class Configurer {
 
     public Map<String, Object> renderMap(TableInfo tableInfo) {
         HashMap<String, Object> result = new HashMap<>();
-        List<TemplateFile> templateFiles = getTemplateConfig().getTemplateFiles();
 
         // 处理后缀
         Set<String> existPropertyNames = tableInfo.getFields().stream()
@@ -107,34 +106,28 @@ public class Configurer {
                 }
             }
         }
-    
+
         // 渲染模板数据
         result.putAll(this.globalConfig.renderData(tableInfo));
         result.putAll(this.strategyConfig.renderData(tableInfo));
-//        result.putAll(this.templateConfig.renderData(tableInfo));
-        
+
         result.putAll(this.controllerConfig.renderData(tableInfo));
         result.putAll(this.serviceConfig.renderData(tableInfo));
         result.putAll(this.mapperConfig.renderData(tableInfo));
-        
+        result.putAll(this.entityConfig.renderData(tableInfo));
+
         result.putAll(this.commandConfig.renderData(tableInfo));
         result.putAll(this.queryConfig.renderData(tableInfo));
         result.putAll(this.excelConfig.renderData(tableInfo));
-        
+
 
         // 表信息
         result.put("table", tableInfo);
-        // 类名
-        result.putAll(this.getOutputClassSimpleNameMap(tableInfo));
-        
-        // 类包
-        result.put("package", this.getOutputClassPackageInfoMap());
-        // 类全名
-        result.put("class", this.getOutputClassNameMap(tableInfo));
-        // 类是否生成
-        result.put("generate", this.getOutputClassGenerateMap());
-        
-        
+        // 模板信息
+        Map<String, TemplateFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
+        result.put("template", templateFileMap);
+
+
         // 自定义扩展数据
         Map<String, Object> customRenderData = this.globalConfig.getCustomRenderData();
         result.putAll(customRenderData);

@@ -21,7 +21,7 @@ public class CommandConfig implements TemplateRender {
     /**
      * 生成参数校验相关注解
      */
-    protected boolean validated;
+    protected boolean valid;
     /**
      * 生成新增方法及配套类
      */
@@ -46,7 +46,7 @@ public class CommandConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         HashMap<String, Object> data = new HashMap<>();
-        data.put("validated", this.validated);
+        data.put("validated", this.valid);
 
         data.put("generateCreate", this.generateCreate);
         data.put("generateUpdate", this.generateUpdate);
