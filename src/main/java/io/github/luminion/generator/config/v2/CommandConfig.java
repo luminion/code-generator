@@ -42,17 +42,21 @@ public class CommandConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         HashMap<String, Object> data = new HashMap<>();
-        
         data.put("validated", this.validated);
 
         data.put("generateCreate", this.generateCreate);
         data.put("generateUpdate", this.generateUpdate);
         data.put("generateDelete", this.generateDelete);
-
-        data.put("editExcludeColumns", editExcludeColumns);
+        data.put("editExcludeColumns", this.editExcludeColumns);
 
 
         return data;
+    }
+    
+    public void disable() {
+        this.generateCreate = false;
+        this.generateUpdate = false;
+        this.generateDelete = false;
     }
     
 }

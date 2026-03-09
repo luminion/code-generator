@@ -17,6 +17,7 @@ package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.common.*;
 import io.github.luminion.generator.common.support.DefaultNamingConverter;
+import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
@@ -30,21 +31,9 @@ import java.util.*;
  * @since 1.0.0
  */
 @Data
+@Deprecated
 public class StrategyConfig implements TemplateRender {
-    // ===================字段名转换===================
-    /**
-     * 数据库表明/字段名转化到实体类名/属性名的转化器
-     */
-    protected NamingConverter namingConverter = new DefaultNamingConverter();
-    /**
-     * 数据库字段类型转化为java字段类型的方式
-     */
-    protected FieldTypeConverter FieldTypeConverter;
-    /**
-     * 数据库关键字处理器
-     */
-    protected DatabaseKeywordsHandler keyWordsHandler;
-
+  
     // ===================字段类型或特殊字段===================
 
 
@@ -58,6 +47,11 @@ public class StrategyConfig implements TemplateRender {
         if (isInclude && isExclude) {
             throw new IllegalArgumentException("<strategy> 标签中 <include> 与 <exclude> 只能配置一项！");
         }
+    }
+
+    @Override
+    public Map<String, Object> renderData(TableInfo tableInfo) {
+        return Map.of();
     }
 
     /**

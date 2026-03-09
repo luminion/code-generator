@@ -72,7 +72,6 @@ public class StrategyConfig implements TemplateRender {
         Set<String> importPackages = new TreeSet<>();
         if (this.lombok) {
             if (this.chainModel) {
-                importPackages.add("lombok.experimental.Accessors");
                 importPackages.add(RuntimeClass.LOMBOK_ACCESSORS.getClassName());
             }
             importPackages.add(RuntimeClass.LOMBOK_DATA.getClassName());

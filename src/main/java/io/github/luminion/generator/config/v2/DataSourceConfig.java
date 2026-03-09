@@ -151,6 +151,84 @@ public class DataSourceConfig {
         return null;
     }
 
+
+
+    /**
+     * 表名称匹配过滤表前缀
+     *
+     * @param tableName 表名称
+     */
+    public boolean startsWithTablePrefix(String tableName) {
+        return this.tablePrefix.stream().anyMatch(tableName::startsWith);
+    }
+
+
+    /**
+     * 排除表名匹配
+     *
+     * @param tableName 表名
+     * @return 是否匹配
+     */
+    public boolean matchExcludeTable(String tableName) {
+        return matchTable(tableName, this.exclude);
+    }
+    
+    /**
+     * 包含表名匹配
+     *
+     * @param tableName 表名
+     * @return 是否匹配
+     */
+    public boolean matchIncludeTable(String tableName) {
+        return matchTable(tableName, this.include);
+    }
+
+
+    /**
+     * 表名匹配
+     *
+     * @param tableName   表名
+     * @param matchTables 匹配集合
+     * @return 是否匹配
+     */
+    protected boolean matchTable(String tableName, Set<String> matchTables) {
+        return matchTables.stream().anyMatch(t -> tableNameMatches(t, tableName));
+    }
+
+    /**
+     * 表名匹配
+     *
+     * @param matchTableName 匹配表名
+     * @param dbTableName    数据库表名
+     * @return 是否匹配
+     */
+    protected boolean tableNameMatches(String matchTableName, String dbTableName) {
+        return matchTableName.equalsIgnoreCase(dbTableName) || StringUtils.matches(matchTableName, dbTableName);
+    }
+
+    /**
+     * 匹配父类字段(忽略大小写)
+     *
+     * @param fieldName 字段名
+     * @return 是否匹配
+     */
+    public boolean matchSuperEntityColumns(String fieldName) {
+        // 公共字段判断忽略大小写【 部分数据库大小写不敏感 】
+        return superEntityColumns.stream().anyMatch(e -> e.equalsIgnoreCase(fieldName));
+    }
+
+    /**
+     * 匹配忽略字段(忽略大小写)
+     *
+     * @param fieldName 字段名
+     * @return 是否匹配
+     */
+    public boolean matchIgnoreColumns(String fieldName) {
+        return ignoreColumns.stream().anyMatch(e -> e.equalsIgnoreCase(fieldName));
+    }
+
+
+
     /**
      * 创建数据库连接对象
      * 这方法建议只调用一次，毕竟只是代码生成，用一个连接就行。
