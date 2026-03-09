@@ -147,8 +147,8 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
             if (fieldTypeConverter != null) {
                 javaFieldInfo = fieldTypeConverter.convert(metaInfo);
             }
-            tableField.setPropertyClassSimpleName(javaFieldInfo.getClassSimpleName());
-            tableField.setPropertyClassCanonicalName(javaFieldInfo.getClassCanonicalName());
+            tableField.setPropertyType(javaFieldInfo.getClassSimpleName());
+            tableField.setPropertyPkg(javaFieldInfo.getClassCanonicalName());
 
             // 注释双引号替换为单引号
             if (columnInfo.getRemarks() != null) {

@@ -66,7 +66,7 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
      */
         #end
     #end
-    private ${field.propertyClassSimpleName} ${field.propertyName};
+    private ${field.propertyType} ${field.propertyName};
 #end
 #end
 #end
@@ -84,7 +84,7 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
      */
         #end
     #end
-    private ${field.propertyClassSimpleName} ${field.propertyName};
+    private ${field.propertyType} ${field.propertyName};
 #end
 ## --基础getter/setter start--
 #if(!${lombok} && !${queryDtoExtendsEntity})
@@ -92,19 +92,19 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
 #if(${field.logicDeleteField})
 #else
 
-    #if(${field.propertyClassSimpleName.equals("boolean")})
+    #if(${field.propertyType.equals("boolean")})
         #set($getprefix="is")
     #else
         #set($getprefix="get")
     #end
-    public ${field.propertyClassSimpleName} ${getprefix}${field.capitalName}() {
+    public ${field.propertyType} ${getprefix}${field.capitalName}() {
         return ${field.propertyName};
     }
 
     #if(${chainModel})
-    public ${queryDto} set${field.capitalName}(${field.propertyClassSimpleName} ${field.propertyName}) {
+    public ${queryDto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
-    public void set${field.capitalName}(${field.propertyClassSimpleName} ${field.propertyName}) {
+    public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
         this.${field.propertyName} = ${field.propertyName};
     #if(${chainModel})
@@ -119,19 +119,19 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
 #if(!${lombok})
 #foreach($field in ${table.extraFields})
 
-    #if(${field.propertyClassSimpleName.equals("boolean")})
+    #if(${field.propertyType.equals("boolean")})
         #set($getprefix="is")
     #else
         #set($getprefix="get")
     #end
-    public ${field.propertyClassSimpleName} ${getprefix}${field.capitalName}() {
+    public ${field.propertyType} ${getprefix}${field.capitalName}() {
         return ${field.propertyName};
     }
 
     #if(${chainModel})
-    public ${queryDto} set${field.capitalName}(${field.propertyClassSimpleName} ${field.propertyName}) {
+    public ${queryDto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
-    public void set${field.capitalName}(${field.propertyClassSimpleName} ${field.propertyName}) {
+    public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
         this.${field.propertyName} = ${field.propertyName};
     #if(${chainModel})

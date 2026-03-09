@@ -70,7 +70,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
     public ${queryVO} voById(Serializable id) {
         #if(${table.primaryKeyField})
         ${queryDto} dto = new ${queryDto}();
-        dto.set${table.primaryKeyField.capitalName}((${table.primaryKeyField.propertyClassSimpleName}) id);
+        dto.set${table.primaryKeyField.capitalName}((${table.primaryKeyField.propertyType}) id);
         ${queryVO} vo = getBaseMapper().selectByXml(dto, null).stream().findFirst().orElse(null);
         return vo;
         #else
