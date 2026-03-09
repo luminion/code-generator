@@ -64,7 +64,7 @@
         SELECT
         a.*
         FROM
-        $!{schemaName}${table.name} a
+        #if(${schema})${schema}.#end${table.name} a
         <where>
             <include refid="sqlbooster.conditions"/>
             #foreach($field in ${table.fields})

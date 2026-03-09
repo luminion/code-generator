@@ -1,6 +1,7 @@
 package io.github.luminion.generator.config.v2;
 
 import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.DocType;
 import io.github.luminion.generator.enums.JavaEEApi;
 import io.github.luminion.generator.enums.RuntimeClass;
@@ -23,6 +24,7 @@ import java.util.function.BiConsumer;
 @Data
 public class GlobalConfig implements TemplateRender {
 
+    private final Configurer configurer;
     /**
      * 自定义配置渲染数据
      * todo 运行时获取

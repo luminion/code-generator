@@ -1,6 +1,7 @@
 package io.github.luminion.generator.config.v2;
 
 import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.ExcelApi;
 import io.github.luminion.generator.po.TableInfo;
 import lombok.Data;
@@ -14,6 +15,8 @@ import java.util.Map;
  */
 @Data
 public class ExcelConfig implements TemplateRender {
+    protected final Configurer configurer;
+
     /**
      * excel api
      */

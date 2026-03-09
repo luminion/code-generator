@@ -279,7 +279,7 @@ public class ${controller} {
         #end
     }
 #end
-#if(${sqlBooster} && ${sqlContextQuery})
+#if(${sqlBooster} && ${queryWithSqlContext})
 #if(${generateVoList})
 
     #if(${swagger3})

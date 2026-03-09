@@ -16,19 +16,14 @@
 package io.github.luminion.generator.common.support;
 
 import io.github.luminion.generator.common.TableInfoProvider;
-import io.github.luminion.generator.config.ConfigResolver;
-import io.github.luminion.generator.config.base.DataSourceConfig;
+import io.github.luminion.generator.config.v2.DataSourceConfig;
+import io.github.luminion.generator.enums.NameConvertType;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -49,38 +44,49 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class DefaultDatabaseQuery implements TableInfoProvider {
-    protected final DefaultDatabaseQueryMetaDataWrapper databaseMetaDataWrapper;
-    protected final StrategyConfig strategyConfig;
-    protected final ConfigResolver configResolver;
+    protected final DataSourceConfig dataSourceConfig;
+    protected final DefaultDatabaseMetaDataWrapper databaseMetaDataWrapper;
 
-    public DefaultDatabaseQuery(ConfigResolver configResolver) {
-        this.configResolver = configResolver;
-        this.strategyConfig = configResolver.getConfigCollector().getStrategyConfig();
-        DataSourceConfig dataSourceConfig = configResolver.getConfigCollector().getDataSourceConfig();
-        this.databaseMetaDataWrapper = new DefaultDatabaseQueryMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchemaName());
+    public DefaultDatabaseQuery(DataSourceConfig dataSourceConfig) {
+        this.dataSourceConfig = dataSourceConfig;
+        this.databaseMetaDataWrapper = new DefaultDatabaseMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchema());
     }
 
     @Override
     public List<TableInfo> queryTables() {
         try {
-            boolean isInclude = !strategyConfig.getInclude().isEmpty();
-            boolean isExclude = !strategyConfig.getExclude().isEmpty();
-            //所有的表信息
+            boolean isInclude = !dataSourceConfig.getInclude().isEmpty();
+            boolean isExclude = !dataSourceConfig.getExclude().isEmpty();
             List<TableInfo> tableList = new ArrayList<>();
-            List<DefaultDatabaseQueryMetaDataWrapper.Table> tables = this.getTables();
+            List<DefaultDatabaseMetaDataWrapper.Table> tables = this.getTables();
             //需要反向生成或排除的表信息
             List<TableInfo> includeTableList = new ArrayList<>();
             List<TableInfo> excludeTableList = new ArrayList<>();
             tables.forEach(table -> {
                 String tableName = table.getName();
                 if (StringUtils.isNotBlank(tableName)) {
-                    TableInfo tableInfo = new TableInfo(configResolver, table);
+                    TableInfo tableInfo = new TableInfo();
+                    tableInfo.setName(tableName);
+                    String remarks = table.getRemarks();
+                    if (remarks != null) {
+                        String replaced = remarks.replaceAll("[\r\n]", "");
+                        tableInfo.setComment(replaced);
+                    }
+                    Set<String> tablePrefix = dataSourceConfig.getTablePrefix();
+                    Set<String> tableSuffix = dataSourceConfig.getTableSuffix();
+                    String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(tableName, tablePrefix, tableSuffix);
+                    String entityName = dataSourceConfig.getNamingConverter().convertEntityName(removePrefixAndSuffix);
+                    tableInfo.setEntityName(entityName);
+                    
                     if (isInclude && strategyConfig.matchIncludeTable(tableName)) {
                         includeTableList.add(tableInfo);
                     } else if (isExclude && strategyConfig.matchExcludeTable(tableName)) {
                         excludeTableList.add(tableInfo);
                     }
                     tableList.add(tableInfo);
+                    /*
+                    
+                     */
                 }
             });
             // 过滤表
@@ -94,7 +100,7 @@ public class DefaultDatabaseQuery implements TableInfoProvider {
         }
     }
 
-    protected List<DefaultDatabaseQueryMetaDataWrapper.Table> getTables() {
+    protected List<DefaultDatabaseMetaDataWrapper.Table> getTables() {
         // 是否跳过视图
         boolean skipView = strategyConfig.isSkipView();
         // 获取表过滤
@@ -105,18 +111,18 @@ public class DefaultDatabaseQuery implements TableInfoProvider {
     protected void convertTableFields(TableInfo tableInfo) {
         String tableName = tableInfo.getName();
 //        tableInfo.setIndexList(getIndex(tableName));
-        Map<String, DefaultDatabaseQueryMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
+        Map<String, DefaultDatabaseMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
         columnsInfoMap.forEach((k, columnInfo) -> {
             TableField field = new TableField( tableInfo, columnInfo);
             tableInfo.addField(field);
         });
     }
 
-    protected Map<String, DefaultDatabaseQueryMetaDataWrapper.Column> getColumnsInfo(String tableName) {
+    protected Map<String, DefaultDatabaseMetaDataWrapper.Column> getColumnsInfo(String tableName) {
         return databaseMetaDataWrapper.getColumnsInfo(tableName, true);
     }
 
-//    protected List<DefaultDatabaseQueryMetaDataWrapper.Index> getIndex(String tableName) {
+//    protected List<DefaultDatabaseMetaDataWrapper.Index> getIndex(String tableName) {
 //        return databaseMetaDataWrapper.getIndex(tableName);
 //    }
 

@@ -18,7 +18,7 @@ package io.github.luminion.generator.po;
 import io.github.luminion.generator.common.DatabaseKeywordsHandler;
 import io.github.luminion.generator.common.FieldTypeConverter;
 import io.github.luminion.generator.common.JavaFieldInfo;
-import io.github.luminion.generator.common.support.DefaultDatabaseQueryMetaDataWrapper;
+import io.github.luminion.generator.common.support.DefaultDatabaseMetaDataWrapper;
 import io.github.luminion.generator.common.support.DefaultJavaFieldProvider;
 import io.github.luminion.generator.common.support.DefaultNamingConverter;
 import io.github.luminion.generator.config.base.StrategyConfig;
@@ -116,7 +116,7 @@ public class TableField {
     private Map<String, Object> customMap;
 
 
-    public TableField(TableInfo tableInfo, DefaultDatabaseQueryMetaDataWrapper.Column columnInfo) {
+    public TableField(TableInfo tableInfo, DefaultDatabaseMetaDataWrapper.Column columnInfo) {
         this.strategyConfig = tableInfo.getConfigResolver().getConfigCollector().getStrategyConfig();
         if (columnInfo.isPrimaryKey()) {
             this.keyFlag = true;
@@ -256,7 +256,7 @@ public class TableField {
         @Getter
         private String typeName;
 
-        public MetaInfo(DefaultDatabaseQueryMetaDataWrapper.Column column, TableInfo tableInfo) {
+        public MetaInfo(DefaultDatabaseMetaDataWrapper.Column column, TableInfo tableInfo) {
             if (column != null) {
                 this.tableName = tableInfo.getName();
                 this.columnName = column.getName();

@@ -1,6 +1,6 @@
 package io.github.luminion.generator.config.v2;
 
-import io.github.luminion.generator.config.GeneratorConfig;
+import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TemplateFile;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 public class TemplateConfig {
-    protected final GeneratorConfig generatorConfig;
+    protected final Configurer configurer;
 
     /**
      * 生成文件的输出目录

@@ -1,8 +1,7 @@
 package io.github.luminion.generator.config.v2;
 
 import io.github.luminion.generator.common.TemplateRender;
-import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.config.ConfigResolver;
+import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.config.base.GlobalConfig;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.RuntimeEnv;
@@ -24,6 +23,7 @@ import java.util.stream.Stream;
  */
 @Data
 public class ControllerConfig implements TemplateRender {
+    protected final Configurer configurer;
 
     /**
      * 自定义继承的Controller类全称，带包名
@@ -44,7 +44,7 @@ public class ControllerConfig implements TemplateRender {
      * 请求基础url
      */
     protected String baseUrl;
-
+    
     /**
      * 跨域注解
      */
@@ -66,14 +66,14 @@ public class ControllerConfig implements TemplateRender {
     protected boolean requestBody = true;
 
     /**
-     * 批量查询使用post请求
+     * 查询参数使用@RequestBody注解
      */
-    protected boolean batchQueryPost = true;
+    protected boolean queryWithBody = true;
 
     /**
-     * 追加SqlContext查询
+     * 添加基于SqlContext的查询
      */
-    private boolean sqlContextQuery = true;
+    private boolean queryWithSqlContext = true;
 
     /**
      * 返回结果方法
@@ -84,30 +84,22 @@ public class ControllerConfig implements TemplateRender {
      * 分页返回方法
      */
     protected ClassMethodPayload pageMethod = new ClassMethodPayload();
-    
-
 
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         HashMap<String, Object> data = new HashMap<>();
-
-
-        Set<String> importPackages = new TreeSet<>();
-
-        ConfigResolver configResolver = tableInfo.getConfigResolver();
-        ConfigCollector<?> configCollector = configResolver.getConfigCollector();
-        GlobalConfig globalConfig = configCollector.getGlobalConfig();
-
+        
         data.put("crossOrigin", this.crossOrigin);
         data.put("restController", this.restController);
-        data.put("controllerSuperClass", ClassUtils.getSimpleName(this.superClass));
-        data.put("sqlContextQuery", this.sqlContextQuery);
+        data.put("controllerSuperClass", ClassUtils.getSimpleName(this.controllerSuperClass));
+        data.put("queryWithSqlContext", this.queryWithSqlContext);
         // 首字母小写
         String entityName = tableInfo.getEntityName();
         String entityPath = entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
         String url = this.hyphenStyle ? StringUtils.camelToHyphen(entityPath) : entityPath;
-        String requestBaseUrl = Stream.of(this.baseUrl, globalConfig.getParentPackageModule(), url).filter(StringUtils::isNotBlank).collect(Collectors.joining("/"));
+        String requestBaseUrl = Stream.of(this.baseUrl, globalConfig.getParentPackageModule(), url)
+                .filter(StringUtils::isNotBlank).collect(Collectors.joining("/"));
         if (!requestBaseUrl.startsWith("/")) {
             requestBaseUrl = "/" + requestBaseUrl;
         }
@@ -117,7 +109,7 @@ public class ControllerConfig implements TemplateRender {
         data.put("baseService", isGenerateService ? configResolver.getClassSimpleName(TemplateFileEnum.SERVICE, tableInfo) : configResolver.getClassSimpleName(TemplateFileEnum.SERVICE_IMPL, tableInfo));
         data.put("returnMethod", this.returnMethod);
         data.put("pageMethod", this.pageMethod);
-        data.put("batchQueryMethod", batchQueryPost ? "@PostMapping" : "@GetMapping");
+        data.put("batchQueryMethod", queryWithBody ? "@PostMapping" : "@GetMapping");
         // 路径参数
         if (pathVariable) {
             data.put("idPathParams", "/{id}");
@@ -130,7 +122,7 @@ public class ControllerConfig implements TemplateRender {
         data.put("validatedStr", globalConfig.isValidated() ? "@Validated " : null);
         String requestBodyStr = requestBody ? "@RequestBody " : null;
         data.put("requiredBodyStr", requestBodyStr);
-        data.put("optionalBodyStr", batchQueryPost ? requestBodyStr : null);
+        data.put("optionalBodyStr", queryWithBody ? requestBodyStr : null);
         Optional.ofNullable(tableInfo.getPrimaryKeyField()).ifPresent(e -> data.put("primaryKeyPropertyType", e.getJavaType().getType()));
         // 分页
         data.put("pageReturnType", pageMethod.returnGenericTypeStr(configResolver.getClassSimpleName(TemplateFileEnum.QUERY_VO, tableInfo)));

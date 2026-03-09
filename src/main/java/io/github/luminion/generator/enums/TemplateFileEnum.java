@@ -32,7 +32,6 @@ public enum TemplateFileEnum {
     SERVICE_IMPL("serviceImpl"),
     MAPPER("mapper"),
     MAPPER_XML("mapperXml"),
-    
     ENTITY("entity"),
     
     QUERY_DTO("queryDto"),

@@ -3,7 +3,9 @@ package io.github.luminion.generator.config.v2;
 import io.github.luminion.generator.common.ExtraFieldStrategy;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.common.support.DefaultExtraFieldStrategy;
+import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.po.TableInfo;
+import lombok.Data;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -13,7 +15,10 @@ import java.util.Map;
  * @author luminion
  * @since 1.0.0
  */
+@Data
 public class QueryConfig implements TemplateRender {
+    protected final Configurer configurer;
+    
     /**
      * 生成id查询方法
      */

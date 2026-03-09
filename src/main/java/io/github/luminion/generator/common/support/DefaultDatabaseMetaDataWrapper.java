@@ -19,7 +19,6 @@ import io.github.luminion.generator.enums.JdbcType;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,9 +35,9 @@ import java.util.*;
  * @author luminion
  * @since 1.0.0
  */
-public class DefaultDatabaseQueryMetaDataWrapper {
+public class DefaultDatabaseMetaDataWrapper {
 
-    private static final Logger logger = LoggerFactory.getLogger(DefaultDatabaseQueryMetaDataWrapper.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultDatabaseMetaDataWrapper.class);
 
     @Getter
     private final Connection connection;
@@ -51,7 +50,7 @@ public class DefaultDatabaseQueryMetaDataWrapper {
     // 暂时只支持一种
     private final String schema;
 
-    public DefaultDatabaseQueryMetaDataWrapper(Connection connection, String schemaName) {
+    public DefaultDatabaseMetaDataWrapper(Connection connection, String schemaName) {
         try {
             if (null == connection) {
                 throw new RuntimeException("数据库连接不能为空");

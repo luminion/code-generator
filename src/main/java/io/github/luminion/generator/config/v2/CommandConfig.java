@@ -1,7 +1,9 @@
 package io.github.luminion.generator.config.v2;
 
 import io.github.luminion.generator.common.TemplateRender;
+import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.po.TableInfo;
+import lombok.Data;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,7 +14,9 @@ import java.util.Set;
  * @author luminion
  * @since 1.0.0
  */
+@Data
 public class CommandConfig implements TemplateRender {
+    protected final Configurer configurer;
 
     /**
      * 生成参数校验相关注解
@@ -48,7 +52,6 @@ public class CommandConfig implements TemplateRender {
         data.put("generateUpdate", this.generateUpdate);
         data.put("generateDelete", this.generateDelete);
         data.put("editExcludeColumns", this.editExcludeColumns);
-
 
         return data;
     }

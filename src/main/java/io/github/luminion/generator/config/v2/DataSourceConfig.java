@@ -4,6 +4,7 @@ import io.github.luminion.generator.common.DatabaseKeywordsHandler;
 import io.github.luminion.generator.common.FieldTypeConverter;
 import io.github.luminion.generator.common.NamingConverter;
 import io.github.luminion.generator.common.support.DefaultNamingConverter;
+import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.DbType;
 import io.github.luminion.generator.util.DatasourceUtils;
@@ -25,6 +26,7 @@ import java.util.Set;
 @Data
 @Slf4j
 public class DataSourceConfig {
+    private final Configurer configurer;
     /**
      * 驱动连接的URL
      */
@@ -51,7 +53,7 @@ public class DataSourceConfig {
      * java日期类型
      */
     private DateType dateType = DateType.TIME_PACK;
-    
+
 
     /**
      * 数据库表明/字段名转化到实体类名/属性名的转化器
@@ -121,7 +123,7 @@ public class DataSourceConfig {
      * 需要排除的表名
      */
     protected final Set<String> exclude = new HashSet<>();
-    
+
 
     public DataSourceConfig(String url, String username, String password) {
         this.url = url;
@@ -172,7 +174,7 @@ public class DataSourceConfig {
     public boolean matchExcludeTable(String tableName) {
         return matchTable(tableName, this.exclude);
     }
-    
+
     /**
      * 包含表名匹配
      *
