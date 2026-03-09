@@ -3,9 +3,7 @@ package io.github.luminion.generator.po;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -13,7 +11,7 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Data
-public class TableInfo2 {
+public class TableInfo {
 
     /**
      * 表名称
@@ -66,7 +64,6 @@ public class TableInfo2 {
     }
 
     public String getBaseResultColumns() {
-        // 用于base column 
         return this.fields.stream()
                 .map(TableField::getColumnName)
                 .collect(Collectors.joining(", "));

@@ -78,7 +78,6 @@ public class Configurer {
         List<TemplateFile> templateFiles = getTemplateConfig().getTemplateFiles();
 
         // 处理后缀
-        tableInfo.processExtraField();
         Set<String> existPropertyNames = tableInfo.getFields().stream()
                 .map(e -> e.getPropertyName())
                 .collect(Collectors.toSet());
