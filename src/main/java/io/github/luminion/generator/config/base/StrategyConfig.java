@@ -16,10 +16,7 @@
 package io.github.luminion.generator.config.base;
 
 import io.github.luminion.generator.common.*;
-import io.github.luminion.generator.common.support.DefaultExtraFieldProvider;
-import io.github.luminion.generator.common.support.DefaultNameConverter;
-import io.github.luminion.generator.enums.DateType;
-import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.common.support.DefaultNamingConverter;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
@@ -38,11 +35,11 @@ public class StrategyConfig implements TemplateRender {
     /**
      * 数据库表明/字段名转化到实体类名/属性名的转化器
      */
-    protected NameConverter nameConverter = new DefaultNameConverter();
+    protected NamingConverter namingConverter = new DefaultNamingConverter();
     /**
      * 数据库字段类型转化为java字段类型的方式
      */
-    protected JavaFieldProvider JavaFieldProvider;
+    protected FieldTypeConverter FieldTypeConverter;
     /**
      * 数据库关键字处理器
      */
@@ -50,95 +47,6 @@ public class StrategyConfig implements TemplateRender {
 
     // ===================字段类型或特殊字段===================
 
-    /**
-     * java日期类型
-     */
-    private DateType dateType = DateType.TIME_PACK;
-
-    /**
-     * Boolean类型字段是否移除is前缀（默认 false）<br>
-     * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
-     */
-    protected boolean booleanColumnRemoveIsPrefix;
-    /**
-     * 自定义基础的Entity类，公共字段
-     */
-    protected final Set<String> superEntityColumns = new HashSet<>();
-    /**
-     * 自定义忽略字段
-     */
-    protected final Set<String> ignoreColumns = new HashSet<>();
-
-    // ===================过滤相关===================
-
-    /**
-     * 是否显示schema
-     */
-    protected boolean showSchema;
-
-    /**
-     * 是否跳过视图（默认 false）
-     */
-    protected boolean skipView;
-    /**
-     * 模糊查询包含的表名, 需要自行拼接(%)
-     */
-    protected String tableNamePattern;
-
-    /**
-     * 过滤表前缀
-     * example: addTablePrefix("t_")
-     * result: t_simple -> Simple
-     */
-    protected final Set<String> tablePrefix = new HashSet<>();
-
-    /**
-     * 过滤表后缀
-     * example: addTableSuffix("_0")
-     * result: t_simple_0 -> Simple
-     */
-    protected final Set<String> tableSuffix = new HashSet<>();
-
-    /**
-     * 过滤字段前缀
-     * example: addFieldPrefix("is_")
-     * result: is_deleted -> deleted
-     */
-    protected final Set<String> fieldPrefix = new HashSet<>();
-
-    /**
-     * 过滤字段后缀
-     * example: addFieldSuffix("_flag")
-     * result: deleted_flag -> deleted
-     */
-    protected final Set<String> fieldSuffix = new HashSet<>();
-
-    /**
-     * 需要包含的表名（与exclude二选一配置）
-     */
-    protected final Set<String> include = new HashSet<>();
-
-    /**
-     * 需要排除的表名
-     */
-    protected final Set<String> exclude = new HashSet<>();
-
-    /**
-     * 新增和修改需要需要排除的字段
-     */
-    protected final Set<String> editExcludeColumns = new HashSet<>();
-
-    // ===================额外字段===================
-
-    /**
-     * 额外字段后缀
-     */
-    protected final Map<String, String> extraFieldSuffixMap = new LinkedHashMap<>();
-
-    /**
-     * 额外字段策略
-     */
-    protected ExtraFieldProvider extraFieldProvider = new DefaultExtraFieldProvider();
 
 
     /**
@@ -224,14 +132,5 @@ public class StrategyConfig implements TemplateRender {
         return ignoreColumns.stream().anyMatch(e -> e.equalsIgnoreCase(fieldName));
     }
 
-    @Override
-    public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = new HashMap<>();
-        // 策略配置
-        data.put("booleanColumnRemoveIsPrefix", booleanColumnRemoveIsPrefix);
-        data.put("editExcludeColumns", editExcludeColumns);
-        data.put("extraFieldSuffixMap", extraFieldSuffixMap);
-        data.put("extraFieldProvider", extraFieldProvider);
-        return data;
-    }
+  
 }

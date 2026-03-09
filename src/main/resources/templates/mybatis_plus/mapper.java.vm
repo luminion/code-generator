@@ -15,13 +15,13 @@ import ${pkg};
 /**
  * $!{table.comment} Mapper接口
  *
- * @author ${author}
- * @since ${date}
+ * @author ${docAuthor}
+ * @since ${docDate}
  */
 $!{mapperAnnotationClass}
 public interface ${mapper} extends ${mapperSuperClass}<${entity}> {
-#if(${generateSelectByXml})
+###if(${generateSelectByXml})
     
     List<${queryVO}> selectByXml(${queryDto} queryDto, IPage<${queryVO}> page);
-#end
+###end
 }

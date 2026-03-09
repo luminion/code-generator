@@ -16,6 +16,7 @@ import java.util.function.BiConsumer;
  * @since 1.0.0
  */
 @Data
+@Deprecated
 public class InjectionConfig implements TemplateRender {
 
     /**

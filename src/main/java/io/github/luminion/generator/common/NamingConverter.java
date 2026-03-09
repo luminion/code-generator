@@ -7,7 +7,7 @@ package io.github.luminion.generator.common;
  * @author luminion
  * @since 1.0.0
  */
-public interface NameConverter {
+public interface NamingConverter {
     /**
      * 转化为实体类名
      *

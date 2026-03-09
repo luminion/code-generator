@@ -1,7 +1,7 @@
 package io.github.luminion.generator.common.support;
 
 
-import io.github.luminion.generator.common.ExtraFieldProvider;
+import io.github.luminion.generator.common.ExtraFieldStrategy;
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.enums.SqlKeyword;
 import io.github.luminion.generator.po.TableField;
@@ -16,7 +16,7 @@ import java.util.List;
  * @author luminion
  * @since 1.0.0
  */
-public class DefaultExtraFieldProvider implements ExtraFieldProvider {
+public class DefaultExtraFieldStrategy implements ExtraFieldStrategy {
     private static final List<String> ALLOW_COMPARE = Arrays.asList(
             "Byte"
             , "Short"
@@ -52,7 +52,7 @@ public class DefaultExtraFieldProvider implements ExtraFieldProvider {
 
     @Override
     @SneakyThrows
-    public Boolean whetherGenerate(String sqlOperator, TableField tableField) {
+    public Boolean generateExtraField(String sqlOperator, TableField tableField) {
         SqlKeyword sqlKeyword = SqlKeyword.resolve(sqlOperator);
         String replacedOperator = sqlKeyword.getSymbol();
         String propertyType = tableField.getPropertyType();

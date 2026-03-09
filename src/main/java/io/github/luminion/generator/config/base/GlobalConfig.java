@@ -37,146 +37,11 @@ import java.util.TreeSet;
  */
 @Slf4j
 @Data
+@Deprecated
 public class GlobalConfig implements TemplateRender {
 
-    //---------------- 通用模型项---------------
 
-    /**
-     * 是否为lombok模型（默认 false）
-     */
-    protected boolean lombok = true;
-
-    /**
-     * 是否为链式模型setter（默认 false）
-     */
-    protected boolean chainModel;
-
-    /**
-     * 实体是否生成 serialVersionUID
-     */
-    protected boolean serializableUID = false;
-
-    /**
-     * 实体是否启用java.io.Serial (需JAVA 14) 注解
-     *
-     */
-    protected boolean serializableAnnotation = true;
-
-    //---------------- 注释文档---------------
-
-    /**
-     * 文档注释类型
-     */
-    protected DocType docType = DocType.JAVA_DOC;
-    /**
-     * 文档注释添加相关类链接
-     */
-    protected boolean docLink = false;
-    /**
-     * doc作者
-     */
-    //protected String author = System.getProperty("user.name");
-    protected String author = "luminion";
-    /**
-     * 注释日期
-     */
-    protected String date = LocalDate.now().toString();
-
-
-    //---------------- 运行时环境相关--------------
-
-    /**
-     * java ee api
-     */
-    protected JavaEEApi javaEEApi = JavaEEApi.JAKARTA;
-    /**
-     * excel api
-     */
-    protected ExcelApi excelApi = ExcelApi.EASY_EXCEL;
-
-    /**
-     * 外部运行环境
-     */
-    protected RuntimeEnv runtimeEnv = RuntimeEnv.MYBATIS_PLUS;
-
-
-    // ----------------输出目录及包相关-----------------
-
-    /**
-     * 生成文件的输出目录
-     */
-    protected String outputDir = System.getProperty("user.dir") + "/src/main/java";
-    /**
-     * 是否打开输出目录
-     */
-    protected boolean openOutputDir;
-
-    /**
-     * 输出文件覆盖(全局)
-     */
-    protected boolean fileOverride;
-
-    /**
-     * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
-     */
-    protected String parentPackage = "com.example";
-
-    /**
-     * 父包模块名
-     */
-    protected String parentPackageModule = "";
-
-    // ----------------生成内容相关-----------------
-
-    /**
-     * 生成参数校验相关注解
-     */
-    protected boolean validated;
-
-    ///**
-    // * 生成查询相关方法及配套类
-    // */
-    //protected boolean generateQuery = true;
-
-    /**
-     * 生成id查询方法
-     */
-    protected boolean generateVoById = true;
-
-    /**
-     * 批量查询相关方法及配套类
-     */
-    protected boolean generateVoList = true;
-
-    /**
-     * 批量查询分页相关方法及配套类
-     */
-    protected boolean generateVoPage = true;
-
-    /**
-     * 生成新增方法及配套类
-     */
-    protected boolean generateCreate = true;
-
-    /**
-     * 生成更新方法及配套类
-     */
-    protected boolean generateUpdate = true;
-
-    /**
-     * 生成删除方法及配套类
-     */
-    protected boolean generateDelete = true;
-
-    /**
-     * 生成导入方法及配套类(需允许新增)
-     */
-    protected boolean generateImport = true;
-
-    /**
-     * 生成导出方法(需允许查询)
-     */
-    protected boolean generateExport = true;
+    
 
     @Override
     public void init() {
@@ -209,11 +74,13 @@ public class GlobalConfig implements TemplateRender {
         Map<String, Object> data = new HashMap<>();
         data.put("author", this.author);
         data.put("date", this.date);
-        data.put("validated", this.validated);
+   
         data.put("docLink", this.docLink);
         data.put("lombok", this.lombok);
         data.put("chainModel", this.chainModel);
 
+        data.put("validated", this.validated);
+        
         switch (this.docType) {
             case SWAGGER_V3:
                 data.put("swagger3", true);
@@ -232,6 +99,7 @@ public class GlobalConfig implements TemplateRender {
         data.put("serializableAnnotation", this.serializableAnnotation);
 
         data.put("javaApiPackagePrefix", javaEEApi.getPackagePrefix());
+        
         data.put("excelApiPackagePrefix", excelApi.getPackagePrefix());
         data.put("excelApiClass", excelApi.getMainEntrance());
 
@@ -243,10 +111,12 @@ public class GlobalConfig implements TemplateRender {
         data.put("generateVoById", this.generateVoById);
         data.put("generateVoList", this.generateVoList);
         data.put("generateVoPage", this.generateVoPage);
-        data.put("generateSelectByXml", this.isGenerateSelectByXml());
+    
         
         data.put("generateImport", this.generateImport);
         data.put("generateExport", this.generateExport);
+
+        data.put("generateSelectByXml", this.isGenerateSelectByXml());
 
         return data;
     }

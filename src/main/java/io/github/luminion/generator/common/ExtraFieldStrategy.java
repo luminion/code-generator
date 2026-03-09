@@ -8,7 +8,7 @@ import io.github.luminion.generator.po.TableField;
  * @since 1.0.0
  */
 @FunctionalInterface
-public interface ExtraFieldProvider {
+public interface ExtraFieldStrategy {
 
     /**
      * 控制是否生成额外字段
@@ -18,5 +18,5 @@ public interface ExtraFieldProvider {
      * @return 是否生成额外字段
      * @since 1.0.0
      */
-    Boolean whetherGenerate(String sqlOperator, TableField tableField);
+    Boolean generateExtraField(String sqlOperator, TableField tableField);
 }

@@ -22,7 +22,7 @@ public abstract class InitializeUtils {
 
     public static void initJdbcTypeConverter(ConfigCollector<?> configCollector) {
         StrategyConfig strategyConfig = configCollector.getStrategyConfig();
-        strategyConfig.setJavaFieldProvider(metaInfo -> {
+        strategyConfig.setFieldTypeConverter(metaInfo -> {
             if (JdbcType.TINYINT == metaInfo.getJdbcType()) {
                 return JavaFieldType.INTEGER;
             }

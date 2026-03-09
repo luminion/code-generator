@@ -9,7 +9,7 @@ import io.github.luminion.generator.po.TableField;
  * @since 1.0.0
  */
 @FunctionalInterface
-public interface JavaFieldProvider {
+public interface FieldTypeConverter {
 
     /**
      * 转为java字段信息

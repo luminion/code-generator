@@ -35,6 +35,7 @@ import java.util.Properties;
  */
 @Slf4j
 @Data
+@Deprecated
 public class DataSourceConfig {
     /**
      * 驱动连接的URL

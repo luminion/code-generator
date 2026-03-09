@@ -1,5 +1,10 @@
 package io.github.luminion.generator.config.v2;
 
+import io.github.luminion.generator.common.DatabaseKeywordsHandler;
+import io.github.luminion.generator.common.FieldTypeConverter;
+import io.github.luminion.generator.common.NamingConverter;
+import io.github.luminion.generator.common.support.DefaultNamingConverter;
+import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.DbType;
 import io.github.luminion.generator.util.DatasourceUtils;
 import io.github.luminion.generator.util.StringUtils;
@@ -9,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * @author luminion
@@ -39,6 +46,82 @@ public class DataSourceConfig {
      * 数据库schema名
      */
     protected String schema;
+
+    /**
+     * java日期类型
+     */
+    private DateType dateType = DateType.TIME_PACK;
+    
+
+    /**
+     * 数据库表明/字段名转化到实体类名/属性名的转化器
+     */
+    protected NamingConverter namingConverter = new DefaultNamingConverter();
+    /**
+     * 数据库字段类型转化为java字段类型的方式
+     */
+    protected FieldTypeConverter FieldTypeConverter;
+    /**
+     * 数据库关键字处理器
+     */
+    protected DatabaseKeywordsHandler keyWordsHandler;
+
+    /**
+     * 是否跳过视图（默认 false）
+     */
+    protected boolean skipView;
+
+    /**
+     * 模糊查询包含的表名, 需要自行拼接(%)
+     */
+    protected String tableNamePattern;
+    /**
+     * 自定义基础的Entity类，公共字段
+     */
+    protected final Set<String> superEntityColumns = new HashSet<>();
+    /**
+     * 自定义忽略字段
+     */
+    protected final Set<String> ignoreColumns = new HashSet<>();
+
+    /**
+     * 过滤表前缀
+     * example: addTablePrefix("t_")
+     * result: t_simple -> Simple
+     */
+    protected final Set<String> tablePrefix = new HashSet<>();
+
+    /**
+     * 过滤表后缀
+     * example: addTableSuffix("_0")
+     * result: t_simple_0 -> Simple
+     */
+    protected final Set<String> tableSuffix = new HashSet<>();
+
+    /**
+     * 过滤字段前缀
+     * example: addFieldPrefix("is_")
+     * result: is_deleted -> deleted
+     */
+    protected final Set<String> fieldPrefix = new HashSet<>();
+
+    /**
+     * 过滤字段后缀
+     * example: addFieldSuffix("_flag")
+     * result: deleted_flag -> deleted
+     */
+    protected final Set<String> fieldSuffix = new HashSet<>();
+
+    /**
+     * 需要包含的表名（与exclude二选一配置）
+     */
+    protected final Set<String> include = new HashSet<>();
+
+    /**
+     * 需要排除的表名
+     */
+    protected final Set<String> exclude = new HashSet<>();
+    
 
     public DataSourceConfig(String url, String username, String password) {
         this.url = url;

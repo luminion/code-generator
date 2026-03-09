@@ -16,11 +16,11 @@
 package io.github.luminion.generator.po;
 
 import io.github.luminion.generator.common.DatabaseKeywordsHandler;
+import io.github.luminion.generator.common.FieldTypeConverter;
 import io.github.luminion.generator.common.JavaFieldInfo;
-import io.github.luminion.generator.common.JavaFieldProvider;
 import io.github.luminion.generator.common.support.DefaultDatabaseQueryMetaDataWrapper;
 import io.github.luminion.generator.common.support.DefaultJavaFieldProvider;
-import io.github.luminion.generator.common.support.DefaultNameConverter;
+import io.github.luminion.generator.common.support.DefaultNamingConverter;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.enums.JdbcType;
 import io.github.luminion.generator.enums.NameConvertType;
@@ -142,13 +142,13 @@ public class TableField {
         Set<String> fieldPrefix = strategyConfig.getFieldPrefix();
         Set<String> fieldSuffix = strategyConfig.getFieldSuffix();
         String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(columnName, fieldPrefix, fieldSuffix);
-        String propertyName = strategyConfig.getNameConverter().convertFieldName(removePrefixAndSuffix);
+        String propertyName = strategyConfig.getNamingConverter().convertFieldName(removePrefixAndSuffix);
         this.propertyName = propertyName;
 
         JavaFieldInfo javaFieldInfo = null;
-        JavaFieldProvider javaFieldTypeConverter = strategyConfig.getJavaFieldProvider();
-        if (javaFieldTypeConverter != null) {
-            javaFieldInfo = javaFieldTypeConverter.convert(metaInfo);
+        FieldTypeConverter fieldTypeConverter = strategyConfig.getFieldTypeConverter();
+        if (fieldTypeConverter != null) {
+            javaFieldInfo = fieldTypeConverter.convert(metaInfo);
         }
         if (javaFieldInfo == null) {
             javaFieldInfo = DefaultJavaFieldProvider.getJavaFieldType(metaInfo, strategyConfig.getDateType());
@@ -162,7 +162,7 @@ public class TableField {
             this.convert = true;
             this.propertyName = StringUtils.removePrefixAfterPrefixToLower(propertyName, 2);
         }
-        if (DefaultNameConverter.class.equals(strategyConfig.getNameConverter().getClass())) {
+        if (DefaultNamingConverter.class.equals(strategyConfig.getNamingConverter().getClass())) {
             // 下划线转驼峰策略
             this.convert = !propertyName.equalsIgnoreCase(NameConvertType.underlineToCamel(this.columnName));
         } else {

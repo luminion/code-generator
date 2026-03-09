@@ -15,7 +15,6 @@
  */
 package io.github.luminion.generator.enums;
 
-import io.github.luminion.generator.common.NameConverter;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

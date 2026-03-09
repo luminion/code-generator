@@ -106,7 +106,7 @@ public class TableInfo {
         Set<String> tablePrefix = strategyConfig.getTablePrefix();
         Set<String> tableSuffix = strategyConfig.getTableSuffix();
         String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(tableName, tablePrefix, tableSuffix);
-        String entityName = strategyConfig.getNameConverter().convertEntityName(removePrefixAndSuffix);
+        String entityName = strategyConfig.getNamingConverter().convertEntityName(removePrefixAndSuffix);
         this.entityName = entityName;
 //        if (strategyConfig.startsWithTablePrefix(name) || strategyConfig.isTableFieldAnnotationEnable()) {
 //            this.convert = true;

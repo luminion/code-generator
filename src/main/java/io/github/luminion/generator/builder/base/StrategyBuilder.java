@@ -1,9 +1,9 @@
 package io.github.luminion.generator.builder.base;
 
 import io.github.luminion.generator.common.DatabaseKeywordsHandler;
-import io.github.luminion.generator.common.ExtraFieldProvider;
-import io.github.luminion.generator.common.JavaFieldProvider;
-import io.github.luminion.generator.common.NameConverter;
+import io.github.luminion.generator.common.ExtraFieldStrategy;
+import io.github.luminion.generator.common.FieldTypeConverter;
+import io.github.luminion.generator.common.NamingConverter;
 import io.github.luminion.generator.config.base.StrategyConfig;
 import io.github.luminion.generator.enums.DateType;
 import lombok.NonNull;
@@ -34,22 +34,22 @@ public class StrategyBuilder {
     /**
      * 数据库表/字段名转实体属性名策略
      *
-     * @param nameConverter 名称转换器
+     * @param namingConverter 名称转换器
      * @return this
      */
-    public StrategyBuilder nameConverter(@NonNull NameConverter nameConverter) {
-        this.config.setNameConverter(nameConverter);
+    public StrategyBuilder nameConverter(@NonNull NamingConverter namingConverter) {
+        this.config.setNamingConverter(namingConverter);
         return this;
     }
 
     /**
      * 数据库类型转Java类型策略
      *
-     * @param javaFieldProvider Java字段提供者
+     * @param fieldTypeConverter Java字段提供者
      * @return this
      */
-    public StrategyBuilder javaFieldProvider(@NonNull JavaFieldProvider javaFieldProvider) {
-        this.config.setJavaFieldProvider(javaFieldProvider);
+    public StrategyBuilder javaFieldProvider(@NonNull FieldTypeConverter fieldTypeConverter) {
+        this.config.setFieldTypeConverter(fieldTypeConverter);
         return this;
     }
 
@@ -268,11 +268,11 @@ public class StrategyBuilder {
     /**
      * 额外字段提供者
      *
-     * @param extraFieldProvider 额外字段提供者
+     * @param extraFieldStrategy 额外字段提供者
      * @return this
      */
-    public StrategyBuilder extraFieldProvider(@NonNull ExtraFieldProvider extraFieldProvider) {
-        this.config.setExtraFieldProvider(extraFieldProvider);
+    public StrategyBuilder extraFieldProvider(@NonNull ExtraFieldStrategy extraFieldStrategy) {
+        this.config.setExtraFieldProvider(extraFieldStrategy);
         return this;
     }
 }

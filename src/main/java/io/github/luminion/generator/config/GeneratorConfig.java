@@ -1,6 +1,7 @@
 package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.config.base.DataSourceConfig;
+import io.github.luminion.generator.po.TableInfo;
 import lombok.Getter;
 
 /**

@@ -16,6 +16,32 @@ import java.util.List;
 public class TemplateConfig {
     protected final GeneratorConfig generatorConfig;
 
+    /**
+     * 生成文件的输出目录
+     */
+    protected String outputDir = System.getProperty("user.dir") + "/src/main/java";
+
+    /**
+     * 是否打开输出目录
+     */
+    protected boolean openOutputDir;
+
+    /**
+     * 输出文件覆盖(全局)
+     */
+    protected boolean fileOverride;
+
+    /**
+     * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
+     */
+    protected String parentPackage = "com.example";
+
+    /**
+     * 父包模块名
+     */
+    protected String parentPackageModule = "";
+    
+
     protected TemplateFile controller = new TemplateFile(
             TemplateFileEnum.CONTROLLER.getKey(),
             "%sController",

@@ -15,12 +15,12 @@ import ${pkg};
 /**
  * $!{table.comment}-导入Dto
  *
- * @author ${author}
+ * @author ${docAuthor}
 #if(${docLink})
  * @see ${class.entity}
  * @see ${class.serviceImpl}
 #end
- * @since ${date}
+ * @since ${docDate}
  */
 #if(${lombok})
 @Data

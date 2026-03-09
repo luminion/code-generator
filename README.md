@@ -213,8 +213,8 @@ public class GeneratorTest {
 
 | 配置方法 | 参数类型 | 详细说明 |
 |---|---|---|
-| `nameConverter(NameConverter)` | `NameConverter` | 数据库表/字段名转实体属性名策略 |
-| `javaFieldProvider(JavaFieldProvider)` | `JavaFieldProvider` | 数据库类型转 Java 类型策略 |
+| `namingConverter(NameConverter)` | `NameConverter` | 数据库表/字段名转实体属性名策略 |
+| `fieldTypeConverter(JavaFieldProvider)` | `JavaFieldProvider` | 数据库类型转 Java 类型策略 |
 | `keyWordsHandler(DatabaseKeywordsHandler)` | `DatabaseKeywordsHandler` | 数据库关键字处理器 |
 | `dateType(DateType)` | `DateType` | 设置时间类型 |
 | `booleanColumnRemoveIsPrefix(boolean)` | `boolean` | 是否移除 Boolean 类型字段的 'is' 前缀 |
@@ -233,7 +233,7 @@ public class GeneratorTest {
 | `extraFieldSuffix(String, String)` | `String`, `String` | 添加额外字段后缀 (例如: `extraFieldSuffix("Like", "LIKE")`) |
 | `extraFieldSuffix(Map<String, String>)` | `Map<String, String>` | 批量添加额外字段后缀 |
 | `clearExtraFieldSuffix()` | - | 清空额外字段后缀 |
-| `extraFieldProvider(ExtraFieldProvider)` | `ExtraFieldProvider` | 自定义额外字段提供者 |
+| `extraFieldStrategy(ExtraFieldProvider)` | `ExtraFieldProvider` | 自定义额外字段提供者 |
 
 
 ### `injection()`注入配置
