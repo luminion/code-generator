@@ -3,10 +3,7 @@ package io.github.luminion.generator.config;
 import io.github.luminion.generator.common.ExtraFieldStrategy;
 import io.github.luminion.generator.common.support.JdbcTableInfoProvider;
 import io.github.luminion.generator.config.v2.*;
-import io.github.luminion.generator.po.TableField;
-import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.po.TableSuffixField;
-import io.github.luminion.generator.po.TemplateFile;
+import io.github.luminion.generator.po.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -124,7 +121,7 @@ public class Configurer {
         // 表信息
         result.put("table", tableInfo);
         // 模板信息
-        Map<String, TemplateFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
+        Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
         result.put("template", templateFileMap);
 
 

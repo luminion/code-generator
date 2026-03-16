@@ -1,4 +1,4 @@
-package ${package.queryDto};
+package ${template.queryDto.packageName};
 #if($queryDtoFramePkg.size()>0)
 
 #end
@@ -28,20 +28,13 @@ import ${pkg};
     #if(${chainModel})
 @Accessors(chain = true)
     #end
-    #if(${queryDtoExtendsEntity})
-@EqualsAndHashCode(callSuper = true)
-    #end
 #end
 #if(${swagger3})
 @Schema(description = "$!{table.comment}-查询Dto")
 #elseif(${swagger2})
 @ApiModel(description = "$!{table.comment}-查询Dto")
 #end
-#if(${queryDtoExtendsEntity})
-public class ${queryDto} extends ${entity}#if(${serializableUID}) implements Serializable#end {
-#else
 public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
-#end
 #if(${serializableUID})
 
     #if(${serializableAnnotation})
@@ -50,7 +43,6 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
     private static final long serialVersionUID = 1L;
 #end
 ## ----------  BEGIN 字段循环遍历  ----------
-#if(!${queryDtoExtendsEntity})
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #else
@@ -67,7 +59,6 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
         #end
     #end
     private ${field.propertyType} ${field.propertyName};
-#end
 #end
 #end
 ## ----------  END 字段循环遍历  ----------
@@ -87,7 +78,6 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
     private ${field.propertyType} ${field.propertyName};
 #end
 ## --基础getter/setter start--
-#if(!${lombok} && !${queryDtoExtendsEntity})
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #else
@@ -111,7 +101,6 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
         return this;
     #end
     }
-#end
 #end
 #end
 ## --基础getter/setter end---

@@ -82,14 +82,6 @@ public class ControllerConfig implements TemplateRender {
      * 分页返回方法
      */
     protected ClassMethodPayload pageMethod = new ClassMethodPayload();
-    /**
-     * 分页页码方法
-     */
-    protected ClassMethodPayload pageNum = new ClassMethodPayload();
-    /**
-     * 分页页大小方法
-     */
-    protected ClassMethodPayload pageSize = new ClassMethodPayload();
 
 
     @Override
