@@ -36,9 +36,6 @@ import ${pkg};
 #else
 @Controller
 #end
-#if(${lombok})
-@RequiredArgsConstructor
-#end
 @RequestMapping("$!{requestBaseUrl}")
 #if(${controllerSuperClass})
 public class ${controller} extends ${controllerSuperClass} {
@@ -46,13 +43,8 @@ public class ${controller} extends ${controllerSuperClass} {
 public class ${controller} {
 #end
 
-    private final ${baseService} baseService;
-#if(!${lombok})
-
-    public ${controller}(${baseService} baseService) {
-        this.baseService = baseService;
-    }
-#end
+    @Autowired
+    private ${baseService} baseService;
 #if(${generateCreate})
 
     #if(${swagger3})
@@ -75,8 +67,8 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Serializable")} create($!{requiredBodyStr}$!{validatedStr}${createDto} dto) {
-        return ${returnMethod.invokeMethodStr("baseService.createByDto(dto)")};
+    public ${returnTypeFormat.apply("Serializable")} create($!{requiredBodyStr}$!{validatedStr}${createDto} dto) {
+        return ${returnMethodFormat.apply("baseService.createByDto(dto)")};
     }
 #end
 #if(${generateUpdate})
@@ -101,8 +93,8 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Boolean")} update($!{requiredBodyStr}$!{validatedStr}${updateDto} dto) {
-        return ${returnMethod.invokeMethodStr("baseService.updateByDto(dto)")};
+    public ${returnTypeFormat.apply("Boolean")} update($!{requiredBodyStr}$!{validatedStr}${updateDto} dto) {
+        return ${returnMethodFormat.apply("baseService.updateByDto(dto)")};
     }
 #end
 #if(${generateDelete} && ${table.havePrimaryKey})
@@ -127,8 +119,8 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Boolean")} delete($!{idMethodParam}${primaryKeyPropertyType} id) {
-        return ${returnMethod.invokeMethodStr("baseService.removeById(id)")};
+    public ${returnTypeFormat.apply("Boolean")} delete($!{idMethodParam}${primaryKeyPropertyType} id) {
+        return ${returnMethodFormat.apply("baseService.removeById(id)")};
     }
 #end
 #if(${generateVoById} && ${table.havePrimaryKey})
@@ -153,8 +145,8 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("${queryVO}")} voById($!{idMethodParam}${primaryKeyPropertyType} id) {
-        return ${returnMethod.invokeMethodStr("baseService.voById(id)")};
+    public ${returnTypeFormat.apply("${queryVo}")} voById($!{idMethodParam}${primaryKeyPropertyType} id) {
+        return ${returnMethodFormat.apply("baseService.voById(id)")};
     }
 #end
 #if(${generateVoList})
@@ -175,12 +167,11 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} list($!{optionalBodyStr}${queryDto} dto) {
+    public ${returnTypeFormat.apply("List<${queryVo}>")} list($!{optionalBodyStr}${queryDto} dto) {
         #if($sqlBooster)
-        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(dto).build();
-        return ${returnMethod.invokeMethodStr("baseService.voList(build)")};    
+        return ${returnMethodFormat.apply("baseService..appendByBean(dto).list()")};    
         #else
-        return ${returnMethod.invokeMethodStr("baseService.voList(dto)")};
+        return ${returnMethodFormat.apply("baseService.voList(dto)")};
         #end
     }
 #end
@@ -200,16 +191,20 @@ public class ${controller} {
      * @return 查询结果
      */
     #end
-    ${batchQueryMethod}("/page$!{pagePathParams}")
+    ${batchQueryMethod}("/page")
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} page($!{optionalBodyStr}${queryDto} dto, $!{pageMethodParams}) {
+    public ${returnTypeFormat.apply(${pageReturnType.apply(${queryVo})})} page($!{optionalBodyStr}${queryDto} dto$!{pageMethodParams}) {
+        #if(${queryDtoSuperClass})
+        Long current = dto.${pageGetter};
+        Long size = dto.${sizeGetter};
+        #end
+        Long 
         #if($sqlBooster)
-        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(dto).build();
-        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(build, current, size)")})};
+        return ${returnMethodFormat.apply(${pageMethodFormat.apply("baseService.lambdaBooster().appendByBean(dto).page(cuurent, size))")})};
         #else
-        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(dto, current, size)")})};
+        return ${returnMethodFormat.apply(${pageMethodFormat.apply("baseService.voPage(dto, current, size)")})};
         #end
     }
 #end
@@ -248,9 +243,9 @@ public class ${controller} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnMethod.returnGenericTypeStr("Integer")} excelImport(@RequestParam("excel") MultipartFile excel) throws IOException {
-        if (excel == null || excel.isEmpty()) return ${returnMethod.invokeMethodStr(0)};
-        return ${returnMethod.invokeMethodStr("baseService.excelImport(excel.getInputStream())")};
+    public ${returnTypeFormat.apply("Integer")} excelImport(@RequestParam("excel") MultipartFile excel) throws IOException {
+        if (excel == null || excel.isEmpty()) return ${returnMethodFormat.apply(0)};
+        return ${returnMethodFormat.apply("baseService.excelImport(excel.getInputStream())")};
     }
 #end
 #if(${generateExport})
@@ -278,74 +273,5 @@ public class ${controller} {
         baseService.excelExport(dto, response.getOutputStream());
         #end
     }
-#end
-#if(${sqlBooster} && ${queryWithSqlContext})
-#if(${generateVoList})
-
-    #if(${swagger3})
-    @Operation(summary = "动态条件-列表查询")
-    #elseif(${swagger2})
-    @ApiOperation(value = "动态条件-列表查询")
-    #else
-    /**
-     * 动态条件-列表查询
-     *
-     * @param sqlContext 条件构造器
-     * @return 查询结果
-     */
-    #end
-    @PostMapping("/booster/list")
-    #if(!${restController})
-    @ResponseBody
-    #end
-    public ${returnMethod.returnGenericTypeStr("List<${queryVO}>")} list($!{optionalBodyStr}SqlContext<${entity}> sqlContext) {
-        return ${returnMethod.invokeMethodStr("baseService.voList(sqlContext)")};
-    }
-#end
-#if(${generateVoPage})
-
-    #if(${swagger3})
-    @Operation(summary = "动态条件-分页查询")
-    #elseif(${swagger2})
-    @ApiOperation(value = "动态条件-分页查询")
-    #else
-    /**
-     * 动态条件-分页查询
-     *
-     * @param sqlContext 条件构造器
-     * @param current 页码
-     * @param size 每页大小
-     * @return 查询结果
-     */
-    #end
-    @PostMapping("/booster/page$!{pagePathParams}")
-    #if(!${restController})
-    @ResponseBody
-    #end
-    public ${returnMethod.returnGenericTypeStr(${pageReturnType})} page($!{optionalBodyStr}SqlContext<${entity}> sqlContext, $!{pageMethodParams}) {
-        return ${returnMethod.invokeMethodStr(${pageMethod.invokeMethodStr("baseService.voPage(sqlContext, current, size)")})};
-    }
-#end
-#if(${generateExport})
-
-    #if(${swagger3})
-    @Operation(summary = "动态条件-excel文件导出")
-    #elseif(${swagger2})
-    @ApiOperation(value = "动态条件-excel文件导出")
-    #else
-    /**
-     * 动态条件-excel文件导出
-     * 
-     * @param sqlContext 条件构造器
-     */
-    #end
-    @PostMapping("/booster/excel/export")
-    public void excelExport($!{optionalBodyStr}SqlContext<${entity}> sqlContext, HttpServletResponse response) throws IOException {
-        response.setContentType("application/vnd.ms-excel");
-##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-        response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        baseService.excelExport(sqlContext, response.getOutputStream());
-    }
-#end
 #end
 }

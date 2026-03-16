@@ -12,6 +12,7 @@ import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,6 +73,34 @@ public class ControllerConfig implements TemplateRender {
      * 添加基于SqlContext的查询
      */
     private boolean queryWithSqlContext = true;
+    
+    
+    /**
+     * 返回结果类型
+     */
+    protected String returnTypeClass;
+    /**
+     * 返回结果类型格式化
+     */
+    protected Function<String,String> returnTypeFormat = (s -> s);
+    /**
+     * 返回结果方法格式化
+     */
+    protected Function<String,String> returnMethodFormat = (s -> s);
+
+    /**
+     * 分页结果类型
+     */
+    protected String pageTypeClass;
+    /**
+     * 分页结果类型格式化
+     */
+    protected Function<String,String> pageTypeFormat = (s -> s);
+    /**
+     * 分页结果方法格式化
+     */
+    protected Function<String,String> pageMethodFormat = (s -> s);
+    
 
     /**
      * 返回结果方法
@@ -114,26 +143,29 @@ public class ControllerConfig implements TemplateRender {
         data.put("pageMethod", this.pageMethod);
         data.put("queryWithBody", queryWithBody ? "@PostMapping" : "@GetMapping");
         // 路径参数
-        // todo 继续改造
         if (pathVariable) {
             data.put("idPathParam", "/{id}");
             data.put("idMethodParam", "@PathVariable(\"id\") ");
-        } else {
-            data.put("pageMethodParams", "Long current, Long size");
         }
-        // 分页参数
-        if (pageNum.isMethodReady() && pageSize.isMethodReady()){
-            data.put("pageMethodParams", "Long current, Long size");
-        }
-        
+      
         data.put("validatedStr", configurer.getCommandConfig().isValid() ? "@Validated " : null);
         String requestBodyStr = requestBody ? "@RequestBody " : null;
         data.put("requiredBodyStr", requestBodyStr);
+        Optional.ofNullable(tableInfo.getPrimaryKeyField())
+                .ifPresent(e -> data.put("primaryKeyPropertyType", e.getPropertyType()));
+        
+        
         data.put("optionalBodyStr", queryWithBody ? requestBodyStr : null);
-        Optional.ofNullable(tableInfo.getPrimaryKeyField()).ifPresent(e -> data.put("primaryKeyPropertyType", e.getJavaType().getType()));
-        // 分页
-        data.put("pageReturnType", pageMethod.returnGenericTypeStr(configResolver.getClassSimpleName(TemplateFileEnum.QUERY_VO, tableInfo)));
 
+        // 分页
+        
+
+
+        QueryConfig queryConfig = configurer.getQueryConfig();
+        if (queryConfig.getQueryDtoSuperClass() == null) {
+            data.put("pageMethodParams", ", Long current, Long size");
+        }
+        
         // ======================导包======================
         // spring组件
         importPackages.add(RuntimeClass.SPRING_BOOT_WEB_ANNOTATION_S.getClassName());
