@@ -65,10 +65,10 @@ public class TemplateConfig {
     );
 
     protected TemplateFile serviceImpl = new TemplateFile(
-            TemplateFileEnum.SERVICE.getKey(),
-            "%sService",
-            "service",
-            "/templates/mybatis_plus/service.java",
+            TemplateFileEnum.SERVICE_IMPL.getKey(),
+            "%sServiceImpl",
+            "service.impl",
+            "/templates/mybatis_plus/serviceImpl.java",
             ".java"
     );
 
