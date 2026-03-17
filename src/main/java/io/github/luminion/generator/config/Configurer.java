@@ -122,7 +122,7 @@ public class Configurer {
         result.put("table", tableInfo);
         // 模板信息
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
-        result.put("template", templateFileMap);
+        result.putAll( templateFileMap);
 
 
         // 自定义扩展数据
