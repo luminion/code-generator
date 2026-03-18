@@ -161,7 +161,6 @@ public class ControllerConfig implements TemplateRender {
     }
 
     private Map<String, Object> resolveControllerImports(TableInfo tableInfo) {
-        StrategyConfig strategyConfig = configurer.getStrategyConfig();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         TemplateConfig templateConfig = configurer.getTemplateConfig();
         CommandConfig commandConfig = configurer.getCommandConfig();
@@ -178,7 +177,7 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(RuntimeClass.SPRING_BOOT_CONTROLLER.getClassName());
         }
         // lombok
-        if (strategyConfig.isLombok()) {
+        if (globalConfig.isLombok()) {
             importPackages.add(RuntimeClass.LOMBOK_REQUIRED_ARGS_CONSTRUCTOR.getClassName());
         }
         // 文档

@@ -63,7 +63,6 @@ public class CommandConfig implements TemplateRender {
 
 
     private Map<String, Object> resolveCreateDtoImports(TableInfo tableInfo) {
-        StrategyConfig strategyConfig = configurer.getStrategyConfig();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         TemplateConfig templateConfig = configurer.getTemplateConfig();
         CommandConfig commandConfig = configurer.getCommandConfig();
@@ -116,8 +115,8 @@ public class CommandConfig implements TemplateRender {
         }
 
         // 全局包
-        importPackages.addAll(configurer.getGlobalConfig().getModelDocImportPackages());
-        importPackages.addAll(configurer.getStrategyConfig().getModelImportPackages());
+        importPackages.addAll(globalConfig.getModelDocImportPackages());
+        importPackages.addAll(globalConfig.getModelImportPackages());
 
 
         // 导包数据
@@ -135,7 +134,6 @@ public class CommandConfig implements TemplateRender {
 
 
     private Map<String, Object> resolveUpdateDtoImports(TableInfo tableInfo) {
-        StrategyConfig strategyConfig = configurer.getStrategyConfig();
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         TemplateConfig templateConfig = configurer.getTemplateConfig();
         CommandConfig commandConfig = configurer.getCommandConfig();
@@ -188,8 +186,8 @@ public class CommandConfig implements TemplateRender {
         }
 
         // 全局包
-        importPackages.addAll(configurer.getGlobalConfig().getModelDocImportPackages());
-        importPackages.addAll(configurer.getStrategyConfig().getModelImportPackages());
+        importPackages.addAll(globalConfig.getModelDocImportPackages());
+        importPackages.addAll(globalConfig.getModelImportPackages());
 
         // 导包数据
         HashMap<String, Object> data = new HashMap<>();

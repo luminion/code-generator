@@ -25,7 +25,6 @@ public class Configurer {
 
     private final GlobalConfig globalConfig;
     private final TemplateConfig templateConfig;
-    private final StrategyConfig strategyConfig;
 
     private final ControllerConfig controllerConfig;
     private final ServiceConfig serviceConfig;
@@ -42,7 +41,6 @@ public class Configurer {
 
         this.globalConfig = new GlobalConfig(this);
         this.templateConfig = new TemplateConfig(this);
-        this.strategyConfig = new StrategyConfig(this);
 
         this.controllerConfig = new ControllerConfig(this);
         this.serviceConfig = new ServiceConfig(this);
@@ -106,7 +104,6 @@ public class Configurer {
 
         // 渲染模板数据
         result.putAll(this.globalConfig.renderData(tableInfo));
-        result.putAll(this.strategyConfig.renderData(tableInfo));
 
         result.putAll(this.controllerConfig.renderData(tableInfo));
         result.putAll(this.serviceConfig.renderData(tableInfo));

@@ -63,6 +63,27 @@ public class GlobalConfig implements TemplateRender {
      */
     private RuntimeEnv runtimeEnv = RuntimeEnv.MYBATIS_PLUS;
 
+    /**
+     * 是否为lombok模型（默认 false）
+     */
+    private boolean lombok = true;
+
+    /**
+     * 是否为链式模型setter（默认 false）
+     */
+    private boolean chainModel;
+
+    /**
+     * 实体是否生成 serialVersionUID
+     */
+    private boolean serializableUID = false;
+
+    /**
+     * 实体是否启用java.io.Serial (需JAVA 14) 注解
+     *
+     */
+    private boolean serializableAnnotation = true;
+
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
@@ -71,7 +92,10 @@ public class GlobalConfig implements TemplateRender {
         data.put("docDate", this.docDate);
         data.put("docLink", this.docLink);
         data.put("javaApiPackagePrefix", javaEEApi.getPackagePrefix());
-
+        data.put("lombok", this.lombok);
+        data.put("chainModel", this.chainModel);
+        data.put("serializableUID", this.serializableUID);
+        data.put("serializableAnnotation", this.serializableAnnotation);
         switch (this.docType) {
             case SWAGGER_V3:
                 data.put("swagger3", true);
@@ -101,6 +125,28 @@ public class GlobalConfig implements TemplateRender {
                 importPackages.add(RuntimeClass.SWAGGER_V2_API_MODEL.getClassName());
                 importPackages.add(RuntimeClass.SWAGGER_V2_API_MODEL_PROPERTY.getClassName());
                 break;
+        }
+        return importPackages;
+    }
+
+    /**
+     * 获取领域类需要导入的包
+     *
+     * @return 包
+     */
+    public Set<String> getModelImportPackages() {
+        Set<String> importPackages = new TreeSet<>();
+        if (this.lombok) {
+            if (this.chainModel) {
+                importPackages.add(RuntimeClass.LOMBOK_ACCESSORS.getClassName());
+            }
+            importPackages.add(RuntimeClass.LOMBOK_DATA.getClassName());
+        }
+        if (this.serializableUID) {
+            importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
+            if (this.serializableAnnotation) {
+                importPackages.add(RuntimeClass.JAVA_IO_SERIAL.getClassName());
+            }
         }
         return importPackages;
     }
