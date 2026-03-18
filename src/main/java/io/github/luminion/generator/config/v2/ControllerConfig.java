@@ -170,8 +170,7 @@ public class ControllerConfig implements TemplateRender {
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
         TableField primaryKeyField = tableInfo.getPrimaryKeyField();
         String primaryKeyFieldPropertyPkg = primaryKeyField != null ? primaryKeyField.getPropertyPkg() : null;
-
-        HashMap<String, Object> result = new HashMap<>();
+    
         Set<String> importPackages = new TreeSet<>();
         // spring-web包
         importPackages.add(RuntimeClass.SPRING_BOOT_WEB_ANNOTATION_S.getClassName());
@@ -275,15 +274,16 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(RuntimeClass.SPRING_BOOT_MULTIPART_FILE.getClassName());
         }
 
+        // 导包数据
+        Map<String, Object> data = new HashMap<>();
         Collection<String> frameworkPackages = importPackages.stream()
                 .filter(pkg -> !pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        result.put("controllerFrameworkPkg", frameworkPackages);
-        result.put("controllerJavaPkg", javaPackages);
-
-        return result;
+        data.put("controllerFrameworkPkg", frameworkPackages);
+        data.put("controllerJavaPkg", javaPackages);
+        return data;
     }
 }
