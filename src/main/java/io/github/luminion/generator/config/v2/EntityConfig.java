@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @Data
 public class EntityConfig implements TemplateRender {
-    protected final Configurer configurer;
+    private final Configurer configurer;
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {

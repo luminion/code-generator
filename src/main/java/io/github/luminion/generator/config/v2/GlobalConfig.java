@@ -29,39 +29,39 @@ public class GlobalConfig implements TemplateRender {
      * 自定义配置渲染数据
      * todo 运行时获取
      */
-    protected Map<String, Object> customRenderData = new HashMap<>();
+    private Map<String, Object> customRenderData = new HashMap<>();
 
     /**
      * 自定义渲染逻辑
      */
-    protected BiConsumer<TableInfo, Map<String, Object>> customRenderLogic;
+    private BiConsumer<TableInfo, Map<String, Object>> customRenderLogic;
 
     /**
      * 文档注释类型
      */
-    protected DocType docType = DocType.JAVA_DOC;
+    private DocType docType = DocType.JAVA_DOC;
     /**
      * 文档注释添加相关类链接
      */
-    protected boolean docLink = false;
+    private boolean docLink = false;
     /**
      * 作者
      */
-    protected String docAuthor = "luminion";
+    private String docAuthor = "luminion";
     /**
      * 注释日期
      */
-    protected String docDate = LocalDate.now().toString();
+    private String docDate = LocalDate.now().toString();
 
     /**
      * java ee api
      */
-    protected JavaEEApi javaEEApi = JavaEEApi.JAKARTA;
+    private JavaEEApi javaEEApi = JavaEEApi.JAKARTA;
 
     /**
      * 外部运行环境
      */
-    protected RuntimeEnv runtimeEnv = RuntimeEnv.MYBATIS_PLUS;
+    private RuntimeEnv runtimeEnv = RuntimeEnv.MYBATIS_PLUS;
 
 
     @Override

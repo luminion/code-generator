@@ -20,35 +20,35 @@ import java.util.stream.Collectors;
  */
 @Data
 public class TemplateConfig {
-    protected final Configurer configurer;
+    private final Configurer configurer;
 
     /**
      * 生成文件的输出目录
      */
-    protected String outputDir = System.getProperty("user.dir") + "/src/main/java";
+    private String outputDir = System.getProperty("user.dir") + "/src/main/java";
 
     /**
      * 是否打开输出目录
      */
-    protected boolean openOutputDir;
+    private boolean openOutputDir;
 
     /**
      * 输出文件覆盖(全局)
      */
-    protected boolean fileOverride;
+    private boolean fileOverride;
 
     /**
      * 父包名。如果为空，将下面子包名必须写全部， 否则就只需写子包名
      */
-    protected String parentPackage = "com.example";
+    private String parentPackage = "com.example";
 
     /**
      * 父包模块名,会拼接在父包名之后
      */
-    protected String parentModule = "";
+    private String parentModule = "";
 
 
-    protected TemplateFile controller = new TemplateFile(
+    private TemplateFile controller = new TemplateFile(
             TemplateFileEnum.CONTROLLER.getKey(),
             "%sController",
             "controller",
@@ -56,7 +56,7 @@ public class TemplateConfig {
             ".java"
     );
 
-    protected TemplateFile service = new TemplateFile(
+    private TemplateFile service = new TemplateFile(
             TemplateFileEnum.SERVICE.getKey(),
             "%sService",
             "service",
@@ -64,7 +64,7 @@ public class TemplateConfig {
             ".java"
     );
 
-    protected TemplateFile serviceImpl = new TemplateFile(
+    private TemplateFile serviceImpl = new TemplateFile(
             TemplateFileEnum.SERVICE_IMPL.getKey(),
             "%sServiceImpl",
             "service.impl",
@@ -72,7 +72,7 @@ public class TemplateConfig {
             ".java"
     );
 
-    protected TemplateFile mapper = new TemplateFile(
+    private TemplateFile mapper = new TemplateFile(
             TemplateFileEnum.MAPPER.getKey(),
             "%sMapper",
             "mapper",
@@ -80,7 +80,7 @@ public class TemplateConfig {
             ".java"
     );
 
-    protected TemplateFile mapperXml = new TemplateFile(
+    private TemplateFile mapperXml = new TemplateFile(
             TemplateFileEnum.MAPPER_XML.getKey(),
             "%sMapper",
             "xml",
@@ -88,7 +88,7 @@ public class TemplateConfig {
             ".xml"
     );
 
-    protected TemplateFile entity = new TemplateFile(
+    private TemplateFile entity = new TemplateFile(
             TemplateFileEnum.ENTITY.getKey(),
             "%s",
             "model.entity",
@@ -97,7 +97,7 @@ public class TemplateConfig {
     );
 
 
-    protected TemplateFile queryDto = new TemplateFile(
+    private TemplateFile queryDto = new TemplateFile(
             TemplateFileEnum.QUERY_DTO.getKey(),
             "%sQueryDTO",
             "model.query",
@@ -106,7 +106,7 @@ public class TemplateConfig {
     );
 
 
-    protected TemplateFile queryVo = new TemplateFile(
+    private TemplateFile queryVo = new TemplateFile(
             TemplateFileEnum.QUERY_VO.getKey(),
             "%sVO",
             "model.vo",
@@ -114,7 +114,7 @@ public class TemplateConfig {
             ".java"
     );
 
-    protected TemplateFile createDto = new TemplateFile(
+    private TemplateFile createDto = new TemplateFile(
             TemplateFileEnum.CREATE_DTO.getKey(),
             "%sCreateDTO",
             "model.command",
@@ -122,7 +122,7 @@ public class TemplateConfig {
             ".java"
     );
 
-    protected TemplateFile updateDto = new TemplateFile(
+    private TemplateFile updateDto = new TemplateFile(
             TemplateFileEnum.UPDATE_DTO.getKey(),
             "%sUpdateDTO",
             "model.command",
@@ -130,7 +130,7 @@ public class TemplateConfig {
             ".java"
     );
 
-    protected TemplateFile exportDto = new TemplateFile(
+    private TemplateFile exportDto = new TemplateFile(
             TemplateFileEnum.EXPORT_DTO.getKey(),
             "%sExportDTO",
             "model.excel",
@@ -138,7 +138,7 @@ public class TemplateConfig {
             ".java"
     );
 
-    protected TemplateFile importDto = new TemplateFile(
+    private TemplateFile importDto = new TemplateFile(
             TemplateFileEnum.IMPORT_DTO.getKey(),
             "%sImportDTO",
             "model.excel",
@@ -146,7 +146,7 @@ public class TemplateConfig {
             ".java"
     );
 
-    protected List<TemplateFile> templateFiles = new ArrayList<>();
+    private List<TemplateFile> templateFiles = new ArrayList<>();
 
     {
         // 添加模板文件

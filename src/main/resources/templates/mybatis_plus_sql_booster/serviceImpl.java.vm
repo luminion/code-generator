@@ -24,7 +24,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
 #else
 public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity}, ${queryVO}> {
 #end
-#if(${generateCreate})
+#if(${enableCreateByDto})
 
     #if(${generate.service})
     @Override
@@ -40,7 +40,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         #end
     }
 #end
-#if(${generateUpdate})
+#if(${enableUpdateByDto})
 
     #if(${generate.service})
     @Override
@@ -51,7 +51,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         return super.updateById(entity);
     }
 #end
-#if(${generateDelete} && ${table.havePrimaryKey})
+#if(${enableDeleteById} && ${table.havePrimaryKey})
 
     @Override
     public boolean removeById(Serializable id) {
@@ -62,28 +62,28 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         #end
     }
 #end
-#if(${generateVoById} && ${table.havePrimaryKey})
+#if(${enableSelectVoById} && ${table.havePrimaryKey})
 
     @Override
     public ${queryVO} voById(Serializable id) { 
         return super.voById(id);
     }
 #end
-#if(${generateVoList})
+#if(${enableSelectVoList})
 
     @Override
     public List<${queryVO}> voList(SqlContext<${entity}> sqlContext) {
         return super.voList(sqlContext);
     }
 #end
-#if(${generateVoPage})
+#if(${enableSelectVoPage})
 
     @Override
     public BPage<${queryVO}> voPage(SqlContext<${entity}> sqlContext, long current, long size) {
         return super.voPage(sqlContext, current, size);
     }
 #end
-#if(${generateImport})
+#if(${enableExcelImport})
 
     #if(${generate.service})
     @Override
@@ -108,7 +108,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         return entityList.size();
     }
 #end
-#if(${generateExport})
+#if(${enableExcelExport})
 
     #if(${generate.service})
     @Override

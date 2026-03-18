@@ -14,7 +14,7 @@ import java.util.Map;
  */
 @Data
 public class ServiceConfig implements TemplateRender {
-    protected final Configurer configurer;
+    private final Configurer configurer;
 
 
 

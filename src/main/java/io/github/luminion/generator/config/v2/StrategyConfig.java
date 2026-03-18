@@ -17,28 +17,28 @@ import java.util.TreeSet;
  */
 @Data
 public class StrategyConfig implements TemplateRender {
-    protected final Configurer configurer;
+    private final Configurer configurer;
 
     /**
      * 是否为lombok模型（默认 false）
      */
-    protected boolean lombok = true;
+    private boolean lombok = true;
 
     /**
      * 是否为链式模型setter（默认 false）
      */
-    protected boolean chainModel;
+    private boolean chainModel;
 
     /**
      * 实体是否生成 serialVersionUID
      */
-    protected boolean serializableUID = false;
+    private boolean serializableUID = false;
 
     /**
      * 实体是否启用java.io.Serial (需JAVA 14) 注解
      *
      */
-    protected boolean serializableAnnotation = true;
+    private boolean serializableAnnotation = true;
 
 
 

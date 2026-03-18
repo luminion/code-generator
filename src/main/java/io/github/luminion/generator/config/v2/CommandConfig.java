@@ -16,50 +16,50 @@ import java.util.Set;
  */
 @Data
 public class CommandConfig implements TemplateRender {
-    protected final Configurer configurer;
+    private final Configurer configurer;
 
     /**
      * 生成参数校验相关注解
      */
-    protected boolean valid;
+    private boolean valid;
     /**
      * 生成新增方法及配套类
      */
-    protected boolean generateCreate = true;
+    private boolean enableCreateByDto = true;
 
     /**
      * 生成更新方法及配套类
      */
-    protected boolean generateUpdate = true;
+    private boolean enableUpdateByDto = true;
 
     /**
      * 生成删除方法及配套类
      */
-    protected boolean generateDelete = true;
+    private boolean enableDeleteById = true;
 
 
     /**
      * 新增和修改需要需要排除的字段
      */
-    protected final Set<String> editExcludeColumns = new HashSet<>();
+    private final Set<String> editExcludeColumns = new HashSet<>();
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         HashMap<String, Object> data = new HashMap<>();
         data.put("validated", this.valid);
 
-        data.put("generateCreate", this.generateCreate);
-        data.put("generateUpdate", this.generateUpdate);
-        data.put("generateDelete", this.generateDelete);
+        data.put("generateCreate", this.enableCreateByDto);
+        data.put("generateUpdate", this.enableUpdateByDto);
+        data.put("generateDelete", this.enableDeleteById);
         data.put("editExcludeColumns", this.editExcludeColumns);
 
         return data;
     }
     
     public void disable() {
-        this.generateCreate = false;
-        this.generateUpdate = false;
-        this.generateDelete = false;
+        this.enableCreateByDto = false;
+        this.enableUpdateByDto = false;
+        this.enableDeleteById = false;
     }
     
 }

@@ -56,12 +56,12 @@ public class TableField {
     private String propertyName;
 
     /**
-     * java属性类型
+     * java属性类型(简类名)
      */
     private String propertyType;
     
     /**
-     * java属性包名
+     * java属性类型(全类名)
      */
     private String propertyPkg;
 

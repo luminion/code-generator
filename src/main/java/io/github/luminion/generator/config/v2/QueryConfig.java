@@ -19,53 +19,53 @@ import java.util.stream.Collectors;
  */
 @Data
 public class QueryConfig implements TemplateRender {
-    protected final Configurer configurer;
+    private final Configurer configurer;
 
     /**
      * 生成id查询方法
      */
-    protected boolean generateVoById = true;
+    private boolean enableSelectVoById = true;
     /**
      * 批量查询相关方法及配套类
      */
-    protected boolean generateVoList = false;
+    private boolean enableSelectVoList = false;
 
     /**
      * 批量查询分页相关方法及配套类
      */
-    protected boolean generateVoPage = true;
+    private boolean enableSelectVoPage = true;
 
     /**
      * 额外字段后缀
      */
-    protected final Map<String, String> extraFieldSuffixMap = new LinkedHashMap<>();
+    private final Map<String, String> extraFieldSuffixMap = new LinkedHashMap<>();
 
     /**
      * 额外字段策略
      */
-    protected ExtraFieldStrategy extraFieldStrategy = new DefaultExtraFieldStrategy();
+    private ExtraFieldStrategy extraFieldStrategy = new DefaultExtraFieldStrategy();
     /**
      * 当前页码参数名
      */
-    protected String pageName = "current";
+    private String pageName = "current";
 
     /**
      * 每页条数参数名
      */
-    protected String sizeName = "size";
+    private String sizeName = "size";
 
     /**
      * 查询dto父类全限定名
      */
-    protected String queryDtoSuperClass;
+    private String queryDtoSuperClass;
 
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         HashMap<String, Object> data = new HashMap<>();
-        data.put("generateVoById", this.generateVoById);
-        data.put("generateVoList", this.generateVoList);
-        data.put("generateVoPage", this.generateVoPage);
+        data.put("generateVoById", this.enableSelectVoById);
+        data.put("generateVoList", this.enableSelectVoList);
+        data.put("generateVoPage", this.enableSelectVoPage);
         data.put("extraFieldSuffixMap", extraFieldSuffixMap);
         data.put("extraFieldStrategy", extraFieldStrategy);
         data.put("pageName", pageName);
@@ -86,14 +86,15 @@ public class QueryConfig implements TemplateRender {
             data.put("sizeGetter", sizeGetter);
         }
 
-        resolveQueryDtoImports(data, tableInfo);
-        resolveQueryVoImports(data, tableInfo);
+        // 导包
+        data.putAll(this.resolveQueryDtoImports(tableInfo));
+        data.putAll(this.resolveQueryVoImports(tableInfo));
 
         return data;
     }
 
-    private void resolveQueryDtoImports(HashMap<String, Object> data, TableInfo tableInfo) {
-
+    private Map<String, Object> resolveQueryDtoImports(TableInfo tableInfo) {
+        HashMap<String, Object> result = new HashMap<>();
         Set<String> importPackages = new TreeSet<>();
         importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
 
@@ -115,12 +116,14 @@ public class QueryConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("queryDtoFramePkg", frameworkPackages);
-        data.put("queryDtoJavaPkg", javaPackages);
-
+        result.put("queryDtoFramePkg", frameworkPackages);
+        result.put("queryDtoJavaPkg", javaPackages);
+        return result;
     }
 
-    private void resolveQueryVoImports(HashMap<String, Object> data, TableInfo tableInfo) {
-
+    private Map<String, Object> resolveQueryVoImports(TableInfo tableInfo) {
+        HashMap<String, Object> result = new HashMap<>();
+        // todo 查询vo导入
+        return result;
     }
 }

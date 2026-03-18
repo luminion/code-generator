@@ -19,38 +19,38 @@ import ${pkg};
  * @since ${docDate}
  */
 public interface ${service} extends ${serviceSuperClass}<${entity}> {
-#if(${generateCreate})
+#if(${enableCreateByDto})
 
     Serializable createByDto(${createDto} dto);
 #end
-#if(${generateUpdate})
+#if(${enableUpdateByDto})
 
     boolean updateByDto(${updateDto} dto);
 #end
-#if(${generateDelete} && ${table.havePrimaryKey})
+#if(${enableDeleteById} && ${table.havePrimaryKey})
 
     @Override
     boolean removeById(Serializable id);
 #end
-#if(${generateVoById} && ${table.havePrimaryKey})
+#if(${enableSelectVoById} && ${table.havePrimaryKey})
 
     ${queryVO} voById(Serializable id);
 #end
-#if(${generateVoList})
+#if(${enableSelectVoList})
 
     List<${queryVO}> voList(${queryDto} dto);
 #end
-#if(${generateVoPage})
+#if(${enableSelectVoPage})
 
     IPage<${queryVO}> voPage(${queryDto} dto, long current, long size);
 #end
-#if(${generateImport})
+#if(${enableExcelImport})
 
     void excelTemplate(OutputStream os);
 
     int excelImport(InputStream is);
 #end
-#if(${generateExport})
+#if(${enableExcelExport})
 
     void excelExport(${queryDto} dto, OutputStream os);
 #end

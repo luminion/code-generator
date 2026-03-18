@@ -37,15 +37,23 @@ import ${pkg};
 @Controller
 #end
 @RequestMapping("$!{requestBaseUrl}")
+#if(${lombok})
+@RequiredArgsConstructor
+#end
 #if(${controllerSuperClass})
 public class ${controller} extends ${controllerSuperClass} {
 #else
 public class ${controller} {
 #end
 
-    @Autowired
-    private ${baseService} baseService;
-#if(${generateCreate})
+    private final ${baseService} baseService;
+#if(!${lombok})
+
+    public ${controller}(${baseService} baseService) {
+        this.baseService = baseService;
+    }
+#end
+#if(${enableCreateByDto})
 
     #if(${swagger3})
     @Operation(summary = "新增")
@@ -71,7 +79,7 @@ public class ${controller} {
         return ${returnMethodFormat.apply("baseService.createByDto(dto)")};
     }
 #end
-#if(${generateUpdate})
+#if(${enableUpdateByDto})
 
     #if(${swagger3})
     @Operation(summary = "修改")
@@ -97,7 +105,7 @@ public class ${controller} {
         return ${returnMethodFormat.apply("baseService.updateByDto(dto)")};
     }
 #end
-#if(${generateDelete} && ${table.havePrimaryKey})
+#if(${enableDeleteById} && ${table.havePrimaryKey})
 
     #if(${swagger3})
     @Operation(summary = "删除")
@@ -123,7 +131,7 @@ public class ${controller} {
         return ${returnMethodFormat.apply("baseService.removeById(id)")};
     }
 #end
-#if(${generateVoById} && ${table.havePrimaryKey})
+#if(${enableSelectVoById} && ${table.havePrimaryKey})
 
     #if(${swagger3})
     @Operation(summary = "根据id查询详情")
@@ -149,7 +157,7 @@ public class ${controller} {
         return ${returnMethodFormat.apply("baseService.voById(id)")};
     }
 #end
-#if(${generateVoList})
+#if(${enableSelectVoList})
 
     #if(${swagger3})
     @Operation(summary = "列表查询")
@@ -163,11 +171,11 @@ public class ${controller} {
      * @return 查询结果
      */
     #end
-    ${batchQueryMethod}("/list")
+    ${queryRequestMapping}("/list")
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("List<${queryVo}>")} list($!{optionalBodyStr}${queryDto} dto) {
+    public ${returnTypeFormat.apply("List<${queryVo}>")} list($!{queryBodyStr}${queryDto} dto) {
         #if($sqlBooster)
         return ${returnMethodFormat.apply("baseService..appendByBean(dto).list()")};    
         #else
@@ -175,7 +183,7 @@ public class ${controller} {
         #end
     }
 #end
-#if(${generateVoPage})
+#if(${enableSelectVoPage})
 
     #if(${swagger3})
     @Operation(summary = "分页查询")
@@ -191,11 +199,11 @@ public class ${controller} {
      * @return 查询结果
      */
     #end
-    ${batchQueryMethod}("/page")
+    ${queryRequestMapping}("/page")
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply(${pageReturnType.apply(${queryVo})})} page($!{optionalBodyStr}${queryDto} dto$!{pageMethodParams}) {
+    public ${returnTypeFormat.apply(${pageTypeFormat.apply(${queryVo})})} page($!{queryBodyStr}${queryDto} dto$!{pageMethodParams}) {
         #if(${queryDtoSuperClass})
         Long current = dto.${pageGetter};
         Long size = dto.${sizeGetter};
@@ -208,7 +216,7 @@ public class ${controller} {
         #end
     }
 #end
-#if(${generateImport})
+#if(${enableExcelImport})
 
     #if(${swagger3})
     @Operation(summary = "下载excel导入模板")
@@ -248,7 +256,7 @@ public class ${controller} {
         return ${returnMethodFormat.apply("baseService.excelImport(excel.getInputStream())")};
     }
 #end
-#if(${generateExport})
+#if(${enableExcelExport})
 
     #if(${swagger3})
     @Operation(summary = "excel文件导出")
@@ -261,8 +269,8 @@ public class ${controller} {
      * @param dto 查询条件
      */
     #end
-    ${batchQueryMethod}("/excel/export")
-    public void excelExport($!{optionalBodyStr}${queryDto} dto, HttpServletResponse response) throws IOException {
+    ${queryRequestMapping}("/excel/export")
+    public void excelExport($!{queryBodyStr}${queryDto} dto, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
 ##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");

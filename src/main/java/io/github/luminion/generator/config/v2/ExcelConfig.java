@@ -15,22 +15,22 @@ import java.util.Map;
  */
 @Data
 public class ExcelConfig implements TemplateRender {
-    protected final Configurer configurer;
+    private final Configurer configurer;
 
     /**
      * excel api
      */
-    protected ExcelApi excelApi = ExcelApi.EASY_EXCEL;
+    private ExcelApi excelApi = ExcelApi.EASY_EXCEL;
 
     /**
      * 生成导入方法及配套类(需允许新增)
      */
-    protected boolean generateImport = true;
+    private boolean enableExcelImport = true;
 
     /**
      * 生成导出方法(需允许查询)
      */
-    protected boolean generateExport = true;
+    private boolean enableExcelExport = true;
 
 
     @Override
@@ -39,8 +39,8 @@ public class ExcelConfig implements TemplateRender {
         data.put("excelApiPackagePrefix", excelApi.getPackagePrefix());
         data.put("excelApiClass", excelApi.getMainEntrance());
 
-        data.put("generateImport", this.generateImport);
-        data.put("generateExport", this.generateExport);
+        data.put("generateImport", this.enableExcelImport);
+        data.put("generateExport", this.enableExcelExport);
         
         // todo 检查是否允许查询
         

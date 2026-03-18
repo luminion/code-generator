@@ -24,7 +24,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
 #else
 public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity}> {
 #end
-#if(${generateCreate})
+#if(${enableCreateByDto})
 
     #if(${generate.service})
     @Override
@@ -40,7 +40,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         #end
     }
 #end
-#if(${generateUpdate})
+#if(${enableUpdateByDto})
 
     #if(${generate.service})
     @Override
@@ -51,7 +51,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         return super.updateById(entity);
     }
 #end
-#if(${generateDelete} && ${table.havePrimaryKey})
+#if(${enableDeleteById} && ${table.havePrimaryKey})
 
     @Override
     public boolean removeById(Serializable id) {
@@ -62,7 +62,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         #end
     }
 #end
-#if(${generateVoById} && ${table.havePrimaryKey})
+#if(${enableSelectVoById} && ${table.havePrimaryKey})
 
     #if(${generate.service})
     @Override
@@ -78,7 +78,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         #end
     }
 #end
-#if(${generateVoList})
+#if(${enableSelectVoList})
 
     #if(${generate.service})
     @Override
@@ -88,7 +88,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         return voList;
     }
 #end
-#if(${generateVoPage})
+#if(${enableSelectVoPage})
 
     #if(${generate.service})
     @Override
@@ -100,7 +100,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         return page;
     }
 #end
-#if(${generateImport})
+#if(${enableExcelImport})
 
     #if(${generate.service})
     @Override
@@ -126,7 +126,7 @@ public class ${serviceImpl} extends ${serviceImplSuperClass}<${mapper}, ${entity
         return entityList.size();
     }
 #end
-#if(${generateExport})
+#if(${enableExcelExport})
 
     #if(${generate.service})
     @Override

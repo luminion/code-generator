@@ -28,24 +28,24 @@ public class DataSourceConfig {
     /**
      * 驱动连接的URL
      */
-    protected final String url;
+    private final String url;
     /**
      * 数据库连接用户名
      */
-    protected final String username;
+    private final String username;
     /**
      * 数据库连接密码
      */
-    protected final String password;
+    private final String password;
     /**
      * 数据库类型
      */
-    protected DbType dbType;
+    private DbType dbType;
 
     /**
      * 数据库schema名
      */
-    protected String schema;
+    private String schema;
 
     /**
      * java日期类型
@@ -55,76 +55,76 @@ public class DataSourceConfig {
     /**
      * 数据库表明/字段名转化到实体类名/属性名的转化器
      */
-    protected NamingConverter namingConverter = new DefaultNamingConverter();
+    private NamingConverter namingConverter = new DefaultNamingConverter();
     /**
      * 数据库字段类型转化为java字段类型的方式
      */
-    protected FieldTypeConverter FieldTypeConverter;
+    private FieldTypeConverter FieldTypeConverter;
     /**
      * 数据库关键字处理器
      */
-    protected DatabaseKeywordsHandler keyWordsHandler;
+    private DatabaseKeywordsHandler keyWordsHandler;
 
     /**
      * 是否跳过视图（默认 false）
      */
-    protected boolean skipView;
+    private boolean skipView;
 
     /**
      * Boolean类型字段是否移除is前缀（默认 false）<br>
      * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
      */
-    protected boolean booleanColumnRemoveIsPrefix;
+    private boolean booleanColumnRemoveIsPrefix;
     /**
      * 模糊查询包含的表名, 需要自行拼接(%)
      */
-    protected String tableNamePattern;
+    private String tableNamePattern;
     /**
      * 自定义基础的Entity类，公共字段
      */
-    protected final Set<String> superEntityColumns = new HashSet<>();
+    private final Set<String> superEntityColumns = new HashSet<>();
     /**
      * 自定义忽略字段
      */
-    protected final Set<String> ignoreColumns = new HashSet<>();
+    private final Set<String> ignoreColumns = new HashSet<>();
 
     /**
      * 过滤表前缀
      * example: addTablePrefix("t_")
      * result: t_simple -> Simple
      */
-    protected final Set<String> tablePrefix = new HashSet<>();
+    private final Set<String> tablePrefix = new HashSet<>();
 
     /**
      * 过滤表后缀
      * example: addTableSuffix("_0")
      * result: t_simple_0 -> Simple
      */
-    protected final Set<String> tableSuffix = new HashSet<>();
+    private final Set<String> tableSuffix = new HashSet<>();
 
     /**
      * 过滤字段前缀
      * example: addFieldPrefix("is_")
      * result: is_deleted -> deleted
      */
-    protected final Set<String> fieldPrefix = new HashSet<>();
+    private final Set<String> fieldPrefix = new HashSet<>();
 
     /**
      * 过滤字段后缀
      * example: addFieldSuffix("_flag")
      * result: deleted_flag -> deleted
      */
-    protected final Set<String> fieldSuffix = new HashSet<>();
+    private final Set<String> fieldSuffix = new HashSet<>();
 
     /**
      * 需要包含的表名（与exclude二选一配置）
      */
-    protected final Set<String> include = new HashSet<>();
+    private final Set<String> include = new HashSet<>();
 
     /**
      * 需要排除的表名
      */
-    protected final Set<String> exclude = new HashSet<>();
+    private final Set<String> exclude = new HashSet<>();
 
 
     public DataSourceConfig(String url, String username, String password) {
@@ -195,7 +195,7 @@ public class DataSourceConfig {
      * @param matchTables 匹配集合
      * @return 是否匹配
      */
-    protected boolean matchTable(String tableName, Set<String> matchTables) {
+    private boolean matchTable(String tableName, Set<String> matchTables) {
         return matchTables.stream().anyMatch(t -> tableNameMatches(t, tableName));
     }
 
@@ -206,7 +206,7 @@ public class DataSourceConfig {
      * @param dbTableName    数据库表名
      * @return 是否匹配
      */
-    protected boolean tableNameMatches(String matchTableName, String dbTableName) {
+    private boolean tableNameMatches(String matchTableName, String dbTableName) {
         return matchTableName.equalsIgnoreCase(dbTableName) || StringUtils.matches(matchTableName, dbTableName);
     }
 

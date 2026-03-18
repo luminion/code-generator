@@ -110,7 +110,7 @@ public class ControllerConfig implements TemplateModelRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = new HashMap<>();
-        Set<String> importPackages = new TreeSet<>();
+//        Set<String> importPackages = new TreeSet<>();
 
         ConfigResolver configResolver = tableInfo.getConfigResolver();
         ConfigCollector<?> configCollector = configResolver.getConfigCollector();
