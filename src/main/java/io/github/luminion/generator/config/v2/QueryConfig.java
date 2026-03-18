@@ -7,6 +7,7 @@ import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.po.TemplateClassFile;
 import io.github.luminion.generator.util.ClassUtils;
 import lombok.Data;
 
@@ -94,9 +95,64 @@ public class QueryConfig implements TemplateRender {
     }
 
     private Map<String, Object> resolveQueryDtoImports(TableInfo tableInfo) {
-        HashMap<String, Object> result = new HashMap<>();
+        GlobalConfig globalConfig = configurer.getGlobalConfig();
+        TemplateConfig templateConfig = configurer.getTemplateConfig();
+        CommandConfig commandConfig = configurer.getCommandConfig();
+        QueryConfig queryConfig = configurer.getQueryConfig();
+        ExcelConfig excelConfig = configurer.getExcelConfig();
+        Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
+        TableField primaryKeyField = tableInfo.getPrimaryKeyField();
+        String primaryKeyFieldPropertyPkg = primaryKeyField != null ? primaryKeyField.getPropertyPkg() : null;
+
         Set<String> importPackages = new TreeSet<>();
+
+        // 额外in查询
         importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
+
+        // 表字段
+        for (TableField field : tableInfo.getFields()) {
+            if (field.isLogicDeleteField()) {
+                continue;
+            }
+            Optional.ofNullable(field.getPropertyPkg()).ifPresent(importPackages::add);
+        }
+
+        // 父类
+        if (queryDtoSuperClass != null) {
+            importPackages.add(queryDtoSuperClass);
+            if (globalConfig.isLombok()) {
+                importPackages.add(RuntimeClass.LOMBOK_EQUALS_AND_HASH_CODE.getClassName());
+            }
+        }
+
+        // 全局包
+        importPackages.addAll(globalConfig.getModelDocImportPackages());
+        importPackages.addAll(globalConfig.getModelImportPackages());
+
+        // 导包数据
+        HashMap<String, Object> data = new HashMap<>();
+        Collection<String> frameworkPackages = importPackages.stream()
+                .filter(pkg -> !pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        Collection<String> javaPackages = importPackages.stream()
+                .filter(pkg -> pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        data.put("queryDtoFramePkg", frameworkPackages);
+        data.put("queryDtoJavaPkg", javaPackages);
+        return data;
+    }
+
+    private Map<String, Object> resolveQueryVoImports(TableInfo tableInfo) {
+        GlobalConfig globalConfig = configurer.getGlobalConfig();
+        TemplateConfig templateConfig = configurer.getTemplateConfig();
+        CommandConfig commandConfig = configurer.getCommandConfig();
+        QueryConfig queryConfig = configurer.getQueryConfig();
+        ExcelConfig excelConfig = configurer.getExcelConfig();
+        Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
+        TableField primaryKeyField = tableInfo.getPrimaryKeyField();
+        String primaryKeyFieldPropertyPkg = primaryKeyField != null ? primaryKeyField.getPropertyPkg() : null;
+
+        Set<String> importPackages = new TreeSet<>();
 
         for (TableField field : tableInfo.getFields()) {
             if (field.isLogicDeleteField()) {
@@ -106,24 +162,19 @@ public class QueryConfig implements TemplateRender {
         }
 
         // 全局包
-        importPackages.addAll(configurer.getGlobalConfig().getModelDocImportPackages());
-        importPackages.addAll(configurer.getStrategyConfig().getModelImportPackages());
+        importPackages.addAll(globalConfig.getModelDocImportPackages());
+        importPackages.addAll(globalConfig.getModelImportPackages());
 
-        // 导入包
+        // 导包数据
+        HashMap<String, Object> data = new HashMap<>();
         Collection<String> frameworkPackages = importPackages.stream()
                 .filter(pkg -> !pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        result.put("queryDtoFramePkg", frameworkPackages);
-        result.put("queryDtoJavaPkg", javaPackages);
-        return result;
-    }
-
-    private Map<String, Object> resolveQueryVoImports(TableInfo tableInfo) {
-        HashMap<String, Object> result = new HashMap<>();
-        // todo 查询vo导入
-        return result;
+        data.put("queryVoFramePkg", frameworkPackages);
+        data.put("queryVoJavaPkg", javaPackages);
+        return data;
     }
 }

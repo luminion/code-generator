@@ -34,6 +34,9 @@ public enum RuntimeClass {
     
     LOMBOK_EQUALS_AND_HASH_CODE("lombok.EqualsAndHashCode"),
     LOMBOK_DATA("lombok.Data"),
+    LOMBOK_GETTER("lombok.Getter"),
+    LOMBOK_SETTER("lombok.Setter"),
+    LOMBOK_TO_STRING("lombok.ToString"),
     LOMBOK_ACCESSORS("lombok.experimental.Accessors"),
     LOMBOK_REQUIRED_ARGS_CONSTRUCTOR("lombok.RequiredArgsConstructor"),
     

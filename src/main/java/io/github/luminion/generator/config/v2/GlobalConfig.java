@@ -64,9 +64,14 @@ public class GlobalConfig implements TemplateRender {
     private RuntimeEnv runtimeEnv = RuntimeEnv.MYBATIS_PLUS;
 
     /**
-     * 是否为lombok模型（默认 false）
+     * 是否为lombok模型
      */
     private boolean lombok = true;
+
+    /**
+     * 生成toString方法
+     */
+    private boolean enableToString;
 
     /**
      * 是否为链式模型setter（默认 false）
@@ -88,15 +93,15 @@ public class GlobalConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         HashMap<String, Object> data = new HashMap<>();
-        data.put("docAuthor", this.docAuthor);
-        data.put("docDate", this.docDate);
-        data.put("docLink", this.docLink);
+        data.put("docAuthor", docAuthor);
+        data.put("docDate", docDate);
+        data.put("docLink", docLink);
         data.put("javaApiPackagePrefix", javaEEApi.getPackagePrefix());
-        data.put("lombok", this.lombok);
-        data.put("chainModel", this.chainModel);
-        data.put("serializableUID", this.serializableUID);
-        data.put("serializableAnnotation", this.serializableAnnotation);
-        switch (this.docType) {
+        data.put("lombok", lombok);
+        data.put("chainModel", chainModel);
+        data.put("serializableUID", serializableUID);
+        data.put("serializableAnnotation", serializableAnnotation);
+        switch (docType) {
             case SWAGGER_V3:
                 data.put("swagger3", true);
                 break;
@@ -105,7 +110,7 @@ public class GlobalConfig implements TemplateRender {
                 break;
         }
         
-        switch (this.runtimeEnv) {
+        switch (runtimeEnv) {
             case MY_BATIS_PLUS_SQL_BOOSTER:
                 data.put("sqlBooster", true);
             case MYBATIS_PLUS:
@@ -117,7 +122,7 @@ public class GlobalConfig implements TemplateRender {
 
     public Set<String> getModelDocImportPackages() {
         Set<String> importPackages = new TreeSet<>();
-        switch (this.docType) {
+        switch (docType) {
             case SWAGGER_V3:
                 importPackages.add(RuntimeClass.SWAGGER_V3_SCHEMA.getClassName());
                 break;
@@ -136,15 +141,19 @@ public class GlobalConfig implements TemplateRender {
      */
     public Set<String> getModelImportPackages() {
         Set<String> importPackages = new TreeSet<>();
-        if (this.lombok) {
-            if (this.chainModel) {
+        if (lombok) {
+            if (chainModel) {
                 importPackages.add(RuntimeClass.LOMBOK_ACCESSORS.getClassName());
             }
-            importPackages.add(RuntimeClass.LOMBOK_DATA.getClassName());
+            if (enableToString){
+                importPackages.add(RuntimeClass.LOMBOK_TO_STRING.getClassName());
+            }
+            importPackages.add(RuntimeClass.LOMBOK_GETTER.getClassName());
+            importPackages.add(RuntimeClass.LOMBOK_SETTER.getClassName());
         }
-        if (this.serializableUID) {
+        if (serializableUID) {
             importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
-            if (this.serializableAnnotation) {
+            if (serializableAnnotation) {
                 importPackages.add(RuntimeClass.JAVA_IO_SERIAL.getClassName());
             }
         }
