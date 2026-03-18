@@ -1,5 +1,6 @@
 package io.github.luminion.generator.config.v2;
 
+import io.github.luminion.generator.common.RenderField;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.RuntimeClass;
@@ -31,12 +32,13 @@ public class ControllerConfig implements TemplateRender {
     /**
      * 生成 @RestController控制器
      */
-    private boolean restController = true;
+    @RenderField
+    private boolean enableRestController = true;
 
     /**
      * 驼峰转连字符(managerUserActionHistory -> manager-user-action-history)
      */
-    private boolean hyphenStyle = true;
+    private boolean enableHyphenStyle = true;
 
     /**
      * 请求基础url
@@ -46,32 +48,36 @@ public class ControllerConfig implements TemplateRender {
     /**
      * 跨域注解
      */
-    private boolean crossOrigin;
+    @RenderField
+    private boolean enableCrossOrigin;
 
     /**
      * restful样式
      */
-    private boolean restful;
+    @RenderField
+    private boolean enableRestful;
 
     /**
      * 请求路径参数
      */
-    private boolean pathVariable = true;
+    private boolean enablePathVariable = true;
 
     /**
      * controller是否使用@RequestBody注解
      */
-    private boolean requestBody = true;
+    private boolean enableRequestBody = true;
 
     /**
-     * 通过POST方式查询(@RequestBody)
+     * 通过POST方式查询
      */
-    private boolean queryViaPost = true;
+    private boolean enableQueryViaPost = true;
 
     /**
-     * 通过SqlContext查询(@RequestBody)
+     * 通过SqlContext查询
+     * // todo 
      */
-    private boolean queryViaSqlContext = false;
+    @RenderField
+    private boolean enableQueryViaSqlContext = false;
 
     /**
      * 返回结果类型
@@ -102,22 +108,18 @@ public class ControllerConfig implements TemplateRender {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        HashMap<String, Object> data = new HashMap<>();
+        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
 
         TemplateConfig templateConfig = configurer.getTemplateConfig();
         CommandConfig commandConfig = configurer.getCommandConfig();
         ExcelConfig excelConfig = configurer.getExcelConfig();
         QueryConfig queryConfig = configurer.getQueryConfig();
 
-
-        data.put("crossOrigin", crossOrigin);
-        data.put("restController", restController);
         data.put("controllerSuperClass", ClassUtils.getSimpleName(controllerSuperClass));
-        data.put("queryWithSqlContext", queryViaSqlContext);
         // 首字母小写
         String entityName = tableInfo.getEntityName();
         String entityPath = entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
-        String entityUrl = hyphenStyle ? StringUtils.camelToHyphen(entityPath) : entityPath;
+        String entityUrl = enableHyphenStyle ? StringUtils.camelToHyphen(entityPath) : entityPath;
         String parentModule = templateConfig.getParentModule();
         String requestBaseUrl = Stream.of(baseUrl, parentModule, entityUrl)
                 .filter(StringUtils::isNotBlank)
@@ -126,7 +128,7 @@ public class ControllerConfig implements TemplateRender {
             requestBaseUrl = "/" + requestBaseUrl;
         }
         data.put("requestBaseUrl", requestBaseUrl);
-        data.put("restful", restful);
+        data.put("restful", enableRestful);
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
         TemplateClassFile baseService = templateFileMap.get(TemplateFileEnum.SERVICE.getKey());
         if (!baseService.isEnabled()) {
@@ -134,22 +136,22 @@ public class ControllerConfig implements TemplateRender {
         }
 
         data.put("baseService", baseService.getClassSimpleName());
-        data.put("queryViaPost", queryViaPost);
+        data.put("queryViaPost", enableQueryViaPost);
         // 路径参数
-        if (pathVariable) {
+        if (enablePathVariable) {
             data.put("idPathParam", "/{id}");
             data.put("idMethodParam", "@PathVariable(\"id\") ");
         }
 
-        data.put("validatedStr", commandConfig.isValid() ? "@Validated " : null);
-        String requestBodyStr = requestBody ? "@RequestBody " : null;
+        data.put("validatedStr", commandConfig.isEnableValid() ? "@Validated " : null);
+        String requestBodyStr = enableRequestBody ? "@RequestBody " : null;
         data.put("requiredBodyStr", requestBodyStr);
         Optional.ofNullable(tableInfo.getPrimaryKeyField())
                 .ifPresent(e -> data.put("primaryKeyPropertyType", e.getPropertyType()));
 
 
-        data.put("queryBodyStr", queryViaPost ? requestBodyStr : null);
-        data.put("queryRequestMapping", queryViaPost ? "@PostMapping" : "@GetMapping");
+        data.put("queryBodyStr", enableQueryViaPost ? requestBodyStr : null);
+        data.put("queryRequestMapping", enableQueryViaPost ? "@PostMapping" : "@GetMapping");
         // 分页
         if (queryConfig.getQueryDtoSuperClass() == null) {
             data.put("pageMethodParams", ", Long current, Long size");
@@ -173,20 +175,20 @@ public class ControllerConfig implements TemplateRender {
         Set<String> importPackages = new TreeSet<>();
         // spring-web包
         importPackages.add(RuntimeClass.SPRING_BOOT_WEB_ANNOTATION_S.getClassName());
-        if (!restController) {
+        if (!enableRestController) {
             importPackages.add(RuntimeClass.SPRING_BOOT_CONTROLLER.getClassName());
         }
         // lombok
-        if (globalConfig.isLombok()) {
+        if (globalConfig.isEnableLombok()) {
             importPackages.add(RuntimeClass.LOMBOK_REQUIRED_ARGS_CONSTRUCTOR.getClassName());
         }
         // 文档
         switch (globalConfig.getDocType()) {
-            case SWAGGER_V3:
+            case OPEN_API_V3:
                 importPackages.add(RuntimeClass.SWAGGER_V3_TAG.getClassName());
                 importPackages.add(RuntimeClass.SWAGGER_V3_OPERATION.getClassName());
                 break;
-            case SWAGGER_V2:
+            case OPEN_API_V2:
                 importPackages.add(RuntimeClass.SWAGGER_V2_API.getClassName());
                 importPackages.add(RuntimeClass.SWAGGER_V2_API_OPERATION.getClassName());
                 break;

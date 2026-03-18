@@ -1,5 +1,6 @@
 package io.github.luminion.generator.config.v2;
 
+import io.github.luminion.generator.common.RenderField;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.DocType;
@@ -43,14 +44,17 @@ public class GlobalConfig implements TemplateRender {
     /**
      * 文档注释添加相关类链接
      */
+    @RenderField
     private boolean docLink = false;
     /**
      * 作者
      */
+    @RenderField
     private String docAuthor = "luminion";
     /**
      * 注释日期
      */
+    @RenderField
     private String docDate = LocalDate.now().toString();
 
     /**
@@ -66,47 +70,46 @@ public class GlobalConfig implements TemplateRender {
     /**
      * 是否为lombok模型
      */
-    private boolean lombok = true;
+    @RenderField
+    private boolean enableLombok = true;
 
     /**
      * 生成toString方法
+     * todo 处理toString方法
      */
+    @RenderField
     private boolean enableToString;
 
     /**
-     * 是否为链式模型setter（默认 false）
+     * 是否为链式模型setter
      */
-    private boolean chainModel;
+    @RenderField
+    private boolean enableChainSetter;
 
     /**
      * 实体是否生成 serialVersionUID
      */
-    private boolean serializableUID = false;
+    @RenderField
+    private boolean enableSerializableUID = false;
 
     /**
      * 实体是否启用java.io.Serial (需JAVA 14) 注解
      *
      */
-    private boolean serializableAnnotation = true;
+    @RenderField
+    private boolean enableSerializableAnnotation = true;
 
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("docAuthor", docAuthor);
-        data.put("docDate", docDate);
-        data.put("docLink", docLink);
+        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         data.put("javaApiPackagePrefix", javaEEApi.getPackagePrefix());
-        data.put("lombok", lombok);
-        data.put("chainModel", chainModel);
-        data.put("serializableUID", serializableUID);
-        data.put("serializableAnnotation", serializableAnnotation);
         switch (docType) {
-            case SWAGGER_V3:
-                data.put("swagger3", true);
+            case OPEN_API_V3:
+                data.put("enableOpenApi3", true);
                 break;
-            case SWAGGER_V2:
-                data.put("swagger2", true);
+            case OPEN_API_V2:
+                data.put("enableOpenApi2", true);
                 break;
         }
         
@@ -123,10 +126,10 @@ public class GlobalConfig implements TemplateRender {
     public Set<String> getModelDocImportPackages() {
         Set<String> importPackages = new TreeSet<>();
         switch (docType) {
-            case SWAGGER_V3:
+            case OPEN_API_V3:
                 importPackages.add(RuntimeClass.SWAGGER_V3_SCHEMA.getClassName());
                 break;
-            case SWAGGER_V2:
+            case OPEN_API_V2:
                 importPackages.add(RuntimeClass.SWAGGER_V2_API_MODEL.getClassName());
                 importPackages.add(RuntimeClass.SWAGGER_V2_API_MODEL_PROPERTY.getClassName());
                 break;
@@ -141,8 +144,8 @@ public class GlobalConfig implements TemplateRender {
      */
     public Set<String> getModelImportPackages() {
         Set<String> importPackages = new TreeSet<>();
-        if (lombok) {
-            if (chainModel) {
+        if (enableLombok) {
+            if (enableChainSetter) {
                 importPackages.add(RuntimeClass.LOMBOK_ACCESSORS.getClassName());
             }
             if (enableToString){
@@ -151,9 +154,9 @@ public class GlobalConfig implements TemplateRender {
             importPackages.add(RuntimeClass.LOMBOK_GETTER.getClassName());
             importPackages.add(RuntimeClass.LOMBOK_SETTER.getClassName());
         }
-        if (serializableUID) {
+        if (enableSerializableUID) {
             importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
-            if (serializableAnnotation) {
+            if (enableSerializableAnnotation) {
                 importPackages.add(RuntimeClass.JAVA_IO_SERIAL.getClassName());
             }
         }

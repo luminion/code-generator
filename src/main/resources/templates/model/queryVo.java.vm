@@ -23,28 +23,28 @@ import ${pkg};
 #end
  * @since ${docDate}
  */
-#if(${lombok})
+#if(${enableLombok})
 @Data
-    #if(${chainModel})
+    #if(${enableChainSetter})
 @Accessors(chain = true)
     #end
     #if(${queryVOExtendsEntity})
 @EqualsAndHashCode(callSuper = true)
     #end
 #end
-#if(${swagger3})
+#if(${enableOpenApi3})
 @Schema(description = "$!{table.comment}-VO")
-#elseif(${swagger2})
+#elseif(${enableOpenApi2})
 @ApiModel(description = "$!{table.comment}-VO")
 #end
 #if(${queryVOExtendsEntity})
-public class ${queryVO} extends ${entity}#if(${serializableUID}) implements Serializable#end {
+public class ${queryVO} extends ${entity}#if(${enableSerializableUID}) implements Serializable#end {
 #else
-public class ${queryVO}#if(${serializableUID}) implements Serializable#end {
+public class ${queryVO}#if(${enableSerializableUID}) implements Serializable#end {
 #end
-#if(${serializableUID})
+#if(${enableSerializableUID})
 
-    #if(${serializableAnnotation})
+    #if(${enableSerializableAnnotation})
     @Serial
     #end
     private static final long serialVersionUID = 1L;
@@ -56,9 +56,9 @@ public class ${queryVO}#if(${serializableUID}) implements Serializable#end {
 #else
 
     #if("$!field.comment" != "")
-        #if(${swagger3})
+        #if(${enableOpenApi3})
     @Schema(description = "${field.comment}")
-        #elseif(${swagger2})
+        #elseif(${enableOpenApi2})
     @ApiModelProperty("${field.comment}")
         #else
     /**
@@ -71,7 +71,7 @@ public class ${queryVO}#if(${serializableUID}) implements Serializable#end {
 #end
 #end
 ## ----------  END 字段循环遍历  ----------
-#if(!${lombok} && !${queryVOExtendsEntity})
+#if(!${enableLombok} && !${queryVOExtendsEntity})
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #else
@@ -85,13 +85,13 @@ public class ${queryVO}#if(${serializableUID}) implements Serializable#end {
         return ${field.propertyName};
     }
 
-    #if(${chainModel})
+    #if(${enableChainSetter})
     public ${queryVO} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
         this.${field.propertyName} = ${field.propertyName};
-     #if(${chainModel})
+     #if(${enableChainSetter})
         return this;
     #end
     }

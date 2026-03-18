@@ -23,21 +23,21 @@ import ${pkg};
  * @since ${docDate}
 #end
  */
-#if(${lombok})
+#if(${enableLombok})
 @Data
-    #if(${chainModel})
+    #if(${enableChainSetter})
 @Accessors(chain = true)
     #end
 #end
-#if(${swagger3})
+#if(${enableOpenApi3})
 @Schema(description = "$!{table.comment}-查询Dto")
-#elseif(${swagger2})
+#elseif(${enableOpenApi2})
 @ApiModel(description = "$!{table.comment}-查询Dto")
 #end
-public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
-#if(${serializableUID})
+public class ${queryDto}#if(${enableSerializableUID}) implements Serializable#end {
+#if(${enableSerializableUID})
 
-    #if(${serializableAnnotation})
+    #if(${enableSerializableAnnotation})
     @Serial
     #end
     private static final long serialVersionUID = 1L;
@@ -48,9 +48,9 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
 #else
 
     #if("$!field.comment" != "")
-        #if(${swagger3})
+        #if(${enableOpenApi3})
     @Schema(description = "${field.comment}")
-        #elseif(${swagger2})
+        #elseif(${enableOpenApi2})
     @ApiModelProperty("${field.comment}")
         #else
     /**
@@ -65,9 +65,9 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
 #foreach($field in ${table.extraFields})
 
     #if("$!field.comment" != "")
-        #if(${swagger3})
+        #if(${enableOpenApi3})
     @Schema(description = "${field.comment}")
-        #elseif(${swagger2})
+        #elseif(${enableOpenApi2})
     @ApiModelProperty("${field.comment}")
         #else
     /**
@@ -91,13 +91,13 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
         return ${field.propertyName};
     }
 
-    #if(${chainModel})
+    #if(${enableChainSetter})
     public ${queryDto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
         this.${field.propertyName} = ${field.propertyName};
-    #if(${chainModel})
+    #if(${enableChainSetter})
         return this;
     #end
     }
@@ -105,7 +105,7 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
 #end
 ## --基础getter/setter end---
 ## --额外字段getter/setter start--
-#if(!${lombok})
+#if(!${enableLombok})
 #foreach($field in ${table.extraFields})
 
     #if(${field.propertyType.equals("boolean")})
@@ -117,13 +117,13 @@ public class ${queryDto}#if(${serializableUID}) implements Serializable#end {
         return ${field.propertyName};
     }
 
-    #if(${chainModel})
+    #if(${enableChainSetter})
     public ${queryDto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
         this.${field.propertyName} = ${field.propertyName};
-    #if(${chainModel})
+    #if(${enableChainSetter})
         return this;
     #end
     }

@@ -22,21 +22,21 @@ import ${pkg};
 #end
  * @since ${docDate}
  */
-#if(${lombok})
+#if(${enableLombok})
 @Data
-    #if(${chainModel})
+    #if(${enableChainSetter})
 @Accessors(chain = true)
     #end
 #end
-#if(${swagger3})
+#if(${enableOpenApi3})
 @Schema(description = "$!{table.comment}-新增Dto")
-#elseif(${swagger2})
+#elseif(${enableOpenApi2})
 @ApiModel(description = "$!{table.comment}-新增Dto")
 #end
-public class ${createDto}#if(${serializableUID}) implements Serializable#end {
-#if(${serializableUID})
+public class ${createDto}#if(${enableSerializableUID}) implements Serializable#end {
+#if(${enableSerializableUID})
 
-    #if(${serializableAnnotation})
+    #if(${enableSerializableAnnotation})
     @Serial
     #end
     private static final long serialVersionUID = 1L;
@@ -51,9 +51,9 @@ public class ${createDto}#if(${serializableUID}) implements Serializable#end {
 #else
 
     #if("$!field.comment" != "")
-        #if(${swagger3})
+        #if(${enableOpenApi3})
     @Schema(description = "${field.comment}")
-        #elseif(${swagger2})
+        #elseif(${enableOpenApi2})
     @ApiModelProperty("${field.comment}")
         #else
     /**
@@ -61,7 +61,7 @@ public class ${createDto}#if(${serializableUID}) implements Serializable#end {
      */
         #end
     #end
-    #if(${validated})## 参数校验
+    #if(${enableValid})## 参数校验
         #if(!${field.metaInfo.nullable})## 非空
             #if(${field.propertyType} == "String")
     @NotBlank(message = "${field.comment}为必填项")
@@ -77,7 +77,7 @@ public class ${createDto}#if(${serializableUID}) implements Serializable#end {
 #end
 #end
 ## ----------  END 字段循环遍历  ----------
-#if(!${lombok})
+#if(!${enableLombok})
 #foreach($field in ${table.fields})
 #if(${field.keyFlag})
 #elseif(${field.versionField})
@@ -95,13 +95,13 @@ public class ${createDto}#if(${serializableUID}) implements Serializable#end {
         return ${field.propertyName};
     }
 
-    #if(${chainModel})
+    #if(${enableChainSetter})
     public ${createDto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
         this.${field.propertyName} = ${field.propertyName};
-    #if(${chainModel})
+    #if(${enableChainSetter})
         return this;
     #end
     }

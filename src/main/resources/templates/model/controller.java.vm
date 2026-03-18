@@ -23,21 +23,21 @@ import ${pkg};
 #end
  * @since ${docDate}
  */
-#if(${swagger3})
+#if(${enableOpenApi3})
 @Tag(name= "$!{table.comment}-前端控制器", description = "$!{table.comment}-前端控制器")
-#elseif(${swagger2})
+#elseif(${enableOpenApi2})
 @Api(tags = "$!{table.comment}")
 #end
-#if(${crossOrigin})
+#if(${enableCrossOrigin})
 @CrossOrigin
 #end
-#if(${restController})
+#if(${enableRestController})
 @RestController
 #else
 @Controller
 #end
 @RequestMapping("$!{requestBaseUrl}")
-#if(${lombok})
+#if(${enableLombok})
 @RequiredArgsConstructor
 #end
 #if(${controllerSuperClass})
@@ -47,7 +47,7 @@ public class ${controller} {
 #end
 
     private final ${baseService} baseService;
-#if(!${lombok})
+#if(!${enableLombok})
 
     public ${controller}(${baseService} baseService) {
         this.baseService = baseService;
@@ -55,9 +55,9 @@ public class ${controller} {
 #end
 #if(${enableCreateByDto})
 
-    #if(${swagger3})
+    #if(${enableOpenApi3})
     @Operation(summary = "新增")
-    #elseif(${swagger2})
+    #elseif(${enableOpenApi2})
     @ApiOperation(value = "新增")
     #else
     /**
@@ -67,23 +67,23 @@ public class ${controller} {
      * @return 新增后的数据id
      */
     #end
-    #if(${restful})
+    #if(${enableRestful})
     @PostMapping("")
     #else
     @PostMapping("/create")
     #end
-    #if(!${restController})
+    #if(!${enableRestController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("Serializable")} create($!{requiredBodyStr}$!{validatedStr}${createDto} dto) {
+    public ${returnTypeFormat.apply("Serializable")} create($!{requiredBodyStr}$!{enableValidStr}${createDto} dto) {
         return ${returnMethodFormat.apply("baseService.createByDto(dto)")};
     }
 #end
 #if(${enableUpdateByDto})
 
-    #if(${swagger3})
+    #if(${enableOpenApi3})
     @Operation(summary = "修改")
-    #elseif(${swagger2})
+    #elseif(${enableOpenApi2})
     @ApiOperation(value = "修改")
     #else
     /**
@@ -93,23 +93,23 @@ public class ${controller} {
      * @return 是否成功
      */
     #end
-    #if(${restful})
+    #if(${enableRestful})
     @PutMapping("")
     #else
     @PostMapping("/update")
     #end
-    #if(!${restController})
+    #if(!${enableRestController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("Boolean")} update($!{requiredBodyStr}$!{validatedStr}${updateDto} dto) {
+    public ${returnTypeFormat.apply("Boolean")} update($!{requiredBodyStr}$!{enableValidStr}${updateDto} dto) {
         return ${returnMethodFormat.apply("baseService.updateByDto(dto)")};
     }
 #end
 #if(${enableDeleteById} && ${table.havePrimaryKey})
 
-    #if(${swagger3})
+    #if(${enableOpenApi3})
     @Operation(summary = "删除")
-    #elseif(${swagger2})
+    #elseif(${enableOpenApi2})
     @ApiOperation(value = "删除")
     #else
     /**
@@ -119,12 +119,12 @@ public class ${controller} {
      * @return 是否成功
      */
     #end
-    #if(${restful})
+    #if(${enableRestful})
     @DeleteMapping("$!{idPathParam}")
     #else
     @PostMapping("/delete$!{idPathParam}")
     #end
-    #if(!${restController})
+    #if(!${enableRestController})
     @ResponseBody
     #end
     public ${returnTypeFormat.apply("Boolean")} delete($!{idMethodParam}${primaryKeyPropertyType} id) {
@@ -133,9 +133,9 @@ public class ${controller} {
 #end
 #if(${enableSelectVoById} && ${table.havePrimaryKey})
 
-    #if(${swagger3})
+    #if(${enableOpenApi3})
     @Operation(summary = "根据id查询详情")
-    #elseif(${swagger2})
+    #elseif(${enableOpenApi2})
     @ApiOperation(value = "根据id查询详情")
     #else
     /**
@@ -145,12 +145,12 @@ public class ${controller} {
      * @return 查询结果
      */
     #end
-    #if(${restful})
+    #if(${enableRestful})
     @GetMapping("$!{idPathParam}")
     #else
     @GetMapping("/detail$!{idPathParam}")
     #end
-    #if(!${restController})
+    #if(!${enableRestController})
     @ResponseBody
     #end
     public ${returnTypeFormat.apply("${queryVo}")} voById($!{idMethodParam}${primaryKeyPropertyType} id) {
@@ -159,9 +159,9 @@ public class ${controller} {
 #end
 #if(${enableSelectVoList})
 
-    #if(${swagger3})
+    #if(${enableOpenApi3})
     @Operation(summary = "列表查询")
-    #elseif(${swagger2})
+    #elseif(${enableOpenApi2})
     @ApiOperation(value = "列表查询")
     #else
     /**
@@ -172,7 +172,7 @@ public class ${controller} {
      */
     #end
     ${queryRequestMapping}("/list")
-    #if(!${restController})
+    #if(!${enableRestController})
     @ResponseBody
     #end
     public ${returnTypeFormat.apply("List<${queryVo}>")} list($!{queryBodyStr}${queryDto} dto) {
@@ -185,9 +185,9 @@ public class ${controller} {
 #end
 #if(${enableSelectVoPage})
 
-    #if(${swagger3})
+    #if(${enableOpenApi3})
     @Operation(summary = "分页查询")
-    #elseif(${swagger2})
+    #elseif(${enableOpenApi2})
     @ApiOperation(value = "分页查询")
     #else
     /**
@@ -200,7 +200,7 @@ public class ${controller} {
      */
     #end
     ${queryRequestMapping}("/page")
-    #if(!${restController})
+    #if(!${enableRestController})
     @ResponseBody
     #end
     public ${returnTypeFormat.apply(${pageTypeFormat.apply(${queryVo})})} page($!{queryBodyStr}${queryDto} dto$!{pageMethodParams}) {
@@ -218,9 +218,9 @@ public class ${controller} {
 #end
 #if(${enableExcelImport})
 
-    #if(${swagger3})
+    #if(${enableOpenApi3})
     @Operation(summary = "下载excel导入模板")
-    #elseif(${swagger2})
+    #elseif(${enableOpenApi2})
     @ApiOperation(value = "下载excel导入模板")
     #else
     /**
@@ -235,9 +235,9 @@ public class ${controller} {
         baseService.excelTemplate(response.getOutputStream());
     }
 
-    #if(${swagger3})
+    #if(${enableOpenApi3})
     @Operation(summary = "excel文件导入")
-    #elseif(${swagger2})
+    #elseif(${enableOpenApi2})
     @ApiOperation(value = "excel文件导入")
     #else
     /**
@@ -248,7 +248,7 @@ public class ${controller} {
      */
     #end
     @PostMapping("/excel/import")
-    #if(!${restController})
+    #if(!${enableRestController})
     @ResponseBody
     #end
     public ${returnTypeFormat.apply("Integer")} excelImport(@RequestParam("excel") MultipartFile excel) throws IOException {
@@ -258,9 +258,9 @@ public class ${controller} {
 #end
 #if(${enableExcelExport})
 
-    #if(${swagger3})
+    #if(${enableOpenApi3})
     @Operation(summary = "excel文件导出")
-    #elseif(${swagger2})
+    #elseif(${enableOpenApi2})
     @ApiOperation(value = "excel文件导出")
     #else
     /**

@@ -16,13 +16,13 @@ public enum DocType {
     //JAVA_MARKDOWN,
 
     /**
-     * swagger v2
+     * spring fox(swagger v2)
      */
-    SWAGGER_V2,
+    OPEN_API_V2,
     /**
      * spring doc (swagger v3)
      */
-    SWAGGER_V3,
+    OPEN_API_V3,
 
 
     

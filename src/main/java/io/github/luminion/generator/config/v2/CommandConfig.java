@@ -1,5 +1,6 @@
 package io.github.luminion.generator.config.v2;
 
+import io.github.luminion.generator.common.RenderField;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.RuntimeClass;
@@ -22,37 +23,35 @@ public class CommandConfig implements TemplateRender {
     /**
      * 生成参数校验相关注解
      */
-    private boolean valid;
+    @RenderField
+    private boolean enableValid;
     /**
      * 生成新增方法及配套类
      */
+    @RenderField
     private boolean enableCreateByDto = true;
 
     /**
      * 生成更新方法及配套类
      */
+    @RenderField
     private boolean enableUpdateByDto = true;
 
     /**
      * 生成删除方法及配套类
      */
+    @RenderField
     private boolean enableDeleteById = true;
-
 
     /**
      * 新增和修改需要需要排除的字段
      */
+    @RenderField
     private final Set<String> editExcludeColumns = new HashSet<>();
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("validated", this.valid);
-
-        data.put("generateCreate", this.enableCreateByDto);
-        data.put("generateUpdate", this.enableUpdateByDto);
-        data.put("generateDelete", this.enableDeleteById);
-        data.put("editExcludeColumns", this.editExcludeColumns);
+        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
 
         // 导包
         data.putAll(resolveCreateDtoImports(tableInfo));
@@ -100,7 +99,7 @@ public class CommandConfig implements TemplateRender {
             boolean isString = "String".equals(field.getPropertyType());
             //boolean notnullFlag = !metaInfo.isNullable() && metaInfo.getDefaultValue() == null;
             boolean notnullFlag = !metaInfo.isNullable();
-            if (valid) {
+            if (enableValid) {
                 if (notnullFlag) {
                     if (isString) {
                         importPackages.add(notBlank);
@@ -168,7 +167,7 @@ public class CommandConfig implements TemplateRender {
             boolean notnullFlag = field.isKeyFlag() || field.isVersionField();
             boolean isString = "String".equals(field.getPropertyType());
 
-            if (valid) {
+            if (enableValid) {
                 if (field.isKeyFlag()) {
                     importPackages.add(notNull);
                 }

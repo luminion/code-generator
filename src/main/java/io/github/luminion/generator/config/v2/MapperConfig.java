@@ -19,7 +19,7 @@ public class MapperConfig implements TemplateRender {
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
-        HashMap<String, Object> data = new HashMap<>();
+        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
      
         return data;
     }
