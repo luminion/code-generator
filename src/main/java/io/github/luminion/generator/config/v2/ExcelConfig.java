@@ -50,8 +50,8 @@ public class ExcelConfig implements TemplateRender {
         data.put("excelApiClass", excelApi.getMainEntrance());
 
         // 导包
-        data.putAll(this.resolveExcelImportDtoImports(tableInfo));
-        data.putAll(this.resolveExcelExportDtoImports(tableInfo));
+        data.putAll(resolveExcelImportDtoImports(tableInfo));
+        data.putAll(resolveExcelExportDtoImports(tableInfo));
         
         return data;
     }
