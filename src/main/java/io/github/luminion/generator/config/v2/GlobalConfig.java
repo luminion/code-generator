@@ -28,7 +28,6 @@ public class GlobalConfig implements TemplateRender {
     private final Configurer configurer;
     /**
      * 自定义配置渲染数据
-     * todo 运行时获取
      */
     private Map<String, Object> customRenderData = new HashMap<>();
 

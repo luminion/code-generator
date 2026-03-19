@@ -1,13 +1,16 @@
 package io.github.luminion.generator.config.v2;
 
+import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.RenderField;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.ExcelApi;
 import io.github.luminion.generator.enums.RuntimeClass;
+import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateClassFile;
+import io.github.luminion.generator.po.TemplateFile;
 import lombok.Data;
 
 import java.util.*;
@@ -65,28 +68,42 @@ public class ExcelConfig implements TemplateRender {
 
         Set<String> importPackages = new TreeSet<>();
 
-        // 额外in查询
-        importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
 
-        // 表字段
+        String excelIgnoreUnannotated = excelApi.getPackagePrefix() + RuntimeClass.PREFIX_EXCEL_EXCEL_IGNORE_UNANNOTATED.getClassName();
+        String excelProperty = excelApi.getPackagePrefix() + RuntimeClass.PREFIX_EXCEL_EXCEL_PROPERTY.getClassName();
+        importPackages.add(excelIgnoreUnannotated);
+        importPackages.add(excelProperty);
+
+
         for (TableField field : tableInfo.getFields()) {
             if (field.isLogicDeleteField()) {
                 continue;
             }
-            Optional.ofNullable(field.getPropertyPkg()).ifPresent(importPackages::add);
-        }
-
-        // 父类
-        if (queryDtoSuperClass != null) {
-            importPackages.add(queryDtoSuperClass);
-            if (globalConfig.isEnableLombok()) {
-                importPackages.add(RuntimeClass.LOMBOK_EQUALS_AND_HASH_CODE.getClassName());
+            if (field.isKeyFlag()) {
+                continue;
             }
+            if (field.isVersionField()) {
+                continue;
+            }
+            if (field.getFill() != null &&
+                    ("INSERT".equals(field.getFill()) || "INSERT_UPDATE".equals(field.getFill()))
+            ) {
+                continue;
+            }
+            if (commandConfig.getEditExcludeColumns().contains(field.getColumnName())) {
+                continue;
+            }
+            String propertyPkg = field.getPropertyPkg();
+            Optional.ofNullable(propertyPkg).ifPresent(importPackages::add);
         }
+        
 
         // 全局包
         importPackages.addAll(globalConfig.getModelDocImportPackages());
         importPackages.addAll(globalConfig.getModelImportPackages());
+        
+        // excel框架不支持链式setter, 会导致无法写入值
+        importPackages.remove(RuntimeClass.LOMBOK_ACCESSORS.getClassName());
 
         // 导包数据
         HashMap<String, Object> data = new HashMap<>();
@@ -96,10 +113,9 @@ public class ExcelConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("queryDtoFramePkg", frameworkPackages);
-        data.put("queryDtoJavaPkg", javaPackages);
+        data.put("excelImportDtoFramePkg", frameworkPackages);
+        data.put("excelImportDtoJavaPkg", javaPackages);
         return data;
-        return null;
     }
     
 
@@ -115,28 +131,24 @@ public class ExcelConfig implements TemplateRender {
 
         Set<String> importPackages = new TreeSet<>();
 
-        // 额外in查询
-        importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
+        String excelIgnoreUnannotated = excelApi.getPackagePrefix() + RuntimeClass.PREFIX_EXCEL_EXCEL_IGNORE_UNANNOTATED.getClassName();
+        String excelProperty = excelApi.getPackagePrefix() + RuntimeClass.PREFIX_EXCEL_EXCEL_PROPERTY.getClassName();
+        importPackages.add(excelIgnoreUnannotated);
+        importPackages.add(excelProperty);
 
-        // 表字段
+        // 属性过滤
         for (TableField field : tableInfo.getFields()) {
-            if (field.isLogicDeleteField()) {
-                continue;
-            }
-            Optional.ofNullable(field.getPropertyPkg()).ifPresent(importPackages::add);
+            String propertyPkg = field.getPropertyPkg();
+            Optional.ofNullable(propertyPkg).ifPresent(importPackages::add);
         }
-
-        // 父类
-        if (queryDtoSuperClass != null) {
-            importPackages.add(queryDtoSuperClass);
-            if (globalConfig.isEnableLombok()) {
-                importPackages.add(RuntimeClass.LOMBOK_EQUALS_AND_HASH_CODE.getClassName());
-            }
-        }
+        
 
         // 全局包
         importPackages.addAll(globalConfig.getModelDocImportPackages());
         importPackages.addAll(globalConfig.getModelImportPackages());
+
+        // excel框架不支持链式setter, 会导致无法写入值
+        importPackages.remove(RuntimeClass.LOMBOK_ACCESSORS.getClassName());
 
         // 导包数据
         HashMap<String, Object> data = new HashMap<>();
@@ -146,8 +158,8 @@ public class ExcelConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("queryDtoFramePkg", frameworkPackages);
-        data.put("queryDtoJavaPkg", javaPackages);
+        data.put("excelExportDtoFramePkg", frameworkPackages);
+        data.put("excelExportDtoJavaPkg", javaPackages);
         return data;
     }
 
