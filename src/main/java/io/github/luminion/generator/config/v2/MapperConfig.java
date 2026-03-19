@@ -2,11 +2,17 @@ package io.github.luminion.generator.config.v2;
 
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.enums.RuntimeClass;
+import io.github.luminion.generator.enums.RuntimeEnv;
+import io.github.luminion.generator.enums.TemplateFileEnum;
+import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.po.TemplateClassFile;
+import io.github.luminion.generator.util.ClassUtils;
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author luminion
@@ -16,11 +22,111 @@ import java.util.Map;
 public class MapperConfig implements TemplateRender {
     private final Configurer configurer;
 
+    /**
+     * 自定义继承的Mapper类全称，带包名
+     */
+    protected String mapperSuperClass;
+
+    /**
+     * 自定义Mapper类上的注解，带包名
+     */
+    protected String mapperAnnotationClass = "org.apache.ibatis.annotations.Mapper";
+
+    /**
+     * 是否开启baseColumnList
+     *
+     */
+    protected boolean enableXmlBaseColumnList;
+    
+    /**
+     * 是否开启BaseResultMap
+     *
+     */
+    protected boolean enableXmlBaseResultMap;
+
+    /**
+     * 缓存类
+     */
+    protected String xmlCacheClass;
+
+    /**
+     * 排序字段map
+     * 字段名 -> 是否倒序
+     */
+    protected Map<String, Boolean> xmlOrderByColumnMap = new LinkedHashMap<>();
+
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-     
+        data.put("mapperSuperClass", ClassUtils.getSimpleName(mapperSuperClass));
+        data.put("mapperAnnotationClass", "@" + ClassUtils.getSimpleName(mapperAnnotationClass));
+
+        // 默认排序字段sql
+        List<TableField> fields = tableInfo.getFields();
+        List<String> existColumnNames = fields.stream().map(TableField::getColumnName).collect(Collectors.toList());
+        if (xmlOrderByColumnMap != null && !xmlOrderByColumnMap.isEmpty()) {
+            xmlOrderByColumnMap.entrySet().stream()
+                    .filter(e -> existColumnNames.contains(e.getKey()))
+                    .map(e -> String.format("a.%s%s", e.getKey(), e.getValue() ? " DESC" : ""))
+                    .reduce((e1, e2) -> e1 + ", " + e2)
+                    .ifPresent(e -> data.put("orderColumnSql", e));
+        }
+        
+        // 导包
+        data.putAll(resolveMapperImports(tableInfo));
         return data;
     }
+
+    private Map<String, Object> resolveMapperImports(TableInfo tableInfo) {
+        GlobalConfig globalConfig = configurer.getGlobalConfig();
+        TemplateConfig templateConfig = configurer.getTemplateConfig();
+        CommandConfig commandConfig = configurer.getCommandConfig();
+        QueryConfig queryConfig = configurer.getQueryConfig();
+        ExcelConfig excelConfig = configurer.getExcelConfig();
+        Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
+        TableField primaryKeyField = tableInfo.getPrimaryKeyField();
+        String primaryKeyFieldPropertyPkg = primaryKeyField != null ? primaryKeyField.getPropertyPkg() : null;
+
+        Set<String> importPackages = new TreeSet<>();
+
+        if (mapperSuperClass != null) {
+            importPackages.add(mapperSuperClass);
+        }
+        if (mapperAnnotationClass != null) {
+            importPackages.add(mapperAnnotationClass);
+        }
+
+        if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
+            TemplateClassFile queryVo = templateFileMap.get(TemplateFileEnum.QUERY_VO.getKey());
+            importPackages.add(queryVo.getClassCanonicalName());
+            importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
+        }
+
+        if (RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
+            importPackages.add(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getClassName());
+            // 查询相关
+            if (queryConfig.isEnableSelectVoById() || queryConfig.isEnableSelectVoList() || queryConfig.isEnableSelectVoPage()) {
+                TemplateClassFile queryDto = templateFileMap.get(TemplateFileEnum.QUERY_DTO.getKey());
+                TemplateClassFile queryVo = templateFileMap.get(TemplateFileEnum.QUERY_VO.getKey());
+                importPackages.add(queryDto.getClassCanonicalName());
+                importPackages.add(queryVo.getClassCanonicalName());
+                importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
+                importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
+            }
+        }
+
+        // 导包数据
+        HashMap<String, Object> data = new HashMap<>();
+        Collection<String> frameworkPackages = importPackages.stream()
+                .filter(pkg -> !pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        Collection<String> javaPackages = importPackages.stream()
+                .filter(pkg -> pkg.startsWith("java"))
+                .collect(Collectors.toCollection(TreeSet::new));
+        data.put("mapperFramePkg", frameworkPackages);
+        data.put("mapperJavaPkg", javaPackages);
+        return data;
+    }
+
 }

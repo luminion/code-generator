@@ -102,6 +102,12 @@ public class Configurer {
             }
         }
 
+        // todo 验证数据
+        // sqlBooster父类验证
+        // mybatis-plus父类验证
+        // controllerSqlContext验证
+        // 实体类主键类型初始化
+        
         // 渲染模板数据
         result.putAll(this.globalConfig.renderData(tableInfo));
 
