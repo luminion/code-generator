@@ -2,7 +2,6 @@ package io.github.luminion.generator.config.v2;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
-import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.RenderField;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
@@ -81,8 +80,8 @@ public class EntityConfig implements TemplateRender {
         QueryConfig queryConfig = configurer.getQueryConfig();
         ExcelConfig excelConfig = configurer.getExcelConfig();
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
-        TableField primaryKeyField = tableInfo.getPrimaryKeyField();
-        String primaryKeyFieldPropertyPkg = primaryKeyField != null ? primaryKeyField.getPropertyPkg() : null;
+        TableField idField = tableInfo.getIdField();
+        String idFieldPropertyPkg = idField != null ? idField.getPropertyPkg() : null;
 
         Set<String> importPackages = new TreeSet<>();
 

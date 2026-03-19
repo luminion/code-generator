@@ -117,7 +117,7 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
                 tableField.setKeyFlag(true);
                 tableField.setKeyIdentityFlag(columnInfo.isAutoIncrement());
                 tableInfo.setHavePrimaryKey(true);
-                tableInfo.setPrimaryKeyField(tableField);
+                tableInfo.setIdField(tableField);
             }
             String columnName = columnInfo.getName();
             tableField.setName(columnName);

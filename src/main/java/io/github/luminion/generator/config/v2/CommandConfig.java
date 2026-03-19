@@ -68,8 +68,8 @@ public class CommandConfig implements TemplateRender {
         QueryConfig queryConfig = configurer.getQueryConfig();
         ExcelConfig excelConfig = configurer.getExcelConfig();
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
-        TableField primaryKeyField = tableInfo.getPrimaryKeyField();
-        String primaryKeyFieldPropertyPkg = primaryKeyField != null ? primaryKeyField.getPropertyPkg() : null;
+        TableField idField = tableInfo.getIdField();
+        String idFieldPropertyPkg = idField != null ? idField.getPropertyPkg() : null;
         Set<String> importPackages = new TreeSet<>();
 
         String size = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_SIZE.getClassName();
@@ -139,8 +139,8 @@ public class CommandConfig implements TemplateRender {
         QueryConfig queryConfig = configurer.getQueryConfig();
         ExcelConfig excelConfig = configurer.getExcelConfig();
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
-        TableField primaryKeyField = tableInfo.getPrimaryKeyField();
-        String primaryKeyFieldPropertyPkg = primaryKeyField != null ? primaryKeyField.getPropertyPkg() : null;
+        TableField idField = tableInfo.getIdField();
+        String idFieldPropertyPkg = idField != null ? idField.getPropertyPkg() : null;
 
         Set<String> importPackages = new TreeSet<>();
 

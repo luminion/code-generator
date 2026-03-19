@@ -146,7 +146,7 @@ public class ControllerConfig implements TemplateRender {
         data.put("validatedStr", commandConfig.isEnableValid() ? "@Validated " : null);
         String requestBodyStr = enableRequestBody ? "@RequestBody " : null;
         data.put("requiredBodyStr", requestBodyStr);
-        Optional.ofNullable(tableInfo.getPrimaryKeyField())
+        Optional.ofNullable(tableInfo.getIdField())
                 .ifPresent(e -> data.put("primaryKeyPropertyType", e.getPropertyType()));
 
 
@@ -169,8 +169,8 @@ public class ControllerConfig implements TemplateRender {
         QueryConfig queryConfig = configurer.getQueryConfig();
         ExcelConfig excelConfig = configurer.getExcelConfig();
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
-        TableField primaryKeyField = tableInfo.getPrimaryKeyField();
-        String primaryKeyFieldPropertyPkg = primaryKeyField != null ? primaryKeyField.getPropertyPkg() : null;
+        TableField idField = tableInfo.getIdField();
+        String idFieldPropertyPkg = idField != null ? idField.getPropertyPkg() : null;
     
         Set<String> importPackages = new TreeSet<>();
         // spring-web包
@@ -214,28 +214,28 @@ public class ControllerConfig implements TemplateRender {
         if (commandConfig.isEnableCreateByDto()) {
             importPackages.add(templateFileMap.get(TemplateFileEnum.CREATE_DTO.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.SPRING_BOOT_VALIDATED.getClassName());
-            if (primaryKeyFieldPropertyPkg != null) {
-                importPackages.add(primaryKeyField.getPropertyPkg());
+            if (idFieldPropertyPkg != null) {
+                importPackages.add(idField.getPropertyPkg());
             }
         }
         // 改
-        if (commandConfig.isEnableUpdateByDto() && primaryKeyField != null) {
+        if (commandConfig.isEnableUpdateByDto() && idField != null) {
             importPackages.add(templateFileMap.get(TemplateFileEnum.UPDATE_DTO.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.SPRING_BOOT_VALIDATED.getClassName());
         }
 
         // 删
-        if (commandConfig.isEnableDeleteById() && primaryKeyField != null) {
-            if (primaryKeyFieldPropertyPkg != null) {
-                importPackages.add(primaryKeyField.getPropertyPkg());
+        if (commandConfig.isEnableDeleteById() && idField != null) {
+            if (idFieldPropertyPkg != null) {
+                importPackages.add(idField.getPropertyPkg());
             }
         }
 
         // 通过id查询
-        if (queryConfig.isEnableSelectVoById() && primaryKeyField != null) {
+        if (queryConfig.isEnableSelectVoById() && idField != null) {
             importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_VO.getKey()).getClassCanonicalName());
-            if (primaryKeyFieldPropertyPkg != null) {
-                importPackages.add(primaryKeyField.getPropertyPkg());
+            if (idFieldPropertyPkg != null) {
+                importPackages.add(idField.getPropertyPkg());
             }
         }
 

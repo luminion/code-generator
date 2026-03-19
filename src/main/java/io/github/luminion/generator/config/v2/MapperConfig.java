@@ -1,5 +1,6 @@
 package io.github.luminion.generator.config.v2;
 
+import io.github.luminion.generator.common.RenderField;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.RuntimeClass;
@@ -36,17 +37,20 @@ public class MapperConfig implements TemplateRender {
      * 是否开启baseColumnList
      *
      */
+    @RenderField
     protected boolean enableXmlBaseColumnList;
     
     /**
      * 是否开启BaseResultMap
      *
      */
+    @RenderField
     protected boolean enableXmlBaseResultMap;
 
     /**
      * 缓存类
      */
+    @RenderField
     protected String xmlCacheClass;
 
     /**
@@ -85,8 +89,8 @@ public class MapperConfig implements TemplateRender {
         QueryConfig queryConfig = configurer.getQueryConfig();
         ExcelConfig excelConfig = configurer.getExcelConfig();
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
-        TableField primaryKeyField = tableInfo.getPrimaryKeyField();
-        String primaryKeyFieldPropertyPkg = primaryKeyField != null ? primaryKeyField.getPropertyPkg() : null;
+        TableField idField = tableInfo.getIdField();
+        String idFieldPropertyPkg = idField != null ? idField.getPropertyPkg() : null;
 
         Set<String> importPackages = new TreeSet<>();
 
@@ -97,12 +101,12 @@ public class MapperConfig implements TemplateRender {
             importPackages.add(mapperAnnotationClass);
         }
 
+        // 运行环境
         if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
+            importPackages.add(RuntimeClass.SQL_BOOSTER_MP_MAPPER.getClassName());
             TemplateClassFile queryVo = templateFileMap.get(TemplateFileEnum.QUERY_VO.getKey());
             importPackages.add(queryVo.getClassCanonicalName());
-            importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
         }
-
         if (RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
             importPackages.add(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getClassName());
             // 查询相关

@@ -51,7 +51,7 @@ public class TableInfo {
     /**
      * 主键字段
      */
-    private TableField primaryKeyField;
+    private TableField idField;
     
 
 

@@ -1,16 +1,13 @@
 package io.github.luminion.generator.config.v2;
 
-import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.RenderField;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.ExcelApi;
 import io.github.luminion.generator.enums.RuntimeClass;
-import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateClassFile;
-import io.github.luminion.generator.po.TemplateFile;
 import lombok.Data;
 
 import java.util.*;
@@ -63,8 +60,8 @@ public class ExcelConfig implements TemplateRender {
         QueryConfig queryConfig = configurer.getQueryConfig();
         ExcelConfig excelConfig = configurer.getExcelConfig();
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
-        TableField primaryKeyField = tableInfo.getPrimaryKeyField();
-        String primaryKeyFieldPropertyPkg = primaryKeyField != null ? primaryKeyField.getPropertyPkg() : null;
+        TableField idField = tableInfo.getIdField();
+        String idFieldPropertyPkg = idField != null ? idField.getPropertyPkg() : null;
 
         Set<String> importPackages = new TreeSet<>();
 
@@ -126,8 +123,8 @@ public class ExcelConfig implements TemplateRender {
         QueryConfig queryConfig = configurer.getQueryConfig();
         ExcelConfig excelConfig = configurer.getExcelConfig();
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
-        TableField primaryKeyField = tableInfo.getPrimaryKeyField();
-        String primaryKeyFieldPropertyPkg = primaryKeyField != null ? primaryKeyField.getPropertyPkg() : null;
+        TableField idField = tableInfo.getIdField();
+        String idFieldPropertyPkg = idField != null ? idField.getPropertyPkg() : null;
 
         Set<String> importPackages = new TreeSet<>();
 
