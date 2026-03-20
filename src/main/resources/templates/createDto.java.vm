@@ -1,39 +1,45 @@
-package ${package.createDto};
-#if($createDtoFramePkg.size()>0)
+package ${package.createParam};
+#if($createParamFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${createDtoFramePkg})
+#foreach($pkg in ${createParamFramePkg})
 import ${pkg};
 #end
-#if($createDtoJavaPkg.size()>0)
+#if($createParamJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${createDtoJavaPkg})
+#foreach($pkg in ${createParamJavaPkg})
 import ${pkg};
 #end
 
 /**
- * $!{table.comment}-新增Dto
+ * $!{table.comment}-新增对象
  *
  * @author ${docAuthor}
 #if(${docLink})
  * @see ${class.entity}
  * @see ${class.serviceImpl}
 #end
- * @since ${docDate}
+#if(${docDate})
+ * @since ${docDate}    
+#end
  */
 #if(${enableLombok})
-@Data
-    #if(${enableChainSetter})
+@Getter
+@Setter
+#end
+#if(${enableLombok} && ${enableChainSetter})
 @Accessors(chain = true)
-    #end
+#end
+#if(${enableLombok} && ${enableToString})
+@ToString
 #end
 #if(${enableOpenApi3})
-@Schema(description = "$!{table.comment}-新增Dto")
+@Schema(description = "$!{table.comment}-新增对象")
 #elseif(${enableOpenApi2})
-@ApiModel(description = "$!{table.comment}-新增Dto")
+@ApiModel(description = "$!{table.comment}-新增对象")
 #end
-public class ${createDto}#if(${enableSerializableUID}) implements Serializable#end {
+public class ${createParam.classSimpleName}#if(${enableSerializableUID}) implements Serializable#end {
 #if(${enableSerializableUID})
 
     #if(${enableSerializableAnnotation})
@@ -47,7 +53,7 @@ public class ${createDto}#if(${enableSerializableUID}) implements Serializable#e
 #elseif(${field.versionField})
 #elseif(${field.logicDeleteField})
 #elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
-#elseif(${editExcludeColumns.contains(${field.columnName})})
+#elseif(${commandExcludeColumns.contains(${field.columnName})})
 #else
 
     #if("$!field.comment" != "")
@@ -83,7 +89,7 @@ public class ${createDto}#if(${enableSerializableUID}) implements Serializable#e
 #elseif(${field.versionField})
 #elseif(${field.logicDeleteField})
 #elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
-#elseif(${editExcludeColumns.contains(${field.columnName})})
+#elseif(${commandExcludeColumns.contains(${field.columnName})})
 #else
     #if(${field.propertyType.equals("boolean")})
         #set($getprefix="is")
@@ -96,7 +102,7 @@ public class ${createDto}#if(${enableSerializableUID}) implements Serializable#e
     }
 
     #if(${enableChainSetter})
-    public ${createDto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    public ${createParam.classSimpleName} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
@@ -107,5 +113,27 @@ public class ${createDto}#if(${enableSerializableUID}) implements Serializable#e
     }
 #end
 #end
+#end
+#if(!${enableLombok} && ${enableToString})
+
+    @Override
+    public String toString() {
+        return "${createParam.classSimpleName}{" +
+    #foreach($field in ${table.fields})
+      #if(${field.keyFlag})
+      #elseif(${field.versionField})
+      #elseif(${field.logicDeleteField})
+      #elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
+      #elseif(${commandExcludeColumns.contains(${field.columnName})})
+      #else  
+            #if($!{foreach.index}==0)
+        "${field.propertyName} = " + ${field.propertyName} +
+            #else
+        ", ${field.propertyName} = " + ${field.propertyName} +
+            #end
+        #end
+    #end
+        "}";
+    }
 #end
 }

@@ -1,39 +1,45 @@
-package ${package.updateDto};
-#if($updateDtoFramePkg.size()>0)
+package ${package.updateParam};
+#if($updateParamFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${updateDtoFramePkg})
+#foreach($pkg in ${updateParamFramePkg})
 import ${pkg};
 #end
-#if($updateDtoJavaPkg.size()>0)
+#if($updateParamJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${updateDtoJavaPkg})
+#foreach($pkg in ${updateParamJavaPkg})
 import ${pkg};
 #end
 
 /**
- * $!{table.comment}-修改Dto
+ * $!{table.comment}-修改入参对象
  *
  * @author ${docAuthor}
 #if(${docLink})
  * @see ${class.entity}
  * @see ${class.serviceImpl}
 #end
- * @since ${docDate}
+#if(${docDate})
+ * @since ${docDate}    
+#end
  */
 #if(${enableLombok})
-@Data
-    #if(${enableChainSetter})
+@Getter
+@Setter
+#end
+#if(${enableLombok} && ${enableChainSetter})
 @Accessors(chain = true)
-    #end
+#end
+#if(${enableLombok} && ${enableToString})
+@ToString
 #end
 #if(${enableOpenApi3})
-@Schema(description = "$!{table.comment}-修改Dto")
+@Schema(description = "$!{table.comment}-修改入参对象")
 #elseif(${enableOpenApi2})
-@ApiModel(description = "$!{table.comment}-修改Dto")
+@ApiModel(description = "$!{table.comment}-修改入参对象")
 #end
-public class ${updateDto}#if(${enableSerializableUID}) implements Serializable#end {
+public class ${updateParam.classSimpleName}#if(${enableSerializableUID}) implements Serializable#end {
 #if(${enableSerializableUID})
 
     #if(${enableSerializableAnnotation})
@@ -45,7 +51,7 @@ public class ${updateDto}#if(${enableSerializableUID}) implements Serializable#e
 #foreach($field in ${table.fields})
 #if(${field.fill} && (${field.fill}=="UPDATE" || ${field.fill}=="INSERT_UPDATE" || ${field.fill}=="INSERT"))
 #elseif(${field.logicDeleteField})
-#elseif(${editExcludeColumns.contains(${field.columnName})})
+#elseif(${commandExcludeColumns.contains(${field.columnName})})
 #else
 
     #if("$!field.comment" != "")
@@ -84,7 +90,7 @@ public class ${updateDto}#if(${enableSerializableUID}) implements Serializable#e
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #elseif(${field.fill} && (${field.fill}=="UPDATE" || ${field.fill}=="INSERT_UPDATE" || ${field.fill}=="INSERT"))
-#elseif(${editExcludeColumns.contains(${field.columnName})})
+#elseif(${commandExcludeColumns.contains(${field.columnName})})
 #else
     #if(${field.propertyType.equals("boolean")})
         #set($getprefix="is")
@@ -97,7 +103,7 @@ public class ${updateDto}#if(${enableSerializableUID}) implements Serializable#e
     }
 
     #if(${enableChainSetter})
-    public ${updateDto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    public ${updateParam.classSimpleName} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
@@ -108,5 +114,25 @@ public class ${updateDto}#if(${enableSerializableUID}) implements Serializable#e
     }
 #end
 #end
+#end
+#if(!${enableLombok} && ${enableToString})
+
+    @Override
+    public String toString() {
+        return "${updateParam.classSimpleName}{" +
+    #foreach($field in ${table.fields})
+        #if(${field.logicDeleteField})
+        #elseif(${field.fill} && (${field.fill}=="UPDATE" || ${field.fill}=="INSERT_UPDATE" || ${field.fill}=="INSERT"))
+        #elseif(${commandExcludeColumns.contains(${field.columnName})})
+        #else
+            #if($!{foreach.index}==0)
+        "${field.propertyName} = " + ${field.propertyName} +
+            #else
+        ", ${field.propertyName} = " + ${field.propertyName} +
+            #end
+        #end
+    #end
+        "}";
+    }
 #end
 }

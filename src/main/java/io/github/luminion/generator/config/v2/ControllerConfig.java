@@ -10,6 +10,7 @@ import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -153,7 +154,7 @@ public class ControllerConfig implements TemplateRender {
         data.put("queryBodyStr", enableQueryViaPost ? requestBodyStr : null);
         data.put("queryRequestMapping", enableQueryViaPost ? "@PostMapping" : "@GetMapping");
         // 分页
-        if (queryConfig.getQueryDtoSuperClass() == null) {
+        if (queryConfig.getQueryParamSuperClass() == null) {
             data.put("pageMethodParams", ", Long current, Long size");
         }
 
@@ -211,45 +212,45 @@ public class ControllerConfig implements TemplateRender {
         }
 
         // 增
-        if (commandConfig.isEnableCreateByDto()) {
-            importPackages.add(templateFileMap.get(TemplateFileEnum.CREATE_DTO.getKey()).getClassCanonicalName());
+        if (commandConfig.isEnableCreate()) {
+            importPackages.add(templateFileMap.get(TemplateFileEnum.CREATE_PARAM.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.SPRING_BOOT_VALIDATED.getClassName());
             if (idFieldPropertyPkg != null) {
                 importPackages.add(idField.getPropertyPkg());
             }
         }
         // 改
-        if (commandConfig.isEnableUpdateByDto() && idField != null) {
-            importPackages.add(templateFileMap.get(TemplateFileEnum.UPDATE_DTO.getKey()).getClassCanonicalName());
+        if (commandConfig.isEnableUpdate() && idField != null) {
+            importPackages.add(templateFileMap.get(TemplateFileEnum.UPDATE_PARAM.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.SPRING_BOOT_VALIDATED.getClassName());
         }
 
         // 删
-        if (commandConfig.isEnableDeleteById() && idField != null) {
+        if (commandConfig.isEnableDelete() && idField != null) {
             if (idFieldPropertyPkg != null) {
                 importPackages.add(idField.getPropertyPkg());
             }
         }
 
         // 通过id查询
-        if (queryConfig.isEnableSelectVoById() && idField != null) {
-            importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_VO.getKey()).getClassCanonicalName());
+        if (queryConfig.isSelectVoById() && idField != null) {
+            importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey()).getClassCanonicalName());
             if (idFieldPropertyPkg != null) {
                 importPackages.add(idField.getPropertyPkg());
             }
         }
 
         // 列表
-        if (queryConfig.isEnableSelectVoList()) {
-            importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_DTO.getKey()).getClassCanonicalName());
-            importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_VO.getKey()).getClassCanonicalName());
+        if (queryConfig.isEnableQueryList()) {
+            importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey()).getClassCanonicalName());
+            importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
         }
 
         // 分页
-        if (queryConfig.isEnableSelectVoPage()) {
-            importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_DTO.getKey()).getClassCanonicalName());
-            importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_VO.getKey()).getClassCanonicalName());
+        if (queryConfig.isEnableQueryPage()) {
+            importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey()).getClassCanonicalName());
+            importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
             if (pageTypeClass != null) {
                 importPackages.add(pageTypeClass);
@@ -270,7 +271,7 @@ public class ControllerConfig implements TemplateRender {
         // 导出
         if (excelConfig.isEnableExcelExport()) {
             importPackages.add(responseClass);
-            importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_DTO.getKey()).getClassCanonicalName());
+            importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getClassName());
             importPackages.add(RuntimeClass.SPRING_BOOT_MULTIPART_FILE.getClassName());
         }

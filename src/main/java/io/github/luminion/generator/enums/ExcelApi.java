@@ -12,6 +12,7 @@ public enum ExcelApi {
     // 主入口
     EASY_EXCEL("com.alibaba.excel.","EasyExcel"),
     FAST_EXCEL("cn.idev.excel.","FastExcel"),
+    APACHE_FESOD("org.apache.fesod.sheet.","FesodSheet"),
     ;
     @Getter
     private final String packagePrefix;

@@ -31,12 +31,30 @@ public class ExcelConfig implements TemplateRender {
      */
     @RenderField
     private boolean enableExcelImport = true;
+    
+    /**
+     * excel导入方法名
+     */
+    @RenderField
+    private String excelImportMethodName = "excelImport";
+    
+    /**
+     * excel导入模板方法名
+     */
+    @RenderField
+    private String excelImportTemplateMethodName = "excelImportTemplate";
 
     /**
      * 生成导出方法(需允许查询)
      */
     @RenderField
     private boolean enableExcelExport = true;
+    
+    /**
+     * excel导出方法名
+     */
+    @RenderField
+    private String excelExportMethodName = "excelExport";
 
 
     @Override
@@ -87,7 +105,7 @@ public class ExcelConfig implements TemplateRender {
             ) {
                 continue;
             }
-            if (commandConfig.getEditExcludeColumns().contains(field.getColumnName())) {
+            if (commandConfig.getCommandExcludeColumns().contains(field.getColumnName())) {
                 continue;
             }
             String propertyPkg = field.getPropertyPkg();
@@ -96,7 +114,7 @@ public class ExcelConfig implements TemplateRender {
         
 
         // 全局包
-        importPackages.addAll(globalConfig.getModelDocImportPackages());
+//        importPackages.addAll(globalConfig.getModelDocImportPackages());
         importPackages.addAll(globalConfig.getModelImportPackages());
         
         // excel框架不支持链式setter, 会导致无法写入值
@@ -110,8 +128,8 @@ public class ExcelConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("excelImportDtoFramePkg", frameworkPackages);
-        data.put("excelImportDtoJavaPkg", javaPackages);
+        data.put("excelImportParamFramePkg", frameworkPackages);
+        data.put("excelImportParamJavaPkg", javaPackages);
         return data;
     }
     
@@ -141,11 +159,11 @@ public class ExcelConfig implements TemplateRender {
         
 
         // 全局包
-        importPackages.addAll(globalConfig.getModelDocImportPackages());
+//        importPackages.addAll(globalConfig.getModelDocImportPackages());
         importPackages.addAll(globalConfig.getModelImportPackages());
 
-        // excel框架不支持链式setter, 会导致无法写入值
-        importPackages.remove(RuntimeClass.LOMBOK_ACCESSORS.getClassName());
+//        // excel框架不支持链式setter, 会导致无法写入值
+//        importPackages.remove(RuntimeClass.LOMBOK_ACCESSORS.getClassName());
 
         // 导包数据
         HashMap<String, Object> data = new HashMap<>();
@@ -155,8 +173,8 @@ public class ExcelConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("excelExportDtoFramePkg", frameworkPackages);
-        data.put("excelExportDtoJavaPkg", javaPackages);
+        data.put("excelExportParamFramePkg", frameworkPackages);
+        data.put("excelExportParamJavaPkg", javaPackages);
         return data;
     }
 

@@ -13,7 +13,7 @@ import ${pkg};
 #end
 
 /**
- * $!{table.comment}-导出Dto
+ * $!{table.comment}-Excel导出对象
  *
  * @author ${docAuthor}
 #if(${docLink})
@@ -21,13 +21,22 @@ import ${pkg};
  * @see ${class.mapper}
  * @see ${class.serviceImpl}
 #end
- * @since ${docDate}
+#if(${docDate})
+ * @since ${docDate}    
+#end
  */
 #if(${enableLombok})
-@Data
+@Getter
+@Setter
+#end
+#if(${enableLombok} && ${enableChainSetter})
+@Accessors(chain = true)
+#end
+#if(${enableLombok} && ${enableToString})
+@ToString
 #end
 @ExcelIgnoreUnannotated
-public class ${exportDto}#if(${enableSerializableUID}) implements Serializable#end {
+public class ${excelExportParam.classSimpleName}#if(${enableSerializableUID}) implements Serializable#end {
 #if(${enableSerializableUID})
 
     #if(${enableSerializableAnnotation})
@@ -78,5 +87,22 @@ public class ${exportDto}#if(${enableSerializableUID}) implements Serializable#e
 #end
 #end
 ## ----------  END getter/setter  ----------
+#if(!${enableLombok} && ${enableToString})
 
+    @Override
+    public String toString() {
+        return "${excelExportParam.classSimpleName}{" +
+    #foreach($field in ${table.fields})
+        #if(${field.logicDeleteField})
+        #else
+            #if($!{foreach.index}==0)
+        "${field.propertyName} = " + ${field.propertyName} +
+            #else
+        ", ${field.propertyName} = " + ${field.propertyName} +
+            #end
+        #end
+    #end
+        "}";
+    }
+#end
 }

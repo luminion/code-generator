@@ -20,7 +20,7 @@ import java.util.function.Function;
 public class MybatisPlusBoosterGenerator extends AbstractGenerator<MybatisPlusConfig, MybatisPlusBoosterBuilder> {
     public MybatisPlusBoosterGenerator(ConfigCollector<MybatisPlusConfig> configCollector) {
         super(configCollector);
-        configCollector.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER);
+        configCollector.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MP_BOOSTER);
         ControllerConfig controllerConfig = configCollector.getControllerConfig();
         ClassMethodPayload classMethodPayload = new ClassMethodPayload(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getClassName(), 1);
         controllerConfig.setPageMethod(classMethodPayload);

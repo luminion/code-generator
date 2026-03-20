@@ -1,8 +1,8 @@
 package ${package.controller};
-#if($controllerFrameworkPkg.size()>0)
+#if($controllerFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${controllerFrameworkPkg})
+#foreach($pkg in ${controllerFramePkg})
 import ${pkg};
 #end
 #if($controllerJavaPkg.size()>0)
@@ -13,7 +13,7 @@ import ${pkg};
 #end
 
 /**
- * $!{table.comment} 前端控制器
+ * $!{table.comment}-前端控制器
  *
  * @author ${docAuthor}
 #if(${docLink})
@@ -21,7 +21,9 @@ import ${pkg};
  * @see ${class.mapper}
  * @see ${class.serviceImpl}
 #end
- * @since ${docDate}
+#if(${docDate})
+ * @since ${docDate}    
+#end
  */
 #if(${enableOpenApi3})
 @Tag(name= "$!{table.comment}-前端控制器", description = "$!{table.comment}-前端控制器")
@@ -41,19 +43,19 @@ import ${pkg};
 @RequiredArgsConstructor
 #end
 #if(${controllerSuperClass})
-public class ${controller} extends ${controllerSuperClass} {
+public class ${controller.classSimpleName} extends ${controllerSuperClass} {
 #else
-public class ${controller} {
+public class ${controller.classSimpleName} {
 #end
 
     private final ${baseService} baseService;
 #if(!${enableLombok})
 
-    public ${controller}(${baseService} baseService) {
+    public ${controller.classSimpleName}(${baseService} baseService) {
         this.baseService = baseService;
     }
 #end
-#if(${enableCreateByDto})
+#if(${enableCreate})
 
     #if(${enableOpenApi3})
     @Operation(summary = "新增")
@@ -75,11 +77,11 @@ public class ${controller} {
     #if(!${enableRestController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("Serializable")} create($!{requiredBodyStr}$!{enableValidStr}${createDto} dto) {
-        return ${returnMethodFormat.apply("baseService.createByDto(dto)")};
+    public ${returnTypeFormat.apply("Serializable")} create($!{requiredBodyStr}$!{enableValidStr}${createParam.classSimpleName} dto) {
+        return ${returnMethodFormat.apply("baseService.${createMethodName}(dto)")};
     }
 #end
-#if(${enableUpdateByDto})
+#if(${enableUpdate})
 
     #if(${enableOpenApi3})
     @Operation(summary = "修改")
@@ -101,11 +103,11 @@ public class ${controller} {
     #if(!${enableRestController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("Boolean")} update($!{requiredBodyStr}$!{enableValidStr}${updateDto} dto) {
-        return ${returnMethodFormat.apply("baseService.updateByDto(dto)")};
+    public ${returnTypeFormat.apply("Boolean")} update($!{requiredBodyStr}$!{enableValidStr}${updateParam.classSimpleName} dto) {
+        return ${returnMethodFormat.apply("baseService.${updateMethodName}(dto)")};
     }
 #end
-#if(${enableDeleteById} && ${table.havePrimaryKey})
+#if(${enableDelete} && ${table.idField})
 
     #if(${enableOpenApi3})
     @Operation(summary = "删除")
@@ -131,7 +133,7 @@ public class ${controller} {
         return ${returnMethodFormat.apply("baseService.removeById(id)")};
     }
 #end
-#if(${enableSelectVoById} && ${table.havePrimaryKey})
+#if(${enableSelectVoById} && ${table.idField})
 
     #if(${enableOpenApi3})
     @Operation(summary = "根据id查询详情")
@@ -153,11 +155,11 @@ public class ${controller} {
     #if(!${enableRestController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("${queryVo}")} voById($!{idMethodParam}${primaryKeyPropertyType} id) {
+    public ${returnTypeFormat.apply("${queryResult.classSimpleName}")} voById($!{idMethodParam}${primaryKeyPropertyType} id) {
         return ${returnMethodFormat.apply("baseService.voById(id)")};
     }
 #end
-#if(${enableSelectVoList})
+#if(${enableQueryList})
 
     #if(${enableOpenApi3})
     @Operation(summary = "列表查询")
@@ -175,7 +177,7 @@ public class ${controller} {
     #if(!${enableRestController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("List<${queryVo}>")} list($!{queryBodyStr}${queryDto} dto) {
+    public ${returnTypeFormat.apply("List<${queryResult.classSimpleName}>")} list($!{queryBodyStr}${queryParam.classSimpleName} dto) {
         #if($sqlBooster)
         return ${returnMethodFormat.apply("baseService..appendByBean(dto).list()")};    
         #else
@@ -183,7 +185,7 @@ public class ${controller} {
         #end
     }
 #end
-#if(${enableSelectVoPage})
+#if(${enableQueryPage})
 
     #if(${enableOpenApi3})
     @Operation(summary = "分页查询")
@@ -203,8 +205,8 @@ public class ${controller} {
     #if(!${enableRestController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply(${pageTypeFormat.apply(${queryVo})})} page($!{queryBodyStr}${queryDto} dto$!{pageMethodParams}) {
-        #if(${queryDtoSuperClass})
+    public ${returnTypeFormat.apply(${pageTypeFormat.apply(${queryResult.classSimpleName})})} page($!{queryBodyStr}${queryParam.classSimpleName} dto$!{pageMethodParams}) {
+        #if(${queryParamSuperClass})
         Long current = dto.${pageGetter};
         Long size = dto.${sizeGetter};
         #end
@@ -270,7 +272,7 @@ public class ${controller} {
      */
     #end
     ${queryRequestMapping}("/excel/export")
-    public void excelExport($!{queryBodyStr}${queryDto} dto, HttpServletResponse response) throws IOException {
+    public void excelExport($!{queryBodyStr}${queryParam.classSimpleName} dto, HttpServletResponse response) throws IOException {
         response.setContentType("application/vnd.ms-excel");
 ##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");

@@ -102,19 +102,19 @@ public class MapperConfig implements TemplateRender {
         }
 
         // 运行环境
-        if (RuntimeEnv.MY_BATIS_PLUS_SQL_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
+        if (RuntimeEnv.MP_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
             importPackages.add(RuntimeClass.SQL_BOOSTER_MP_MAPPER.getClassName());
-            TemplateClassFile queryVo = templateFileMap.get(TemplateFileEnum.QUERY_VO.getKey());
-            importPackages.add(queryVo.getClassCanonicalName());
+            TemplateClassFile queryResult = templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey());
+            importPackages.add(queryResult.getClassCanonicalName());
         }
         if (RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
             importPackages.add(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getClassName());
             // 查询相关
-            if (queryConfig.isEnableSelectVoById() || queryConfig.isEnableSelectVoList() || queryConfig.isEnableSelectVoPage()) {
-                TemplateClassFile queryDto = templateFileMap.get(TemplateFileEnum.QUERY_DTO.getKey());
-                TemplateClassFile queryVo = templateFileMap.get(TemplateFileEnum.QUERY_VO.getKey());
-                importPackages.add(queryDto.getClassCanonicalName());
-                importPackages.add(queryVo.getClassCanonicalName());
+            if (queryConfig.isSelectVoById() || queryConfig.isEnableQueryList() || queryConfig.isEnableQueryPage()) {
+                TemplateClassFile queryParam = templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey());
+                TemplateClassFile queryResult = templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey());
+                importPackages.add(queryParam.getClassCanonicalName());
+                importPackages.add(queryResult.getClassCanonicalName());
                 importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName());
                 importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
             }

@@ -1,0 +1,138 @@
+package ${package.serviceImpl};
+#if($serviceImplFramePkg.size()>0)
+
+#end
+#foreach($pkg in ${serviceImplFramePkg})
+import ${pkg};
+#end
+#if($serviceImplJavaPkg.size()>0)
+
+#end
+#foreach($pkg in ${serviceImplJavaPkg})
+import ${pkg};
+#end
+
+/**
+ * $!{table.comment}-服务实现类
+ *
+ * @author ${docAuthor}
+#if(${docDate})
+ * @since ${docDate}    
+#end
+ */
+@Service
+#if(${service.enabled})
+public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${mpBooster}), ${queryResult}#end> implements ${service.classSimpleName} {
+#else
+public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${mpBooster}), ${queryResult}#end> {
+#end
+#if(${enableCreate})
+
+    #if(${service.enabled})
+    @Override
+    #end
+    #if(${table.idField})
+    public ${table.idField.propertyName} ${createMethodName}(${createParam.classSimpleName} dto) {
+    #else
+    public void ${createMethodName}(${createParam.classSimpleName} dto) {
+    #end
+        ${entity.classSimpleName} entity = new ${entity.classSimpleName}();
+        BeanUtils.copyProperties(dto, entity);
+        super.save(entity);
+        #if(${table.idField})
+        return entity.get${table.idField.capitalName}();
+        #else
+        return null;
+        #end
+    }
+#end
+#if(${enableUpdate} && ${table.idField})
+
+    #if(${service.enabled})
+    @Override
+    #end
+    public boolean ${updateMethodName}(${updateParam.classSimpleName} dto) {
+        ${entity.classSimpleName} entity = new ${entity.classSimpleName}();
+        BeanUtils.copyProperties(dto, entity);
+        return super.updateById(entity);
+    }
+#end
+#if(${enableDelete} && ${table.idField})
+
+    @Override
+    public boolean ${deleteMethodName}(${table.idField.propertyName} id) {
+        return super.removeById(id);
+    }
+#end
+#if(${enableSelectVoById} && ${table.idField} && !${mpBooster})
+
+    #if(${service.enabled})
+    @Override
+    #end
+    public ${queryResult} ${enableQueryByIdMethodName}(${table.idField.propertyType} id) {
+        ${queryParam.classSimpleName} dto = new ${queryParam.classSimpleName}();
+        dto.set${table.idField.capitalName}(id);
+        ${queryResult} one = getBaseMapper().selectByXml(dto, null).stream().findFirst().orElse(null)
+        return one;
+    }
+#end
+#if(${enableQueryList} && !${mpBooster})
+
+    #if(${service.enabled})
+    @Override
+    #end
+    public List<${queryResult}> ${queryListMethodName}(${queryParam.classSimpleName} dto) {
+        List<${queryResult}> list = getBaseMapper().selectByXml(dto, null);
+        return list;
+    }
+#end
+#if(${enableQueryPage} && !${mpBooster})
+
+    #if(${service.enabled})
+    @Override
+    #end
+    public IPage<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} dto, long current, long size) {
+        Page<${queryResult}> page = new Page<>(current, size);
+        List<${queryResult}> list = getBaseMapper().selectByXml(dto, page);
+        page.setRecords(list);
+        return page;
+    }
+#end
+#if(${enableExcelImport})
+
+    #if(${service.enabled})
+    @Override
+    #end
+    public void ${excelImportTemplateMethodName}(OutputStream os) {
+        ${excelApiClass}.write(os, ${excelImportParam.classSimpleName}.class).sheet()
+            .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+            .doWrite(Collections.emptyList());
+    }
+
+    #if(${service.enabled})
+    @Override
+    #end
+    public int ${excelImportMethodName}(InputStream is) {
+        List<${excelImportParam.classSimpleName}> dataList = ${excelApiClass}.read(is)
+            .head(${excelImportParam.classSimpleName}.class).sheet().doReadSync();
+        List<${entity.classSimpleName}> entityList = dataList.stream().map(importDto -> {
+            ${entity.classSimpleName} entity = new ${entity.classSimpleName}();
+            BeanUtils.copyProperties(importDto, entity);
+            return entity;
+        }).collect(Collectors.toList());
+        super.saveBatch(entityList);
+        return entityList.size();
+    }
+#end
+#if(${enableExcelExport})
+
+    #if(${service.enabled})
+    @Override
+    #end
+    public void ${excelExportMethodName}(${queryParam.classSimpleName} dto, OutputStream os) {
+        ${excelApiClass}.write(os, ${excelExportParam.classSimpleName}.class).sheet()
+            .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+            .doWrite(getBaseMapper().selectByXml(dto, null));
+    }
+#end
+}

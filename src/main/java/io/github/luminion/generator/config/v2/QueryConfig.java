@@ -24,21 +24,42 @@ public class QueryConfig implements TemplateRender {
     private final Configurer configurer;
 
     /**
-     * 生成id查询方法
+     * 生成id查询
      */
     @RenderField
-    private boolean enableSelectVoById = true;
+    private boolean selectVoById = true;
+    private boolean enableQueryById = true;
+    
     /**
-     * 批量查询相关方法及配套类
+     * id查询方法名
      */
     @RenderField
-    private boolean enableSelectVoList = false;
+    private String queryByIdMethodName = "voById";
+    
+    /**
+     * 生成列表查询
+     */
+    @RenderField
+    private boolean enableQueryList = false;
+    
+    /**
+     * 列表查询方法名
+     */
+    @RenderField
+    private String queryListMethodName = "voList";
+    
+    
+    /**
+     * 生成分页查询
+     */
+    @RenderField
+    private boolean enableQueryPage = true;
 
     /**
-     * 批量查询分页相关方法及配套类
+     * 分页查询方法名
      */
     @RenderField
-    private boolean enableSelectVoPage = true;
+    private String queryPageMethodName = "voPage";
 
     /**
      * 额外字段后缀
@@ -66,16 +87,20 @@ public class QueryConfig implements TemplateRender {
     /**
      * 查询dto父类全限定名
      */
-    private String queryDtoSuperClass;
+    private String queryParamSuperClass;
+    /**
+     * 查询vo父类全限定名
+     */
+    private String queryResultSuperClass;
 
-
+    
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
     
-        if (queryDtoSuperClass != null) {
-            data.put("queryDtoSuperClass", ClassUtils.getSimpleName(queryDtoSuperClass));
-            data.put("queryDtoSuperClassCanonicalName", queryDtoSuperClass);
+        if (queryParamSuperClass != null) {
+            data.put("queryParamSuperClass", ClassUtils.getSimpleName(queryParamSuperClass));
+            data.put("queryParamSuperClassCanonicalName", queryParamSuperClass);
             // 假设用户没改配置，值是 "pageNum" 和 "pageSize"
             String pageGetter = "get"
                     + pageName.substring(0, 1).toUpperCase()
@@ -88,7 +113,6 @@ public class QueryConfig implements TemplateRender {
             data.put("pageGetter", pageGetter);
             data.put("sizeGetter", sizeGetter);
         }
-
         // 导包
         data.putAll(this.resolveQueryDtoImports(tableInfo));
         data.putAll(this.resolveQueryVoImports(tableInfo));
@@ -120,8 +144,8 @@ public class QueryConfig implements TemplateRender {
         }
 
         // 父类
-        if (queryDtoSuperClass != null) {
-            importPackages.add(queryDtoSuperClass);
+        if (queryParamSuperClass != null) {
+            importPackages.add(queryParamSuperClass);
             if (globalConfig.isEnableLombok()) {
                 importPackages.add(RuntimeClass.LOMBOK_EQUALS_AND_HASH_CODE.getClassName());
             }
@@ -139,8 +163,8 @@ public class QueryConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("queryDtoFramePkg", frameworkPackages);
-        data.put("queryDtoJavaPkg", javaPackages);
+        data.put("queryParamFramePkg", frameworkPackages);
+        data.put("queryParamJavaPkg", javaPackages);
         return data;
     }
 
@@ -175,8 +199,8 @@ public class QueryConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("queryVoFramePkg", frameworkPackages);
-        data.put("queryVoJavaPkg", javaPackages);
+        data.put("queryResultFramePkg", frameworkPackages);
+        data.put("queryResultJavaPkg", javaPackages);
         return data;
     }
 }

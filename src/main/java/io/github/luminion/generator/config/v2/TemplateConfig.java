@@ -52,7 +52,7 @@ public class TemplateConfig {
             TemplateFileEnum.CONTROLLER.getKey(),
             "%sController",
             "controller",
-            "/templates/model/controller.java",
+            "/templates/controller.java",
             ".java"
     );
 
@@ -60,7 +60,7 @@ public class TemplateConfig {
             TemplateFileEnum.SERVICE.getKey(),
             "%sService",
             "service",
-            "/templates/mybatis_plus/service.java",
+            "/templates/service.java",
             ".java"
     );
 
@@ -68,7 +68,7 @@ public class TemplateConfig {
             TemplateFileEnum.SERVICE_IMPL.getKey(),
             "%sServiceImpl",
             "service.impl",
-            "/templates/mybatis_plus/serviceImpl.java",
+            "/templates/serviceImpl.java",
             ".java"
     );
 
@@ -76,7 +76,7 @@ public class TemplateConfig {
             TemplateFileEnum.MAPPER.getKey(),
             "%sMapper",
             "mapper",
-            "/templates/mybatis_plus/mapper.java",
+            "/templates/mapper.java",
             ".java"
     );
 
@@ -84,7 +84,7 @@ public class TemplateConfig {
             TemplateFileEnum.MAPPER_XML.getKey(),
             "%sMapper",
             "xml",
-            "/templates/mybatis_plus/mapper.xml",
+            "/templates/mapper.xml",
             ".xml"
     );
 
@@ -92,57 +92,57 @@ public class TemplateConfig {
             TemplateFileEnum.ENTITY.getKey(),
             "%s",
             "model.entity",
-            "/templates/model/entity.java",
+            "/templates/entity.java",
             ".java"
     );
 
 
-    private TemplateFile queryDto = new TemplateFile(
-            TemplateFileEnum.QUERY_DTO.getKey(),
+    private TemplateFile queryParam = new TemplateFile(
+            TemplateFileEnum.QUERY_PARAM.getKey(),
             "%sQueryDTO",
             "model.query",
-            "/templates/model/queryDto.java",
+            "/templates/queryParam.java",
             ".java"
     );
 
 
-    private TemplateFile queryVo = new TemplateFile(
-            TemplateFileEnum.QUERY_VO.getKey(),
+    private TemplateFile queryResult = new TemplateFile(
+            TemplateFileEnum.QUERY_RESULT.getKey(),
             "%sVO",
             "model.vo",
-            "/templates/model/queryVo.java",
+            "/templates/queryResult.java",
             ".java"
     );
 
-    private TemplateFile createDto = new TemplateFile(
-            TemplateFileEnum.CREATE_DTO.getKey(),
+    private TemplateFile createParam = new TemplateFile(
+            TemplateFileEnum.CREATE_PARAM.getKey(),
             "%sCreateDTO",
             "model.command",
-            "/templates/model/createDto.java",
+            "/templates/createParam.java",
             ".java"
     );
 
-    private TemplateFile updateDto = new TemplateFile(
-            TemplateFileEnum.UPDATE_DTO.getKey(),
+    private TemplateFile updateParam = new TemplateFile(
+            TemplateFileEnum.UPDATE_PARAM.getKey(),
             "%sUpdateDTO",
             "model.command",
-            "/templates/model/updateDto.java",
+            "/templates/updateParam.java",
             ".java"
     );
 
-    private TemplateFile exportDto = new TemplateFile(
-            TemplateFileEnum.EXPORT_DTO.getKey(),
-            "%sExportDTO",
+    private TemplateFile excelExportParam = new TemplateFile(
+            TemplateFileEnum.EXCEL_EXPORT_PARAM.getKey(),
+            "%sExcelExportDTO",
             "model.excel",
-            "/templates/model/exportDto.java",
+            "/templates/excelExportParam.java",
             ".java"
     );
 
-    private TemplateFile importDto = new TemplateFile(
-            TemplateFileEnum.IMPORT_DTO.getKey(),
-            "%sImportDTO",
+    private TemplateFile excelImportParam = new TemplateFile(
+            TemplateFileEnum.EXCEL_IMPORT_PARAM.getKey(),
+            "%sExcelImportDTO",
             "model.excel",
-            "/templates/model/importDto.java",
+            "/templates/excelImportParam.java",
             ".java"
     );
 
@@ -157,14 +157,14 @@ public class TemplateConfig {
         templateFiles.add(mapperXml);
         templateFiles.add(entity);
 
-        templateFiles.add(queryDto);
-        templateFiles.add(queryVo);
+        templateFiles.add(queryParam);
+        templateFiles.add(queryResult);
 
-        templateFiles.add(createDto);
-        templateFiles.add(updateDto);
+        templateFiles.add(createParam);
+        templateFiles.add(updateParam);
 
-        templateFiles.add(exportDto);
-        templateFiles.add(importDto);
+        templateFiles.add(excelExportParam);
+        templateFiles.add(excelImportParam);
     }
 
     public void setFileOverride(boolean fileOverride) {

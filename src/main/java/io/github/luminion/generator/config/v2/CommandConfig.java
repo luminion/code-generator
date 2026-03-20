@@ -24,30 +24,48 @@ public class CommandConfig implements TemplateRender {
      * 生成参数校验相关注解
      */
     @RenderField
-    private boolean enableValid;
+    private boolean enableValid = true;
     /**
      * 生成新增方法及配套类
      */
     @RenderField
-    private boolean enableCreateByDto = true;
+    private boolean enableCreate = true;
+    
+    /**
+     * 新增方法及配套类方法名
+     */
+    @RenderField
+    private String createMethodName = "create";
 
     /**
      * 生成更新方法及配套类
      */
     @RenderField
-    private boolean enableUpdateByDto = true;
+    private boolean enableUpdate = true;
+    
+    /**
+     * 更新方法及配套类方法名
+     */
+    @RenderField
+    private String updateMethodName = "update";
 
     /**
      * 生成删除方法及配套类
      */
     @RenderField
-    private boolean enableDeleteById = true;
+    private boolean enableDelete = true;
+    
+    /**
+     * 删除方法及配套类方法名
+     */
+    @RenderField
+    private String deleteMethodName = "delete";
 
     /**
      * 新增和修改需要需要排除的字段
      */
     @RenderField
-    private final Set<String> editExcludeColumns = new HashSet<>();
+    private final Set<String> commandExcludeColumns = new HashSet<>();
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
@@ -91,7 +109,7 @@ public class CommandConfig implements TemplateRender {
             ) {
                 continue;
             }
-            if (editExcludeColumns.contains(field.getColumnName())) {
+            if (commandExcludeColumns.contains(field.getColumnName())) {
                 continue;
             }
             Optional.ofNullable(field.getPropertyPkg()).ifPresent(importPackages::add);
@@ -126,8 +144,8 @@ public class CommandConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("createDtoFramePkg", frameworkPackages);
-        data.put("createDtoJavaPkg", javaPackages);
+        data.put("createParamFramePkg", frameworkPackages);
+        data.put("createParamJavaPkg", javaPackages);
         return data;
     }
 
@@ -159,7 +177,7 @@ public class CommandConfig implements TemplateRender {
             if (field.getFill() != null && isFill) {
                 continue;
             }
-            if (editExcludeColumns.contains(field.getColumnName())) {
+            if (commandExcludeColumns.contains(field.getColumnName())) {
                 continue;
             }
             Optional.ofNullable(field.getPropertyPkg()).ifPresent(importPackages::add);
@@ -196,8 +214,8 @@ public class CommandConfig implements TemplateRender {
         Collection<String> javaPackages = importPackages.stream()
                 .filter(pkg -> pkg.startsWith("java"))
                 .collect(Collectors.toCollection(TreeSet::new));
-        data.put("updateDtoFramePkg", frameworkPackages);
-        data.put("updateDtoJavaPkg", javaPackages);
+        data.put("updateParamFramePkg", frameworkPackages);
+        data.put("updateParamJavaPkg", javaPackages);
         return data;
     }
 

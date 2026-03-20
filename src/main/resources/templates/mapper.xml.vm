@@ -26,7 +26,7 @@
     </resultMap>
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="voResultMap" type="${class.queryVO}">
+    <resultMap id="voResultMap" type="${class.queryResult}">
     #foreach($field in ${table.fields})
         #if(${field.keyFlag})##生成主键排在第一位
         <id column="${field.name}" property="${field.propertyName}" />
@@ -37,7 +37,7 @@
     #end
     #foreach($field in ${table.fields})
         #if(!${field.keyFlag})##生成普通字段
-            #if(${field.logicDeleteField} && !${queryVOExtendsEntity})
+            #if(${field.logicDeleteField} && !${queryResultExtendsEntity})
             #else
         <result column="${field.name}" property="${field.propertyName}" />
             #end
@@ -55,17 +55,46 @@
         ${table.fieldNames}
     </sql>
 #end
-#if(${generateSelectByXml})
-
+#if(${mpBooster})
     #if(${baseResultMap})
     <select id="selectByXml" resultMap="voResultMap">
     #else
-    <select id="selectByXml" resultType="${class.queryVO}">
+    <select id="selectByXml" resultType="${class.queryResult}">
     #end
         SELECT
         a.*
         FROM
-        #if(${schema})${schema}.#end${table.name} a
+        #if(${schemaName})${schemaName}.#end${table.name} a
+        <where>
+            <include refid="sqlbooster.conditions"/>
+            #foreach($field in ${table.fields})
+                #if(${field.logicDeleteField})
+                    #if(${field.metaInfo.defaultValue})
+            AND a.${field.columnName} = ${field.metaInfo.defaultValue}
+                    #else
+            AND a.${field.columnName} IS NULL
+                    #end
+                    #break
+                #end
+            #end
+        </where>
+        <trim prefix="ORDER BY" prefixOverrides=",">
+            <include refid="sqlbooster.sorts"/>
+            #if(${orderColumnSql})
+            , ${orderColumnSql}
+            #end
+        </trim>
+    </select>
+#else
+    #if(${baseResultMap})
+    <select id="selectByXml" resultMap="voResultMap">
+    #else
+    <select id="selectByXml" resultType="${class.queryResult}">
+    #end
+        SELECT
+        a.*
+        FROM
+        #if(${schemaName})${schemaName}.#end${table.name} a
         <where>
             <include refid="conditions"/>
             #foreach($field in ${table.fields})
@@ -83,9 +112,6 @@
         ORDER BY ${orderColumnSql}
         #end
     </select>
-
-#end
-#if(${generateSelectByXml})
 
     <sql id="conditions">
         <if test="param1 != null">

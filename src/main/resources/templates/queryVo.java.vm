@@ -1,19 +1,19 @@
-package ${package.queryVO};
-#if($queryVOFramePkg.size()>0)
+package ${package.queryResult};
+#if($queryResultFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${queryVOFramePkg})
+#foreach($pkg in ${queryResultFramePkg})
 import ${pkg};
 #end
-#if($queryVOJavaPkg.size()>0)
+#if($queryResultJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${queryVOJavaPkg})
+#foreach($pkg in ${queryResultJavaPkg})
 import ${pkg};
 #end
 
 /**
- * $!{table.comment}-VO
+ * $!{table.comment}-查询返回对象
  *
  * @author ${docAuthor}
 #if(${docLink})
@@ -21,27 +21,26 @@ import ${pkg};
  * @see ${class.mapper}
  * @see ${class.serviceImpl}
 #end
- * @since ${docDate}
+#if(${docDate})
+ * @since ${docDate}    
+#end
  */
 #if(${enableLombok})
-@Data
-    #if(${enableChainSetter})
+@Getter
+@Setter
+#end
+#if(${enableLombok} && ${enableChainSetter})
 @Accessors(chain = true)
-    #end
-    #if(${queryVOExtendsEntity})
-@EqualsAndHashCode(callSuper = true)
-    #end
+#end
+#if(${enableLombok} && ${enableToString})
+@ToString
 #end
 #if(${enableOpenApi3})
 @Schema(description = "$!{table.comment}-VO")
 #elseif(${enableOpenApi2})
 @ApiModel(description = "$!{table.comment}-VO")
 #end
-#if(${queryVOExtendsEntity})
-public class ${queryVO} extends ${entity}#if(${enableSerializableUID}) implements Serializable#end {
-#else
-public class ${queryVO}#if(${enableSerializableUID}) implements Serializable#end {
-#end
+public class ${queryResult} #if(${queryResultSuperClass})extends ${queryResultSuperClass}#end#if(${enableSerializableUID}) implements Serializable#end {
 #if(${enableSerializableUID})
 
     #if(${enableSerializableAnnotation})
@@ -50,7 +49,7 @@ public class ${queryVO}#if(${enableSerializableUID}) implements Serializable#end
     private static final long serialVersionUID = 1L;
 #end
 ## ----------  BEGIN 字段循环遍历  ----------
-#if(!${queryVOExtendsEntity})
+#if(!${queryResultExtendsEntity})
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #else
@@ -71,7 +70,7 @@ public class ${queryVO}#if(${enableSerializableUID}) implements Serializable#end
 #end
 #end
 ## ----------  END 字段循环遍历  ----------
-#if(!${enableLombok} && !${queryVOExtendsEntity})
+#if(!${enableLombok} && !${queryResultExtendsEntity})
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #else
@@ -86,7 +85,7 @@ public class ${queryVO}#if(${enableSerializableUID}) implements Serializable#end
     }
 
     #if(${enableChainSetter})
-    public ${queryVO} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    public ${queryResult} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
@@ -98,5 +97,22 @@ public class ${queryVO}#if(${enableSerializableUID}) implements Serializable#end
 #end
 #end
 #end
+#if(!${enableLombok} && ${enableToString})
 
+    @Override
+    public String toString() {
+        return "${queryResult.classSimpleName}{" +
+    #foreach($field in ${table.fields})
+        #if(${field.logicDeleteField})
+        #else
+            #if($!{foreach.index}==0)
+        "${field.propertyName} = " + ${field.propertyName} +
+            #else
+        ", ${field.propertyName} = " + ${field.propertyName} +
+            #end
+        #end
+    #end
+        "}";
+    }
+#end
 }

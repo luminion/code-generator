@@ -1,0 +1,30 @@
+package ${package.mapper};
+#if($mapperFramePkg.size()>0)
+
+#end
+#foreach($pkg in ${mapperFramePkg})
+import ${pkg};
+#end
+#if($mapperJavaPkg.size()>0)
+
+#end
+#foreach($pkg in ${mapperJavaPkg})
+import ${pkg};
+#end
+
+/**
+ * $!{table.comment}-Mapper
+ *
+ * @author ${docAuthor}
+#if(${docDate})
+ * @since ${docDate}    
+#end
+ */
+$!{mapperAnnotationClass}
+public interface ${mapper.classSimpleName} extends ${mapperSuperClass}<${entity.classSimpleName}#if(${mpBooster}), ${queryResult}#end> {
+#if(!${mpBooster})
+    #if(${enableSelectVoById} || ${enableQueryList} || ${enableQueryPage})
+    List<${queryResult}> selectByXml(${queryParam.classSimpleName} queryParam, IPage<${queryResult}> page);
+    #end
+#end
+}

@@ -10,7 +10,6 @@ import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.po.TableInfo;
 import lombok.Data;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -44,7 +43,7 @@ public class GlobalConfig implements TemplateRender {
      * 文档注释添加相关类链接
      */
     @RenderField
-    private boolean docLink = false;
+    private boolean docLink = true;
     /**
      * 作者
      */
@@ -54,7 +53,7 @@ public class GlobalConfig implements TemplateRender {
      * 注释日期
      */
     @RenderField
-    private String docDate = LocalDate.now().toString();
+    private String docDate;
 
     /**
      * java ee api
@@ -97,12 +96,21 @@ public class GlobalConfig implements TemplateRender {
      */
     @RenderField
     private boolean enableSerializableAnnotation = true;
+    
+    /**
+     * 数据库schema名
+     */
+    @RenderField
+    private String schemaName;
 
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         data.put("javaApiPackagePrefix", javaEEApi.getPackagePrefix());
+        if (RuntimeEnv.MP_BOOSTER.equals(runtimeEnv)){
+            data.put("mpBooster", true);
+        }
         switch (docType) {
             case OPEN_API_V3:
                 data.put("enableOpenApi3", true);
@@ -113,7 +121,7 @@ public class GlobalConfig implements TemplateRender {
         }
         
         switch (runtimeEnv) {
-            case MY_BATIS_PLUS_SQL_BOOSTER:
+            case MP_BOOSTER:
                 data.put("sqlBooster", true);
             case MYBATIS_PLUS:
             default:

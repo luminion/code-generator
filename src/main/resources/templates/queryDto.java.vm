@@ -1,46 +1,73 @@
-package ${template.queryDto.packageName};
-#if($queryDtoFramePkg.size()>0)
+package ${template.queryParam.packageName};
+#if($queryParamFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${queryDtoFramePkg})
+#foreach($pkg in ${queryParamFramePkg})
 import ${pkg};
 #end
-#if($queryDtoJavaPkg.size()>0)
+#if($queryParamJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${queryDtoJavaPkg})
+#foreach($pkg in ${queryParamJavaPkg})
 import ${pkg};
 #end
 
 /**
- * $!{table.comment}-查询Dto
+ * $!{table.comment}-查询条件对象
  *
  * @author ${docAuthor}
 #if(${docLink})
  * @see ${class.entity}
  * @see ${class.mapper}
  * @see ${class.serviceImpl}
- * @since ${docDate}
+ * @date ${docDate}
 #end
  */
 #if(${enableLombok})
-@Data
-    #if(${enableChainSetter})
+@Getter
+@Setter
+#end
+#if(${enableLombok} && ${enableChainSetter})
 @Accessors(chain = true)
-    #end
+#end
+#if(${enableLombok} && ${enableToString})
+@ToString
 #end
 #if(${enableOpenApi3})
-@Schema(description = "$!{table.comment}-查询Dto")
+@Schema(description = "$!{table.comment}-查询条件对象")
 #elseif(${enableOpenApi2})
-@ApiModel(description = "$!{table.comment}-查询Dto")
+@ApiModel(description = "$!{table.comment}-查询条件对象")
 #end
-public class ${queryDto}#if(${enableSerializableUID}) implements Serializable#end {
+public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends ${queryParamSuperClass} #end#if(${enableSerializableUID})implements Serializable#end{
 #if(${enableSerializableUID})
 
     #if(${enableSerializableAnnotation})
     @Serial
     #end
     private static final long serialVersionUID = 1L;
+#end
+#if(!${queryParamSuperClass})
+
+    #if(${enableOpenApi3})
+    @Schema(description = "当前页码")
+    #elseif(${enableOpenApi2})
+    @ApiModelProperty("当前页码")
+    #else
+    /**
+     * 当前页码
+     */
+    #end
+    private Long ${pageName};
+    #if(${enableOpenApi3})
+    @Schema(description = "每页条数")
+    #elseif(${enableOpenApi2})
+    @ApiModelProperty("每页条数")
+    #else
+    /**
+     * 每页条数
+     */
+    #end
+    private Long ${sizeName};
 #end
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${table.fields})
@@ -92,7 +119,7 @@ public class ${queryDto}#if(${enableSerializableUID}) implements Serializable#en
     }
 
     #if(${enableChainSetter})
-    public ${queryDto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    public ${queryParam.classSimpleName} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
@@ -118,7 +145,7 @@ public class ${queryDto}#if(${enableSerializableUID}) implements Serializable#en
     }
 
     #if(${enableChainSetter})
-    public ${queryDto} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
+    public ${queryParam.classSimpleName} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
@@ -128,5 +155,26 @@ public class ${queryDto}#if(${enableSerializableUID}) implements Serializable#en
     #end
     }
 #end
+#end
+#if(!${enableLombok} && ${enableToString})
+
+    @Override
+    public String toString() {
+        return "${queryParam.classSimpleName}{" +
+    #foreach($field in ${table.fields})
+        #if(${field.logicDeleteField})
+        #else
+            #if($!{foreach.index}==0)
+        "${field.propertyName} = " + ${field.propertyName} +
+            #else
+        ", ${field.propertyName} = " + ${field.propertyName} +
+            #end
+        #end
+    #end
+    #foreach($field in ${table.extraFields})
+        ", ${field.propertyName} = " + ${field.propertyName} +
+    #end
+        "}";
+    }
 #end
 }

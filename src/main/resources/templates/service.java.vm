@@ -1,0 +1,63 @@
+package ${package.service};
+#if($serviceFramePkg.size()>0)
+
+#end
+#foreach($pkg in ${serviceFramePkg})
+import ${pkg};
+#end
+#if($serviceJavaPkg.size()>0)
+
+#end
+#foreach($pkg in ${serviceJavaPkg})
+import ${pkg};
+#end
+
+/**
+ * $!{table.comment}-服务类
+ *
+ * @author ${docAuthor}
+#if(${docDate})
+ * @since ${docDate}    
+#end
+ */
+public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entity.classSimpleName}#if(${mpBooster}), ${queryResult}#end> {
+#if(${enableCreate})
+
+    #if(${table.idField})
+    ${table.idField.propertyName} ${createMethodName}(${createParam.classSimpleName} dto);
+    #else
+    void ${createMethodName}(${createParam.classSimpleName} dto);
+    #end
+#end
+#if(${enableUpdate} && ${table.idField})
+
+    boolean ${updateMethodName}(${updateParam.classSimpleName} dto);
+#end
+#if(${enableDelete} && ${table.idField})
+
+    boolean ${deleteMethodName}(${table.idField.propertyName} id);
+#end
+#if(${enableSelectVoById} && ${table.idField} && !${mpBooster})
+
+    ${queryResult} ${enableQueryByIdMethodName}(${table.idField.propertyType} id);
+#end
+#if(${enableQueryList} && !${mpBooster})
+
+    ${queryListMethodName}(${queryParam.classSimpleName} dto);
+#end
+#if(${enableQueryPage} && !${mpBooster})
+
+    IPage<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} dto, long current, long size);
+#end
+#if(${enableExcelImport})
+
+    void ${excelImportTemplateMethodName}(OutputStream os);
+
+    int ${excelImportMethodName}(InputStream is);
+#end
+#if(${enableExcelExport})
+
+    void ${excelExportMethodName}(${queryParam.classSimpleName} dto, OutputStream os);
+#end
+}
+
