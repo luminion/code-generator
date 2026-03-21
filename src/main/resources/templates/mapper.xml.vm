@@ -6,10 +6,10 @@
     <!-- 开启二级缓存 -->
     <cache type="${mapperCacheClass}"/>
 #end
-#if(${baseResultMap})
+#if(${mapperBaseResultMap})
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="${class.entity}">
+    <resultMap id="BaseResultMap" type="${entity.classSimpleName}">
     #foreach($field in ${table.fields})
         #if(${field.keyFlag})##生成主键排在第一位
         <id column="${field.name}" property="${field.propertyName}" />
@@ -26,7 +26,7 @@
     </resultMap>
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="voResultMap" type="${class.queryResult}">
+    <resultMap id="queryResultMap" type="${queryResult.classSimpleName}">
     #foreach($field in ${table.fields})
         #if(${field.keyFlag})##生成主键排在第一位
         <id column="${field.name}" property="${field.propertyName}" />
@@ -45,7 +45,7 @@
     #end
     </resultMap>
 #end
-#if(${baseColumnList})
+#if(${mapperBaseColumnList})
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
@@ -56,10 +56,10 @@
     </sql>
 #end
 #if(${mpBooster})
-    #if(${baseResultMap})
-    <select id="selectByXml" resultMap="voResultMap">
+    #if(${mapperBaseResultMap})
+    <select id="selectByXml" resultMap="queryResultMap">
     #else
-    <select id="selectByXml" resultType="${class.queryResult}">
+    <select id="selectByXml" resultType="${queryResult.classSimpleName}">
     #end
         SELECT
         a.*
@@ -85,11 +85,11 @@
             #end
         </trim>
     </select>
-#else
-    #if(${baseResultMap})
-    <select id="selectByXml" resultMap="voResultMap">
+#elseif(${generateQueryById} || ${generateQueryList} || ${generateQueryPage} || ${generateExcelExport})
+    #if(${mapperBaseResultMap})
+    <select id="selectByXml" resultMap="queryResultMap">
     #else
-    <select id="selectByXml" resultType="${class.queryResult}">
+    <select id="selectByXml" resultType="${queryResult.classSimpleName}">
     #end
         SELECT
         a.*

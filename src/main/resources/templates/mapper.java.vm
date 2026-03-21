@@ -1,4 +1,4 @@
-package ${package.mapper};
+package ${mapper.packageName};
 #if($mapperFramePkg.size()>0)
 
 #end
@@ -21,9 +21,9 @@ import ${pkg};
 #end
  */
 $!{mapperAnnotationClass}
-public interface ${mapper.classSimpleName} extends ${mapperSuperClass}<${entity.classSimpleName}#if(${mpBooster}), ${queryResult}#end> {
+public interface ${mapper.classSimpleName} extends ${mapperSuperClass}<${entity.classSimpleName}#if(${mpBooster}), ${queryResult.classSimpleName}#end> {
 #if(!${mpBooster})
-    #if(${enableSelectVoById} || ${enableQueryList} || ${enableQueryPage})
+    #if(${generateQueryById} || ${generateQueryList} || ${generateQueryPage} || ${generateExcelExport})
     List<${queryResult}> selectByXml(${queryParam.classSimpleName} queryParam, IPage<${queryResult}> page);
     #end
 #end

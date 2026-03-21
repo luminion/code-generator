@@ -25,12 +25,6 @@ public class ExcelConfig implements TemplateRender {
      * excel api
      */
     private ExcelApi excelApi = ExcelApi.EASY_EXCEL;
-
-    /**
-     * 生成导入方法及配套类(需允许新增)
-     */
-    @RenderField
-    private boolean enableExcelImport = true;
     
     /**
      * excel导入方法名
@@ -43,12 +37,6 @@ public class ExcelConfig implements TemplateRender {
      */
     @RenderField
     private String excelImportTemplateMethodName = "excelImportTemplate";
-
-    /**
-     * 生成导出方法(需允许查询)
-     */
-    @RenderField
-    private boolean enableExcelExport = true;
     
     /**
      * excel导出方法名

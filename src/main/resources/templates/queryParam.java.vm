@@ -1,4 +1,4 @@
-package ${template.queryParam.packageName};
+package ${queryParam.packageName};
 #if($queryParamFramePkg.size()>0)
 
 #end
@@ -17,40 +17,42 @@ import ${pkg};
  *
  * @author ${docAuthor}
 #if(${docLink})
- * @see ${class.entity}
- * @see ${class.mapper}
- * @see ${class.serviceImpl}
- * @date ${docDate}
+ * @see ${entity.classCanonicalName}
+ * @see ${mapper.classCanonicalName}
+ * @see ${serviceImpl.classCanonicalName}
+#end
+#if(${docDate})
+ * @since ${docDate}
 #end
  */
-#if(${enableLombok})
+#if(${lombok})
 @Getter
 @Setter
 #end
-#if(${enableLombok} && ${enableChainSetter})
+#if(${lombok} && ${chainSetter})
 @Accessors(chain = true)
 #end
-#if(${enableLombok} && ${enableToString})
+#if(${lombok} && ${toString})
 @ToString
 #end
-#if(${enableOpenApi3})
+#if(${springDoc})
 @Schema(description = "$!{table.comment}-查询条件对象")
-#elseif(${enableOpenApi2})
+#elseif(${swagger})
 @ApiModel(description = "$!{table.comment}-查询条件对象")
 #end
-public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends ${queryParamSuperClass} #end#if(${enableSerializableUID})implements Serializable#end{
-#if(${enableSerializableUID})
+public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends ${queryParamSuperClass} #end#if(${serializable})implements Serializable#end{
+#if(${serializable})
 
-    #if(${enableSerializableAnnotation})
+    #if(${serializableAnnotation})
     @Serial
     #end
     private static final long serialVersionUID = 1L;
 #end
 #if(!${queryParamSuperClass})
 
-    #if(${enableOpenApi3})
+    #if(${springDoc})
     @Schema(description = "当前页码")
-    #elseif(${enableOpenApi2})
+    #elseif(${swagger})
     @ApiModelProperty("当前页码")
     #else
     /**
@@ -58,9 +60,9 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
      */
     #end
     private Long ${pageName};
-    #if(${enableOpenApi3})
+    #if(${springDoc})
     @Schema(description = "每页条数")
-    #elseif(${enableOpenApi2})
+    #elseif(${swagger})
     @ApiModelProperty("每页条数")
     #else
     /**
@@ -75,9 +77,9 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
 #else
 
     #if("$!field.comment" != "")
-        #if(${enableOpenApi3})
+        #if(${springDoc})
     @Schema(description = "${field.comment}")
-        #elseif(${enableOpenApi2})
+        #elseif(${swagger})
     @ApiModelProperty("${field.comment}")
         #else
     /**
@@ -92,9 +94,9 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
 #foreach($field in ${table.extraFields})
 
     #if("$!field.comment" != "")
-        #if(${enableOpenApi3})
+        #if(${springDoc})
     @Schema(description = "${field.comment}")
-        #elseif(${enableOpenApi2})
+        #elseif(${swagger})
     @ApiModelProperty("${field.comment}")
         #else
     /**
@@ -118,13 +120,13 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
         return ${field.propertyName};
     }
 
-    #if(${enableChainSetter})
+    #if(${chainSetter})
     public ${queryParam.classSimpleName} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
         this.${field.propertyName} = ${field.propertyName};
-    #if(${enableChainSetter})
+    #if(${chainSetter})
         return this;
     #end
     }
@@ -132,7 +134,7 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
 #end
 ## --基础getter/setter end---
 ## --额外字段getter/setter start--
-#if(!${enableLombok})
+#if(!${lombok})
 #foreach($field in ${table.extraFields})
 
     #if(${field.propertyType.equals("boolean")})
@@ -144,19 +146,19 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
         return ${field.propertyName};
     }
 
-    #if(${enableChainSetter})
+    #if(${chainSetter})
     public ${queryParam.classSimpleName} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
         this.${field.propertyName} = ${field.propertyName};
-    #if(${enableChainSetter})
+    #if(${chainSetter})
         return this;
     #end
     }
 #end
 #end
-#if(!${enableLombok} && ${enableToString})
+#if(!${lombok} && ${toString})
 
     @Override
     public String toString() {

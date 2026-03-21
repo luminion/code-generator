@@ -5,12 +5,13 @@ import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
-import io.github.luminion.generator.po.*;
+import io.github.luminion.generator.po.TableField;
+import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.po.TemplateClassFile;
 import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -34,12 +35,12 @@ public class ControllerConfig implements TemplateRender {
      * 生成 @RestController控制器
      */
     @RenderField
-    private boolean enableRestController = true;
+    private boolean restController = true;
 
     /**
      * 驼峰转连字符(managerUserActionHistory -> manager-user-action-history)
      */
-    private boolean enableHyphenStyle = true;
+    private boolean hyphenStyle = true;
 
     /**
      * 请求基础url
@@ -50,35 +51,35 @@ public class ControllerConfig implements TemplateRender {
      * 跨域注解
      */
     @RenderField
-    private boolean enableCrossOrigin;
+    private boolean crossOrigin;
 
     /**
      * restful样式
      */
     @RenderField
-    private boolean enableRestful;
+    private boolean restful;
 
     /**
      * 请求路径参数
      */
-    private boolean enablePathVariable = true;
+    private boolean pathVariable = true;
 
     /**
      * controller是否使用@RequestBody注解
      */
-    private boolean enableRequestBody = true;
+    private boolean requestBody = true;
 
     /**
      * 通过POST方式查询
      */
-    private boolean enableQueryViaPost = true;
+    private boolean queryViaPost = true;
 
     /**
      * 通过SqlContext查询
      * // todo 
      */
     @RenderField
-    private boolean enableQueryViaSqlContext = false;
+    private boolean queryViaSqlContext = false;
 
     /**
      * 返回结果类型
@@ -120,7 +121,7 @@ public class ControllerConfig implements TemplateRender {
         // 首字母小写
         String entityName = tableInfo.getEntityName();
         String entityPath = entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
-        String entityUrl = enableHyphenStyle ? StringUtils.camelToHyphen(entityPath) : entityPath;
+        String entityUrl = hyphenStyle ? StringUtils.camelToHyphen(entityPath) : entityPath;
         String parentModule = templateConfig.getParentModule();
         String requestBaseUrl = Stream.of(baseUrl, parentModule, entityUrl)
                 .filter(StringUtils::isNotBlank)
@@ -129,30 +130,30 @@ public class ControllerConfig implements TemplateRender {
             requestBaseUrl = "/" + requestBaseUrl;
         }
         data.put("requestBaseUrl", requestBaseUrl);
-        data.put("restful", enableRestful);
+        data.put("restful", restful);
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
         TemplateClassFile baseService = templateFileMap.get(TemplateFileEnum.SERVICE.getKey());
-        if (!baseService.isEnabled()) {
+        if (!baseService.isGenerate()) {
             baseService = templateFileMap.get(TemplateFileEnum.SERVICE_IMPL.getKey());
         }
 
         data.put("baseService", baseService.getClassSimpleName());
-        data.put("queryViaPost", enableQueryViaPost);
+        data.put("queryViaPost", queryViaPost);
         // 路径参数
-        if (enablePathVariable) {
+        if (pathVariable) {
             data.put("idPathParam", "/{id}");
             data.put("idMethodParam", "@PathVariable(\"id\") ");
         }
 
-        data.put("validatedStr", commandConfig.isEnableValid() ? "@Validated " : null);
-        String requestBodyStr = enableRequestBody ? "@RequestBody " : null;
+        data.put("validatedStr", commandConfig.isValid() ? "@Validated " : null);
+        String requestBodyStr = requestBody ? "@RequestBody " : null;
         data.put("requiredBodyStr", requestBodyStr);
         Optional.ofNullable(tableInfo.getIdField())
                 .ifPresent(e -> data.put("primaryKeyPropertyType", e.getPropertyType()));
 
 
-        data.put("queryBodyStr", enableQueryViaPost ? requestBodyStr : null);
-        data.put("queryRequestMapping", enableQueryViaPost ? "@PostMapping" : "@GetMapping");
+        data.put("queryBodyStr", queryViaPost ? requestBodyStr : null);
+        data.put("queryRequestMapping", queryViaPost ? "@PostMapping" : "@GetMapping");
         // 分页
         if (queryConfig.getQueryParamSuperClass() == null) {
             data.put("pageMethodParams", ", Long current, Long size");
@@ -176,20 +177,20 @@ public class ControllerConfig implements TemplateRender {
         Set<String> importPackages = new TreeSet<>();
         // spring-web包
         importPackages.add(RuntimeClass.SPRING_BOOT_WEB_ANNOTATION_S.getClassName());
-        if (!enableRestController) {
+        if (!restController) {
             importPackages.add(RuntimeClass.SPRING_BOOT_CONTROLLER.getClassName());
         }
         // lombok
-        if (globalConfig.isEnableLombok()) {
+        if (globalConfig.isLombok()) {
             importPackages.add(RuntimeClass.LOMBOK_REQUIRED_ARGS_CONSTRUCTOR.getClassName());
         }
         // 文档
         switch (globalConfig.getDocType()) {
-            case OPEN_API_V3:
+            case SPRING_DOC:
                 importPackages.add(RuntimeClass.SWAGGER_V3_TAG.getClassName());
                 importPackages.add(RuntimeClass.SWAGGER_V3_OPERATION.getClassName());
                 break;
-            case OPEN_API_V2:
+            case SWAGGER:
                 importPackages.add(RuntimeClass.SWAGGER_V2_API.getClassName());
                 importPackages.add(RuntimeClass.SWAGGER_V2_API_OPERATION.getClassName());
                 break;
@@ -201,7 +202,7 @@ public class ControllerConfig implements TemplateRender {
         // baseService
         TemplateClassFile baseService = templateFileMap.get(TemplateFileEnum.SERVICE.getKey());
         TemplateClassFile baseServiceImpl = templateFileMap.get(TemplateFileEnum.SERVICE_IMPL.getKey());
-        if (baseService.isEnabled()) {
+        if (baseService.isGenerate()) {
             importPackages.add(baseService.getClassCanonicalName());
         } else {
             importPackages.add(baseServiceImpl.getClassCanonicalName());
@@ -212,7 +213,7 @@ public class ControllerConfig implements TemplateRender {
         }
 
         // 增
-        if (commandConfig.isEnableCreate()) {
+        if (globalConfig.isGenerateCreate()) {
             importPackages.add(templateFileMap.get(TemplateFileEnum.CREATE_PARAM.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.SPRING_BOOT_VALIDATED.getClassName());
             if (idFieldPropertyPkg != null) {
@@ -220,20 +221,20 @@ public class ControllerConfig implements TemplateRender {
             }
         }
         // 改
-        if (commandConfig.isEnableUpdate() && idField != null) {
+        if (globalConfig.isGenerateUpdate() && idField != null) {
             importPackages.add(templateFileMap.get(TemplateFileEnum.UPDATE_PARAM.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.SPRING_BOOT_VALIDATED.getClassName());
         }
 
         // 删
-        if (commandConfig.isEnableDelete() && idField != null) {
+        if (globalConfig.isGenerateDelete() && idField != null) {
             if (idFieldPropertyPkg != null) {
                 importPackages.add(idField.getPropertyPkg());
             }
         }
 
         // 通过id查询
-        if (queryConfig.isSelectVoById() && idField != null) {
+        if (globalConfig.isGenerateQueryById() && idField != null) {
             importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey()).getClassCanonicalName());
             if (idFieldPropertyPkg != null) {
                 importPackages.add(idField.getPropertyPkg());
@@ -241,14 +242,14 @@ public class ControllerConfig implements TemplateRender {
         }
 
         // 列表
-        if (queryConfig.isEnableQueryList()) {
+            if (globalConfig.isGenerateQueryList()) {
             importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey()).getClassCanonicalName());
             importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
         }
 
         // 分页
-        if (queryConfig.isEnableQueryPage()) {
+        if (globalConfig.isGenerateQueryPage()) {
             importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey()).getClassCanonicalName());
             importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
@@ -261,7 +262,7 @@ public class ControllerConfig implements TemplateRender {
                 + RuntimeClass.PREFIX_JAKARTA_SERVLET_RESPONSE.getClassName();
 
         // 导入
-        if (excelConfig.isEnableExcelImport()) {
+        if (globalConfig.isGenerateExcelImport()) {
             // 导入需要下载导入模板, 导入response
             importPackages.add(responseClass);
             importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getClassName());
@@ -269,7 +270,7 @@ public class ControllerConfig implements TemplateRender {
         }
         
         // 导出
-        if (excelConfig.isEnableExcelExport()) {
+        if (globalConfig.isGenerateExcelExport()) {
             importPackages.add(responseClass);
             importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getClassName());

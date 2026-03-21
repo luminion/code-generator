@@ -24,12 +24,7 @@ public class CommandConfig implements TemplateRender {
      * 生成参数校验相关注解
      */
     @RenderField
-    private boolean enableValid = true;
-    /**
-     * 生成新增方法及配套类
-     */
-    @RenderField
-    private boolean enableCreate = true;
+    private boolean valid = true;
     
     /**
      * 新增方法及配套类方法名
@@ -38,22 +33,11 @@ public class CommandConfig implements TemplateRender {
     private String createMethodName = "create";
 
     /**
-     * 生成更新方法及配套类
-     */
-    @RenderField
-    private boolean enableUpdate = true;
-    
-    /**
      * 更新方法及配套类方法名
      */
     @RenderField
     private String updateMethodName = "update";
 
-    /**
-     * 生成删除方法及配套类
-     */
-    @RenderField
-    private boolean enableDelete = true;
     
     /**
      * 删除方法及配套类方法名
@@ -117,7 +101,7 @@ public class CommandConfig implements TemplateRender {
             boolean isString = "String".equals(field.getPropertyType());
             //boolean notnullFlag = !metaInfo.isNullable() && metaInfo.getDefaultValue() == null;
             boolean notnullFlag = !metaInfo.isNullable();
-            if (enableValid) {
+            if (valid) {
                 if (notnullFlag) {
                     if (isString) {
                         importPackages.add(notBlank);
@@ -185,7 +169,7 @@ public class CommandConfig implements TemplateRender {
             boolean notnullFlag = field.isKeyFlag() || field.isVersionField();
             boolean isString = "String".equals(field.getPropertyType());
 
-            if (enableValid) {
+            if (valid) {
                 if (field.isKeyFlag()) {
                     importPackages.add(notNull);
                 }

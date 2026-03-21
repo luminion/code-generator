@@ -1,58 +1,61 @@
-package ${package.exportDto};
-#if($exportDtoFramePkg.size()>0)
+package ${excelImportParam.packageName};
+#if($importDtoFramePkg.size()>0)
 
 #end
-#foreach($pkg in ${exportDtoFramePkg})
+#foreach($pkg in ${importDtoFramePkg})
 import ${pkg};
 #end
-#if($exportDtoJavaPkg.size()>0)
+#if($importDtoJavaPkg.size()>0)
 
 #end
-#foreach($pkg in ${exportDtoJavaPkg})
+#foreach($pkg in ${importDtoJavaPkg})
 import ${pkg};
 #end
 
 /**
- * $!{table.comment}-Excel导出对象
+ * $!{table.comment}-Excel导入对象
  *
  * @author ${docAuthor}
 #if(${docLink})
- * @see ${class.entity}
- * @see ${class.mapper}
- * @see ${class.serviceImpl}
+ * @see ${entity.classCanonicalName}
+ * @see ${serviceImpl.classCanonicalName}
 #end
 #if(${docDate})
  * @since ${docDate}    
 #end
  */
-#if(${enableLombok})
+#if(${lombok})
 @Getter
 @Setter
 #end
-#if(${enableLombok} && ${enableChainSetter})
-@Accessors(chain = true)
-#end
-#if(${enableLombok} && ${enableToString})
+###if(${lombok} && ${chainSetter})
+##@Accessors(chain = true)
+###end
+#if(${lombok} && ${toString})
 @ToString
 #end
 @ExcelIgnoreUnannotated
-public class ${excelExportParam.classSimpleName}#if(${enableSerializableUID}) implements Serializable#end {
-#if(${enableSerializableUID})
+public class ${excelImportParam.classSimpleName}#if(${serializable}) implements Serializable#end {
+#if(${serializable})
 
-    #if(${enableSerializableAnnotation})
+    #if(${serializableAnnotation})
     @Serial
     #end
     private static final long serialVersionUID = 1L;
 #end
 ## ----------  BEGIN 字段循环遍历  ----------
 #foreach($field in ${table.fields})
-#if(${field.logicDeleteField})
+#if(${field.keyFlag})
+#elseif(${field.versionField})
+#elseif(${field.logicDeleteField})
+#elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
+#elseif(${commandExcludeColumns.contains(${field.columnName})})
 #else
 
 ##    #if("$!field.comment" != "")
-##        #if(${enableOpenApi3})
+##        #if(${springDoc})
 ##    @Schema(description = "${field.comment}")
-##        #elseif(${enableOpenApi2})
+##        #elseif(${swagger})
 ##    @ApiModelProperty("${field.comment}")
 ##        #else
 ##    /**
@@ -66,9 +69,13 @@ public class ${excelExportParam.classSimpleName}#if(${enableSerializableUID}) im
 #end
 ## ----------  END 字段循环遍历  ----------
 ## ----------BEGIN getter/setter----------
-#if(!${enableLombok})
+#if(!${lombok})
 #foreach($field in ${table.fields})
-#if(${field.logicDeleteField})
+#if(${field.keyFlag})
+#elseif(${field.versionField})
+#elseif(${field.logicDeleteField})
+#elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
+#elseif(${commandExcludeColumns.contains(${field.columnName})})
 #else
     #if(${field.propertyType.equals("boolean")})
         #set($getprefix="is")
@@ -79,7 +86,7 @@ public class ${excelExportParam.classSimpleName}#if(${enableSerializableUID}) im
     public ${field.propertyType} ${getprefix}${field.capitalName}() {
         return ${field.propertyName};
     }
-    
+
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
         this.${field.propertyName} = ${field.propertyName};
     }
@@ -87,13 +94,17 @@ public class ${excelExportParam.classSimpleName}#if(${enableSerializableUID}) im
 #end
 #end
 ## ----------  END getter/setter  ----------
-#if(!${enableLombok} && ${enableToString})
+#if(!${lombok} && ${toString})
 
     @Override
     public String toString() {
-        return "${excelExportParam.classSimpleName}{" +
+        return "${excelImportParam.classSimpleName}{" +
     #foreach($field in ${table.fields})
-        #if(${field.logicDeleteField})
+        #if(${field.keyFlag})
+        #elseif(${field.versionField})
+        #elseif(${field.logicDeleteField})
+        #elseif(${field.fill} && (${field.fill}=="INSERT" || ${field.fill}=="INSERT_UPDATE"))
+        #elseif(${commandExcludeColumns.contains(${field.columnName})})
         #else
             #if($!{foreach.index}==0)
         "${field.propertyName} = " + ${field.propertyName} +

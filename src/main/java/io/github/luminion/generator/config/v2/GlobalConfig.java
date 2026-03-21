@@ -69,39 +69,85 @@ public class GlobalConfig implements TemplateRender {
      * 是否为lombok模型
      */
     @RenderField
-    private boolean enableLombok = true;
+    private boolean lombok = true;
 
     /**
      * 生成toString方法
-     * todo 处理toString方法
      */
     @RenderField
-    private boolean enableToString;
+    private boolean toString;
 
     /**
      * 是否为链式模型setter
      */
     @RenderField
-    private boolean enableChainSetter;
+    private boolean chainSetter;
 
     /**
-     * 实体是否生成 serialVersionUID
+     * 实体是否实现 serializable
      */
     @RenderField
-    private boolean enableSerializableUID = false;
+    private boolean serializable = true;
 
     /**
-     * 实体是否启用java.io.Serial (需JAVA 14) 注解
-     *
+     * serializable的实体是否启用java.io.Serial (需JAVA 14) 注解
      */
     @RenderField
-    private boolean enableSerializableAnnotation = true;
+    private boolean serializableAnnotation = true;
     
     /**
      * 数据库schema名
      */
     @RenderField
     private String schemaName;
+
+    /**
+     * 生成新增方法及配套类
+     */
+    @RenderField
+    private boolean generateCreate = true;
+
+    /**
+     * 生成更新方法及配套
+     */
+    @RenderField
+    private boolean generateUpdate = true;
+
+    /**
+     * 生成删除方法及配套类
+     */
+    @RenderField
+    private boolean generateDelete = true;
+
+    /**
+     * 生成id查询及配套类
+     */
+    @RenderField
+    private boolean generateQueryById = true;
+
+    /**
+     * 生成列表查询及配套类
+     */
+    @RenderField
+    private boolean generateQueryList = false;
+
+    /**
+     * 生成分页查询及配套类
+     */
+    @RenderField
+    private boolean generateQueryPage = true;
+
+    /**
+     * 生成导入方法及配套类
+     */
+    @RenderField
+    private boolean generateExcelImport = true;
+
+    /**
+     * 生成导出方法
+     */
+    @RenderField
+    private boolean generateExcelExport = true;
 
 
     @Override
@@ -111,20 +157,11 @@ public class GlobalConfig implements TemplateRender {
         if (RuntimeEnv.MP_BOOSTER.equals(runtimeEnv)){
             data.put("mpBooster", true);
         }
-        switch (docType) {
-            case OPEN_API_V3:
-                data.put("enableOpenApi3", true);
-                break;
-            case OPEN_API_V2:
-                data.put("enableOpenApi2", true);
-                break;
+        if (DocType.SPRING_DOC.equals(docType)){
+            data.put("springDoc", true);
         }
-        
-        switch (runtimeEnv) {
-            case MP_BOOSTER:
-                data.put("sqlBooster", true);
-            case MYBATIS_PLUS:
-            default:
+        if (DocType.SWAGGER.equals(docType)){
+            data.put("swagger", true);
         }
         return data;
     }
@@ -133,10 +170,10 @@ public class GlobalConfig implements TemplateRender {
     public Set<String> getModelDocImportPackages() {
         Set<String> importPackages = new TreeSet<>();
         switch (docType) {
-            case OPEN_API_V3:
+            case SPRING_DOC:
                 importPackages.add(RuntimeClass.SWAGGER_V3_SCHEMA.getClassName());
                 break;
-            case OPEN_API_V2:
+            case SWAGGER:
                 importPackages.add(RuntimeClass.SWAGGER_V2_API_MODEL.getClassName());
                 importPackages.add(RuntimeClass.SWAGGER_V2_API_MODEL_PROPERTY.getClassName());
                 break;
@@ -151,19 +188,19 @@ public class GlobalConfig implements TemplateRender {
      */
     public Set<String> getModelImportPackages() {
         Set<String> importPackages = new TreeSet<>();
-        if (enableLombok) {
-            if (enableChainSetter) {
+        if (lombok) {
+            if (chainSetter) {
                 importPackages.add(RuntimeClass.LOMBOK_ACCESSORS.getClassName());
             }
-            if (enableToString){
+            if (toString){
                 importPackages.add(RuntimeClass.LOMBOK_TO_STRING.getClassName());
             }
             importPackages.add(RuntimeClass.LOMBOK_GETTER.getClassName());
             importPackages.add(RuntimeClass.LOMBOK_SETTER.getClassName());
         }
-        if (enableSerializableUID) {
+        if (serializable) {
             importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
-            if (enableSerializableAnnotation) {
+            if (serializableAnnotation) {
                 importPackages.add(RuntimeClass.JAVA_IO_SERIAL.getClassName());
             }
         }

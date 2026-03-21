@@ -1,4 +1,4 @@
-package ${package.controller};
+package ${controller.packageName};
 #if($controllerFramePkg.size()>0)
 
 #end
@@ -17,29 +17,29 @@ import ${pkg};
  *
  * @author ${docAuthor}
 #if(${docLink})
- * @see ${class.entity}
- * @see ${class.mapper}
- * @see ${class.serviceImpl}
+ * @see ${entity.classCanonicalName}
+ * @see ${mapper.classCanonicalName}
+ * @see ${serviceImpl.classCanonicalName}
 #end
 #if(${docDate})
  * @since ${docDate}    
 #end
  */
-#if(${enableOpenApi3})
+#if(${springDoc})
 @Tag(name= "$!{table.comment}-前端控制器", description = "$!{table.comment}-前端控制器")
-#elseif(${enableOpenApi2})
+#elseif(${swagger})
 @Api(tags = "$!{table.comment}")
 #end
-#if(${enableCrossOrigin})
+#if(${crossOrigin})
 @CrossOrigin
 #end
-#if(${enableRestController})
+#if(${restController})
 @RestController
 #else
 @Controller
 #end
 @RequestMapping("$!{requestBaseUrl}")
-#if(${enableLombok})
+#if(${lombok})
 @RequiredArgsConstructor
 #end
 #if(${controllerSuperClass})
@@ -49,17 +49,17 @@ public class ${controller.classSimpleName} {
 #end
 
     private final ${baseService} baseService;
-#if(!${enableLombok})
+#if(!${lombok})
 
     public ${controller.classSimpleName}(${baseService} baseService) {
         this.baseService = baseService;
     }
 #end
-#if(${enableCreate})
+#if(${generateCreate})
 
-    #if(${enableOpenApi3})
+    #if(${springDoc})
     @Operation(summary = "新增")
-    #elseif(${enableOpenApi2})
+    #elseif(${swagger})
     @ApiOperation(value = "新增")
     #else
     /**
@@ -69,23 +69,23 @@ public class ${controller.classSimpleName} {
      * @return 新增后的数据id
      */
     #end
-    #if(${enableRestful})
+    #if(${restful})
     @PostMapping("")
     #else
     @PostMapping("/create")
     #end
-    #if(!${enableRestController})
+    #if(!${restController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("Serializable")} create($!{requiredBodyStr}$!{enableValidStr}${createParam.classSimpleName} dto) {
+    public ${returnTypeFormat.apply("Serializable")} create($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} dto) {
         return ${returnMethodFormat.apply("baseService.${createMethodName}(dto)")};
     }
 #end
-#if(${enableUpdate})
+#if(${generateUpdate})
 
-    #if(${enableOpenApi3})
+    #if(${springDoc})
     @Operation(summary = "修改")
-    #elseif(${enableOpenApi2})
+    #elseif(${swagger})
     @ApiOperation(value = "修改")
     #else
     /**
@@ -95,23 +95,23 @@ public class ${controller.classSimpleName} {
      * @return 是否成功
      */
     #end
-    #if(${enableRestful})
+    #if(${restful})
     @PutMapping("")
     #else
     @PostMapping("/update")
     #end
-    #if(!${enableRestController})
+    #if(!${restController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("Boolean")} update($!{requiredBodyStr}$!{enableValidStr}${updateParam.classSimpleName} dto) {
+    public ${returnTypeFormat.apply("Boolean")} update($!{requiredBodyStr}$!{validStr}${updateParam.classSimpleName} dto) {
         return ${returnMethodFormat.apply("baseService.${updateMethodName}(dto)")};
     }
 #end
-#if(${enableDelete} && ${table.idField})
+#if(${generateDelete} && ${table.idField})
 
-    #if(${enableOpenApi3})
+    #if(${springDoc})
     @Operation(summary = "删除")
-    #elseif(${enableOpenApi2})
+    #elseif(${swagger})
     @ApiOperation(value = "删除")
     #else
     /**
@@ -121,23 +121,23 @@ public class ${controller.classSimpleName} {
      * @return 是否成功
      */
     #end
-    #if(${enableRestful})
+    #if(${restful})
     @DeleteMapping("$!{idPathParam}")
     #else
     @PostMapping("/delete$!{idPathParam}")
     #end
-    #if(!${enableRestController})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnTypeFormat.apply("Boolean")} delete($!{idMethodParam}${primaryKeyPropertyType} id) {
         return ${returnMethodFormat.apply("baseService.removeById(id)")};
     }
 #end
-#if(${enableSelectVoById} && ${table.idField})
+#if(${generateQueryById} && ${table.idField})
 
-    #if(${enableOpenApi3})
+    #if(${springDoc})
     @Operation(summary = "根据id查询详情")
-    #elseif(${enableOpenApi2})
+    #elseif(${swagger})
     @ApiOperation(value = "根据id查询详情")
     #else
     /**
@@ -147,23 +147,23 @@ public class ${controller.classSimpleName} {
      * @return 查询结果
      */
     #end
-    #if(${enableRestful})
+    #if(${restful})
     @GetMapping("$!{idPathParam}")
     #else
     @GetMapping("/detail$!{idPathParam}")
     #end
-    #if(!${enableRestController})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnTypeFormat.apply("${queryResult.classSimpleName}")} voById($!{idMethodParam}${primaryKeyPropertyType} id) {
         return ${returnMethodFormat.apply("baseService.voById(id)")};
     }
 #end
-#if(${enableQueryList})
+#if(${generateQueryList})
 
-    #if(${enableOpenApi3})
+    #if(${springDoc})
     @Operation(summary = "列表查询")
-    #elseif(${enableOpenApi2})
+    #elseif(${swagger})
     @ApiOperation(value = "列表查询")
     #else
     /**
@@ -174,7 +174,7 @@ public class ${controller.classSimpleName} {
      */
     #end
     ${queryRequestMapping}("/list")
-    #if(!${enableRestController})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnTypeFormat.apply("List<${queryResult.classSimpleName}>")} list($!{queryBodyStr}${queryParam.classSimpleName} dto) {
@@ -185,11 +185,11 @@ public class ${controller.classSimpleName} {
         #end
     }
 #end
-#if(${enableQueryPage})
+#if(${generateQueryPage})
 
-    #if(${enableOpenApi3})
+    #if(${springDoc})
     @Operation(summary = "分页查询")
-    #elseif(${enableOpenApi2})
+    #elseif(${swagger})
     @ApiOperation(value = "分页查询")
     #else
     /**
@@ -202,7 +202,7 @@ public class ${controller.classSimpleName} {
      */
     #end
     ${queryRequestMapping}("/page")
-    #if(!${enableRestController})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnTypeFormat.apply(${pageTypeFormat.apply(${queryResult.classSimpleName})})} page($!{queryBodyStr}${queryParam.classSimpleName} dto$!{pageMethodParams}) {
@@ -220,9 +220,9 @@ public class ${controller.classSimpleName} {
 #end
 #if(${enableExcelImport})
 
-    #if(${enableOpenApi3})
+    #if(${springDoc})
     @Operation(summary = "下载excel导入模板")
-    #elseif(${enableOpenApi2})
+    #elseif(${swagger})
     @ApiOperation(value = "下载excel导入模板")
     #else
     /**
@@ -237,9 +237,9 @@ public class ${controller.classSimpleName} {
         baseService.excelTemplate(response.getOutputStream());
     }
 
-    #if(${enableOpenApi3})
+    #if(${springDoc})
     @Operation(summary = "excel文件导入")
-    #elseif(${enableOpenApi2})
+    #elseif(${swagger})
     @ApiOperation(value = "excel文件导入")
     #else
     /**
@@ -250,7 +250,7 @@ public class ${controller.classSimpleName} {
      */
     #end
     @PostMapping("/excel/import")
-    #if(!${enableRestController})
+    #if(!${restController})
     @ResponseBody
     #end
     public ${returnTypeFormat.apply("Integer")} excelImport(@RequestParam("excel") MultipartFile excel) throws IOException {
@@ -260,9 +260,9 @@ public class ${controller.classSimpleName} {
 #end
 #if(${enableExcelExport})
 
-    #if(${enableOpenApi3})
+    #if(${springDoc})
     @Operation(summary = "excel文件导出")
-    #elseif(${enableOpenApi2})
+    #elseif(${swagger})
     @ApiOperation(value = "excel文件导出")
     #else
     /**

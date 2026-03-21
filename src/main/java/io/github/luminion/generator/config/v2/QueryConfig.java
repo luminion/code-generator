@@ -24,37 +24,17 @@ public class QueryConfig implements TemplateRender {
     private final Configurer configurer;
 
     /**
-     * 生成id查询
-     */
-    @RenderField
-    private boolean selectVoById = true;
-    private boolean enableQueryById = true;
-    
-    /**
      * id查询方法名
      */
     @RenderField
     private String queryByIdMethodName = "voById";
-    
-    /**
-     * 生成列表查询
-     */
-    @RenderField
-    private boolean enableQueryList = false;
-    
+
     /**
      * 列表查询方法名
      */
     @RenderField
     private String queryListMethodName = "voList";
     
-    
-    /**
-     * 生成分页查询
-     */
-    @RenderField
-    private boolean enableQueryPage = true;
-
     /**
      * 分页查询方法名
      */
@@ -72,6 +52,7 @@ public class QueryConfig implements TemplateRender {
      */
     @RenderField
     private ExtraFieldStrategy extraFieldStrategy = new DefaultExtraFieldStrategy();
+
     /**
      * 当前页码参数名
      */
@@ -88,6 +69,7 @@ public class QueryConfig implements TemplateRender {
      * 查询dto父类全限定名
      */
     private String queryParamSuperClass;
+
     /**
      * 查询vo父类全限定名
      */
@@ -146,7 +128,7 @@ public class QueryConfig implements TemplateRender {
         // 父类
         if (queryParamSuperClass != null) {
             importPackages.add(queryParamSuperClass);
-            if (globalConfig.isEnableLombok()) {
+            if (globalConfig.isLombok()) {
                 importPackages.add(RuntimeClass.LOMBOK_EQUALS_AND_HASH_CODE.getClassName());
             }
         }

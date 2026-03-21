@@ -40,13 +40,13 @@
 //     * 是否开启BaseResultMap
 //     *
 //     */
-//    protected boolean baseResultMap;
+//    protected boolean mapperBaseResultMap;
 //
 //    /**
-//     * 是否开启baseColumnList
+//     * 是否开启mapperBaseColumnList
 //     *
 //     */
-//    protected boolean baseColumnList;
+//    protected boolean mapperBaseColumnList;
 //
 //    /**
 //     * 设置缓存实现类
@@ -74,8 +74,8 @@
 //            data.put("mapperCacheClass", cacheClass);
 //        }
 //
-//        data.put("baseResultMap", this.baseResultMap);
-//        data.put("baseColumnList", this.baseColumnList);
+//        data.put("mapperBaseResultMap", this.mapperBaseResultMap);
+//        data.put("mapperBaseColumnList", this.mapperBaseColumnList);
 //        // 排序字段sql
 //        List<TableField> sortFields = tableInfo.getFields();
 //        List<String> existColumnNames = sortFields.stream().map(TableField::getColumnName).collect(Collectors.toList());

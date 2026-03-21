@@ -33,4 +33,8 @@ public class TemplateClassFile extends TemplateFile {
                 templateFile.getOutputFileSuffix());
     }
 
+    @Override
+    public String toString() {
+        return classSimpleName;
+    }
 }

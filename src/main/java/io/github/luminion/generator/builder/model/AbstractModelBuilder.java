@@ -38,7 +38,7 @@ public abstract class AbstractModelBuilder<C extends TemplateModelRender, B exte
      * @return this
      */
     public B generateDisable() {
-        this.config.renderTemplateFile().setEnabled(false);
+        this.config.renderTemplateFile().setGenerate(false);
         return self();
     }
 

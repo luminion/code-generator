@@ -34,24 +34,24 @@ public class MapperConfig implements TemplateRender {
     protected String mapperAnnotationClass = "org.apache.ibatis.annotations.Mapper";
 
     /**
-     * 是否开启baseColumnList
+     * 是否开启mapperBaseColumnList
      *
      */
     @RenderField
-    protected boolean enableXmlBaseColumnList;
-    
+    protected boolean mapperBaseColumnList;
+
     /**
      * 是否开启BaseResultMap
      *
      */
     @RenderField
-    protected boolean enableXmlBaseResultMap;
+    protected boolean mapperBaseResultMap;
 
     /**
      * 缓存类
      */
     @RenderField
-    protected String xmlCacheClass;
+    protected String mapperCacheClass;
 
     /**
      * 排序字段map
@@ -76,7 +76,7 @@ public class MapperConfig implements TemplateRender {
                     .reduce((e1, e2) -> e1 + ", " + e2)
                     .ifPresent(e -> data.put("orderColumnSql", e));
         }
-        
+
         // 导包
         data.putAll(resolveMapperImports(tableInfo));
         return data;
@@ -110,7 +110,7 @@ public class MapperConfig implements TemplateRender {
         if (RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
             importPackages.add(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getClassName());
             // 查询相关
-            if (queryConfig.isSelectVoById() || queryConfig.isEnableQueryList() || queryConfig.isEnableQueryPage()) {
+            if (globalConfig.isGenerateQueryById() || globalConfig.isGenerateQueryList() || globalConfig.isGenerateQueryPage() || globalConfig.isGenerateExcelExport()) {
                 TemplateClassFile queryParam = templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey());
                 TemplateClassFile queryResult = templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey());
                 importPackages.add(queryParam.getClassCanonicalName());

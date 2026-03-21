@@ -8,7 +8,7 @@ import io.github.luminion.generator.config.model.MapperXmlConfig;
  * 用于配置Mapper XML文件的生成选项：
  * <ul>
  *   <li>BaseResultMap</li>
- *   <li>baseColumnList</li>
+ *   <li>mapperBaseColumnList</li>
  *   <li>缓存实现类</li>
  *   <li>排序字段</li>
  * </ul>
@@ -29,17 +29,17 @@ public class MapperXmlBuilder extends AbstractModelBuilder<MapperXmlConfig, Mapp
      *
      * @return this
      */
-    public MapperXmlBuilder baseResultMapEnable() {
+    public MapperXmlBuilder mapperBaseResultMapEnable() {
         this.config.setBaseResultMap(true);
         return this;
     }
 
     /**
-     * 启用baseColumnList（默认关闭）
+     * 启用mapperBaseColumnList（默认关闭）
      *
      * @return this
      */
-    public MapperXmlBuilder baseColumnListEnable() {
+    public MapperXmlBuilder mapperBaseColumnListEnable() {
         this.config.setBaseColumnList(true);
         return this;
     }

@@ -10,9 +10,9 @@ import lombok.Data;
 @Data
 public class TemplateFile {
     /**
-     * 是否启用
+     * 是否生成该文件
      */
-    protected boolean enabled = true;
+    protected boolean generate = true;
     /**
      * 用于标识文件的key,不可重复
      */

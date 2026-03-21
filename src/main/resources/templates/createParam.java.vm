@@ -1,4 +1,4 @@
-package ${package.createParam};
+package ${createParam.packageName};
 #if($createParamFramePkg.size()>0)
 
 #end
@@ -17,32 +17,32 @@ import ${pkg};
  *
  * @author ${docAuthor}
 #if(${docLink})
- * @see ${class.entity}
- * @see ${class.serviceImpl}
+ * @see ${entity.classCanonicalName}
+ * @see ${serviceImpl.classCanonicalName}
 #end
 #if(${docDate})
  * @since ${docDate}    
 #end
  */
-#if(${enableLombok})
+#if(${lombok})
 @Getter
 @Setter
 #end
-#if(${enableLombok} && ${enableChainSetter})
+#if(${lombok} && ${chainSetter})
 @Accessors(chain = true)
 #end
-#if(${enableLombok} && ${enableToString})
+#if(${lombok} && ${toString})
 @ToString
 #end
-#if(${enableOpenApi3})
+#if(${springDoc})
 @Schema(description = "$!{table.comment}-新增对象")
-#elseif(${enableOpenApi2})
+#elseif(${swagger})
 @ApiModel(description = "$!{table.comment}-新增对象")
 #end
-public class ${createParam.classSimpleName}#if(${enableSerializableUID}) implements Serializable#end {
-#if(${enableSerializableUID})
+public class ${createParam.classSimpleName}#if(${serializable}) implements Serializable#end {
+#if(${serializable})
 
-    #if(${enableSerializableAnnotation})
+    #if(${serializableAnnotation})
     @Serial
     #end
     private static final long serialVersionUID = 1L;
@@ -57,9 +57,9 @@ public class ${createParam.classSimpleName}#if(${enableSerializableUID}) impleme
 #else
 
     #if("$!field.comment" != "")
-        #if(${enableOpenApi3})
+        #if(${springDoc})
     @Schema(description = "${field.comment}")
-        #elseif(${enableOpenApi2})
+        #elseif(${swagger})
     @ApiModelProperty("${field.comment}")
         #else
     /**
@@ -67,7 +67,7 @@ public class ${createParam.classSimpleName}#if(${enableSerializableUID}) impleme
      */
         #end
     #end
-    #if(${enableValid})## 参数校验
+    #if(${valid})## 参数校验
         #if(!${field.metaInfo.nullable})## 非空
             #if(${field.propertyType} == "String")
     @NotBlank(message = "${field.comment}为必填项")
@@ -83,7 +83,7 @@ public class ${createParam.classSimpleName}#if(${enableSerializableUID}) impleme
 #end
 #end
 ## ----------  END 字段循环遍历  ----------
-#if(!${enableLombok})
+#if(!${lombok})
 #foreach($field in ${table.fields})
 #if(${field.keyFlag})
 #elseif(${field.versionField})
@@ -101,20 +101,20 @@ public class ${createParam.classSimpleName}#if(${enableSerializableUID}) impleme
         return ${field.propertyName};
     }
 
-    #if(${enableChainSetter})
+    #if(${chainSetter})
     public ${createParam.classSimpleName} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
     #end
         this.${field.propertyName} = ${field.propertyName};
-    #if(${enableChainSetter})
+    #if(${chainSetter})
         return this;
     #end
     }
 #end
 #end
 #end
-#if(!${enableLombok} && ${enableToString})
+#if(!${lombok} && ${toString})
 
     @Override
     public String toString() {

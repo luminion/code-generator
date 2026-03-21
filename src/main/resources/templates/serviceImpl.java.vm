@@ -1,4 +1,4 @@
-package ${package.serviceImpl};
+package ${serviceImpl.packageName};
 #if($serviceImplFramePkg.size()>0)
 
 #end
@@ -21,14 +21,14 @@ import ${pkg};
 #end
  */
 @Service
-#if(${service.enabled})
-public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${mpBooster}), ${queryResult}#end> implements ${service.classSimpleName} {
+#if(${service.generate})
+public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${mpBooster}), ${queryResult.classSimpleName}#end> implements ${service.classSimpleName} {
 #else
-public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${mpBooster}), ${queryResult}#end> {
+public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${mpBooster}), ${queryResult.classSimpleName}#end> {
 #end
-#if(${enableCreate})
+#if(${generateCreate})
 
-    #if(${service.enabled})
+    #if(${service.generate})
     @Override
     #end
     #if(${table.idField})
@@ -46,9 +46,9 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
         #end
     }
 #end
-#if(${enableUpdate} && ${table.idField})
+#if(${generateUpdate} && ${table.idField})
 
-    #if(${service.enabled})
+    #if(${service.generate})
     @Override
     #end
     public boolean ${updateMethodName}(${updateParam.classSimpleName} dto) {
@@ -57,28 +57,28 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
         return super.updateById(entity);
     }
 #end
-#if(${enableDelete} && ${table.idField})
+#if(${generateDelete} && ${table.idField})
 
     @Override
     public boolean ${deleteMethodName}(${table.idField.propertyName} id) {
         return super.removeById(id);
     }
 #end
-#if(${enableSelectVoById} && ${table.idField} && !${mpBooster})
+#if(${generateQueryById} && ${table.idField} && !${mpBooster})
 
-    #if(${service.enabled})
+    #if(${service.generate})
     @Override
     #end
-    public ${queryResult} ${enableQueryByIdMethodName}(${table.idField.propertyType} id) {
+    public ${queryResult} ${generateQueryByIdMethodName}(${table.idField.propertyType} id) {
         ${queryParam.classSimpleName} dto = new ${queryParam.classSimpleName}();
         dto.set${table.idField.capitalName}(id);
         ${queryResult} one = getBaseMapper().selectByXml(dto, null).stream().findFirst().orElse(null)
         return one;
     }
 #end
-#if(${enableQueryList} && !${mpBooster})
+#if(${generateQueryList} && !${mpBooster})
 
-    #if(${service.enabled})
+    #if(${service.generate})
     @Override
     #end
     public List<${queryResult}> ${queryListMethodName}(${queryParam.classSimpleName} dto) {
@@ -86,9 +86,9 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
         return list;
     }
 #end
-#if(${enableQueryPage} && !${mpBooster})
+#if(${generateQueryPage} && !${mpBooster})
 
-    #if(${service.enabled})
+    #if(${service.generate})
     @Override
     #end
     public IPage<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} dto, long current, long size) {
@@ -100,7 +100,7 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
 #end
 #if(${enableExcelImport})
 
-    #if(${service.enabled})
+    #if(${service.generate})
     @Override
     #end
     public void ${excelImportTemplateMethodName}(OutputStream os) {
@@ -109,7 +109,7 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
             .doWrite(Collections.emptyList());
     }
 
-    #if(${service.enabled})
+    #if(${service.generate})
     @Override
     #end
     public int ${excelImportMethodName}(InputStream is) {
@@ -126,7 +126,7 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
 #end
 #if(${enableExcelExport})
 
-    #if(${service.enabled})
+    #if(${service.generate})
     @Override
     #end
     public void ${excelExportMethodName}(${queryParam.classSimpleName} dto, OutputStream os) {

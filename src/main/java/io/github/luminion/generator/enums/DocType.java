@@ -18,11 +18,11 @@ public enum DocType {
     /**
      * spring fox(swagger v2)
      */
-    OPEN_API_V2,
+    SWAGGER,
     /**
      * spring doc (swagger v3)
      */
-    OPEN_API_V3,
+    SPRING_DOC,
 
 
     

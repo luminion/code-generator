@@ -47,12 +47,12 @@ public class EntityConfig implements TemplateRender {
      * 开启 ActiveRecord 模式
      */
     @RenderField
-    protected boolean enableActiveRecord;
+    protected boolean activeRecord;
     /**
      * 是否生成实体时，生成字段注解
      */
     @RenderField
-    protected boolean enableTableFieldAnnotation;
+    protected boolean tableFieldAnnotation;
     /**
      * 表填充字段
      */
@@ -91,14 +91,14 @@ public class EntityConfig implements TemplateRender {
         }
 
         Set<String> entityImportPackages = new TreeSet<>();
-        if (enableTableFieldAnnotation) {
+        if (tableFieldAnnotation) {
             entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_FIELD.getClassName());
         }
    
         if (tableInfo.isConvert()) {
             entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_NAME.getClassName());
         }
-        if (enableActiveRecord) {
+        if (activeRecord) {
             entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_ACTIVE_RECORD_MODEL.getClassName());
             entityImportPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getClassName());
         }
@@ -112,7 +112,7 @@ public class EntityConfig implements TemplateRender {
                 // 主键
                 entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_ID.getClassName());
                 entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_ID_TYPE.getClassName());
-            } else if (field.isConvert() || enableTableFieldAnnotation) {
+            } else if (field.isConvert() || tableFieldAnnotation) {
                 // 普通字段
                 entityImportPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_FIELD.getClassName());
             }

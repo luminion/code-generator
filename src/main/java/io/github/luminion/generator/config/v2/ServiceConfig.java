@@ -78,7 +78,7 @@ public class ServiceConfig implements TemplateRender {
         if (RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
             importPackages.add(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getClassName());
             // 根据ID查询
-            if (queryConfig.isSelectVoById() && idField != null){
+            if (globalConfig.isGenerateQueryById() && idField != null){
                 TemplateClassFile queryResult = templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey());
                 importPackages.add(queryResult.getClassCanonicalName());
                 if (idFieldPropertyPkg != null) {
@@ -86,7 +86,7 @@ public class ServiceConfig implements TemplateRender {
                 }
             }
             // 列表查询
-            if (queryConfig.isEnableQueryList()){
+            if (globalConfig.isGenerateQueryList()){
                 TemplateClassFile queryResult = templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey());
                 importPackages.add(queryResult.getClassCanonicalName());
                 TemplateClassFile queryParam = templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey());
@@ -94,7 +94,7 @@ public class ServiceConfig implements TemplateRender {
                 importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
             }
             // 分页查询
-            if (queryConfig.isEnableQueryPage()){
+            if (globalConfig.isGenerateQueryPage()){
                 TemplateClassFile queryResult = templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey());
                 importPackages.add(queryResult.getClassCanonicalName());
                 TemplateClassFile queryParam = templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey());
@@ -103,7 +103,7 @@ public class ServiceConfig implements TemplateRender {
             }
         }
         // 创建
-        if (commandConfig.isEnableCreate()){
+        if (globalConfig.isGenerateCreate()){
             TemplateClassFile createParam = templateFileMap.get(TemplateFileEnum.CREATE_PARAM.getKey());
             importPackages.add(createParam.getClassCanonicalName());
             if (idFieldPropertyPkg != null){
@@ -111,7 +111,7 @@ public class ServiceConfig implements TemplateRender {
             }
         }
         // 更新
-        if (commandConfig.isEnableUpdate() && idField != null){
+        if (globalConfig.isGenerateUpdate() && idField != null){
             TemplateClassFile updateParam = templateFileMap.get(TemplateFileEnum.UPDATE_PARAM.getKey());
             importPackages.add(updateParam.getClassCanonicalName());
             if (idFieldPropertyPkg != null){
@@ -119,18 +119,18 @@ public class ServiceConfig implements TemplateRender {
             }
         }
         // 删除
-        if (commandConfig.isEnableDelete() && idField != null){
+        if (globalConfig.isGenerateDelete() && idField != null){
             if (idFieldPropertyPkg != null){
                 importPackages.add(idFieldPropertyPkg);
             }
         }
         // excel导入
-        if (excelConfig.isEnableExcelImport()){
+        if (globalConfig.isGenerateExcelImport()){
             importPackages.add(RuntimeClass.JAVA_IO_INPUT_STREAM.getClassName());
             importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
         }
         // excel导出
-        if (excelConfig.isEnableExcelExport()){
+        if (globalConfig.isGenerateExcelExport()){
             importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getClassName());
         }
 
@@ -174,7 +174,7 @@ public class ServiceConfig implements TemplateRender {
         if (RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
             importPackages.add(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getClassName());
             // 根据ID查询
-            if (queryConfig.isSelectVoById() && idField != null){
+            if (globalConfig.isGenerateQueryById() && idField != null){
                 TemplateClassFile queryResult = templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey());
                 importPackages.add(queryResult.getClassCanonicalName());
                 TemplateClassFile queryParam = templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey());
@@ -184,7 +184,7 @@ public class ServiceConfig implements TemplateRender {
                 }
             }
             // 列表查询
-            if (queryConfig.isEnableQueryList()){
+            if (globalConfig.isGenerateQueryList()){
                 TemplateClassFile queryResult = templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey());
                 importPackages.add(queryResult.getClassCanonicalName());
                 TemplateClassFile queryParam = templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey());
@@ -192,7 +192,7 @@ public class ServiceConfig implements TemplateRender {
                 importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
             }
             // 分页查询
-            if (queryConfig.isEnableQueryPage()){
+            if (globalConfig.isGenerateQueryPage()){
                 TemplateClassFile queryResult = templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey());
                 importPackages.add(queryResult.getClassCanonicalName());
                 TemplateClassFile queryParam = templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey());
@@ -203,7 +203,7 @@ public class ServiceConfig implements TemplateRender {
             }
         }
         // 创建
-        if (commandConfig.isEnableCreate()){
+        if (globalConfig.isGenerateCreate()){
             TemplateClassFile createParam = templateFileMap.get(TemplateFileEnum.CREATE_PARAM.getKey());
             importPackages.add(createParam.getClassCanonicalName());
             if (idFieldPropertyPkg != null){
@@ -211,7 +211,7 @@ public class ServiceConfig implements TemplateRender {
             }
         }
         // 更新
-        if (commandConfig.isEnableUpdate() && idField != null){
+        if (globalConfig.isGenerateUpdate() && idField != null){
             TemplateClassFile updateParam = templateFileMap.get(TemplateFileEnum.UPDATE_PARAM.getKey());
             importPackages.add(updateParam.getClassCanonicalName());
             if (idFieldPropertyPkg != null){
@@ -219,7 +219,7 @@ public class ServiceConfig implements TemplateRender {
             }
         }
         // 删除
-        if (commandConfig.isEnableDelete() && idField != null){
+        if (globalConfig.isGenerateDelete() && idField != null){
             if (idFieldPropertyPkg != null){
                 importPackages.add(idFieldPropertyPkg);
             }
@@ -231,7 +231,7 @@ public class ServiceConfig implements TemplateRender {
         String longestMatchColumnWidthStyleStrategyClass = excelPackagePrefix + RuntimeClass.PREFIX_EXCEL_LONGEST_MATCH_COLUMN_WIDTH_STYLE_STRATEGY.getClassName();
         
         // excel导入
-        if (excelConfig.isEnableExcelImport()){
+        if (globalConfig.isGenerateExcelImport()){
             TemplateClassFile excelImportParam = templateFileMap.get(TemplateFileEnum.EXCEL_IMPORT_PARAM.getKey());
             importPackages.add(excelImportParam.getClassCanonicalName());
             importPackages.add(excelClass);
@@ -244,7 +244,7 @@ public class ServiceConfig implements TemplateRender {
 
         }
         // excel导出
-        if (excelConfig.isEnableExcelExport()){
+        if (globalConfig.isGenerateExcelExport()){
             TemplateClassFile excelExportParam = templateFileMap.get(TemplateFileEnum.EXCEL_EXPORT_PARAM.getKey());
             importPackages.add(excelExportParam.getClassCanonicalName());
             importPackages.add(excelClass);

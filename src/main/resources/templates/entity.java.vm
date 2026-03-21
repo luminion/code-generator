@@ -1,4 +1,4 @@
-package ${package.entity};
+package ${entity.packageName};
 #if($entityFramePkg.size()>0)
 
 #end
@@ -17,44 +17,44 @@ import ${pkg};
  *
  * @author ${docAuthor}
 #if(${docLink})
- * @see ${class.mapper}
- * @see ${class.serviceImpl}
+ * @see ${mapper.classCanonicalName}
+ * @see ${serviceImpl.classCanonicalName}
 #end
 #if(${docDate})
  * @since ${docDate}    
 #end
  */
-#if(${enableLombok})
+#if(${lombok})
 @Getter
 @Setter
 #end
-#if(${enableLombok} && ${enableChainSetter})
+#if(${lombok} && ${chainSetter})
 @Accessors(chain = true)
 #end
-#if(${enableLombok} && ${enableToString})
+#if(${lombok} && ${toString})
 @ToString
 #end
-#if(${enableLombok} && ${enableToString})
+#if(${lombok} && ${toString})
 @ToString
 #end
-#if(${enableOpenApi3})
+#if(${springDoc})
 @Schema(description = "$!{table.comment}")
-#elseif(${enableOpenApi2})
+#elseif(${swagger})
 @ApiModel(description = "$!{table.comment}")
 #end
 #if(${table.convert})
 @TableName("#if($schemaName)${schemaName}.#end${table.name}")
 #end
 #if(${entitySuperClass})
-public class ${entity.classSimpleName} extends ${entitySuperClass}#if(${enableSerializableUID}) implements Serializable#end {
-#elseif(${enableActiveRecord})
+public class ${entity.classSimpleName} extends ${entitySuperClass}#if(${serializable}) implements Serializable#end {
+#elseif(${activeRecord})
 public class ${entity.classSimpleName} extends Model<${entity.classSimpleName}> {
 #else
-public class ${entity.classSimpleName}#if(${enableSerializableUID}) implements Serializable#end {
+public class ${entity.classSimpleName}#if(${serializable}) implements Serializable#end {
 #end
-#if(${enableSerializableUID})
+#if(${serializable})
 
-    #if(${enableSerializableAnnotation})
+    #if(${serializableAnnotation})
     @Serial
     #end
     private static final long serialVersionUID = 1L;
@@ -66,9 +66,9 @@ public class ${entity.classSimpleName}#if(${enableSerializableUID}) implements S
     #set($keyPropertyName=${field.propertyName})
     #end
     #if("$!field.comment" != "")
-        #if(${enableOpenApi3})
+        #if(${springDoc})
     @Schema(description = "${field.comment}")
-        #elseif(${enableOpenApi2})
+        #elseif(${swagger})
     @ApiModelProperty("${field.comment}")
         #else
     /**
@@ -81,16 +81,16 @@ public class ${entity.classSimpleName}#if(${enableSerializableUID}) implements S
     @TableId(value = "${field.columnName}", type = IdType.AUTO)
         #elseif(!$null.isNull(${idType}) && "$!idType" != "")
     @TableId(value = "${field.columnName}", type = IdType.${idType})
-        #elseif(${field.convert} || ${enableTableFieldAnnotation})
+        #elseif(${field.convert} || ${tableFieldAnnotation})
     @TableId("${field.columnName}")
         #end
     #elseif(${field.fill})
-        #if(${field.convert} || ${enableTableFieldAnnotation})
+        #if(${field.convert} || ${tableFieldAnnotation})
     @TableField(value = "${field.columnName}", fill = FieldFill.${field.fill})
         #else
     @TableField(fill = FieldFill.${field.fill})
         #end
-    #elseif(${field.convert} || ${enableTableFieldAnnotation})
+    #elseif(${field.convert} || ${tableFieldAnnotation})
     @TableField("${field.columnName}")
     #end
     #if(${field.versionField})
@@ -103,7 +103,7 @@ public class ${entity.classSimpleName}#if(${enableSerializableUID}) implements S
 #end
 ## ----------END 字段循环遍历----------
 ## ----------BEGIN getter/setter----------
-#if(!${enableLombok})
+#if(!${lombok})
     #foreach($field in ${table.fields})
         #if(${field.propertyType.equals("boolean")})
             #set($getprefix="is")
@@ -115,20 +115,20 @@ public class ${entity.classSimpleName}#if(${enableSerializableUID}) implements S
         return ${field.propertyName};
     }
 
-        #if(${enableChainSetter})
+        #if(${chainSetter})
     public ${entity.classSimpleName} set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
         #else
     public void set${field.capitalName}(${field.propertyType} ${field.propertyName}) {
         #end
         this.${field.propertyName} = ${field.propertyName};
-        #if(${enableChainSetter})
+        #if(${chainSetter})
         return this;
         #end
     }
     #end
 #end
 ## ----------  END getter/setter  ----------
-#if(${enableActiveRecord})
+#if(${activeRecord})
 
     @Override
     public Serializable pkVal() {
@@ -139,7 +139,7 @@ public class ${entity.classSimpleName}#if(${enableSerializableUID}) implements S
   #end
     }
 #end
-#if(!${enableLombok} && ${enableToString})
+#if(!${lombok} && ${toString})
 
     @Override
     public String toString() {
