@@ -59,8 +59,8 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
     @Override
     public List<TableInfo> queryTables() {
         try {
-            boolean isInclude = !dataSourceConfig.getTableIncludes().isEmpty();
-            boolean isExclude = !dataSourceConfig.getTableExcludes().isEmpty();
+            boolean isInclude = !dataSourceConfig.getIncludeTables().isEmpty();
+            boolean isExclude = !dataSourceConfig.getExcludeTables().isEmpty();
             List<TableInfo> tableList = new ArrayList<>();
             List<JdbcDatabaseMetaDataWrapper.Table> tables = this.getTables();
             //需要反向生成或排除的表信息
@@ -198,11 +198,11 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
     
 
     protected void filter(List<TableInfo> tableList, List<TableInfo> includeTableList, List<TableInfo> excludeTableList) {
-        boolean isInclude = !dataSourceConfig.getTableIncludes().isEmpty();
-        boolean isExclude = !dataSourceConfig.getTableExcludes().isEmpty();
+        boolean isInclude = !dataSourceConfig.getIncludeTables().isEmpty();
+        boolean isExclude = !dataSourceConfig.getExcludeTables().isEmpty();
         if (isExclude || isInclude) {
             Pattern pattern = Pattern.compile("[~!/@#$%^&*()+\\\\\\[\\]|{};:'\",<.>?]+");
-            Map<String, String> notExistTables = new HashSet<>(isExclude ? dataSourceConfig.getTableExcludes() : dataSourceConfig.getTableIncludes())
+            Map<String, String> notExistTables = new HashSet<>(isExclude ? dataSourceConfig.getExcludeTables() : dataSourceConfig.getIncludeTables())
                     .stream()
                     .filter(s -> !pattern.matcher(s).find())
                     .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n));

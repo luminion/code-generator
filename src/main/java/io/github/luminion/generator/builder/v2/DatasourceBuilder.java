@@ -94,32 +94,32 @@ public class DatasourceBuilder {
     /**
      * 需要包含的表名
      */
-    public DatasourceBuilder tableIncludes(String... tableIncludes){
-        configurer.getDataSourceConfig().setTableIncludes(new LinkedHashSet<>(Arrays.asList(tableIncludes)));
+    public DatasourceBuilder includeTables(String... includeTables){
+        configurer.getDataSourceConfig().setIncludeTables(new LinkedHashSet<>(Arrays.asList(includeTables)));
         return this;
     }
 
     /**
      * 需要包含的表名
      */
-    public DatasourceBuilder tableIncludes(Set<String> tableIncludes){
-        configurer.getDataSourceConfig().setTableIncludes(tableIncludes);
+    public DatasourceBuilder includeTables(Collection<String> includeTables){
+        configurer.getDataSourceConfig().setIncludeTables(new LinkedHashSet<>(includeTables));
         return this;
     }
 
     /**
      * 需要排除的表名
      */
-    public DatasourceBuilder tableExcludes(String... tableExcludes){
-        configurer.getDataSourceConfig().setTableExcludes(new LinkedHashSet<>(Arrays.asList(tableExcludes)));
+    public DatasourceBuilder excludeTables(String... excludeTables){
+        configurer.getDataSourceConfig().setExcludeTables(new LinkedHashSet<>(Arrays.asList(excludeTables)));
         return this;
     }
 
     /**
      * 需要排除的表名
      */
-    public DatasourceBuilder tableExcludes(Set<String> tableExcludes){
-        configurer.getDataSourceConfig().setTableExcludes(tableExcludes);
+    public DatasourceBuilder excludeTables(Collection<String> excludeTables){
+        configurer.getDataSourceConfig().setExcludeTables(new LinkedHashSet<>(excludeTables));
         return this;
     }
     
@@ -135,8 +135,8 @@ public class DatasourceBuilder {
     /**
      * 过滤表前缀
      */
-    public DatasourceBuilder tablePrefixes(Set<String> tablePrefixes){
-        configurer.getDataSourceConfig().setTablePrefixes(tablePrefixes);
+    public DatasourceBuilder tablePrefixes(Collection<String> tablePrefixes){
+        configurer.getDataSourceConfig().setTablePrefixes(new LinkedHashSet<>(tablePrefixes));
         return this;
     }
 
@@ -151,8 +151,8 @@ public class DatasourceBuilder {
     /**
      * 过滤表前缀
      */
-    public DatasourceBuilder tableSuffixes(Set<String> tableSuffixes){
-        configurer.getDataSourceConfig().setTableSuffixes(tableSuffixes);
+    public DatasourceBuilder tableSuffixes(Collection<String> tableSuffixes){
+        configurer.getDataSourceConfig().setTableSuffixes(new LinkedHashSet<>(tableSuffixes));
         return this;
     }
 
@@ -167,8 +167,8 @@ public class DatasourceBuilder {
     /**
      * 自定义实体父类公共字段
      */
-    public DatasourceBuilder commonColumns(Set<String> commonColumns){
-        configurer.getDataSourceConfig().setCommonColumns(commonColumns);
+    public DatasourceBuilder commonColumns(Collection<String> commonColumns){
+        configurer.getDataSourceConfig().setCommonColumns(new LinkedHashSet<>(commonColumns));
         return this;
     }
 
@@ -183,8 +183,8 @@ public class DatasourceBuilder {
     /**
      * 自定义实体父类公共字段
      */
-    public DatasourceBuilder ignoreColumns(Set<String> ignoreColumns){
-        configurer.getDataSourceConfig().setIgnoreColumns(ignoreColumns);
+    public DatasourceBuilder ignoreColumns(Collection<String> ignoreColumns){
+        configurer.getDataSourceConfig().setIgnoreColumns(new LinkedHashSet<>(ignoreColumns));
         return this;
     }
     
@@ -200,8 +200,8 @@ public class DatasourceBuilder {
     /**
      * 过滤字段前缀
      */
-    public DatasourceBuilder columnPrefixes(Set<String> columnPrefixes){
-        configurer.getDataSourceConfig().setColumnPrefixes(columnPrefixes);
+    public DatasourceBuilder columnPrefixes(Collection<String> columnPrefixes){
+        configurer.getDataSourceConfig().setColumnPrefixes(new LinkedHashSet<>(columnPrefixes));
         return this;
     }
 
@@ -217,8 +217,8 @@ public class DatasourceBuilder {
     /**
      * 过滤字段后缀
      */
-    public DatasourceBuilder columnSuffixes(Set<String> columnSuffixes){
-        configurer.getDataSourceConfig().setColumnSuffixes(columnSuffixes);
+    public DatasourceBuilder columnSuffixes(Collection<String> columnSuffixes){
+        configurer.getDataSourceConfig().setColumnSuffixes(new LinkedHashSet<>(columnSuffixes));
         return this;
     }
 

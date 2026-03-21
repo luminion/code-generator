@@ -83,12 +83,12 @@ public class DataSourceConfig {
     /**
      * 需要包含的表名（与exclude二选一配置）
      */
-    private Set<String> tableIncludes = new LinkedHashSet<>();
+    private Set<String> includeTables = new LinkedHashSet<>();
 
     /**
      * 需要排除的表名
      */
-    private Set<String> tableExcludes = new LinkedHashSet<>();
+    private Set<String> excludeTables = new LinkedHashSet<>();
 
     /**
      * 过滤表前缀
@@ -177,7 +177,7 @@ public class DataSourceConfig {
      * @return 是否匹配
      */
     public boolean matchExcludeTable(String tableName) {
-        return matchTable(tableName, this.tableExcludes);
+        return matchTable(tableName, this.excludeTables);
     }
 
     /**
@@ -187,7 +187,7 @@ public class DataSourceConfig {
      * @return 是否匹配
      */
     public boolean matchIncludeTable(String tableName) {
-        return matchTable(tableName, this.tableIncludes);
+        return matchTable(tableName, this.includeTables);
     }
 
 
