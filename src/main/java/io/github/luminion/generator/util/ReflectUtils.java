@@ -1,7 +1,7 @@
 package io.github.luminion.generator.util;
 
 import io.github.luminion.generator.common.MethodReference;
-import io.github.luminion.generator.po.ClassMethodPayload;
+import io.github.luminion.generator.po.InvokeInfo;
 
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Constructor;
@@ -24,15 +24,14 @@ public abstract class ReflectUtils {
      *
      * @param methodReference lambda方法引用
      * @param parameterClass  参数类型
-     * @return {@link ClassMethodPayload }
      */
-    public static ClassMethodPayload lambdaMethodInfo(MethodReference<?, ?> methodReference, Class<?> parameterClass) {
-        String methodName = "" , className = "";
+    public static InvokeInfo lambdaMethodInvokeInfo(MethodReference<?, ?> methodReference, Class<?> parameterClass) {
+        String methodName = "", className = "";
         try {
             Method lambdaMethod = methodReference.getClass().getDeclaredMethod("writeReplace");
             lambdaMethod.setAccessible(Boolean.TRUE);
             SerializedLambda serializedLambda = (SerializedLambda) lambdaMethod.invoke(methodReference);
-            className = serializedLambda.getImplClass().replace("/" , ".");
+            className = serializedLambda.getImplClass().replace("/", ".");
             methodName = serializedLambda.getImplMethodName();
             Class<?> methodClass = Class.forName(className);
             try {
@@ -42,13 +41,13 @@ public abstract class ReflectUtils {
                 if (!returnType.equals(methodClass) || !Modifier.isPublic(modifiers)) {
                     throw new NoSuchMethodException("no public method found which return instance of class itself");
                 }
-                return new ClassMethodPayload(returnMethod);
+                return new InvokeInfo(returnMethod);
             } catch (Exception e) {
                 Constructor<?> constructor = methodClass.getConstructor(parameterClass);
-                return new ClassMethodPayload(constructor);
+                return new InvokeInfo(constructor);
             }
         } catch (Exception e) {
-            String msg = String.format("can't find constructor or method with parameter[%s] source:%s.%s() " , parameterClass.getName(), className, methodName);
+            String msg = String.format("can't find constructor or method with parameter[%s] source:%s.%s() ", parameterClass.getName(), className, methodName);
             throw new IllegalStateException(msg);
         }
     }

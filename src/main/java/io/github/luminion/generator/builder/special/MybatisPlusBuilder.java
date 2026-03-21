@@ -32,7 +32,7 @@ public class MybatisPlusBuilder extends AbstractMyBatisPlusBuilder<MybatisPlusBu
      * @return this
      */
     public <T, R> MybatisPlusBuilder pageMethod(MethodReference<IPage<T>, R> methodReference) {
-        ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, IPage.class);
+        ClassMethodPayload payload = ReflectUtils.lambdaMethodInvokeInfo(methodReference, IPage.class);
         this.configCollector.getControllerConfig().setPageMethod(payload);
         return this;
     }

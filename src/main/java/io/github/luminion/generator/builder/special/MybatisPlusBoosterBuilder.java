@@ -33,7 +33,7 @@ public class MybatisPlusBoosterBuilder extends AbstractMyBatisPlusBuilder<Mybati
      * @return this
      */
     public <T, R> MybatisPlusBoosterBuilder pageMethod(MethodReference<BPage<T>, R> methodReference) {
-        ClassMethodPayload payload = ReflectUtils.lambdaMethodInfo(methodReference, BPage.class);
+        ClassMethodPayload payload = ReflectUtils.lambdaMethodInvokeInfo(methodReference, BPage.class);
         this.configCollector.getControllerConfig().setPageMethod(payload);
         return this;
     }

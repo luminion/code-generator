@@ -132,7 +132,7 @@ public class ControllerBuilder extends AbstractModelBuilder<ControllerConfig, Co
      * @return this
      */
     public <R> ControllerBuilder returnMethod(MethodReference<Object, R> methodReference) {
-        ClassMethodPayload methodPayload = ReflectUtils.lambdaMethodInfo(methodReference, Object.class);
+        ClassMethodPayload methodPayload = ReflectUtils.lambdaMethodInvokeInfo(methodReference, Object.class);
         this.config.setReturnMethod(methodPayload);
         return this;
     }

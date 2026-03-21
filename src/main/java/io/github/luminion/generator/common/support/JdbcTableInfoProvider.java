@@ -59,8 +59,8 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
     @Override
     public List<TableInfo> queryTables() {
         try {
-            boolean isInclude = !dataSourceConfig.getInclude().isEmpty();
-            boolean isExclude = !dataSourceConfig.getExclude().isEmpty();
+            boolean isInclude = !dataSourceConfig.getTableIncludes().isEmpty();
+            boolean isExclude = !dataSourceConfig.getTableExcludes().isEmpty();
             List<TableInfo> tableList = new ArrayList<>();
             List<JdbcDatabaseMetaDataWrapper.Table> tables = this.getTables();
             //需要反向生成或排除的表信息
@@ -76,8 +76,8 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
                         String replaced = remarks.replaceAll("[\r\n]", "");
                         tableInfo.setComment(replaced);
                     }
-                    Set<String> tablePrefix = dataSourceConfig.getTablePrefix();
-                    Set<String> tableSuffix = dataSourceConfig.getTableSuffix();
+                    Set<String> tablePrefix = dataSourceConfig.getTablePrefixes();
+                    Set<String> tableSuffix = dataSourceConfig.getTableSuffixes();
                     String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(tableName, tablePrefix, tableSuffix);
                     String entityName = dataSourceConfig.getNamingConverter().convertEntityName(removePrefixAndSuffix);
                     tableInfo.setEntityName(entityName);
@@ -155,9 +155,9 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
                 String comment = columnInfo.getRemarks().replace("\"", "'");
                 tableField.setComment(comment);
             }
-            Set<String> fieldPrefix = dataSourceConfig.getFieldPrefix();
-            Set<String> fieldSuffix = dataSourceConfig.getFieldSuffix();
-            String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(columnName, fieldPrefix, fieldSuffix);
+            Set<String> columnPrefixes = dataSourceConfig.getColumnPrefixes();
+            Set<String> columnSuffixes = dataSourceConfig.getColumnSuffixes();
+            String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(columnName, columnPrefixes, columnSuffixes);
             String propertyName = dataSourceConfig.getNamingConverter().convertFieldName(removePrefixAndSuffix);
             tableField.setPropertyName(propertyName);
            
@@ -184,7 +184,7 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
             if (dataSourceConfig.matchIgnoreColumns(tableField.getColumnName())) {
                 return;
             }
-            if (dataSourceConfig.matchSuperEntityColumns(tableField.getColumnName())) {
+            if (dataSourceConfig.matchCommonColumns(tableField.getColumnName())) {
                 tableInfo.getCommonFields().add(tableField);
             } else {
                 tableInfo.getFields().add(tableField);
@@ -198,11 +198,11 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
     
 
     protected void filter(List<TableInfo> tableList, List<TableInfo> includeTableList, List<TableInfo> excludeTableList) {
-        boolean isInclude = !dataSourceConfig.getInclude().isEmpty();
-        boolean isExclude = !dataSourceConfig.getExclude().isEmpty();
+        boolean isInclude = !dataSourceConfig.getTableIncludes().isEmpty();
+        boolean isExclude = !dataSourceConfig.getTableExcludes().isEmpty();
         if (isExclude || isInclude) {
             Pattern pattern = Pattern.compile("[~!/@#$%^&*()+\\\\\\[\\]|{};:'\",<.>?]+");
-            Map<String, String> notExistTables = new HashSet<>(isExclude ? dataSourceConfig.getExclude() : dataSourceConfig.getInclude())
+            Map<String, String> notExistTables = new HashSet<>(isExclude ? dataSourceConfig.getTableExcludes() : dataSourceConfig.getTableIncludes())
                     .stream()
                     .filter(s -> !pattern.matcher(s).find())
                     .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n));

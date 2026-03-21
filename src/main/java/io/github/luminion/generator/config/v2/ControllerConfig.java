@@ -5,6 +5,7 @@ import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateFileEnum;
+import io.github.luminion.generator.po.InvokeInfo;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
 import io.github.luminion.generator.po.TemplateClassFile;
@@ -13,7 +14,6 @@ import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -84,28 +84,14 @@ public class ControllerConfig implements TemplateRender {
     /**
      * 返回结果类型
      */
-    private String returnTypeClass;
-    /**
-     * 返回结果类型格式化
-     */
-    private Function<String, String> returnTypeFormat = (s -> s);
-    /**
-     * 返回结果方法格式化
-     */
-    private Function<String, String> returnMethodFormat = (s -> s);
+    @RenderField
+    private InvokeInfo returnType;
 
     /**
      * 分页结果类型
      */
-    private String pageTypeClass;
-    /**
-     * 分页结果类型格式化
-     */
-    private Function<String, String> pageTypeFormat = (s -> s);
-    /**
-     * 分页结果方法格式化
-     */
-    private Function<String, String> pageMethodFormat = (s -> s);
+    @RenderField
+    private InvokeInfo pageType;
 
 
     @Override
@@ -208,8 +194,8 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(baseServiceImpl.getClassCanonicalName());
         }
         // 返回结果类型
-        if (returnTypeClass != null) {
-            importPackages.add(returnTypeClass);
+        if (returnType != null) {
+            importPackages.add(returnType.getClassCanonicalName());
         }
 
         // 增
@@ -253,8 +239,8 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey()).getClassCanonicalName());
             importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
-            if (pageTypeClass != null) {
-                importPackages.add(pageTypeClass);
+            if (pageType != null) {
+                importPackages.add(pageType.getClassCanonicalName());
             }
         }
 

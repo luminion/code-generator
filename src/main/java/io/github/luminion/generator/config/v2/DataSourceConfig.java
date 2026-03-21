@@ -14,9 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author luminion
@@ -40,7 +38,7 @@ public class DataSourceConfig {
     /**
      * 数据库类型
      */
-    private DbType dbType;
+    private final DbType dbType;
 
     /**
      * 数据库schema名
@@ -56,22 +54,24 @@ public class DataSourceConfig {
      * 数据库表明/字段名转化到实体类名/属性名的转化器
      */
     private NamingConverter namingConverter = new DefaultNamingConverter();
+
     /**
      * 数据库字段类型转化为java字段类型的方式
      */
-    private FieldTypeConverter FieldTypeConverter;
+    private FieldTypeConverter fieldTypeConverter;
+
     /**
      * 数据库关键字处理器
      */
     private DatabaseKeywordsHandler keyWordsHandler;
 
     /**
-     * 是否跳过视图（默认 false）
+     * 是否跳过视图
      */
     private boolean skipView;
 
     /**
-     * Boolean类型字段是否移除is前缀（默认 false）<br>
+     * Boolean类型字段是否移除is前缀<br>
      * 比如 : 数据库字段名称 : 'is_xxx',类型为 : tinyint. 在映射实体的时候则会去掉is,在实体类中映射最终结果为 xxx
      */
     private boolean booleanColumnRemoveIsPrefix;
@@ -79,52 +79,55 @@ public class DataSourceConfig {
      * 模糊查询包含的表名, 需要自行拼接(%)
      */
     private String tableNamePattern;
+
     /**
-     * 自定义基础的Entity类，公共字段
+     * 需要包含的表名（与exclude二选一配置）
      */
-    private final Set<String> superEntityColumns = new HashSet<>();
+    private Set<String> tableIncludes = new LinkedHashSet<>();
+
     /**
-     * 自定义忽略字段
+     * 需要排除的表名
      */
-    private final Set<String> ignoreColumns = new HashSet<>();
+    private Set<String> tableExcludes = new LinkedHashSet<>();
 
     /**
      * 过滤表前缀
      * example: addTablePrefix("t_")
      * result: t_simple -> Simple
      */
-    private final Set<String> tablePrefix = new HashSet<>();
+    private Set<String> tablePrefixes = new LinkedHashSet<>();
 
     /**
      * 过滤表后缀
      * example: addTableSuffix("_0")
      * result: t_simple_0 -> Simple
      */
-    private final Set<String> tableSuffix = new HashSet<>();
+    private Set<String> tableSuffixes = new LinkedHashSet<>();
+
+
+    /**
+     * 自定义实体父类公共字段
+     */
+    private Set<String> commonColumns = new LinkedHashSet<>();
+    /**
+     * 自定义忽略字段
+     */
+    private Set<String> ignoreColumns = new LinkedHashSet<>();
 
     /**
      * 过滤字段前缀
-     * example: addFieldPrefix("is_")
+     * example: addColumnPrefix("is_")
      * result: is_deleted -> deleted
      */
-    private final Set<String> fieldPrefix = new HashSet<>();
+    private Set<String> columnPrefixes = new LinkedHashSet<>();
 
     /**
      * 过滤字段后缀
-     * example: addFieldSuffix("_flag")
+     * example: addColumnSuffix("_flag")
      * result: deleted_flag -> deleted
      */
-    private final Set<String> fieldSuffix = new HashSet<>();
+    private Set<String> columnSuffixes = new LinkedHashSet<>();
 
-    /**
-     * 需要包含的表名（与exclude二选一配置）
-     */
-    private final Set<String> include = new HashSet<>();
-
-    /**
-     * 需要排除的表名
-     */
-    private final Set<String> exclude = new HashSet<>();
 
 
     public DataSourceConfig(String url, String username, String password) {
@@ -163,7 +166,7 @@ public class DataSourceConfig {
      * @param tableName 表名称
      */
     public boolean startsWithTablePrefix(String tableName) {
-        return this.tablePrefix.stream().anyMatch(tableName::startsWith);
+        return this.tablePrefixes.stream().anyMatch(tableName::startsWith);
     }
 
 
@@ -174,7 +177,7 @@ public class DataSourceConfig {
      * @return 是否匹配
      */
     public boolean matchExcludeTable(String tableName) {
-        return matchTable(tableName, this.exclude);
+        return matchTable(tableName, this.tableExcludes);
     }
 
     /**
@@ -184,7 +187,7 @@ public class DataSourceConfig {
      * @return 是否匹配
      */
     public boolean matchIncludeTable(String tableName) {
-        return matchTable(tableName, this.include);
+        return matchTable(tableName, this.tableIncludes);
     }
 
 
@@ -216,9 +219,9 @@ public class DataSourceConfig {
      * @param fieldName 字段名
      * @return 是否匹配
      */
-    public boolean matchSuperEntityColumns(String fieldName) {
+    public boolean matchCommonColumns(String fieldName) {
         // 公共字段判断忽略大小写【 部分数据库大小写不敏感 】
-        return superEntityColumns.stream().anyMatch(e -> e.equalsIgnoreCase(fieldName));
+        return commonColumns.stream().anyMatch(e -> e.equalsIgnoreCase(fieldName));
     }
 
     /**
