@@ -62,7 +62,7 @@ public class TemplateBuilder {
     }
     
     public TemplateBuilder mapperXml(Function<TemplateFileBuilder, TemplateFileBuilder> func){
-        func.apply(new TemplateFileBuilder(configurer.getTemplateConfig().getXml()));
+        func.apply(new TemplateFileBuilder(configurer.getTemplateConfig().getMapperXml()));
         return this;
     }
     
