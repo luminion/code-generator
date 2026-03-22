@@ -45,7 +45,7 @@ public class QueryConfig implements TemplateRender {
      * 额外字段后缀
      */
     @RenderField
-    private final Map<String, String> extraFieldSuffixMap = new LinkedHashMap<>();
+    private Map<String, String> extraFieldSuffixMap = new LinkedHashMap<>();
 
     /**
      * 额外字段策略
@@ -57,13 +57,13 @@ public class QueryConfig implements TemplateRender {
      * 当前页码参数名
      */
     @RenderField
-    private String pageName = "current";
+    private String pageParamName = "current";
 
     /**
      * 每页条数参数名
      */
     @RenderField
-    private String sizeName = "size";
+    private String sizeParamName = "size";
 
     /**
      * 查询dto父类全限定名
@@ -85,12 +85,12 @@ public class QueryConfig implements TemplateRender {
             data.put("queryParamSuperClassCanonicalName", queryParamSuperClass);
             // 假设用户没改配置，值是 "pageNum" 和 "pageSize"
             String pageGetter = "get"
-                    + pageName.substring(0, 1).toUpperCase()
-                    + pageName.substring(1)
+                    + pageParamName.substring(0, 1).toUpperCase()
+                    + pageParamName.substring(1)
                     + "()";
             String sizeGetter = "get"
-                    + sizeName.substring(0, 1).toUpperCase()
-                    + sizeName.substring(1)
+                    + sizeParamName.substring(0, 1).toUpperCase()
+                    + sizeParamName.substring(1)
                     + "()";
             data.put("pageGetter", pageGetter);
             data.put("sizeGetter", sizeGetter);

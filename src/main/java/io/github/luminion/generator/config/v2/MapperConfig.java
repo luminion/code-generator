@@ -57,7 +57,7 @@ public class MapperConfig implements TemplateRender {
      * 排序字段map
      * 字段名 -> 是否倒序
      */
-    protected Map<String, Boolean> xmlOrderByColumnMap = new LinkedHashMap<>();
+    protected Map<String, Boolean> xmlOrderColumnMap = new LinkedHashMap<>();
 
 
     @Override
@@ -69,8 +69,8 @@ public class MapperConfig implements TemplateRender {
         // 默认排序字段sql
         List<TableField> fields = tableInfo.getFields();
         List<String> existColumnNames = fields.stream().map(TableField::getColumnName).collect(Collectors.toList());
-        if (xmlOrderByColumnMap != null && !xmlOrderByColumnMap.isEmpty()) {
-            xmlOrderByColumnMap.entrySet().stream()
+        if (xmlOrderColumnMap != null && !xmlOrderColumnMap.isEmpty()) {
+            xmlOrderColumnMap.entrySet().stream()
                     .filter(e -> existColumnNames.contains(e.getKey()))
                     .map(e -> String.format("a.%s%s", e.getKey(), e.getValue() ? " DESC" : ""))
                     .reduce((e1, e2) -> e1 + ", " + e2)
