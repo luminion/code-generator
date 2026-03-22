@@ -129,7 +129,7 @@ public class GlobalConfig implements TemplateRender {
      * 生成列表查询及配套类
      */
     @RenderField
-    private boolean generateQueryList = false;
+    private boolean generateQueryList = true;
 
     /**
      * 生成分页查询及配套类
