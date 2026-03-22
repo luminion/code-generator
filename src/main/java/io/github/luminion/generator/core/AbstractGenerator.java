@@ -1,8 +1,8 @@
 package io.github.luminion.generator.core;
 
-import io.github.luminion.generator.builder.base.GlobalBuilder;
-import io.github.luminion.generator.builder.base.InjectionBuilder;
-import io.github.luminion.generator.builder.base.StrategyBuilder;
+import io.github.luminion.generator.builder.core.GlobalBuilder;
+import io.github.luminion.generator.builder.core.InjectionBuilder;
+import io.github.luminion.generator.builder.core.StrategyBuilder;
 import io.github.luminion.generator.builder.model.*;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.ConfigCollector;

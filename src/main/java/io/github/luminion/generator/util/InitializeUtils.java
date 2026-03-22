@@ -1,10 +1,7 @@
 package io.github.luminion.generator.util;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.config.base.StrategyConfig;
-import io.github.luminion.generator.config.special.MybatisPlusConfig;
-import io.github.luminion.generator.config.model.MapperXmlConfig;
+import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.enums.IdStrategy;
 import io.github.luminion.generator.enums.JavaFieldType;
 import io.github.luminion.generator.enums.JdbcType;
 
@@ -20,9 +17,8 @@ import java.util.Set;
 public abstract class InitializeUtils {
 
 
-    public static void initJdbcTypeConverter(ConfigCollector<?> configCollector) {
-        StrategyConfig strategyConfig = configCollector.getStrategyConfig();
-        strategyConfig.setFieldTypeConverter(metaInfo -> {
+    public static void initJdbcTypeConverter(Configurer configurer) {
+        configurer.getDataSourceConfig().setFieldTypeConverter(metaInfo -> {
             if (JdbcType.TINYINT == metaInfo.getJdbcType()) {
                 return JavaFieldType.INTEGER;
             }
@@ -33,34 +29,32 @@ public abstract class InitializeUtils {
         });
     }
 
-    public static void initializeMapperSortColumn(ConfigCollector<?> configCollector) {
-        MapperXmlConfig mapperXmlConfig = configCollector.getMapperXmlConfig();
-        Map<String, Boolean> sortColumnMap = mapperXmlConfig.getSortColumnMap();
-        sortColumnMap.put("order" , false);
-        sortColumnMap.put("rank" , false);
-        sortColumnMap.put("sort" , false);
-        sortColumnMap.put("seq" , false);
-        sortColumnMap.put("sequence" , false);
-        sortColumnMap.put("create_time" , true);
-        sortColumnMap.put("id" , true);
+    public static void initializeMapperSortColumn(Configurer configurer) {
+        Map<String, Boolean> orderColumnMap = configurer.getMapperConfig().getXmlOrderColumnMap();
+        orderColumnMap.put("order" , false);
+        orderColumnMap.put("rank" , false);
+        orderColumnMap.put("sort" , false);
+        orderColumnMap.put("seq" , false);
+        orderColumnMap.put("sequence" , false);
+        orderColumnMap.put("create_time" , true);
+        orderColumnMap.put("id" , true);
     }
 
 
-    public static void initializeDtoExcludeColumn(ConfigCollector<?> configCollector) {
-        Set<String> editExcludeColumns = configCollector.getStrategyConfig().getEditExcludeColumns();
+    public static void initializeDtoExcludeColumn(Configurer configurer) {
+        Set<String> commandExcludeColumns = configurer.getCommandConfig().getCommandExcludeColumns();
         // 1. 创建时间类
-        editExcludeColumns.addAll(Arrays.asList(
-                "create_time",      // 您的规范
+        commandExcludeColumns.addAll(Arrays.asList(
+                "create_time",
                 "created_time",
                 "create_at",
                 "created_at",
-                "create_date",
-                "gmt_create"        // 阿里系
+                "create_date"
         ));
 
         // 2. 创建人类
-        editExcludeColumns.addAll(Arrays.asList(
-                "create_by",        // 您的规范
+        commandExcludeColumns.addAll(Arrays.asList(
+                "create_by",
                 "created_by",
                 "creator",
                 "creator_id",
@@ -68,54 +62,28 @@ public abstract class InitializeUtils {
         ));
 
         // 3. 更新时间类
-        editExcludeColumns.addAll(Arrays.asList(
-                "update_time",      // 您的规范
+        commandExcludeColumns.addAll(Arrays.asList(
+                "update_time",
                 "updated_time",
                 "update_at",
                 "updated_at",
                 "update_date",
-                "modify_time",
-                "gmt_modified"      // 阿里系
+                "modify_time"
         ));
 
         // 4. 更新人类
-        editExcludeColumns.addAll(Arrays.asList(
-                "update_by",        // 您的规范
+        commandExcludeColumns.addAll(Arrays.asList(
+                "update_by",
                 "updated_by",
                 "updater",
                 "updater_id",
                 "update_id",
                 "modify_by"
         ));
-        //
-        //// 5. 逻辑删除类 (通常不需要前端编辑)
-        //editExcludeColumns.addAll(Arrays.asList(
-        //        "deleted",          // 您的规范
-        //        "is_deleted",
-        //        "del_flag",
-        //        "delete_flag",
-        //        "remove_flag"
-        //));
-        //
-        //// 6. 乐观锁/版本类 (通常由后端自动处理)
-        //editExcludeColumns.addAll(Arrays.asList(
-        //        "version",          // 您的规范
-        //        "lock_version",
-        //        "opt_lock",
-        //        "revision"
-        //));
-        //
-        //// 7. 租户隔离类 (严禁前端篡改)
-        //editExcludeColumns.addAll(Arrays.asList(
-        //        "tenant_id",
-        //        "corp_id",
-        //        "company_id"
-        //));
     }
 
-    public static void initializeExtraFieldSuffix(ConfigCollector<?> configCollector) {
-        StrategyConfig strategyConfig = configCollector.getStrategyConfig();
-        Map<String, String> extraFieldSuffixMap = strategyConfig.getExtraFieldSuffixMap();
+    public static void initializeExtraFieldSuffix(Configurer configurer) {
+        Map<String, String> extraFieldSuffixMap = configurer.getQueryConfig().getExtraFieldSuffixMap();
 
         //extraFieldSuffixMap.put("Ne" , "!=");
 
@@ -134,9 +102,9 @@ public abstract class InitializeUtils {
         //extraFieldSuffixMap.put("IsNull" , "IS NULL");
         //extraFieldSuffixMap.put("IsNotNull" , "IS NOT NULL");
         //
-        //extraFieldSuffixMap.put("BitAny" , "BIT ANY");
-        //extraFieldSuffixMap.put("BitAll" , "BIT ALL");
-        //extraFieldSuffixMap.put("BitNone" , "BIT NONE");
+        extraFieldSuffixMap.put("HasAnyBits" , "HAS ANY BITS");
+        extraFieldSuffixMap.put("HasAllBits" , "HAS ALL BITS");
+        extraFieldSuffixMap.put("HasNoBits" , "HAS NO BITS");
 
     }
     
@@ -160,18 +128,17 @@ public abstract class InitializeUtils {
         extraFieldSuffixMap.put("IsNull", "IS NULL");
         extraFieldSuffixMap.put("IsNotNull", "IS NOT NULL");
 
-        extraFieldSuffixMap.put("BitAny", "BIT ANY");
-        extraFieldSuffixMap.put("BitAll", "BIT ALL");
-        extraFieldSuffixMap.put("BitNone", "BIT NONE");
+        extraFieldSuffixMap.put("HasAnyBits" , "HAS ANY BITS");
+        extraFieldSuffixMap.put("HasAllBits" , "HAS ALL BITS");
+        extraFieldSuffixMap.put("HasNoBits" , "HAS NO BITS");
         return extraFieldSuffixMap;
     }
 
 
-    public static void initializeMybatisPlus(ConfigCollector<MybatisPlusConfig> configCollector) {
-        MybatisPlusConfig customConfig = configCollector.getFeatureConfig();
-        customConfig.setIdType(IdType.ASSIGN_ID);
-        customConfig.setVersionColumnName("version");
-        customConfig.setLogicDeleteColumnName("deleted");
+    public static void initializeMybatisPlus(Configurer configurer) {
+        configurer.getEntityConfig().setIdType(IdStrategy.ASSIGN_ID);
+        configurer.getDataSourceConfig().setVersionColumnName("version");
+        configurer.getDataSourceConfig().setLogicDeleteColumnName("deleted");
     }
 
 
