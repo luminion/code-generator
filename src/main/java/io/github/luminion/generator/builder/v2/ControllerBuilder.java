@@ -19,11 +19,11 @@ public class ControllerBuilder {
     /**
      * controller父类
      *
-      * @param CanonicalName 父类规范名称
-     * @return this
+     * @param classCanonicalName 父类规范名称
+     * @return Controller配置构建器
      */
-    public ControllerBuilder superClass(String CanonicalName) {
-        configurer.getControllerConfig().setControllerSuperClass(CanonicalName);
+    public ControllerBuilder superClass(String classCanonicalName) {
+        configurer.getControllerConfig().setControllerSuperClass(classCanonicalName);
         return this;
     }
 
@@ -31,7 +31,7 @@ public class ControllerBuilder {
      * controller父类
      *
      * @param clazz 父类
-     * @return this
+     * @return Controller配置构建器
      */
     public ControllerBuilder superClass(Class<?> clazz) {
         configurer.getControllerConfig().setControllerSuperClass(clazz.getCanonicalName());
@@ -41,7 +41,7 @@ public class ControllerBuilder {
     /**
      * 禁用@RestController，使用@Controller
      *
-     * @return this
+     * @return Controller配置构建器
      */
     public ControllerBuilder disableRestController() {
         configurer.getControllerConfig().setRestController(false);
@@ -51,7 +51,7 @@ public class ControllerBuilder {
     /**
      * 禁用驼峰转连字符
      *
-     * @return this
+     * @return Controller配置构建器
      */
     public ControllerBuilder disableHyphenStyle() {
         configurer.getControllerConfig().setHyphenStyle(false);
@@ -62,7 +62,7 @@ public class ControllerBuilder {
      * controller请求前缀
      *
      * @param url url
-     * @return this
+     * @return Controller配置构建器
      */
     public ControllerBuilder baseUrl(String url) {
         configurer.getControllerConfig().setBaseUrl(url);
@@ -72,7 +72,7 @@ public class ControllerBuilder {
     /**
      * 启用跨域注解@CrossOrigin
      *
-     * @return this
+     * @return Controller配置构建器
      */
     public ControllerBuilder enableCrossOrigin() {
         configurer.getControllerConfig().setCrossOrigin(true);
@@ -82,7 +82,7 @@ public class ControllerBuilder {
     /**
      * 启用restful风格
      *
-     * @return this
+     * @return Controller配置构建器
      */
     public ControllerBuilder enableRestful() {
         configurer.getControllerConfig().setRestful(true);
@@ -92,7 +92,7 @@ public class ControllerBuilder {
     /**
      * 禁用请求路径参数@PathVariable
      *
-     * @return this
+     * @return Controller配置构建器
      */
     public ControllerBuilder disablePathVariable() {
         configurer.getControllerConfig().setPathVariable(false);
@@ -102,7 +102,7 @@ public class ControllerBuilder {
     /**
      * 禁用请求体参数@RequestBody
      *
-     * @return this
+     * @return Controller配置构建器
      */
     public ControllerBuilder disableRequestBody() {
         configurer.getControllerConfig().setRequestBody(false);
@@ -112,7 +112,7 @@ public class ControllerBuilder {
     /**
      * 列表/分页查询使用post请求
      *
-     * @return this
+     * @return Controller配置构建器
      */
     public ControllerBuilder enableQueryViaPost() {
         configurer.getControllerConfig().setQueryViaPost(false);

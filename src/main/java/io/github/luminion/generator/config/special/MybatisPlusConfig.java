@@ -1,7 +1,7 @@
 //package io.github.luminion.generator.config.special;
 //
 //import com.baomidou.mybatisplus.annotation.FieldFill;
-//import com.baomidou.mybatisplus.annotation.IdType;
+//import com.baomidou.mybatisplus.annotation.IdStrategy;
 //import io.github.luminion.generator.common.JavaFieldInfo;
 //import io.github.luminion.generator.common.TemplateRender;
 //import io.github.luminion.generator.config.ConfigCollector;
@@ -23,7 +23,7 @@
 //    /**
 //     * 指定生成的主键的ID类型
 //     */
-//    protected IdType idType = IdType.ASSIGN_ID;
+//    protected IdStrategy idType = IdStrategy.ASSIGN_ID;
 //    /**
 //     * 乐观锁字段名称(数据库字段)
 //     */

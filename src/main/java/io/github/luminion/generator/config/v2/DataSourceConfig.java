@@ -6,6 +6,7 @@ import io.github.luminion.generator.common.NamingConverter;
 import io.github.luminion.generator.common.support.DefaultNamingConverter;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.DbType;
+import io.github.luminion.generator.enums.ColumnFillStrategy;
 import io.github.luminion.generator.util.DatasourceUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
@@ -104,7 +105,6 @@ public class DataSourceConfig {
      */
     private Set<String> tableSuffixes = new LinkedHashSet<>();
 
-
     /**
      * 自定义实体父类公共字段
      */
@@ -127,6 +127,19 @@ public class DataSourceConfig {
      * result: deleted_flag -> deleted
      */
     private Set<String> columnSuffixes = new LinkedHashSet<>();
+
+    /**
+     * 自动填充字段(对应mybatis-plus的FiledFill)
+     */
+    private Map<String, ColumnFillStrategy> columnFillMap = new HashMap<>();
+    /**
+     * 乐观锁字段名称(数据库字段)
+     */
+    protected String versionColumnName;
+    /**
+     * 逻辑删除字段名称(数据库字段)
+     */
+    protected String logicDeleteColumnName;
 
 
 
@@ -157,18 +170,6 @@ public class DataSourceConfig {
         }
         return null;
     }
-
-
-
-    /**
-     * 表名称匹配过滤表前缀
-     *
-     * @param tableName 表名称
-     */
-    public boolean startsWithTablePrefix(String tableName) {
-        return this.tablePrefixes.stream().anyMatch(tableName::startsWith);
-    }
-
 
     /**
      * 排除表名匹配

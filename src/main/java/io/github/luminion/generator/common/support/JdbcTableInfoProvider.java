@@ -15,6 +15,7 @@
  */
 package io.github.luminion.generator.common.support;
 
+import io.github.luminion.generator.enums.ColumnFillStrategy;
 import io.github.luminion.generator.util.FieldTypeConvertUtils;
 import io.github.luminion.generator.common.DatabaseKeywordsHandler;
 import io.github.luminion.generator.common.FieldTypeConverter;
@@ -110,6 +111,7 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
 
     protected void convertTableFields(TableInfo tableInfo) {
         String tableName = tableInfo.getTableName();
+        Map<String, ColumnFillStrategy> columnFillMap = dataSourceConfig.getColumnFillMap();
         Map<String, JdbcDatabaseMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
         columnsInfoMap.forEach((k, columnInfo) -> {
             TableField tableField = new TableField();
@@ -142,6 +144,7 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
             metaInfo.setTypeName(columnInfo.getTypeName());
             tableField.setMetaInfo(metaInfo);
 
+
             JavaFieldInfo javaFieldInfo = FieldTypeConvertUtils.getJavaFieldType(metaInfo, dataSourceConfig.getDateType());
             FieldTypeConverter fieldTypeConverter = dataSourceConfig.getFieldTypeConverter();
             if (fieldTypeConverter != null) {
@@ -160,7 +163,7 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
             String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(columnName, columnPrefixes, columnSuffixes);
             String propertyName = dataSourceConfig.getNamingConverter().convertFieldName(removePrefixAndSuffix);
             tableField.setPropertyName(propertyName);
-           
+
             boolean removeIsPrefix = dataSourceConfig.isBooleanColumnRemoveIsPrefix();
             boolean isBoolean = "boolean".equalsIgnoreCase(tableField.getPropertyType());
             boolean startsWithIs = propertyName.startsWith("is");
@@ -189,13 +192,26 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
             } else {
                 tableInfo.getFields().add(tableField);
             }
+            // 字段填充
+            ColumnFillStrategy columnFillStrategy = columnFillMap.get(tableField.getColumnName());
+            if (columnFillStrategy != null) {
+                tableField.setFill(columnFillStrategy.name());
+            }
+            String logicDeleteColumnName = dataSourceConfig.getLogicDeleteColumnName();
+            if (tableField.getColumnName().equals(logicDeleteColumnName)) {
+                tableField.setLogicDeleteField(true);
+            }
+            String versionColumnName = dataSourceConfig.getVersionColumnName();
+            if (tableField.getColumnName().equals(versionColumnName)) {
+                tableField.setVersionField(true);
+            }
         });
     }
 
     protected Map<String, JdbcDatabaseMetaDataWrapper.Column> getColumnsInfo(String tableName) {
         return databaseMetaDataWrapper.getColumnsInfo(tableName, true);
     }
-    
+
 
     protected void filter(List<TableInfo> tableList, List<TableInfo> includeTableList, List<TableInfo> excludeTableList) {
         boolean isInclude = !dataSourceConfig.getIncludeTables().isEmpty();

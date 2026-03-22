@@ -3,8 +3,10 @@ package io.github.luminion.generator.builder.v2;
 import io.github.luminion.generator.common.DatabaseKeywordsHandler;
 import io.github.luminion.generator.common.FieldTypeConverter;
 import io.github.luminion.generator.common.NamingConverter;
+import io.github.luminion.generator.common.RenderField;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.DateType;
+import io.github.luminion.generator.enums.ColumnFillStrategy;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;
@@ -160,7 +162,7 @@ public class DatasourceBuilder {
      * 自定义实体父类公共字段
      */
     public DatasourceBuilder commonColumns(String... commonColumns){
-        configurer.getDataSourceConfig().setCommonColumns(new HashSet<>(Arrays.asList(commonColumns)));
+        configurer.getDataSourceConfig().setCommonColumns(new LinkedHashSet<>(Arrays.asList(commonColumns)));
         return this;
     }
 
@@ -221,7 +223,7 @@ public class DatasourceBuilder {
         configurer.getDataSourceConfig().setColumnSuffixes(new LinkedHashSet<>(columnSuffixes));
         return this;
     }
-
+    
     
     
     

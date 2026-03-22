@@ -26,7 +26,7 @@ public enum RuntimeClass {
     MYBATIS_PLUS_PAGE("com.baomidou.mybatisplus.extension.plugins.pagination.Page"),
     MYBATIS_PLUS_TABLE_NAME("com.baomidou.mybatisplus.annotation.TableName"),
     MYBATIS_PLUS_TABLE_ID("com.baomidou.mybatisplus.annotation.TableId"),
-    MYBATIS_PLUS_ID_TYPE("com.baomidou.mybatisplus.annotation.IdType"),
+    MYBATIS_PLUS_ID_TYPE("com.baomidou.mybatisplus.annotation.IdStrategy"),
     MYBATIS_PLUS_TABLE_LOGIC("com.baomidou.mybatisplus.annotation.TableLogic"),
     MYBATIS_PLUS_VERSION("com.baomidou.mybatisplus.annotation.Version"),
     MYBATIS_PLUS_TABLE_FIELD("com.baomidou.mybatisplus.annotation.TableField"),

@@ -1,10 +1,9 @@
 package io.github.luminion.generator.config.v2;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
 import io.github.luminion.generator.common.RenderField;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.enums.IdStrategy;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.po.TableField;
 import io.github.luminion.generator.po.TableInfo;
@@ -29,20 +28,10 @@ public class EntityConfig implements TemplateRender {
     private String entitySuperClass;
     /**
      * 指定生成的主键的ID类型
-     * todo 初始化
      */
     @RenderField
-    protected IdType idType;
-    /**
-     * 乐观锁字段名称(数据库字段)
-     */
-    @RenderField
-    protected String versionColumnName;
-    /**
-     * 逻辑删除字段名称(数据库字段)
-     */
-    @RenderField
-    protected String logicDeleteColumnName;
+    protected IdStrategy idType = IdStrategy.ASSIGN_UUID;
+
     /**
      * 开启 ActiveRecord 模式
      */
@@ -53,11 +42,6 @@ public class EntityConfig implements TemplateRender {
      */
     @RenderField
     protected boolean tableFieldAnnotation;
-    /**
-     * 表填充字段
-     */
-    @RenderField
-    protected final Map<String, FieldFill> tableFillMap = new HashMap<>();
     
 
     @Override
