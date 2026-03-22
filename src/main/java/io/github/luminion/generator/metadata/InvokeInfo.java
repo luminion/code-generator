@@ -1,4 +1,4 @@
-package io.github.luminion.generator.po;
+package io.github.luminion.generator.metadata;
 
 import io.github.luminion.generator.util.ClassUtils;
 import lombok.Getter;

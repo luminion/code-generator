@@ -23,8 +23,8 @@ import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.common.TableInfoProvider;
 import io.github.luminion.generator.config.core.DataSourceConfig;
 import io.github.luminion.generator.enums.NameConvertType;
-import io.github.luminion.generator.po.TableField;
-import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.metadata.TableField;
+import io.github.luminion.generator.metadata.TableInfo;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 

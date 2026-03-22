@@ -1,7 +1,7 @@
 package io.github.luminion.generator.util;
 
 import io.github.luminion.generator.common.MethodReference;
-import io.github.luminion.generator.po.InvokeInfo;
+import io.github.luminion.generator.metadata.InvokeInfo;
 
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.Constructor;

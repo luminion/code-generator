@@ -2,9 +2,9 @@ package io.github.luminion.generator.config.core;
 
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.TemplateFileEnum;
-import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.po.TemplateFile;
-import io.github.luminion.generator.po.TemplateClassFile;
+import io.github.luminion.generator.metadata.TableInfo;
+import io.github.luminion.generator.metadata.TemplateFile;
+import io.github.luminion.generator.metadata.TemplateClassFile;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 

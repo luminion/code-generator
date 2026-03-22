@@ -15,7 +15,7 @@
  */
 package io.github.luminion.generator.common;
 
-import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.metadata.TableInfo;
 
 
 import java.util.List;

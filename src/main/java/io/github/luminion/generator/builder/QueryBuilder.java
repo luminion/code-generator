@@ -1,4 +1,4 @@
-package io.github.luminion.generator.builder.core;
+package io.github.luminion.generator.builder;
 
 import io.github.luminion.generator.common.ExtraFieldStrategy;
 import io.github.luminion.generator.config.Configurer;

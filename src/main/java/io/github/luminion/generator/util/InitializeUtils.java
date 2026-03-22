@@ -1,12 +1,10 @@
 package io.github.luminion.generator.util;
 
 import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.enums.IdStrategy;
-import io.github.luminion.generator.enums.JavaFieldType;
-import io.github.luminion.generator.enums.JdbcType;
+import io.github.luminion.generator.enums.*;
+import io.github.luminion.generator.metadata.InvokeInfo;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -29,7 +27,7 @@ public abstract class InitializeUtils {
         });
     }
 
-    public static void initializeMapperSortColumn(Configurer configurer) {
+    public static void initializeMapperOrderColumn(Configurer configurer) {
         Map<String, Boolean> orderColumnMap = configurer.getMapperConfig().getXmlOrderColumnMap();
         orderColumnMap.put("order" , false);
         orderColumnMap.put("rank" , false);
@@ -41,7 +39,7 @@ public abstract class InitializeUtils {
     }
 
 
-    public static void initializeDtoExcludeColumn(Configurer configurer) {
+    public static void initializeCommandExcludeColumn(Configurer configurer) {
         Set<String> commandExcludeColumns = configurer.getCommandConfig().getCommandExcludeColumns();
         // 1. 创建时间类
         commandExcludeColumns.addAll(Arrays.asList(
@@ -82,7 +80,7 @@ public abstract class InitializeUtils {
         ));
     }
 
-    public static void initializeExtraFieldSuffix(Configurer configurer) {
+    public static void initializeSuggestedExtraFieldSuffix(Configurer configurer) {
         Map<String, String> extraFieldSuffixMap = configurer.getQueryConfig().getExtraFieldSuffixMap();
 
         //extraFieldSuffixMap.put("Ne" , "!=");
@@ -108,8 +106,8 @@ public abstract class InitializeUtils {
 
     }
     
-    public static Map<String,String> getFullExtraFieldSuffixMap() {
-        Map<String, String> extraFieldSuffixMap = new HashMap<>();
+    public static void initializeSupportedExtraFieldSuffix(Configurer configurer) {
+        Map<String, String> extraFieldSuffixMap = configurer.getQueryConfig().getExtraFieldSuffixMap();
 
         extraFieldSuffixMap.put("Ne", "!=");
 
@@ -131,14 +129,22 @@ public abstract class InitializeUtils {
         extraFieldSuffixMap.put("HasAnyBits" , "HAS ANY BITS");
         extraFieldSuffixMap.put("HasAllBits" , "HAS ALL BITS");
         extraFieldSuffixMap.put("HasNoBits" , "HAS NO BITS");
-        return extraFieldSuffixMap;
     }
 
 
     public static void initializeMybatisPlus(Configurer configurer) {
+        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PLUS);
         configurer.getEntityConfig().setIdType(IdStrategy.ASSIGN_ID);
         configurer.getDataSourceConfig().setVersionColumnName("version");
         configurer.getDataSourceConfig().setLogicDeleteColumnName("deleted");
+    }
+
+
+    public static void initializeMpBooster(Configurer configurer) {
+        initializeMybatisPlus(configurer);
+        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MP_BOOSTER);
+        InvokeInfo invokeInfo = new InvokeInfo(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getClassName(), "BPage<%>", "%s");
+        configurer.getControllerConfig().setPageType(invokeInfo);
     }
 
 

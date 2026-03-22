@@ -7,7 +7,7 @@ import io.github.luminion.generator.enums.DocType;
 import io.github.luminion.generator.enums.JavaEEApi;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.RuntimeEnv;
-import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.metadata.TableInfo;
 import lombok.Data;
 
 import java.util.HashMap;

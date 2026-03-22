@@ -1,9 +1,9 @@
-package io.github.luminion.generator.builder.core;
+package io.github.luminion.generator.builder;
 
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.DocType;
 import io.github.luminion.generator.enums.JavaEEApi;
-import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.metadata.TableInfo;
 import lombok.RequiredArgsConstructor;
 
 import java.text.SimpleDateFormat;

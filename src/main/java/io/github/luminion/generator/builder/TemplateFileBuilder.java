@@ -1,6 +1,6 @@
-package io.github.luminion.generator.builder.core;
+package io.github.luminion.generator.builder;
 
-import io.github.luminion.generator.po.TemplateFile;
+import io.github.luminion.generator.metadata.TemplateFile;
 import lombok.RequiredArgsConstructor;
 
 /**

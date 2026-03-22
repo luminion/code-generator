@@ -6,9 +6,9 @@ import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.enums.TemplateFileEnum;
-import io.github.luminion.generator.po.TableField;
-import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.po.TemplateClassFile;
+import io.github.luminion.generator.metadata.TableField;
+import io.github.luminion.generator.metadata.TableInfo;
+import io.github.luminion.generator.metadata.TemplateClassFile;
 import io.github.luminion.generator.util.ClassUtils;
 import lombok.Data;
 

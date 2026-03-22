@@ -1,8 +1,8 @@
-package io.github.luminion.generator.builder.core;
+package io.github.luminion.generator.builder;
 
 import io.github.luminion.generator.common.MethodReference;
 import io.github.luminion.generator.config.Configurer;
-import io.github.luminion.generator.po.InvokeInfo;
+import io.github.luminion.generator.metadata.InvokeInfo;
 import io.github.luminion.generator.util.ReflectUtils;
 import lombok.RequiredArgsConstructor;
 

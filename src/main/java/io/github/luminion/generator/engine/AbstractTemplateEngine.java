@@ -17,12 +17,14 @@ package io.github.luminion.generator.engine;
 
 import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.ConfigResolver;
-import io.github.luminion.generator.po.TableInfo;
-import io.github.luminion.generator.po.TemplateFile;
+import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.metadata.TableInfo;
+import io.github.luminion.generator.metadata.TemplateFile;
 import io.github.luminion.generator.util.FileUtils;
 import io.github.luminion.generator.util.RuntimeUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -39,17 +41,14 @@ import java.util.Map;
  * @since 1.0.0
  */
 @Slf4j
+@RequiredArgsConstructor
 public abstract class AbstractTemplateEngine {
 
     /**
      * 配置信息
      */
     @Getter
-    protected final ConfigResolver configResolver;
-
-    public AbstractTemplateEngine(ConfigCollector<?> configCollector) {
-        this.configResolver = new ConfigResolver(configCollector);
-    }
+    protected final Configurer configurer;
 
     /**
      * 输出文件

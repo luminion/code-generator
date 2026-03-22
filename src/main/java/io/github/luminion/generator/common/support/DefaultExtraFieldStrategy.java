@@ -4,7 +4,7 @@ package io.github.luminion.generator.common.support;
 import io.github.luminion.generator.common.ExtraFieldStrategy;
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.enums.SqlKeyword;
-import io.github.luminion.generator.po.TableField;
+import io.github.luminion.generator.metadata.TableField;
 import lombok.SneakyThrows;
 
 import java.util.Arrays;

@@ -3,7 +3,7 @@ package io.github.luminion.generator.util;
 import io.github.luminion.generator.common.JavaFieldInfo;
 import io.github.luminion.generator.enums.JavaFieldType;
 import io.github.luminion.generator.enums.DateType;
-import io.github.luminion.generator.po.TableField;
+import io.github.luminion.generator.metadata.TableField;
 
 import java.sql.Types;
 import java.util.HashMap;

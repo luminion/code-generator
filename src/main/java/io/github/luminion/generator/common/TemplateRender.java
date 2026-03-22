@@ -1,6 +1,6 @@
 package io.github.luminion.generator.common;
 
-import io.github.luminion.generator.po.TableInfo;
+import io.github.luminion.generator.metadata.TableInfo;
 import lombok.SneakyThrows;
 
 import java.lang.reflect.Field;

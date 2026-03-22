@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.luminion.generator.po;
+package io.github.luminion.generator.metadata;
 
 import io.github.luminion.generator.enums.JdbcType;
 import lombok.Data;
