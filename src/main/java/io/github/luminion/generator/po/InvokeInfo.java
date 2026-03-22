@@ -75,12 +75,16 @@ public class InvokeInfo {
      * @param methodInvokeFormat    方法调用格式
      */
     public InvokeInfo(String classCanonicalName, String declarationTypeFormat, String methodInvokeFormat) {
-        this.classSimpleName = ClassUtils.getSimpleName(classCanonicalName);
-        this.classCanonicalName = classCanonicalName;
+        if (classCanonicalName != null && !classCanonicalName.isEmpty()) {
+            this.classSimpleName = ClassUtils.getSimpleName(classCanonicalName);
+            this.classCanonicalName = classCanonicalName;
+        } else {
+            this.classSimpleName = null;
+            this.classCanonicalName = null;
+        }
         this.typeFormatter = genericTypeString -> String.format(declarationTypeFormat, genericTypeString);
         this.invokeFormatter = params -> String.format(methodInvokeFormat, params);
     }
-
 
     /**
      * 声明字符串

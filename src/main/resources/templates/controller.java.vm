@@ -77,8 +77,8 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("Serializable")} create($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} dto) {
-        return ${returnMethodFormat.apply("baseService.${createMethodName}(dto)")};
+    public ${returnType.toTypeString("Serializable")} create($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} dto) {
+        return ${returnType.toInvokeString("baseService.${createMethodName}(dto)")};
     }
 #end
 #if(${generateUpdate})
@@ -103,8 +103,8 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("Boolean")} update($!{requiredBodyStr}$!{validStr}${updateParam.classSimpleName} dto) {
-        return ${returnMethodFormat.apply("baseService.${updateMethodName}(dto)")};
+    public ${returnType.toTypeString("Boolean")} update($!{requiredBodyStr}$!{validStr}${updateParam.classSimpleName} dto) {
+        return ${returnType.toInvokeString("baseService.${updateMethodName}(dto)")};
     }
 #end
 #if(${generateDelete} && ${table.idField})
@@ -129,8 +129,8 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("Boolean")} delete($!{idMethodParam}${primaryKeyPropertyType} id) {
-        return ${returnMethodFormat.apply("baseService.removeById(id)")};
+    public ${returnType.toTypeString("Boolean")} delete($!{idMethodParam}${primaryKeyPropertyType} id) {
+        return ${returnType.toInvokeString("baseService.removeById(id)")};
     }
 #end
 #if(${generateQueryById} && ${table.idField})
@@ -155,8 +155,8 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("${queryResult.classSimpleName}")} voById($!{idMethodParam}${primaryKeyPropertyType} id) {
-        return ${returnMethodFormat.apply("baseService.voById(id)")};
+    public ${returnType.toTypeString("${queryResult.classSimpleName}")} voById($!{idMethodParam}${primaryKeyPropertyType} id) {
+        return ${returnType.toInvokeString("baseService.voById(id)")};
     }
 #end
 #if(${generateQueryList})
@@ -177,11 +177,11 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("List<${queryResult.classSimpleName}>")} list($!{queryBodyStr}${queryParam.classSimpleName} dto) {
+    public ${returnType.toTypeString("List<${queryResult.classSimpleName}>")} list($!{queryBodyStr}${queryParam.classSimpleName} dto) {
         #if($sqlBooster)
-        return ${returnMethodFormat.apply("baseService..appendByBean(dto).list()")};    
+        return ${returnType.toInvokeString("baseService..appendByBean(dto).list()")};    
         #else
-        return ${returnMethodFormat.apply("baseService.voList(dto)")};
+        return ${returnType.toInvokeString("baseService.voList(dto)")};
         #end
     }
 #end
@@ -205,16 +205,16 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply(${pageTypeFormat.apply(${queryResult.classSimpleName})})} page($!{queryBodyStr}${queryParam.classSimpleName} dto$!{pageMethodParams}) {
+    public ${returnType.toTypeString(${pageType.toTypeString(${queryResult.classSimpleName})})} page($!{queryBodyStr}${queryParam.classSimpleName} dto$!{pageMethodParams}) {
         #if(${queryParamSuperClass})
         Long current = dto.${pageGetter};
         Long size = dto.${sizeGetter};
         #end
         Long 
         #if($sqlBooster)
-        return ${returnMethodFormat.apply(${pageMethodFormat.apply("baseService.lambdaBooster().appendByBean(dto).page(cuurent, size))")})};
+        return ${returnType.toInvokeString(${pageType.toInvokeString("baseService.lambdaBooster().appendByBean(dto).page(cuurent, size))")})};
         #else
-        return ${returnMethodFormat.apply(${pageMethodFormat.apply("baseService.voPage(dto, current, size)")})};
+        return ${returnType.toInvokeString(${pageType.toInvokeString("baseService.voPage(dto, current, size)")})};
         #end
     }
 #end
@@ -253,9 +253,9 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnTypeFormat.apply("Integer")} excelImport(@RequestParam("excel") MultipartFile excel) throws IOException {
-        if (excel == null || excel.isEmpty()) return ${returnMethodFormat.apply(0)};
-        return ${returnMethodFormat.apply("baseService.excelImport(excel.getInputStream())")};
+    public ${returnType.toTypeString("Integer")} excelImport(@RequestParam("excel") MultipartFile excel) throws IOException {
+        if (excel == null || excel.isEmpty()) return ${returnType.toInvokeString(0)};
+        return ${returnType.toInvokeString("baseService.excelImport(excel.getInputStream())")};
     }
 #end
 #if(${enableExcelExport})

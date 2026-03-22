@@ -4,6 +4,7 @@ import io.github.luminion.generator.common.RenderField;
 import io.github.luminion.generator.common.TemplateRender;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.RuntimeClass;
+import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.enums.TemplateFileEnum;
 import io.github.luminion.generator.po.InvokeInfo;
 import io.github.luminion.generator.po.TableField;
@@ -76,7 +77,7 @@ public class ControllerConfig implements TemplateRender {
 
     /**
      * 通过SqlContext查询
-     * // todo 
+     * // todo
      */
     @RenderField
     private boolean queryViaSqlContext = false;
@@ -85,13 +86,13 @@ public class ControllerConfig implements TemplateRender {
      * 返回结果类型
      */
     @RenderField
-    private InvokeInfo returnType;
+    private InvokeInfo returnType = new InvokeInfo("", "%s", "%s");
 
     /**
      * 分页结果类型
      */
     @RenderField
-    private InvokeInfo pageType;
+    private InvokeInfo pageType = new InvokeInfo(RuntimeClass.MYBATIS_PLUS_I_PAGE.getClassName(), "IPage<%s>", "%s");
 
 
     @Override
@@ -159,7 +160,7 @@ public class ControllerConfig implements TemplateRender {
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
         TableField idField = tableInfo.getIdField();
         String idFieldPropertyPkg = idField != null ? idField.getPropertyPkg() : null;
-    
+
         Set<String> importPackages = new TreeSet<>();
         // spring-web包
         importPackages.add(RuntimeClass.SPRING_BOOT_WEB_ANNOTATION_S.getClassName());
@@ -194,8 +195,12 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(baseServiceImpl.getClassCanonicalName());
         }
         // 返回结果类型
-        if (returnType != null) {
+        if (returnType != null && returnType.getClassCanonicalName() != null) {
             importPackages.add(returnType.getClassCanonicalName());
+        }
+        // 分页结果类型
+        if (pageType != null && pageType.getClassCanonicalName() != null) {
+            importPackages.add(pageType.getClassCanonicalName());
         }
 
         // 增
@@ -228,7 +233,7 @@ public class ControllerConfig implements TemplateRender {
         }
 
         // 列表
-            if (globalConfig.isGenerateQueryList()) {
+        if (globalConfig.isGenerateQueryList()) {
             importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_PARAM.getKey()).getClassCanonicalName());
             importPackages.add(templateFileMap.get(TemplateFileEnum.QUERY_RESULT.getKey()).getClassCanonicalName());
             importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getClassName());
@@ -244,7 +249,7 @@ public class ControllerConfig implements TemplateRender {
             }
         }
 
-        String responseClass = globalConfig.getJavaEEApi().getPackagePrefix() 
+        String responseClass = globalConfig.getJavaEEApi().getPackagePrefix()
                 + RuntimeClass.PREFIX_JAKARTA_SERVLET_RESPONSE.getClassName();
 
         // 导入
@@ -254,7 +259,7 @@ public class ControllerConfig implements TemplateRender {
             importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getClassName());
             importPackages.add(RuntimeClass.SPRING_BOOT_MULTIPART_FILE.getClassName());
         }
-        
+
         // 导出
         if (globalConfig.isGenerateExcelExport()) {
             importPackages.add(responseClass);
