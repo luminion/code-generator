@@ -47,7 +47,7 @@ public class CommandConfig implements TemplateRender {
      * 新增和修改需要需要排除的字段
      */
     @RenderField
-    private final Set<String> commandExcludeColumns = new HashSet<>();
+    private Set<String> commandExcludeColumns = new HashSet<>();
 
     @Override
     public Map<String, Object> renderData(TableInfo tableInfo) {

@@ -1,7 +1,11 @@
 package io.github.luminion.generator.builder;
 
+import io.github.luminion.generator.metadata.InvokeInfo;
+import io.github.luminion.generator.metadata.MethodReference;
 import io.github.luminion.generator.naming.ExtraFieldStrategy;
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.util.ClassUtils;
+import io.github.luminion.generator.util.LambdaUtils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -56,6 +60,22 @@ public class QueryBuilder {
     
     public QueryBuilder sizeParamName(String sizeParamName){
         configurer.getQueryConfig().setSizeParamName(sizeParamName);
+        return this;
+    }
+
+    public <T> QueryBuilder pageSizeParam(MethodReference<T,Long> pageParamGetter, MethodReference<T,Long> sizeParamGetter){
+        String pageParamName = LambdaUtils.resolveGetterPropertyName(pageParamGetter);
+        String sizeParamName = LambdaUtils.resolveGetterPropertyName(sizeParamGetter);
+        Class<T> tClass = LambdaUtils.resolveGetterClass(pageParamGetter);
+        configurer.getQueryConfig().setPageParamName(pageParamName);
+        configurer.getQueryConfig().setSizeParamName(sizeParamName);
+        configurer.getQueryConfig().setQueryParamPageFields(false);
+        configurer.getQueryConfig().setQueryParamSuperClass(tClass.getCanonicalName());
+        return this;
+    }
+    
+    public QueryBuilder disableQueryParamPageFields(){
+        configurer.getQueryConfig().setQueryParamPageFields(false);
         return this;
     }
     

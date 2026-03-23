@@ -16,7 +16,7 @@ import ${pkg};
  * $!{table.comment}-修改入参对象
  *
  * @author ${author}
-#if(${javadocWithSeeTags})
+#if(${seeTags})
  * @see ${entity.classCanonicalName}
  * @see ${serviceImpl.classCanonicalName}
 #end

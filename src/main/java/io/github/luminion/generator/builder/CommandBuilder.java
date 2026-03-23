@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 
 /**
  * Command配置构建器（创建/更新/删除）
@@ -66,7 +67,7 @@ public class CommandBuilder {
      * @return this
      */
     public CommandBuilder excludeColumns(String... columns) {
-        configurer.getCommandConfig().getCommandExcludeColumns().addAll(Arrays.asList(columns));
+        configurer.getCommandConfig().setCommandExcludeColumns(new LinkedHashSet<>(Arrays.asList(columns)));
         return this;
     }
 
@@ -77,17 +78,8 @@ public class CommandBuilder {
      * @return this
      */
     public CommandBuilder excludeColumns(Collection<String> columns) {
-        configurer.getCommandConfig().getCommandExcludeColumns().addAll(columns);
+        configurer.getCommandConfig().setCommandExcludeColumns(new LinkedHashSet<>(columns));
         return this;
     }
-
-    /**
-     * 清空创建/新增排除字段
-     *
-     * @return this
-     */
-    public CommandBuilder clearExcludeColumns() {
-        configurer.getCommandConfig().getCommandExcludeColumns().clear();
-        return this;
-    }
+    
 }

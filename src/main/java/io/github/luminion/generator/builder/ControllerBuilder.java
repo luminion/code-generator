@@ -3,7 +3,7 @@ package io.github.luminion.generator.builder;
 import io.github.luminion.generator.metadata.MethodReference;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.metadata.InvokeInfo;
-import io.github.luminion.generator.util.ReflectUtils;
+import io.github.luminion.generator.util.LambdaUtils;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -126,7 +126,7 @@ public class ControllerBuilder {
      * @return Controller配置构建器
      */
     public <R> ControllerBuilder returnMethod(MethodReference<Object, R> methodReference) {
-        InvokeInfo invokeInfo = ReflectUtils.lambdaMethodInvokeInfo(methodReference, Object.class);
+        InvokeInfo invokeInfo = LambdaUtils.resolveInvokeInfo(methodReference, Object.class);
         configurer.getControllerConfig().setReturnType(invokeInfo);
         return this;
     }
@@ -152,8 +152,8 @@ public class ControllerBuilder {
      * @return Controller配置构建器
      */
     public <T, R> ControllerBuilder pageMethod(MethodReference<T, R> methodReference, Class<T> pageClass) {
-        InvokeInfo invokeInfo = ReflectUtils.lambdaMethodInvokeInfo(methodReference, pageClass);
-        configurer.getControllerConfig().setReturnType(invokeInfo);
+        InvokeInfo invokeInfo = LambdaUtils.resolveInvokeInfo(methodReference, pageClass);
+        configurer.getControllerConfig().setPageType(invokeInfo);
         return this;
     }
 
@@ -166,7 +166,7 @@ public class ControllerBuilder {
      * @return Controller配置构建器
      */
     public ControllerBuilder pageMethod(String classCanonicalName, String declarationTypeFormat, String methodInvokeFormat) {
-        configurer.getControllerConfig().setReturnType(new InvokeInfo(classCanonicalName, declarationTypeFormat, methodInvokeFormat));
+        configurer.getControllerConfig().setPageType(new InvokeInfo(classCanonicalName, declarationTypeFormat, methodInvokeFormat));
         return this;
     }
 

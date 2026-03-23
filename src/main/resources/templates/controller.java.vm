@@ -16,7 +16,7 @@ import ${pkg};
  * $!{table.comment}-前端控制器
  *
  * @author ${author}
-#if(${javadocWithSeeTags})
+#if(${seeTags})
  * @see ${entity.classCanonicalName}
  * @see ${mapper.classCanonicalName}
  * @see ${serviceImpl.classCanonicalName}
@@ -58,14 +58,14 @@ public class ${controller.classSimpleName} {
 #if(${generateCreate})
 
     #if(${springDoc})
-    @Operation(summary = "新增")
+    @Operation(summary = "$!{table.comment}-新增")
     #elseif(${swagger})
-    @ApiOperation(value = "新增")
+    @ApiOperation(value = "$!{table.comment}-新增")
     #else
     /**
-     * 新增
+     * $!{table.comment}-新增
      *
-     * @param dto 新增入参对象
+     * @param param 新增入参对象
      * @return 新增后的数据id
      */
     #end
@@ -78,14 +78,14 @@ public class ${controller.classSimpleName} {
     @ResponseBody
     #end
     #if(${table.idField})
-    public ${returnType.toTypeString("${table.idField.propertyType}")} create($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} dto) {
+    public ${returnType.toTypeString("${table.idField.propertyType}")} create($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} param) {
     #else
-    public ${returnType.toTypeString("?")} ${createMethodName}($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} dto) {     
+    public ${returnType.toTypeString("?")} ${createMethodName}($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} param) {     
     #end
     #if(${table.idField})
-        return ${returnType.toInvokeString("baseService.${createMethodName}(dto)")};
+        return ${returnType.toInvokeString("baseService.${createMethodName}(param)")};
         #else
-        baseService.${createMethodName}(dto)
+        baseService.${createMethodName}(param)
         return ${returnType.toInvokeString("")};        
     #end
     }
@@ -93,14 +93,14 @@ public class ${controller.classSimpleName} {
 #if(${generateUpdate})
 
     #if(${springDoc})
-    @Operation(summary = "修改")
+    @Operation(summary = "$!{table.comment}-修改")
     #elseif(${swagger})
-    @ApiOperation(value = "修改")
+    @ApiOperation(value = "$!{table.comment}-修改")
     #else
     /**
-     * 修改
+     * $!{table.comment}-修改
      *
-     * @param dto 修改入参对象
+     * @param param 修改入参对象
      * @return 是否成功
      */
     #end
@@ -112,19 +112,19 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnType.toTypeString("Boolean")} ${updateMethodName}($!{requiredBodyStr}$!{validStr}${updateParam.classSimpleName} dto) {
-        return ${returnType.toInvokeString("baseService.${updateMethodName}(dto)")};
+    public ${returnType.toTypeString("Boolean")} ${updateMethodName}($!{requiredBodyStr}$!{validStr}${updateParam.classSimpleName} param) {
+        return ${returnType.toInvokeString("baseService.${updateMethodName}(param)")};
     }
 #end
 #if(${generateDelete} && ${table.idField})
 
     #if(${springDoc})
-    @Operation(summary = "删除")
+    @Operation(summary = "$!{table.comment}-删除")
     #elseif(${swagger})
-    @ApiOperation(value = "删除")
+    @ApiOperation(value = "$!{table.comment}-删除")
     #else
     /**
-     * 根据id删除
+     * $!{table.comment}-根据id删除
      *
      * @param id 主键id
      * @return 是否成功
@@ -145,12 +145,12 @@ public class ${controller.classSimpleName} {
 #if(${generateQueryById} && ${table.idField})
 
     #if(${springDoc})
-    @Operation(summary = "根据id查询详情")
+    @Operation(summary = "$!{table.comment}-根据id查询详情")
     #elseif(${swagger})
-    @ApiOperation(value = "根据id查询详情")
+    @ApiOperation(value = "$!{table.comment}-根据id查询详情")
     #else
     /**
-     * 根据id查询详情
+     * $!{table.comment}-根据id查询详情
      *
      * @param id 主键id
      * @return 查询结果
@@ -171,14 +171,14 @@ public class ${controller.classSimpleName} {
 #if(${generateQueryList})
 
     #if(${springDoc})
-    @Operation(summary = "列表查询")
+    @Operation(summary = "$!{table.comment}-列表查询")
     #elseif(${swagger})
-    @ApiOperation(value = "列表查询")
+    @ApiOperation(value = "$!{table.comment}-列表查询")
     #else
     /**
-     * 列表查询
+     * $!{table.comment}-列表查询
      *
-     * @param dto 查询条件
+     * @param param 查询条件
      * @return 查询结果
      */
     #end
@@ -186,25 +186,25 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnType.toTypeString("List<${queryResult.classSimpleName}>")} ${queryListMethodName}($!{queryBodyStr}${queryParam.classSimpleName} dto) {
+    public ${returnType.toTypeString("List<${queryResult.classSimpleName}>")} ${queryListMethodName}($!{queryBodyStr}${queryParam.classSimpleName} param) {
         #if($sqlBooster)
-        return ${returnType.toInvokeString("baseService.${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(dto).list()")};    
+        return ${returnType.toInvokeString("baseService.${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(param).list()")};    
         #else
-        return ${returnType.toInvokeString("baseService.${queryListMethodName}(dto)")};
+        return ${returnType.toInvokeString("baseService.${queryListMethodName}(param)")};
         #end
     }
 #end
 #if(${generateQueryPage})
 
     #if(${springDoc})
-    @Operation(summary = "分页查询")
+    @Operation(summary = "$!{table.comment}-分页查询")
     #elseif(${swagger})
-    @ApiOperation(value = "分页查询")
+    @ApiOperation(value = "$!{table.comment}-分页查询")
     #else
     /**
-     * 分页查询
+     * $!{table.comment}-分页查询
      *
-     * @param dto 查询条件          
+     * @param param 查询条件          
      * @return 查询结果
      */
     #end
@@ -212,23 +212,23 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnType.toTypeString(${pageType.toTypeString(${queryResult.classSimpleName})})} ${queryPageMethodName}($!{queryBodyStr}${queryParam.classSimpleName} dto) {
+    public ${returnType.toTypeString(${pageType.toTypeString(${queryResult.classSimpleName})})} ${queryPageMethodName}($!{queryBodyStr}${queryParam.classSimpleName} param) {
         #if($sqlBooster)
-        return ${returnType.toInvokeString(${pageType.toInvokeString("baseService.${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(dto).page(dto.get${pageCapitalName}(), dto.get${sizeCapitalName}())")})};
+        return ${returnType.toInvokeString(${pageType.toInvokeString("baseService.${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(param).page(param.get${pageCapitalName}(), param.get${sizeCapitalName}())")})};
         #else
-        return ${returnType.toInvokeString(${pageType.toInvokeString("baseService.${queryPageMethodName}(dto, dto.get${pageCapitalName}(), dto.get${sizeCapitalName}())")})};
+        return ${returnType.toInvokeString(${pageType.toInvokeString("baseService.${queryPageMethodName}(param, param.get${pageCapitalName}(), param.get${sizeCapitalName}())")})};
         #end
     }
 #end
 #if(${generateExcelImport})
 
     #if(${springDoc})
-    @Operation(summary = "下载excel导入模板")
+    @Operation(summary = "$!{table.comment}-下载excel导入模板")
     #elseif(${swagger})
-    @ApiOperation(value = "下载excel导入模板")
+    @ApiOperation(value = "$!{table.comment}-下载excel导入模板")
     #else
     /**
-     * 下载excel导入模板
+     * $!{table.comment}-下载excel导入模板
      */
     #end
     @GetMapping("/excel/template")
@@ -240,12 +240,12 @@ public class ${controller.classSimpleName} {
     }
 
     #if(${springDoc})
-    @Operation(summary = "excel文件导入")
+    @Operation(summary = "$!{table.comment}-excel文件导入")
     #elseif(${swagger})
-    @ApiOperation(value = "excel文件导入")
+    @ApiOperation(value = "$!{table.comment}-excel文件导入")
     #else
     /**
-     * excel文件导入
+     * $!{table.comment}-excel文件导入
      *
      * @param excel excel文件
      * @return 导入条数
@@ -263,22 +263,22 @@ public class ${controller.classSimpleName} {
 #if(${generateExcelExport})
 
     #if(${springDoc})
-    @Operation(summary = "excel文件导出")
+    @Operation(summary = "$!{table.comment}-excel文件导出")
     #elseif(${swagger})
-    @ApiOperation(value = "excel文件导出")
+    @ApiOperation(value = "$!{table.comment}-excel文件导出")
     #else
     /**
-     * excel文件导出
+     * $!{table.comment}-excel文件导出
      * 
-     * @param dto 查询条件
+     * @param param 查询条件
      */
     #end
     ${queryRequestMapping}("/excel/export")
-    public void ${excelExportMethodName}($!{queryBodyStr}${queryParam.classSimpleName} dto, HttpServletResponse response) throws IOException {
+    public void ${excelExportMethodName}($!{queryBodyStr}${queryParam.classSimpleName} param, HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
 ##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        baseService.${excelExportMethodName}(dto, response.getOutputStream());
+        baseService.${excelExportMethodName}(param, response.getOutputStream());
     }
 #end
 }

@@ -16,7 +16,7 @@ import ${pkg};
  * $!{table.comment}
  *
  * @author ${author}
-#if(${javadocWithSeeTags})
+#if(${seeTags})
  * @see ${mapper.classCanonicalName}
  * @see ${serviceImpl.classCanonicalName}
 #end
@@ -79,8 +79,8 @@ public class ${entity.classSimpleName}#if(${serializable}) implements Serializab
     #if(${field.keyFlag})
         #if(${field.keyIdentityFlag})
     @TableId(value = "${field.columnName}", type = IdType.AUTO)
-        #elseif(!$null.isNull(${idStrategy}) && "$!idStrategy" != "")
-    @TableId(value = "${field.columnName}", type = IdType.${idStrategy})
+        #elseif(!$null.isNull(${idType}) && "$!idType" != "")
+    @TableId(value = "${field.columnName}", type = IdType.${idType})
         #elseif(${field.convert} || ${tableFieldAnnotation})
     @TableId("${field.columnName}")
         #end

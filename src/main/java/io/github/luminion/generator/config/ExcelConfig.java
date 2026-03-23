@@ -34,7 +34,7 @@ public class ExcelConfig implements TemplateRender {
      * excel导入模板方法名
      */
     @RenderField
-    private String excelImportTemplateMethodName = "excelImportTemplate";
+    private String excelImportTemplateMethodName = "excelTemplate";
     
     /**
      * excel导出方法名

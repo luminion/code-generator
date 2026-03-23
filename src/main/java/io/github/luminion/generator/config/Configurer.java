@@ -1,5 +1,6 @@
 package io.github.luminion.generator.config;
 
+import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.naming.ExtraFieldStrategy;
 import io.github.luminion.generator.datasource.support.JdbcTableInfoProvider;
 import io.github.luminion.generator.metadata.*;
@@ -101,12 +102,31 @@ public class Configurer {
             }
         }
 
-        // todo 验证数据
-        // sqlBooster父类验证
-        // mybatis-plus父类验证
-        // controllerSqlContext验证
-        // 实体类主键类型初始化
-        
+        // 逻辑处理
+        if (globalConfig.isGenerateCreate()) {
+            templateConfig.getCreateParam().setGenerate(false);
+        }
+        if (globalConfig.isGenerateUpdate()) {
+            templateConfig.getUpdateParam().setGenerate(false);
+        }
+        boolean generateQuery = globalConfig.isGenerateQueryById()
+                || globalConfig.isGenerateQueryList()
+                || globalConfig.isGenerateQueryPage()
+                || globalConfig.isGenerateExcelExport();
+        if (!generateQuery) {
+            templateConfig.getQueryParam().setGenerate(false);
+            if (!RuntimeEnv.MP_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
+                templateConfig.getQueryResult().setGenerate(false);
+            }
+        }
+        if (!globalConfig.isGenerateExcelImport()) {
+            templateConfig.getExcelImportParam().setGenerate(false);
+        }
+        if (!globalConfig.isGenerateExcelExport()) {
+            templateConfig.getExcelExportParam().setGenerate(false);
+        }
+
+
         // 渲染模板数据
         result.putAll(this.globalConfig.renderData(tableInfo));
 
@@ -124,7 +144,7 @@ public class Configurer {
         result.put("table", tableInfo);
         // 模板信息
         Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
-        result.putAll( templateFileMap);
+        result.putAll(templateFileMap);
 
 
         // 自定义扩展数据

@@ -58,8 +58,8 @@ public class GlobalBuilder {
      *
      * @return this
      */
-    public GlobalBuilder disableJavadocWithSeeTags() {
-        configurer.getGlobalConfig().setJavadocWithSeeTags(true);
+    public GlobalBuilder disableSeeTags() {
+        configurer.getGlobalConfig().setSeeTags(false);
         return this;
     }
 
@@ -94,6 +94,9 @@ public class GlobalBuilder {
      */
     public GlobalBuilder javaEEApi(JavaEEApi javaEEApi) {
         configurer.getGlobalConfig().setJavaEEApi(javaEEApi);
+        if (JavaEEApi.JAVAX.equals(javaEEApi)){
+            configurer.getGlobalConfig().setSerializableAnnotation(false);
+        }
         return this;
     }
     
@@ -113,7 +116,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder enableToString() {
-        configurer.getGlobalConfig().setLombok(false);
+        configurer.getGlobalConfig().setToString(true);
         return this;
     }
 
@@ -152,7 +155,7 @@ public class GlobalBuilder {
      *
      * @return this
      */
-    public GlobalBuilder disableGenerateCreate() {
+    public GlobalBuilder skipCreate() {
         configurer.getGlobalConfig().setGenerateCreate(false);
         return this;
     }
@@ -162,7 +165,7 @@ public class GlobalBuilder {
      *
      * @return this
      */
-    public GlobalBuilder disableGenerateUpdate() {
+    public GlobalBuilder skipUpdate() {
         configurer.getGlobalConfig().setGenerateUpdate(false);
         return this;
     }
@@ -172,7 +175,7 @@ public class GlobalBuilder {
      *
      * @return this
      */
-    public GlobalBuilder disableGenerateDelete() {
+    public GlobalBuilder skipDelete() {
         configurer.getGlobalConfig().setGenerateDelete(false);
         return this;
     }
@@ -182,7 +185,7 @@ public class GlobalBuilder {
      *
      * @return this
      */
-    public GlobalBuilder disableGenerateQueryById() {
+    public GlobalBuilder skipQueryById() {
         configurer.getGlobalConfig().setGenerateQueryById(false);
         return this;
     }
@@ -192,7 +195,7 @@ public class GlobalBuilder {
      *
      * @return this
      */
-    public GlobalBuilder disableGenerateQueryList() {
+    public GlobalBuilder skipQueryList() {
         configurer.getGlobalConfig().setGenerateQueryList(false);
         return this;
     }
@@ -202,7 +205,7 @@ public class GlobalBuilder {
      *
      * @return this
      */
-    public GlobalBuilder disableGenerateQueryPage() {
+    public GlobalBuilder skipQueryPage() {
         configurer.getGlobalConfig().setGenerateQueryPage(false);
         return this;
     }
@@ -212,7 +215,7 @@ public class GlobalBuilder {
      *
      * @return this
      */
-    public GlobalBuilder disableGenerateExcelImport() {
+    public GlobalBuilder skipExcelImport() {
         configurer.getGlobalConfig().setGenerateExcelImport(false);
         return this;
     }
@@ -222,7 +225,7 @@ public class GlobalBuilder {
      *
      * @return this
      */
-    public GlobalBuilder disableGenerateExcelExport() {
+    public GlobalBuilder skipExcelExport() {
         configurer.getGlobalConfig().setGenerateExcelExport(false);
         return this;
     }

@@ -32,12 +32,12 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     @Override
     #end
     #if(${table.idField})
-    public ${table.idField.propertyType} ${createMethodName}(${createParam.classSimpleName} dto) {
+    public ${table.idField.propertyType} ${createMethodName}(${createParam.classSimpleName} param) {
     #else
-    public void ${createMethodName}(${createParam.classSimpleName} dto) {
+    public void ${createMethodName}(${createParam.classSimpleName} param) {
     #end
         ${entity.classSimpleName} entity = new ${entity.classSimpleName}();
-        BeanUtils.copyProperties(dto, entity);
+        BeanUtils.copyProperties(param, entity);
         super.save(entity);
         #if(${table.idField})
         return entity.get${table.idField.capitalName}();
@@ -51,9 +51,9 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     #if(${service.generate})
     @Override
     #end
-    public boolean ${updateMethodName}(${updateParam.classSimpleName} dto) {
+    public boolean ${updateMethodName}(${updateParam.classSimpleName} param) {
         ${entity.classSimpleName} entity = new ${entity.classSimpleName}();
-        BeanUtils.copyProperties(dto, entity);
+        BeanUtils.copyProperties(param, entity);
         return super.updateById(entity);
     }
 #end
@@ -70,9 +70,9 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     @Override
     #end
     public ${queryResult} ${queryByIdMethodName}(${table.idField.propertyType} id) {
-        ${queryParam.classSimpleName} dto = new ${queryParam.classSimpleName}();
-        dto.set${table.idField.capitalName}(id);
-        ${queryResult} one = getBaseMapper().selectByXml(dto, null)
+        ${queryParam.classSimpleName} param = new ${queryParam.classSimpleName}();
+        param.set${table.idField.capitalName}(id);
+        ${queryResult} one = getBaseMapper().selectByXml(param, null)
                 .stream()
                 .findFirst()
                 .orElse(null);
@@ -94,9 +94,9 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     #if(${service.generate})
     @Override
     #end
-    public ${pageType.classCanonicalName}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} dto, long current, long size) {
+    public ${pageType.classCanonicalName}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} param, long current, long size) {
         Page<${queryResult}> page = new Page<>(current, size);
-        List<${queryResult}> list = getBaseMapper().selectByXml(dto, page);
+        List<${queryResult}> list = getBaseMapper().selectByXml(param, page);
         page.setRecords(list);
         return page;
     }
@@ -133,11 +133,11 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     #if(${service.generate})
     @Override
     #end
-    public void ${excelExportMethodName}(${queryParam.classSimpleName} dto, OutputStream os) {
+    public void ${excelExportMethodName}(${queryParam.classSimpleName} param, OutputStream os) {
         #if(${sqlBooster})
-        List<${queryResult}> records = ${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(dto).list();
+        List<${queryResult}> records = ${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(param).list();
         #else
-        List<${queryResult}> records = getBaseMapper().selectByXml(dto, null);
+        List<${queryResult}> records = getBaseMapper().selectByXml(param, null);
         #end
         ${excelApiClass}.write(os, ${excelExportParam.classSimpleName}.class)
                 .sheet()

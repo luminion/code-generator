@@ -24,14 +24,14 @@ public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entit
 #if(${generateCreate})
 
     #if(${table.idField})
-    ${table.idField.propertyType} ${createMethodName}(${createParam.classSimpleName} dto);
+    ${table.idField.propertyType} ${createMethodName}(${createParam.classSimpleName} param);
     #else
-    void ${createMethodName}(${createParam.classSimpleName} dto);
+    void ${createMethodName}(${createParam.classSimpleName} param);
     #end
 #end
 #if(${generateUpdate} && ${table.idField})
 
-    boolean ${updateMethodName}(${updateParam.classSimpleName} dto);
+    boolean ${updateMethodName}(${updateParam.classSimpleName} param);
 #end
 #if(${generateDelete} && ${table.idField})
 
@@ -43,11 +43,11 @@ public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entit
 #end
 #if(${generateQueryList} && !${sqlBooster})
 
-    List<${queryResult}> ${queryListMethodName}(${queryParam.classSimpleName} dto);
+    List<${queryResult}> ${queryListMethodName}(${queryParam.classSimpleName} param);
 #end
 #if(${generateQueryPage} && !${sqlBooster})
 
-    ${pageType.classCanonicalName}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} dto, long current, long size);
+    ${pageType.classCanonicalName}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} param, long current, long size);
 #end
 #if(${generateExcelImport})
 
@@ -57,7 +57,7 @@ public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entit
 #end
 #if(${generateExcelExport})
 
-    void ${excelExportMethodName}(${queryParam.classSimpleName} dto, OutputStream os);
+    void ${excelExportMethodName}(${queryParam.classSimpleName} param, OutputStream os);
 #end
 }
 

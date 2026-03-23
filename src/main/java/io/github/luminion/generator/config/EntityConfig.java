@@ -1,7 +1,7 @@
 package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.annotation.RenderField;
-import io.github.luminion.generator.enums.IdStrategy;
+import io.github.luminion.generator.enums.IdType;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.metadata.TableField;
 import io.github.luminion.generator.metadata.TableInfo;
@@ -28,7 +28,7 @@ public class EntityConfig implements TemplateRender {
      * 指定生成的主键的ID类型
      */
     @RenderField
-    protected IdStrategy idType = IdStrategy.AUTO;
+    protected IdType idType = IdType.AUTO;
 
     /**
      * 开启 ActiveRecord 模式

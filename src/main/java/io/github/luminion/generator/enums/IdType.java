@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
  * @since 1.0.0
  */
 @RequiredArgsConstructor
-public enum IdStrategy {
+public enum IdType {
     /**
      * 数据库ID自增
      * <p>该类型请确保数据库设置了 ID自增 否则无效</p>

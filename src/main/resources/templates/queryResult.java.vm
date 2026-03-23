@@ -16,7 +16,7 @@ import ${pkg};
  * $!{table.comment}-查询返回对象
  *
  * @author ${author}
-#if(${javadocWithSeeTags})
+#if(${seeTags})
  * @see ${entity.classCanonicalName}
  * @see ${mapper.classCanonicalName}
  * @see ${serviceImpl.classCanonicalName}

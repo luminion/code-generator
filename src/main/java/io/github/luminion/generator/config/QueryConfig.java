@@ -64,6 +64,11 @@ public class QueryConfig implements TemplateRender {
     private String sizeParamName = "size";
 
     /**
+     * 查询参数-分页字段
+     */
+    private boolean queryParamPageFields = true;
+
+    /**
      * 查询dto父类全限定名
      */
     private String queryParamSuperClass;

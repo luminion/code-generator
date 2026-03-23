@@ -133,7 +133,7 @@ public abstract class InitializeUtils {
 
     public static void initializeMybatisPlus(Configurer configurer) {
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PLUS);
-        configurer.getEntityConfig().setIdType(IdStrategy.ASSIGN_ID);
+        configurer.getEntityConfig().setIdType(IdType.ASSIGN_ID);
         configurer.getDataSourceConfig().setVersionColumnName("version");
         configurer.getDataSourceConfig().setLogicDeleteColumnName("deleted");
         configurer.getServiceConfig().setServiceSuperClass(RuntimeClass.MYBATIS_PLUS_I_SERVICE.getCanonicalName());

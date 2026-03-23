@@ -16,7 +16,7 @@ import ${pkg};
  * $!{table.comment}-查询条件对象
  *
  * @author ${author}
-#if(${javadocWithSeeTags})
+#if(${seeTags})
  * @see ${entity.classCanonicalName}
  * @see ${mapper.classCanonicalName}
  * @see ${serviceImpl.classCanonicalName}
@@ -48,7 +48,7 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
     #end
     private static final long serialVersionUID = 1L;
 #end
-#if(!${queryParamSuperClass})
+#if(!${queryParamSuperClass} && !${queryParamPageFields})
 
     #if(${springDoc})
     @Schema(description = "当前页码")
@@ -106,6 +106,38 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
     #end
     private ${field.propertyType} ${field.propertyName};
 #end
+#if(!${lombok} && !${queryParamSuperClass} && !${queryParamPageFields})
+
+    public Long get${pageCapitalName}() {
+        return this.${pageParamName};
+    }
+
+    #if(${chainSetter})
+    public ${queryParam.classSimpleName} set${pageCapitalName}(Long ${pageParamName}) {
+    #else
+    public void set${pageCapitalName}(Long ${pageParamName}) {
+    #end
+        this.${pageParamName} = ${pageParamName};
+    #if(${chainSetter})
+        return this;
+    #end
+    }
+
+    public Long get${sizeCapitalName}() {
+        return this.${sizeParamName};
+    }
+
+    #if(${chainSetter})
+    public ${queryParam.classSimpleName} set${sizeCapitalName}(Long ${sizeParamName}) {
+    #else
+    public void set${sizeCapitalName}(Long ${sizeParamName}) {
+    #end
+        this.${sizeParamName} = ${sizeParamName};
+    #if(${chainSetter})
+        return this;
+    #end
+    }
+#end
 ## --基础getter/setter start--
 #if(!${lombok})
     
@@ -137,38 +169,8 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
 #end
 #end
 ## --基础getter/setter end---
-## --额外字段getter/setter start--
 #if(!${lombok})
-    
-    public Long get${pageCapitalName}() {
-        return this.${pageParamName};
-    }
-
-    #if(${chainSetter})
-    public ${queryParam.classSimpleName} set${pageCapitalName}(Long ${pageParamName}) {
-    #else
-    public void set${pageCapitalName}(Long ${pageParamName}) {
-    #end
-        this.${pageParamName} = ${pageParamName};
-    #if(${chainSetter})
-        return this;
-    #end
-    }
-
-    public Long get${sizeCapitalName}() {
-        return this.${sizeParamName};
-    }
-
-    #if(${chainSetter})
-    public ${queryParam.classSimpleName} set${sizeCapitalName}(Long ${sizeParamName}) {
-    #else
-    public void set${sizeCapitalName}(Long ${sizeParamName}) {
-    #end
-        this.${sizeParamName} = ${sizeParamName};
-    #if(${chainSetter})
-        return this;
-    #end
-    }
+## --额外字段getter/setter start--
 #foreach($field in ${table.extraFields})
 
     #if(${field.propertyType.equals("boolean")})

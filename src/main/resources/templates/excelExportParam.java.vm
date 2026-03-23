@@ -16,7 +16,7 @@ import ${pkg};
  * $!{table.comment}-Excel导出对象
  *
  * @author ${author}
-#if(${javadocWithSeeTags})
+#if(${seeTags})
  * @see ${entity.classCanonicalName}
  * @see ${serviceImpl.classCanonicalName}
 #end

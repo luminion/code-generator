@@ -2,7 +2,7 @@ package io.github.luminion.generator.builder;
 
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.ColumnFillStrategy;
-import io.github.luminion.generator.enums.IdStrategy;
+import io.github.luminion.generator.enums.IdType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -34,8 +34,8 @@ public class EntityBuilder {
     /**
      * 主键生成策略
      */
-    public EntityBuilder idStrategy(IdStrategy idStrategy) {
-        configurer.getEntityConfig().setIdType(idStrategy);
+    public EntityBuilder idType(IdType idType) {
+        configurer.getEntityConfig().setIdType(idType);
         return this;
     }
 
