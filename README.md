@@ -3,20 +3,21 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/code-generator)](https://mvnrepository.com/artifact/io.github.luminion/code-generator)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-一个代码生成器, 用于快速生成代码, 提升开发效率
+一个基于Lambda 表达式风格的代码生成器，采用链式调用配置方式，用于快速生成代码。
+支持生成实体类、Mapper、Service、Controller、DTO、Query 参数等完整的后端代码。
 
 旧版地址: https://github.com/bootystar/mybatis-plus-generator
 
 ## 功能特性
 
-- **基础代码生成**：生成实体类、Mapper、Service、Controller 等基础代码
-- **领域模型生成**：支持生成`新增DTO`、`修改DTO`、`查询DTO`、`查询VO`、`EXCEL导入DTO`、`EXCEL导出DTO` 等领域模型
+- **基础代码生成**：生成`Entity`、`Mapper`、`Service`、`Controller` 等基础代码
+- **领域模型生成**：支持生成`新增DTO、`修改DTO`、`查询DTO`、`查询VO`、`EXCEL导入DTO`、`EXCEL导出DTO` 等领域模型
 - **CRUD方法生成**：生成增删查改方法
 - **参数校验**：生成参数校验相关注解
 - **快捷查询** xml默认生成绝大多数场景的sql查询, 并封装了dto供前端调用, 无需手动编写
-- **Excel导入导出**：支持生成Excel导入导出相关代码，支持`EasyExcel`/`FastExcel`
+- **Excel导入导出**：支持生成Excel导入导出相关代码，支持`EasyExcel`/`FastExcel`/`Apache Fesod`
 - **多配置集成**：提供多种配置, 适配各种场景格式
-- **多种数据库支持**：支持 MySQL、PostgreSQL、Oracle等主流数据库
+- **多种数据库支持**：支持 MySQL、PostgreSQL等主流数据库
 - **模板引擎支持**：使用 Velocity 模板引擎，支持自定义模板
 - **链式调用**：提供链式调用的配置方式
 - **自定义扩展**:支持自定义模板及参数扩展
@@ -24,25 +25,9 @@
 
 ---
 
-## 准备工作
+## maven仓库
 
-### 1. 添加生成器依赖
-
-首先, 在您的项目中添加 `code-generator` 的依赖。由于它是一个开发工具, 通常建议将其放在 `test` 或 `provided` 作用域下。
-
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/code-generator)](https://mvnrepository.com/artifact/io.github.luminion/code-generator)
-
-```xml
-<dependency>
-    <groupId>io.github.luminion</groupId>
-    <artifactId>code-generator</artifactId>
-    <version>latest</version>
-    <scope>test</scope> <!-- Or <scope>provided</scope> -->
-</dependency>
-```
-
-目前暂未release, 可添加maven中央快照仓库(可能需网络代理)获取快照版本
-
+可添加maven中央快照仓库(可能需网络代理)获取快照版本
 
 ```xml
 
@@ -67,249 +52,451 @@
         <version>1.0.0-SNAPSHOT</version>
     </dependency>
 </dependencies>
-
 ```
-
-
-### 2. 添加数据库驱动
-
-接下来, 请确保您的项目中包含了所需要的数据库驱动。
-
-```xml
-
-<!-- MySQL Connector (请根据您的数据库选择) -->
-<dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>latest</version>
-</dependency>
-```
-
----
 
 ## 快速开始
 
-完成上述准备工作后, 您可以在一个测试类或 `main` 方法中使用 `GeneratorHelper` 来生成代码,
-代码默认会生成到运行所在项目的`src/main/java`目录下, 可通过以下控制台输出确认生成文件路径
+### 1. 添加依赖
 
-```java
-    public static void main(String[] args) {
-        GeneratorHelper.mybatisPlus("jdbc:mysql://localhost:3306/your_database",
-                        "username",
-                        "password")
-                .execute("user", "role");
-    }
-```
-```text
-Connected to the target VM, address: '127.0.0.1:49687', transport: 'socket'
-  _________                                        
- /   _____/__ __   ____  ____  ____   ______ ______
- \_____  \|  |  \_/ ___\/ ___\/ __ \ /  ___//  ___/
- /        \  |  /\  \__\  \__\  ___/ \___ \ \___ \ 
-/_______  /____/  \___  >___  >___  >____  >____  >
-        \/            \/    \/    \/     \/     \/ 
-(ﾉ>ω<)ﾉ  Code generation complete! Let's start coding ~
-
-generated file output dir:
-D:\Project\github\luminion\demo-test\generator-test-sp3\src\main\java
-Disconnected from the target VM, address: '127.0.0.1:49687', transport: 'socket'
-```
-
-可以通过链式表达, 自定义配置内容, 具体可用配置方法见
-[配置说明](#配置说明)
-
-```java
-    public static void main(String[] args) {
-        GeneratorHelper.mybatisPlus("jdbc:mysql://localhost:3306/your_database",
-                        "username",
-                        "password") // 创建mybatisPlus的生成器
-                .global(e -> e.outputDir("D:\\Project\\src\\main\\java")//输出目录
-                                .author("luminion") // 作者
-                                .docType(DocType.SWAGGER_V3) // 文档类型(支持javadoc, swaggerV2, swaggerV3)
-                        )// 全局配置
-                .injection(e->e) // 注入配置
-                .strategy(e->e)// 策略配置
-                .special(e->e)// 特殊配置(配置内容具体取决于创建的生成器, 比如mybatisPlus相关配置)
-                .controller(e->e)// controller配置
-                .service(e->e)// service配置
-                .serviceImpl(e->e)// serviceImpl配置
-                .mapper(e->e)// mapper配置
-                .mapperXml(e->e)// mapper.xml配置
-                .createDTO(e->e)// 创建入参DTO配置
-                .updateDTO(e->e)// 修改入参DTO配置
-                .queryDTO(e->e)// 查询入参DTO配置
-                .queryVO(e->e)// 查询返回值VO配置
-                .importDTO(e->e)// Excel导入入参DTO配置
-                .exportDTO(e->e)// Excel导出返回值VO配置
-                .execute("user", "role"); // 需要生成的表
-    }
-```
-
----
-
-## SQL-Booster 集成
-
-`code-generator` 同样支持与 `SQL-Booster` 集成, 以生成更强大的 SQL 查询能力。
-
-如果使用此功能, 请确保在项目中添加 `sql-booster` 依赖:
-
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/sql-booster)](https://mvnrepository.com/artifact/io.github.luminion/sql-booster)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/code-generator)](https://mvnrepository.com/artifact/io.github.luminion/code-generator)
 
 ```xml
 <dependency>
     <groupId>io.github.luminion</groupId>
-    <artifactId>sql-booster</artifactId>
+    <artifactId>code-generator</artifactId>
     <version>latest</version>
+    <scope>test</scope>
+</dependency>
+
+<!-- MySQL Connector (请根据您的数据库选择) -->
+<dependency>
+<groupId>mysql</groupId>
+<artifactId>mysql-connector-java</artifactId>
+<version>latest</version>
 </dependency>
 ```
 
-**使用示例:**
+## 生成代码
+
 ```java
-public class GeneratorTest {
-    public static void main(String[] args) {
-        // 使用mybatisPlusBooster()方法, 创建一个MyBatis-Plus和SQL-Booster结合的代码生成器
-        GeneratorHelper.mybatisPlusBooster("jdbc:mysql://localhost:3306/your_database",
-                        "username", 
-                        "password")
-                .execute("user", "role");
-    }
+import io.github.luminion.generator.GeneratorHelper;
+
+public static void main(String[] args) {
+    GeneratorHelper.mybatisPlus("jdbc:mysql://localhost:3306/your_database",
+                    "username",
+                    "password")
+            .execute("user", "role");
 }
+```
+代码默认会生成到运行所在项目的`src/main/java`目录下, 可通过以下控制台输出确认生成文件路径
+
+
+
+## SQL-Booster 集成
+使用 `GeneratorHelper.mybatisPlusSqlBooster`, 生成sql-booster相关代码
+```java
+import io.github.luminion.generator.GeneratorHelper;
+
+public static void main(String[] args) {
+    GeneratorHelper.mybatisPlusSqlBooster("jdbc:mysql://localhost:3306/your_database",
+                    "username",
+                    "password")
+            .execute("user", "role");
+}
+```
+
+
+### 可选配置
+
+```java
+public static void main(String[] args) {
+    GeneratorHelper.mybatisPlus(
+                    "jdbc:mysql://localhost:3306/your_database",
+                    "username",
+                    "password"
+            )
+            .global(g -> g
+                    .author("luminion")
+                    .date("yyyy-MM-dd")
+                    .docType(DocType.SPRING_DOC)
+                    .javaEEApi(JavaEEApi.JAKARTA)
+                    .disableLombok()
+                    .enableChainSetter()
+                    .enableToString()
+                    .disableSerializable()
+                    .skipQueryPage()
+                    .skipExcelImport()
+            )
+            .dataSource(d -> d
+                    .schema("public")
+                    .dateType(DateType.TIME_PACK)
+                    .namingConverter(NamingConverter.UNDERLINE_TO_CAMEL)
+                    .enableSKipView()
+                    .enableBooleanColumnRemoveIsPrefix()
+                    .includeTables("user", "role")
+                    .excludeTables("sys_log")
+                    .tablePrefixes("sys_", "tbl_")
+                    .tableSuffixes("_tb")
+                    .columnPrefixes("f_")
+                    .columnSuffixes("_flag")
+                    .commonColumns("create_time", "update_time")
+                    .ignoreColumns("deleted")
+            )
+            .template(t -> t
+                    .outputDir("D:\\Project\\src\\main\\java")
+                    .parentPackage("com.example.project")
+                    .parentModule("module-name")
+                    .enableFileOverride()
+            )
+            .entity(e -> e
+                    .idType(IdType.ASSIGN_ID)
+                    .enableActiveRecord()
+                    .enableTableFieldAnnotation()
+                    .versionColumnName("version")
+                    .logicDeleteColumnName("deleted")
+                    .columnFill("create_time", ColumnFillStrategy.INSERT)
+                    .columnFill("update_time", ColumnFillStrategy.INSERT_UPDATE)
+            )
+            .service(s -> s
+                    .serviceSuperClass("com.example.base.BaseService")
+                    .serviceImplSuperClass("com.example.base.BaseServiceImpl")
+            )
+            .mapper(m -> m
+                    .superClass("com.example.base.BaseMapper")
+                    .mapperAnnotationClass("org.apache.ibatis.annotations.Mapper")
+                    .enableBaseColumnList()
+                    .enableBaseResultMap()
+                    .appendOrderColumn("sort", true)
+            )
+            .controller(c -> c
+                    .superClass("com.example.base.BaseController")
+                    .baseUrl("/api/v1")
+                    .enableRestful()
+                    .enableCrossOrigin()
+                    .disablePathVariable()
+                    .disableRequestBody()
+                    .enableQueryViaPost()
+                    .returnMethod("com.example.common.Result", "Result<%s>", "Result::success")
+                    .pageMethod("com.example.common.PageResult", "PageResult<%s>", "PageResult::success")
+            )
+            .command(cmd -> cmd
+                    .disableValid()
+                    .createMethodName("create")
+                    .updateMethodName("update")
+                    .deleteMethodName("delete")
+                    .excludeColumns("create_time", "create_by")
+            )
+            .query(q -> q
+                    .queryByIdMethodName("getById")
+                    .queryListMethodName("list")
+                    .queryPageMethodName("page")
+                    .appendExtraFieldSuffix("Like", "LIKE")
+                    .appendExtraFieldSuffix("In", "IN")
+                    .pageParamName("page")
+                    .sizeParamName("size")
+                    .queryParamSuperClass("com.example.common.PageQuery")
+                    .queryResultSuperClass("com.example.common.PageResult")
+            )
+            .excel(ex -> ex
+                    .api(ExcelApi.EASY_EXCEL)
+                    .excelImportMethodName("importExcel")
+                    .excelExportMethodName("exportExcel")
+            )
+            .execute("user", "role");
+}
+```
+## 配置详解
+
+### global() 全局配置
+
+| 方法 | 类型 | 说明 |
+|------|------|------|
+| `author(String)` | String | 文档作者 |
+| `date(String)` | String | 注释日期格式，默认 "yyyy-MM-dd" |
+| `docType(DocType)` | DocType | 文档类型：JAVA_DOC, SWAGGER, SPRING_DOC |
+| `javaEEApi(JavaEEApi)` | JavaEEApi | Java EE 框架：JAVAX (javax.*), JAKARTA (jakarta.*) |
+| `disableLombok()` | - | 禁用 Lombok 模型 |
+| `enableChainSetter()` | - | 启用链式 setter |
+| `enableToString()` | - | 启用 toString 方法 |
+| `disableSerializable()` | - | 禁用 Serializable 接口 |
+| `disableSerializableAnnotation()` | - | 禁用 @Serial 注解 |
+| `skipCreate()` | - | 禁用生成新增方法 |
+| `skipUpdate()` | - | 禁用生成更新方法 |
+| `skipDelete()` | - | 禁用生成删除方法 |
+| `skipQueryById()` | - | 禁用生成 ID 查询方法 |
+| `skipQueryList()` | - | 禁用生成列表查询方法 |
+| `skipQueryPage()` | - | 禁用生成分页查询方法 |
+| `skipExcelImport()` | - | 禁用生成 Excel 导入 |
+| `skipExcelExport()` | - | 禁用生成 Excel 导出 |
+| `disableSeeTags()` | - | 关闭文档注释中的 @see 链接 |
+| `customRenderData(Map)` | Map<String, Object> | 自定义渲染数据 |
+| `customRenderLogic(BiConsumer)` | BiConsumer<TableInfo, Map> | 自定义渲染逻辑 |
+
+---
+
+### dataSource() 数据源配置
+
+| 方法 | 类型 | 说明 |
+|------|------|------|
+| `schema(String)` | String | 数据库 schema |
+| `dateType(DateType)` | DateType | 日期类型：ONLY_DATE, SQL_PACK, TIME_PACK |
+| `namingConverter(NamingConverter)` | NamingConverter | 命名转换器 |
+| `fieldTypeConverter(FieldTypeConverter)` | FieldTypeConverter | 字段类型转换器 |
+| `keywordsHandler(DatabaseKeywordsHandler)` | DatabaseKeywordsHandler | 数据库关键字处理器 |
+| `enableSKipView()` | - | 跳过视图 |
+| `enableBooleanColumnRemoveIsPrefix()` | - | 移除 Boolean 字段的 is 前缀 |
+| `tableNamePattern(String)` | String | 表名匹配模式（需自行拼接 %） |
+| `includeTables(String.../Collection)` | - | 指定包含的表 |
+| `excludeTables(String.../Collection)` | - | 指定排除的表 |
+| `tablePrefixes(String.../Collection)` | - | 表名前缀过滤 |
+| `tableSuffixes(String.../Collection)` | - | 表名后缀过滤 |
+| `columnPrefixes(String.../Collection)` | - | 字段前缀过滤 |
+| `columnSuffixes(String.../Collection)` | - | 字段后缀过滤 |
+| `commonColumns(String.../Collection)` | - | 公共字段（父类共有） |
+| `ignoreColumns(String.../Collection)` | - | 忽略字段 |
+
+---
+
+### template() 模板配置
+
+| 方法 | 类型 | 说明 |
+|------|------|------|
+| `outputDir(String)` | String | 输出目录 |
+| `parentPackage(String)` | String | 父包名 |
+| `parentModule(String)` | String | 父模块名 |
+| `enableOpenOutputDir()` | - | 生成后打开输出目录 |
+| `enableFileOverride()` | - | 启用文件覆盖 |
+
+#### template() 子配置
+
+配置各模板文件的通用内容, 包含以下模板文件: 
+- controller
+- service
+- serviceImpl
+- mapper
+- mapperXml
+- entity
+- queryParam
+- queryResult
+- createParam
+- updateParam
+- excelExportParam
+- excelImportParam
+
+```java
+.template(t -> t
+    .entity(e -> e
+        .nameFormat("%sEntity")
+        .subPackage("model.entity")
+        .templatePath("/templates/entity.java")
+        .outputFileSuffix(".java")
+        .enalbeFileOverride()
+        .disable()
+    )
+)
+```
+
+| 方法                            | 类型     | 说明                   |
+|-------------------------------|--------|----------------------|
+| `nameFormat(String)`          | String | 文件名格式，如 "%sEntity"   |
+| `subPackage(String)`          | String | 子包名                  |
+| `templatePath(String)`        | String | 模板路径（classpath 相对路径） |
+| `outputFileSuffix(String)`    | String | 输出文件后缀               |
+| `enableFileOverride()` | -      | 是否覆盖已有文件             |
+| `disable()`                   | -      | 禁止生成该文件              |
+| `fileOutputDir(String)`       | String | 单独指定输出目录             |
+
+---
+
+### entity() 实体配置
+
+| 方法 | 类型 | 说明 |
+|------|------|------|
+| `superClass(String)` | String | 实体父类（全限定名） |
+| `idType(IdType)` | IdType | 主键生成策略：AUTO, NONE, INPUT, ASSIGN_ID, ASSIGN_UUID |
+| `enableActiveRecord()` | - | 启用 ActiveRecord 模式 |
+| `enableTableFieldAnnotation()` | - | 生成字段注解 |
+| `versionColumnName(String)` | String | 乐观锁字段名 |
+| `logicDeleteColumnName(String)` | String | 逻辑删除字段名 |
+| `columnFill(String, ColumnFillStrategy)` | - | 自动填充配置 |
+| `columnFill(Map)` | - | 批量自动填充配置 |
+
+**ColumnFillStrategy**：
+- `DEFAULT` - 默认不处理
+- `INSERT` - 插入时填充
+- `UPDATE` - 更新时填充
+- `INSERT_UPDATE` - 插入和更新时填充
+
+---
+
+### service() 服务配置
+
+| 方法 | 类型 | 说明 |
+|------|------|------|
+| `serviceSuperClass(String/Class)` | - | Service 接口父类 |
+| `serviceImplSuperClass(String/Class)` | - | ServiceImpl 父类 |
+
+---
+
+### mapper() 配置
+
+| 方法 | 类型 | 说明 |
+|------|------|------|
+| `superClass(String)` | String | Mapper 父类 |
+| `mapperAnnotationClass(String)` | String | Mapper 注解类 |
+| `enableBaseColumnList()` | - | 启用 Base_Column_List |
+| `enableBaseResultMap()` | - | 启用 BaseResultMap |
+| `mapperCacheClass(String)` | String | Mapper 缓存类 |
+| `appendOrderColumn(String, boolean)` | - | 添加排序字段 |
+| `orderColumnMap(Map)` | - | 批量配置排序字段 |
+
+---
+
+### controller() 配置
+
+| 方法 | 类型 | 说明 |
+|------|------|------|
+| `superClass(String/Class)` | - | Controller 父类 |
+| `baseUrl(String)` | String | 请求前缀 |
+| `disableRestController()` | - | 使用 @Controller 而非 @RestController |
+| `disableHyphenStyle()` | - | 禁用驼峰转连字符 |
+| `enableCrossOrigin()` | - | 启用 @CrossOrigin |
+| `enableRestful()` | - | 启用 RESTful 风格 |
+| `disablePathVariable()` | - | 禁用 @PathVariable |
+| `disableRequestBody()` | - | 禁用 @RequestBody |
+| `enableQueryViaPost()` | - | 查询使用 POST |
+| `returnMethod(MethodReference/String...)` | - | 返回值包装方法 |
+| `pageMethod(MethodReference/String...)` | - | 分页包装方法 |
+
+**returnMethod 示例**：
+```java
+.returnMethod("com.example.Result", "Result<%s>", "Result::success")
+// 或使用 Lambda
+.returnMethod(Result::success)
 ```
 
 ---
 
-## 配置说明
+### command() 配置（增删改）
 
-### `global()`全局配置
-
-| 配置方法                              | 参数类型 | 详细说明 |
-|-----------------------------------|---|---|
-| `lombok(boolean)`                 | `boolean` | 启用/禁用 lombok 模型 |
-| `chainModel(boolean)`             | `boolean` | 启用/禁用链式 setter |
-| `serializableUID(boolean)`        | `boolean` | 添加序列化 UID |
-| `serializableAnnotation(boolean)` | `boolean` | 添加 `@Serial` 注解 (需要 JDK 14+) |
-| `docType(DocType)`                | `DocType` | 配置文档类型 (例如: `DocType.SWAGGER`) |
-| `docLink(boolean)`                | `boolean` | 在文档注释中添加相关类链接 |
-| `author(String)`                  | `String` | 设置文档作者 |
-| `date(String)`                    | `String` | 指定注释日期格式 (例如: "yyyy-MM-dd") |
-| `javaEEApi(JavaEEApi)`            | `JavaEEApi` | 设置 Java EE 框架 (例如: `JavaEEApi.JAKARTA`) |
-| `excelApi(ExcelApi)`              | `ExcelApi` | 设置 Excel 框架 (例如: `ExcelApi.EASY_EXCEL`) |
-| `outputDir(String)`               | `String` | 设置输出根目录 (全路径) |
-| `openOutputDir(boolean)`          | `boolean` | 生成后是否打开输出目录 |
-| `fileOverride(boolean)`           | `boolean` | 是否覆盖已有文件 (全局) |
-| `parentPackage(String)`           | `String` | 设置父包名 |
-| `parentPackageModule(String)`     | `String` | 设置父包模块名 |
-| `validated(boolean)`              | `boolean` | 是否生成参数校验相关注解 |
-| `generateInsert(boolean)`         | `boolean` | 是否生成新增方法 |
-| `generateUpdate(boolean)`         | `boolean` | 是否生成更新方法 |
-| `generateDelete(boolean)`         | `boolean` | 是否生成删除方法 |
-| `generateVoById(boolean)`         | `boolean` | 是否生成查询方法 |
-| `generateVoList(boolean)`         | `boolean` | 是否生成查询方法 |
-| `generateVoPage(boolean)`         | `boolean` | 是否生成查询方法 |
-| `generateImport(boolean)`         | `boolean` | 是否生成导入方法 |
-| `generateExport(boolean)`         | `boolean` | 是否生成导出方法 |
-
-### `strategy()`策略配置
-
-| 配置方法 | 参数类型 | 详细说明 |
-|---|---|---|
-| `namingConverter(NameConverter)` | `NameConverter` | 数据库表/字段名转实体属性名策略 |
-| `fieldTypeConverter(JavaFieldProvider)` | `JavaFieldProvider` | 数据库类型转 Java 类型策略 |
-| `keyWordsHandler(DatabaseKeywordsHandler)` | `DatabaseKeywordsHandler` | 数据库关键字处理器 |
-| `dateType(DateType)` | `DateType` | 设置时间类型 |
-| `booleanColumnRemoveIsPrefix(boolean)` | `boolean` | 是否移除 Boolean 类型字段的 'is' 前缀 |
-| `superEntityColumns(String...)` | `String...` | 添加父类公共字段 |
-| `ignoreColumns(String...)` | `String...` | 添加忽略字段 |
-| `skipView(boolean)` | `boolean` | 是否跳过视图 |
-| `tableNamePattern(String)` | `String` | 表名匹配 (正则表达式) |
-| `tablePrefix(String...)` | `String...` | 添加表前缀 |
-| `tableSuffix(String...)` | `String...` | 添加表后缀 |
-| `fieldPrefix(String...)` | `String...` | 添加字段前缀 |
-| `fieldSuffix(String...)` | `String...` | 添加字段后缀 |
-| `include(String...)` | `String...` | 添加包含的表 |
-| `exclude(String...)` | `String...` | 添加排除的表 |
-| `editExcludeColumn(String...)` | `String...` | 添加编辑时排除的字段 |
-| `editExcludeColumnsClear()` | - | 清空编辑时排除的字段 |
-| `extraFieldSuffix(String, String)` | `String`, `String` | 添加额外字段后缀 (例如: `extraFieldSuffix("Like", "LIKE")`) |
-| `extraFieldSuffix(Map<String, String>)` | `Map<String, String>` | 批量添加额外字段后缀 |
-| `clearExtraFieldSuffix()` | - | 清空额外字段后缀 |
-| `extraFieldStrategy(ExtraFieldProvider)` | `ExtraFieldProvider` | 自定义额外字段提供者 |
-
-
-### `injection()`注入配置
-
-| 配置方法                                                 | 参数类型                                       | 详细说明                                                     |
-| -------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------ |
-| `beforeGenerate(BiConsumer<TableInfo, Map<String, Object>>)` | `BiConsumer<TableInfo, Map<String, Object>>` | 在生成文件之前的操作, 可通过此方法添加一些自定义操作<br />其中 tableInfo是数据库表信息<br />Map<String, Object> 是最终模板使用的参数集合 |
-| `customMap(Map<String, Object>)`                         | `Map<String, Object>`                          | 添加自定义参数                                               |
-| `addCustomFiles(TemplateFile...)`                        | `TemplateFile...`                              | 添加自定义模板文件                                           |
-
-
-
-
-### 模型配置
-
-所有模型配置都支持以下通用方法:
-
-| 配置方法                    | 参数类型      | 详细说明                              |
-|-------------------------|-----------|-----------------------------------|
-| `nameFormat(String)`    | `String`  | 名称格式化 (例如: `%sEntity`)            |
-| `subPackage(String)`    | `String`  | 模板文件子包名                           |
-| `templatePath(String)`  | `String`  | 模板文件路径 (classpath 相对路径)           |
-| `outputDir(String)`     | `String`  | 输出文件路径 (全路径), 不配置时默认值为全局路径+包名+子包名 |
-| `fileOverride(boolean)` | `boolean` | 生成时覆盖已存在的文件                       |
-| `generate(boolean)`     | `boolean` | 是否生成该文件                           |
-
-#### `entity()` 配置
-
-| 配置方法 | 参数类型 | 详细说明 |
-|---|---|---|
-| `superClass(String)` | `String` | 自定义继承的 Entity 类 (全限定名) |
-
-#### `mapper()` 配置
-
-| 配置方法 | 参数类型 | 详细说明 |
-|---|---|---|
-| `superClass(String)` | `String` | 自定义继承的 Mapper 类 (全限定名) |
-| `mapperAnnotationClass(String)` | `String` | Mapper 标记注解 (全限定名) |
-
-#### `service()` 配置
-
-| 配置方法 | 参数类型 | 详细说明 |
-|---|---|---|
-| `superClass(String)` | `String` | 自定义继承的 Service 接口 (全限定名) |
-
-#### `ServiceImpl` 配置
-
-| 配置方法 | 参数类型 | 详细说明 |
-|---|---|---|
-| `superClass(String)` | `String` | 自定义继承的 ServiceImpl 类 (全限定名) |
-
-#### `controller()` 配置
-
-| 配置方法 | 参数类型 | 详细说明 |
-|---|---|---|
-| `superClass(String)` | `String` | 自定义继承的 Controller 类 (全限定名) |
-| `restStyle(boolean)` | `boolean` | 是否生成 Restful 风格的 Controller |
-| `crossOrigin(boolean)` | `boolean` | 是否添加 `@CrossOrigin` 注解 |
-| `requestBody(boolean)` | `boolean` | 是否使用 `@RequestBody` 接收参数 |
-| `pathVariable(boolean)` | `boolean` | 是否使用 `@PathVariable` |
-| `hyphenStyle(boolean)` | `boolean` | 是否开启驼峰转连字符 |
-| `baseUrl(String)` | `String` | Controller 请求前缀 |
+| 方法 | 类型 | 说明 |
+|------|------|------|
+| `disableValid()` | - | 禁用参数校验 |
+| `createMethodName(String)` | String | 新增方法名 |
+| `updateMethodName(String)` | String | 更新方法名 |
+| `deleteMethodName(String)` | String | 删除方法名 |
+| `excludeColumns(String.../Collection)` | - | 新增/更新时排除的字段 |
 
 ---
 
-### `special()`特殊配置
-该配置内容根据不同生成器而异
+### query() 查询配置
 
-| 配置方法 | 参数类型 | 详细说明 |
-|---|---|---|
-| `entityActiveRecord(boolean)` | `boolean` | 开启 ActiveRecord 模式 |
-| `entityTableFieldAnnotation(boolean)` | `boolean` | 生成实体时, 生成字段注解 |
-| `strategyIdType(IdType)` | `IdType` | 全局主键类型 |
-| `strategyVersionColumnName(String)` | `String` | 乐观锁字段名 |
-| `strategyLogicDeleteColumnName(String)` | `String` | 逻辑删除字段名 |
-| `strategyTableFills(IFill...)` | `IFill...` | 添加表填充字段 |
+| 方法 | 类型 | 说明 |
+|------|------|------|
+| `queryByIdMethodName(String)` | String | 按 ID 查询方法名 |
+| `queryListMethodName(String)` | String | 列表查询方法名 |
+| `queryPageMethodName(String)` | String | 分页查询方法名 |
+| `appendExtraFieldSuffix(String, String)` | - | 添加额外字段后缀（如 "Like" -> "LIKE"） |
+| `extraFieldSuffixMap(Map)` | - | 批量配置额外字段后缀 |
+| `extraFieldStrategy(ExtraFieldStrategy)` | - | 额外字段策略 |
+| `pageParamName(String)` | String | 分页参数名 |
+| `sizeParamName(String)` | String | 每页大小参数名 |
+| `pageSizeParam(MethodReference, MethodReference)` | - | Lambda 方式设置分页参数 |
+| `disableQueryParamPageFields()` | - | 禁用 QueryParam 中的分页字段 |
+| `queryParamSuperClass(String/Class)` | - | QueryParam 父类 |
+| `queryResultSuperClass(String/Class)` | - | QueryResult 父类 |
+
+---
+
+### excel() 配置
+
+| 方法 | 类型 | 说明 |
+|------|------|------|
+| `api(ExcelApi)` | ExcelApi | Excel 框架：EASY_EXCEL, FAST_EXCEL, APACHE_FESOD |
+| `excelImportMethodName(String)` | String | 导入方法名 |
+| `excelImportTemplateMethodName(String)` | String | 导入模板方法名 |
+| `excelExportMethodName(String)` | String | 导出方法名 |
+
+---
+
+## 枚举说明
+
+### DocType
+| 枚举值 | 说明 |
+|--------|------|
+| `JAVA_DOC` | 标准 JavaDoc |
+| `SWAGGER` | Spring Fox (Swagger v2) |
+| `SPRING_DOC` | Spring Doc (Swagger v3) |
+
+### JavaEEApi
+| 枚举值 | 说明 |
+|--------|------|
+| `JAVAX` | javax.* 包（传统 Java EE） |
+| `JAKARTA` | jakarta.* 包（Spring Boot 3.0+） |
+
+### DateType
+| 枚举值 | 说明 |
+|--------|------|
+| `ONLY_DATE` | 仅使用 java.util.Date |
+| `SQL_PACK` | 使用 java.sql 包 |
+| `TIME_PACK` | 使用 java.time 包（JDK8+） |
+
+### IdType
+| 枚举值 | 说明 |
+|--------|------|
+| `AUTO` | 数据库自增 |
+| `NONE` | 未设置 |
+| `INPUT` | 用户输入 |
+| `ASSIGN_ID` | 雪花算法（默认） |
+| `ASSIGN_UUID` | UUID |
+
+### ExcelApi
+| 枚举值 | 说明 |
+|--------|------|
+| `EASY_EXCEL` | Alibaba EasyExcel |
+| `FAST_EXCEL` | FastExcel |
+| `APACHE_FESOD` | Apache Fesod |
+
+### NamingConverter
+| 枚举值 | 说明 |
+|--------|------|
+| `NO_CHANGE` | 不转换 |
+| `UNDERLINE_TO_CAMEL` | 下划线转驼峰 |
+| `UNDERLINE_TO_PASCAL` | 下划线转帕斯卡 |
+
+### ColumnFillStrategy
+| 枚举值 | 说明 |
+|--------|------|
+| `DEFAULT` | 默认不处理 |
+| `INSERT` | 插入时填充 |
+| `UPDATE` | 更新时填充 |
+| `INSERT_UPDATE` | 插入和更新时填充 |
+
+---
+
+## 生成的文件类型
+
+执行后会生成以下文件（根据配置可能有所增减）：
+
+| 文件 | 说明 |
+|------|------|
+| Entity | 实体类 |
+| Mapper | Mapper 接口 |
+| MapperXml | Mapper XML |
+| Service | Service 接口 |
+| ServiceImpl | Service 实现类 |
+| Controller | 控制器 |
+| CreateParam | 新增参数 DTO |
+| UpdateParam | 修改参数 DTO |
+| QueryParam | 查询参数 DTO |
+| QueryResult | 查询结果 VO |
+| ExcelImportParam | Excel 导入 DTO |
+| ExcelExportParam | Excel 导出 DTO |
+
+---
+
+
+
 
 
 ## 注意事项
@@ -320,5 +507,4 @@ public class GeneratorTest {
 4. 可以通过自定义模板来满足特殊需求
 
 ## 声明
-
-该项目中部分代码及实现源自[MyBatis-Plus](https://github.com/baomidou/mybatis-plus) 项目，特此感谢。
+该项目中部分代码源自[MyBatis-Plus](https://github.com/baomidou/mybatis-plus) 项目, 文件已保留相关版权信息。
