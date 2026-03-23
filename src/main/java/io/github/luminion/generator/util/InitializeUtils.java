@@ -18,10 +18,10 @@ public abstract class InitializeUtils {
     public static void initJdbcTypeConverter(Configurer configurer) {
         configurer.getDataSourceConfig().setFieldTypeConverter(metaInfo -> {
             if (JdbcType.TINYINT == metaInfo.getJdbcType()) {
-                return JavaFieldType.INTEGER;
+                return FieldTypeEnum.INTEGER;
             }
             if (JdbcType.SMALLINT == metaInfo.getJdbcType()) {
-                return JavaFieldType.INTEGER;
+                return FieldTypeEnum.INTEGER;
             }
             return null;
         });
@@ -131,19 +131,27 @@ public abstract class InitializeUtils {
         extraFieldSuffixMap.put("HasNoBits" , "HAS NO BITS");
     }
 
-
     public static void initializeMybatisPlus(Configurer configurer) {
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PLUS);
         configurer.getEntityConfig().setIdType(IdStrategy.ASSIGN_ID);
         configurer.getDataSourceConfig().setVersionColumnName("version");
         configurer.getDataSourceConfig().setLogicDeleteColumnName("deleted");
+        configurer.getServiceConfig().setServiceSuperClass(RuntimeClass.MYBATIS_PLUS_I_SERVICE.getCanonicalName());
+        configurer.getServiceConfig().setServiceImplSuperClass(RuntimeClass.MYBATIS_PLUS_SERVICE_IMPL.getCanonicalName());
+        configurer.getMapperConfig().setMapperSuperClass(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getCanonicalName());
+        configurer.getMapperConfig().setMapperAnnotationClass(RuntimeClass.MYBATIS_MAPPER_ANNOTATION.getCanonicalName());
+        InvokeInfo invokeInfo = new InvokeInfo(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName(), "IPage<%s>", "%s");
+        configurer.getControllerConfig().setPageType(invokeInfo);
     }
 
 
     public static void initializeMpBooster(Configurer configurer) {
         initializeMybatisPlus(configurer);
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MP_BOOSTER);
-        InvokeInfo invokeInfo = new InvokeInfo(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getClassName(), "BPage<%>", "%s");
+        configurer.getServiceConfig().setServiceSuperClass(RuntimeClass.SQL_BOOSTER_MP_SERVICE.getCanonicalName());
+        configurer.getServiceConfig().setServiceImplSuperClass(RuntimeClass.SQL_BOOSTER_MP_SERVICE_IMPL.getCanonicalName());
+        configurer.getMapperConfig().setMapperSuperClass(RuntimeClass.SQL_BOOSTER_MP_MAPPER.getCanonicalName());
+        InvokeInfo invokeInfo = new InvokeInfo(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getCanonicalName(), "BPage<%s>", "%s");
         configurer.getControllerConfig().setPageType(invokeInfo);
     }
 

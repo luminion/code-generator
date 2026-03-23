@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="${class.mapper}">
+<mapper namespace="${mapper.classCanonicalName}">
 #if(${mapperCacheClass})
     
     <!-- 开启二级缓存 -->
@@ -9,7 +9,7 @@
 #if(${mapperBaseResultMap})
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="baseResultMap" type="${entity.classSimpleName}">
+    <resultMap id="baseResultMap" type="${entity.classCanonicalName}">
     #foreach($field in ${table.fields})
         #if(${field.keyFlag})##生成主键排在第一位
         <id column="${field.name}" property="${field.propertyName}" />
@@ -26,7 +26,7 @@
     </resultMap>
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="queryResultMap" type="${queryResult.classSimpleName}">
+    <resultMap id="queryResultMap" type="${queryResult.classCanonicalName}">
     #foreach($field in ${table.fields})
         #if(${field.keyFlag})##生成主键排在第一位
         <id column="${field.name}" property="${field.propertyName}" />
@@ -55,16 +55,17 @@
         ${table.fieldNames}
     </sql>
 #end
-#if(${mpBooster})
+#if(${sqlBooster})
+
     #if(${mapperBaseResultMap})
     <select id="selectByXml" resultMap="queryResultMap">
     #else
-    <select id="selectByXml" resultType="${queryResult.classSimpleName}">
+    <select id="selectByXml" resultType="${queryResult.classCanonicalName}">
     #end
         SELECT
         a.*
         FROM
-        #if(${schemaName})${schemaName}.#end${table.name} a
+        $!{schemaPrefix}${table.tableName} a
         <where>
             <include refid="sqlbooster.conditions"/>
             #foreach($field in ${table.fields})
@@ -86,15 +87,16 @@
         </trim>
     </select>
 #elseif(${generateQueryById} || ${generateQueryList} || ${generateQueryPage} || ${generateExcelExport})
+
     #if(${mapperBaseResultMap})
     <select id="selectByXml" resultMap="queryResultMap">
     #else
-    <select id="selectByXml" resultType="${queryResult.classSimpleName}">
+    <select id="selectByXml" resultType="${queryResult.classCanonicalName}">
     #end
         SELECT
         a.*
         FROM
-        #if(${schemaName})${schemaName}.#end${table.name} a
+        $!{schemaPrefix}${table.tableName} a
         <where>
             <include refid="conditions"/>
             #foreach($field in ${table.fields})
@@ -143,15 +145,15 @@
                 <bind name="${field.propertyName}" value="'%' + param1.${field.propertyName} + '%'"/>
                 AND a.${field.columnName} ${field.sqlOperatorXml} #{${field.propertyName}}
             </if>
-        #elseif(${field.sqlOperator}=="BIT ANY")
+        #elseif(${field.sqlOperator}=="HAS ANY BITS")
             <if test="param1.${field.propertyName} != null">
                 AND (a.${field.columnName} &amp; #{param1.${field.propertyName}}) > 0
             </if>
-        #elseif(${field.sqlOperator}=="BIT ALL")
+        #elseif(${field.sqlOperator}=="HAS ALL BITS")
             <if test="param1.${field.propertyName} != null">
                 AND (a.${field.columnName} &amp; #{param1.${field.propertyName}}) = #{param1.${field.propertyName}} 
             </if>
-        #elseif(${field.sqlOperator}=="BIT NONE")
+        #elseif(${field.sqlOperator}=="HAS NO BITS")
             <if test="param1.${field.propertyName} != null">
                 AND (a.${field.columnName} &amp; #{param1.${field.propertyName}}) = 0
             </if>

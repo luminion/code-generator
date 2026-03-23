@@ -1,8 +1,7 @@
 package io.github.luminion.generator.config;
 
-import io.github.luminion.generator.common.ExtraFieldStrategy;
-import io.github.luminion.generator.common.support.JdbcTableInfoProvider;
-import io.github.luminion.generator.config.core.*;
+import io.github.luminion.generator.naming.ExtraFieldStrategy;
+import io.github.luminion.generator.datasource.support.JdbcTableInfoProvider;
 import io.github.luminion.generator.metadata.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

@@ -15,14 +15,14 @@ import ${pkg};
 /**
  * $!{table.comment}-查询条件对象
  *
- * @author ${docAuthor}
-#if(${docLink})
+ * @author ${author}
+#if(${javadocWithSeeTags})
  * @see ${entity.classCanonicalName}
  * @see ${mapper.classCanonicalName}
  * @see ${serviceImpl.classCanonicalName}
 #end
-#if(${docDate})
- * @since ${docDate}
+#if(${date})
+ * @since ${date}
 #end
  */
 #if(${lombok})
@@ -107,6 +107,9 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
     private ${field.propertyType} ${field.propertyName};
 #end
 ## --基础getter/setter start--
+#if(!${lombok})
+    
+    
 #foreach($field in ${table.fields})
 #if(${field.logicDeleteField})
 #else
@@ -132,9 +135,40 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
     }
 #end
 #end
+#end
 ## --基础getter/setter end---
 ## --额外字段getter/setter start--
 #if(!${lombok})
+    
+    public Long get${pageCapitalName}() {
+        return this.${pageParamName};
+    }
+
+    #if(${chainSetter})
+    public ${queryParam.classSimpleName} set${pageCapitalName}(Long ${pageParamName}) {
+    #else
+    public void set${pageCapitalName}(Long ${pageParamName}) {
+    #end
+        this.${pageParamName} = ${pageParamName};
+    #if(${chainSetter})
+        return this;
+    #end
+    }
+
+    public Long get${sizeCapitalName}() {
+        return this.${sizeParamName};
+    }
+
+    #if(${chainSetter})
+    public ${queryParam.classSimpleName} set${sizeCapitalName}(Long ${sizeParamName}) {
+    #else
+    public void set${sizeCapitalName}(Long ${sizeParamName}) {
+    #end
+        this.${sizeParamName} = ${sizeParamName};
+    #if(${chainSetter})
+        return this;
+    #end
+    }
 #foreach($field in ${table.extraFields})
 
     #if(${field.propertyType.equals("boolean")})

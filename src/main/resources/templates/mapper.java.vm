@@ -15,16 +15,19 @@ import ${pkg};
 /**
  * $!{table.comment}-Mapper
  *
- * @author ${docAuthor}
-#if(${docDate})
- * @since ${docDate}    
+ * @author ${author}
+#if(${date})
+ * @since ${date}    
 #end
  */
-$!{mapperAnnotationClass}
-public interface ${mapper.classSimpleName} extends ${mapperSuperClass}<${entity.classSimpleName}#if(${mpBooster}), ${queryResult.classSimpleName}#end> {
-#if(!${mpBooster})
+#if(${mapperAnnotationClass})
+@${mapperAnnotationClass}
+#end
+public interface ${mapper.classSimpleName} extends ${mapperSuperClass}<${entity.classSimpleName}#if(${sqlBooster}), ${queryResult.classSimpleName}#end> {
+#if(!${sqlBooster})
     #if(${generateQueryById} || ${generateQueryList} || ${generateQueryPage} || ${generateExcelExport})
-    List<${queryResult}> selectByXml(${queryParam.classSimpleName} queryParam, IPage<${queryResult}> page);
+
+    List<${queryResult}> selectByXml(${queryParam.classSimpleName} param, IPage<${queryResult}> page);
     #end
 #end
 }

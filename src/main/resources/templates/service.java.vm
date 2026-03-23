@@ -15,16 +15,16 @@ import ${pkg};
 /**
  * $!{table.comment}-服务类
  *
- * @author ${docAuthor}
-#if(${docDate})
- * @since ${docDate}    
+ * @author ${author}
+#if(${date})
+ * @since ${date}    
 #end
  */
-public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entity.classSimpleName}#if(${mpBooster}), ${queryResult.classSimpleName}#end> {
+public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entity.classSimpleName}#if(${sqlBooster}), ${queryResult.classSimpleName}#end> {
 #if(${generateCreate})
 
     #if(${table.idField})
-    ${table.idField.propertyName} ${createMethodName}(${createParam.classSimpleName} dto);
+    ${table.idField.propertyType} ${createMethodName}(${createParam.classSimpleName} dto);
     #else
     void ${createMethodName}(${createParam.classSimpleName} dto);
     #end
@@ -35,27 +35,27 @@ public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entit
 #end
 #if(${generateDelete} && ${table.idField})
 
-    boolean ${deleteMethodName}(${table.idField.propertyName} id);
+    boolean ${deleteMethodName}(${table.idField.propertyType} id);
 #end
-#if(${generateQueryById} && ${table.idField} && !${mpBooster})
+#if(${generateQueryById} && ${table.idField} && !${sqlBooster})
 
-    ${queryResult} ${generateQueryByIdMethodName}(${table.idField.propertyType} id);
+    ${queryResult} ${queryByIdMethodName}(${table.idField.propertyType} id);
 #end
-#if(${generateQueryList} && !${mpBooster})
+#if(${generateQueryList} && !${sqlBooster})
 
-    ${queryListMethodName}(${queryParam.classSimpleName} dto);
+    List<${queryResult}> ${queryListMethodName}(${queryParam.classSimpleName} dto);
 #end
-#if(${generateQueryPage} && !${mpBooster})
+#if(${generateQueryPage} && !${sqlBooster})
 
-    IPage<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} dto, long current, long size);
+    ${pageType.classCanonicalName}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} dto, long current, long size);
 #end
-#if(${enableExcelImport})
+#if(${generateExcelImport})
 
     void ${excelImportTemplateMethodName}(OutputStream os);
 
     int ${excelImportMethodName}(InputStream is);
 #end
-#if(${enableExcelExport})
+#if(${generateExcelExport})
 
     void ${excelExportMethodName}(${queryParam.classSimpleName} dto, OutputStream os);
 #end

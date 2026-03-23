@@ -15,8 +15,6 @@
  */
 package io.github.luminion.generator.engine;
 
-import io.github.luminion.generator.config.ConfigCollector;
-import io.github.luminion.generator.config.ConfigResolver;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.metadata.TableInfo;
 import io.github.luminion.generator.metadata.TemplateFile;
@@ -80,10 +78,10 @@ public abstract class AbstractTemplateEngine {
      */
     public AbstractTemplateEngine batchOutput() {
         try {
-            List<TableInfo> tableInfoList = configResolver.getTableInfoList();
+            List<TableInfo> tableInfoList = configurer.queryTableInfos();
             tableInfoList.forEach(tableInfo -> {
-                Map<String, Object> objectMap = configResolver.renderMap(tableInfo);
-                List<TemplateFile> templateFiles = configResolver.getTemplateFiles();
+                Map<String, Object> objectMap = configurer.renderMap(tableInfo);
+                List<TemplateFile> templateFiles = configurer.getTemplateConfig().getTemplateFiles();
                 for (TemplateFile file : templateFiles) {
                     file.validate();
                     String outputDir = file.getFileOutputDir();
@@ -125,10 +123,10 @@ public abstract class AbstractTemplateEngine {
      * 打开输出目录
      */
     public void open() {
-        String outDir = getConfigResolver().getConfigCollector().getGlobalConfig().getOutputDir();
+        String outDir = configurer.getTemplateConfig().getOutputDir();
         if (StringUtils.isBlank(outDir) || !new File(outDir).exists()) {
             System.err.println("Output directory not found：" + outDir);
-        } else if (getConfigResolver().getConfigCollector().getGlobalConfig().isOpenOutputDir()) {
+        } else if (configurer.getTemplateConfig().isOpenOutputDir()) {
             try {
                 RuntimeUtils.openDir(outDir);
             } catch (IOException e) {

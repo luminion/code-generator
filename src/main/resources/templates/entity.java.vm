@@ -15,13 +15,13 @@ import ${pkg};
 /**
  * $!{table.comment}
  *
- * @author ${docAuthor}
-#if(${docLink})
+ * @author ${author}
+#if(${javadocWithSeeTags})
  * @see ${mapper.classCanonicalName}
  * @see ${serviceImpl.classCanonicalName}
 #end
-#if(${docDate})
- * @since ${docDate}    
+#if(${date})
+ * @since ${date}    
 #end
  */
 #if(${lombok})
@@ -43,7 +43,7 @@ import ${pkg};
 @ApiModel(description = "$!{table.comment}")
 #end
 #if(${table.convert})
-@TableName("#if($schemaName)${schemaName}.#end${table.name}")
+@TableName("$!{schemaPrefix}${table.tableName}")
 #end
 #if(${entitySuperClass})
 public class ${entity.classSimpleName} extends ${entitySuperClass}#if(${serializable}) implements Serializable#end {

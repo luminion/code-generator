@@ -15,16 +15,16 @@ import ${pkg};
 /**
  * $!{table.comment}-服务实现类
  *
- * @author ${docAuthor}
-#if(${docDate})
- * @since ${docDate}    
+ * @author ${author}
+#if(${date})
+ * @since ${date}    
 #end
  */
 @Service
 #if(${service.generate})
-public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${mpBooster}), ${queryResult.classSimpleName}#end> implements ${service.classSimpleName} {
+public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${sqlBooster}), ${queryResult.classSimpleName}#end> implements ${service.classSimpleName} {
 #else
-public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${mpBooster}), ${queryResult.classSimpleName}#end> {
+public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${sqlBooster}), ${queryResult.classSimpleName}#end> {
 #end
 #if(${generateCreate})
 
@@ -32,7 +32,7 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     @Override
     #end
     #if(${table.idField})
-    public ${table.idField.propertyName} ${createMethodName}(${createParam.classSimpleName} dto) {
+    public ${table.idField.propertyType} ${createMethodName}(${createParam.classSimpleName} dto) {
     #else
     public void ${createMethodName}(${createParam.classSimpleName} dto) {
     #end
@@ -60,23 +60,26 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
 #if(${generateDelete} && ${table.idField})
 
     @Override
-    public boolean ${deleteMethodName}(${table.idField.propertyName} id) {
+    public boolean ${deleteMethodName}(${table.idField.propertyType} id) {
         return super.removeById(id);
     }
 #end
-#if(${generateQueryById} && ${table.idField} && !${mpBooster})
+#if(${generateQueryById} && ${table.idField} && !${sqlBooster})
 
     #if(${service.generate})
     @Override
     #end
-    public ${queryResult} ${generateQueryByIdMethodName}(${table.idField.propertyType} id) {
+    public ${queryResult} ${queryByIdMethodName}(${table.idField.propertyType} id) {
         ${queryParam.classSimpleName} dto = new ${queryParam.classSimpleName}();
         dto.set${table.idField.capitalName}(id);
-        ${queryResult} one = getBaseMapper().selectByXml(dto, null).stream().findFirst().orElse(null)
+        ${queryResult} one = getBaseMapper().selectByXml(dto, null)
+                .stream()
+                .findFirst()
+                .orElse(null);
         return one;
     }
 #end
-#if(${generateQueryList} && !${mpBooster})
+#if(${generateQueryList} && !${sqlBooster})
 
     #if(${service.generate})
     @Override
@@ -86,25 +89,26 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
         return list;
     }
 #end
-#if(${generateQueryPage} && !${mpBooster})
+#if(${generateQueryPage} && !${sqlBooster})
 
     #if(${service.generate})
     @Override
     #end
-    public IPage<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} dto, long current, long size) {
+    public ${pageType.classCanonicalName}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} dto, long current, long size) {
         Page<${queryResult}> page = new Page<>(current, size);
         List<${queryResult}> list = getBaseMapper().selectByXml(dto, page);
         page.setRecords(list);
         return page;
     }
 #end
-#if(${enableExcelImport})
+#if(${generateExcelImport})
 
     #if(${service.generate})
     @Override
     #end
     public void ${excelImportTemplateMethodName}(OutputStream os) {
-        ${excelApiClass}.write(os, ${excelImportParam.classSimpleName}.class).sheet()
+        ${excelApiClass}.write(os, ${excelImportParam.classSimpleName}.class)
+            .sheet()
             .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
             .doWrite(Collections.emptyList());
     }
@@ -124,15 +128,21 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
         return entityList.size();
     }
 #end
-#if(${enableExcelExport})
+#if(${generateExcelExport})
 
     #if(${service.generate})
     @Override
     #end
     public void ${excelExportMethodName}(${queryParam.classSimpleName} dto, OutputStream os) {
-        ${excelApiClass}.write(os, ${excelExportParam.classSimpleName}.class).sheet()
-            .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
-            .doWrite(getBaseMapper().selectByXml(dto, null));
+        #if(${sqlBooster})
+        List<${queryResult}> records = ${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(dto).list();
+        #else
+        List<${queryResult}> records = getBaseMapper().selectByXml(dto, null);
+        #end
+        ${excelApiClass}.write(os, ${excelExportParam.classSimpleName}.class)
+                .sheet()
+                .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+                .doWrite(records);
     }
 #end
 }

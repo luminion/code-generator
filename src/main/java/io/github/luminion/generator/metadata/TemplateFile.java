@@ -47,7 +47,7 @@ public class TemplateFile {
 
      * <pre>
      * TemplateFile templateFile = new TemplateFile(
-     *             TemplateFileEnum.CREATE_DTO.getKey(),
+     *             TemplateEnum.CREATE_DTO.getKey(),
      *             "%sCreateDTO",
      *             "model.dto",
      *             "/templates/model/createDTO.java",

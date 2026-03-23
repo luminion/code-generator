@@ -24,7 +24,6 @@ public class GlobalBuilder {
     /**
      * 自定义渲染数据
      *
-     * @param renderMap 渲染
      * @return 全局配置构建器
      */
     public GlobalBuilder customRenderData(Map<String, Object> renderData) {
@@ -59,8 +58,8 @@ public class GlobalBuilder {
      *
      * @return this
      */
-    public GlobalBuilder disableDocLink() {
-        configurer.getGlobalConfig().setDocLink(true);
+    public GlobalBuilder disableJavadocWithSeeTags() {
+        configurer.getGlobalConfig().setJavadocWithSeeTags(true);
         return this;
     }
 
@@ -70,8 +69,8 @@ public class GlobalBuilder {
      * @param author 文档作者
      * @return this
      */
-    public GlobalBuilder docAuthor(String author) {
-        configurer.getGlobalConfig().setDocAuthor(author);
+    public GlobalBuilder author(String author) {
+        configurer.getGlobalConfig().setAuthor(author);
         return this;
     }
 
@@ -81,9 +80,9 @@ public class GlobalBuilder {
      * @param pattern 格式,默认"yyyy-MM-dd"
      * @return this
      */
-    public GlobalBuilder docDate(String pattern) {
+    public GlobalBuilder date(String pattern) {
         String format = new SimpleDateFormat(pattern).format(new Date());
-        configurer.getGlobalConfig().setDocDate(format);
+        configurer.getGlobalConfig().setDate(format);
         return this;
     }
     

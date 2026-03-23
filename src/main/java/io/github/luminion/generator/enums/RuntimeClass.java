@@ -18,6 +18,9 @@ public enum RuntimeClass {
     JAVA_UTIL_COLLECTIONS("java.util.Collections"),
     JAVA_STREAM_COLLECTORS("java.util.stream.Collectors"),
     
+    
+    MYBATIS_MAPPER_ANNOTATION("org.apache.ibatis.annotations.Mapper"),
+    
     MYBATIS_PLUS_I_SERVICE("com.baomidou.mybatisplus.extension.service.IService"),
     MYBATIS_PLUS_SERVICE_IMPL("com.baomidou.mybatisplus.extension.service.impl.ServiceImpl"),
     MYBATIS_PLUS_BASE_MAPPER("com.baomidou.mybatisplus.core.mapper.BaseMapper"),
@@ -26,7 +29,7 @@ public enum RuntimeClass {
     MYBATIS_PLUS_PAGE("com.baomidou.mybatisplus.extension.plugins.pagination.Page"),
     MYBATIS_PLUS_TABLE_NAME("com.baomidou.mybatisplus.annotation.TableName"),
     MYBATIS_PLUS_TABLE_ID("com.baomidou.mybatisplus.annotation.TableId"),
-    MYBATIS_PLUS_ID_TYPE("com.baomidou.mybatisplus.annotation.IdStrategy"),
+    MYBATIS_PLUS_ID_TYPE("com.baomidou.mybatisplus.annotation.IdType"),
     MYBATIS_PLUS_TABLE_LOGIC("com.baomidou.mybatisplus.annotation.TableLogic"),
     MYBATIS_PLUS_VERSION("com.baomidou.mybatisplus.annotation.Version"),
     MYBATIS_PLUS_TABLE_FIELD("com.baomidou.mybatisplus.annotation.TableField"),
@@ -79,6 +82,6 @@ public enum RuntimeClass {
     
     ;
     @Getter
-    private final String className;
+    private final String canonicalName;
     
 }

@@ -15,7 +15,6 @@
  */
 package io.github.luminion.generator.engine;
 
-import io.github.luminion.generator.config.ConfigCollector;
 import io.github.luminion.generator.config.Configurer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.velocity.Template;

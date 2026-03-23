@@ -1,6 +1,6 @@
 package io.github.luminion.generator.builder;
 
-import io.github.luminion.generator.common.MethodReference;
+import io.github.luminion.generator.metadata.MethodReference;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.metadata.InvokeInfo;
 import io.github.luminion.generator.util.ReflectUtils;
@@ -115,7 +115,7 @@ public class ControllerBuilder {
      * @return Controller配置构建器
      */
     public ControllerBuilder enableQueryViaPost() {
-        configurer.getControllerConfig().setQueryViaPost(false);
+        configurer.getControllerConfig().setQueryViaPost(true);
         return this;
     }
 

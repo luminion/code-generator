@@ -15,14 +15,14 @@ import ${pkg};
 /**
  * $!{table.comment}-前端控制器
  *
- * @author ${docAuthor}
-#if(${docLink})
+ * @author ${author}
+#if(${javadocWithSeeTags})
  * @see ${entity.classCanonicalName}
  * @see ${mapper.classCanonicalName}
  * @see ${serviceImpl.classCanonicalName}
 #end
-#if(${docDate})
- * @since ${docDate}    
+#if(${date})
+ * @since ${date}    
 #end
  */
 #if(${springDoc})
@@ -77,8 +77,17 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnType.toTypeString("Serializable")} create($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} dto) {
+    #if(${table.idField})
+    public ${returnType.toTypeString("${table.idField.propertyType}")} create($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} dto) {
+    #else
+    public ${returnType.toTypeString("?")} ${createMethodName}($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} dto) {     
+    #end
+    #if(${table.idField})
         return ${returnType.toInvokeString("baseService.${createMethodName}(dto)")};
+        #else
+        baseService.${createMethodName}(dto)
+        return ${returnType.toInvokeString("")};        
+    #end
     }
 #end
 #if(${generateUpdate})
@@ -103,7 +112,7 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnType.toTypeString("Boolean")} update($!{requiredBodyStr}$!{validStr}${updateParam.classSimpleName} dto) {
+    public ${returnType.toTypeString("Boolean")} ${updateMethodName}($!{requiredBodyStr}$!{validStr}${updateParam.classSimpleName} dto) {
         return ${returnType.toInvokeString("baseService.${updateMethodName}(dto)")};
     }
 #end
@@ -129,8 +138,8 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnType.toTypeString("Boolean")} delete($!{idMethodParam}${primaryKeyPropertyType} id) {
-        return ${returnType.toInvokeString("baseService.removeById(id)")};
+    public ${returnType.toTypeString("Boolean")} ${deleteMethodName}($!{idMethodParam}${primaryKeyPropertyType} id) {
+        return ${returnType.toInvokeString("baseService.${deleteMethodName}(id)")};
     }
 #end
 #if(${generateQueryById} && ${table.idField})
@@ -155,8 +164,8 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnType.toTypeString("${queryResult.classSimpleName}")} voById($!{idMethodParam}${primaryKeyPropertyType} id) {
-        return ${returnType.toInvokeString("baseService.voById(id)")};
+    public ${returnType.toTypeString(${queryResult})} ${queryByIdMethodName}($!{idMethodParam}${primaryKeyPropertyType} id) {
+        return ${returnType.toInvokeString("baseService.${queryByIdMethodName}(id)")};
     }
 #end
 #if(${generateQueryList})
@@ -177,11 +186,11 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnType.toTypeString("List<${queryResult.classSimpleName}>")} list($!{queryBodyStr}${queryParam.classSimpleName} dto) {
+    public ${returnType.toTypeString("List<${queryResult.classSimpleName}>")} ${queryListMethodName}($!{queryBodyStr}${queryParam.classSimpleName} dto) {
         #if($sqlBooster)
-        return ${returnType.toInvokeString("baseService..appendByBean(dto).list()")};    
+        return ${returnType.toInvokeString("baseService.${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(dto).list()")};    
         #else
-        return ${returnType.toInvokeString("baseService.voList(dto)")};
+        return ${returnType.toInvokeString("baseService.${queryListMethodName}(dto)")};
         #end
     }
 #end
@@ -195,9 +204,7 @@ public class ${controller.classSimpleName} {
     /**
      * 分页查询
      *
-     * @param dto 查询条件
-     * @param current 页码
-     * @param size 每页大小
+     * @param dto 查询条件          
      * @return 查询结果
      */
     #end
@@ -205,20 +212,15 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnType.toTypeString(${pageType.toTypeString(${queryResult.classSimpleName})})} page($!{queryBodyStr}${queryParam.classSimpleName} dto$!{pageMethodParams}) {
-        #if(${queryParamSuperClass})
-        Long current = dto.${pageGetter};
-        Long size = dto.${sizeGetter};
-        #end
-        Long 
+    public ${returnType.toTypeString(${pageType.toTypeString(${queryResult.classSimpleName})})} ${queryPageMethodName}($!{queryBodyStr}${queryParam.classSimpleName} dto) {
         #if($sqlBooster)
-        return ${returnType.toInvokeString(${pageType.toInvokeString("baseService.lambdaBooster().appendByBean(dto).page(cuurent, size))")})};
+        return ${returnType.toInvokeString(${pageType.toInvokeString("baseService.${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(dto).page(dto.get${pageCapitalName}(), dto.get${sizeCapitalName}())")})};
         #else
-        return ${returnType.toInvokeString(${pageType.toInvokeString("baseService.voPage(dto, current, size)")})};
+        return ${returnType.toInvokeString(${pageType.toInvokeString("baseService.${queryPageMethodName}(dto, dto.get${pageCapitalName}(), dto.get${sizeCapitalName}())")})};
         #end
     }
 #end
-#if(${enableExcelImport})
+#if(${generateExcelImport})
 
     #if(${springDoc})
     @Operation(summary = "下载excel导入模板")
@@ -230,11 +232,11 @@ public class ${controller.classSimpleName} {
      */
     #end
     @GetMapping("/excel/template")
-    public void excelTemplate(HttpServletResponse response) throws IOException {
-        response.setContentType("application/vnd.ms-excel");
+    public void ${excelImportTemplateMethodName}(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
 ##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        baseService.excelTemplate(response.getOutputStream());
+        baseService.${excelImportTemplateMethodName}(response.getOutputStream());
     }
 
     #if(${springDoc})
@@ -253,12 +255,12 @@ public class ${controller.classSimpleName} {
     #if(!${restController})
     @ResponseBody
     #end
-    public ${returnType.toTypeString("Integer")} excelImport(@RequestParam("excel") MultipartFile excel) throws IOException {
+    public ${returnType.toTypeString("Integer")} ${excelImportMethodName}(@RequestParam("excel") MultipartFile excel) throws IOException {
         if (excel == null || excel.isEmpty()) return ${returnType.toInvokeString(0)};
-        return ${returnType.toInvokeString("baseService.excelImport(excel.getInputStream())")};
+        return ${returnType.toInvokeString("baseService.${excelImportMethodName}(excel.getInputStream())")};
     }
 #end
-#if(${enableExcelExport})
+#if(${generateExcelExport})
 
     #if(${springDoc})
     @Operation(summary = "excel文件导出")
@@ -272,16 +274,11 @@ public class ${controller.classSimpleName} {
      */
     #end
     ${queryRequestMapping}("/excel/export")
-    public void excelExport($!{queryBodyStr}${queryParam.classSimpleName} dto, HttpServletResponse response) throws IOException {
-        response.setContentType("application/vnd.ms-excel");
+    public void ${excelExportMethodName}($!{queryBodyStr}${queryParam.classSimpleName} dto, HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
 ##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
         response.setHeader("Content-Disposition", "attachment;filename=" + System.currentTimeMillis() + ".xlsx");
-        #if($sqlBooster)
-        SqlContext<SysUser> build = SqlBuilder.of(baseService).appendEqByBean(dto).build();
-        baseService.excelExport(build, response.getOutputStream());
-        #else
-        baseService.excelExport(dto, response.getOutputStream());
-        #end
+        baseService.${excelExportMethodName}(dto, response.getOutputStream());
     }
 #end
 }

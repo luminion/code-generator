@@ -107,23 +107,23 @@ public class TableSuffixField {
                 this.sqlOperator = "!=";
                 this.sqlOperatorXml = "&lt;&gt;";
                 break;
-            case "BIT ANY":
+            case "HAS ANY BITS":
                 this.comment += "(包含任意指定bit位)";
-                this.sqlOperator = "BIT ANY";
-                this.sqlOperatorXml = "BIT ANY";
+                this.sqlOperator = "HAS ANY BITS";
+                this.sqlOperatorXml = "HAS ANY BITS";
                 break;
-            case "BIT ALL":
+            case "HAS ALL BITS":
                 this.comment += "(包含所有指定bit位)";
-                this.sqlOperator = "BIT ALL";
-                this.sqlOperatorXml = "BIT ALL";
+                this.sqlOperator = "HAS ALL BITS";
+                this.sqlOperatorXml = "HAS ALL BITS";
                 break;
-            case "BIT NONE":
+            case "HAS NO BITS":
                 this.comment += "(不包含指定bit位)";
-                this.sqlOperator = "BIT NONE";
-                this.sqlOperatorXml = "BIT NONE";
+                this.sqlOperator = "HAS NO BITS";
+                this.sqlOperatorXml = "HAS NO BITS";
                 break;
             default:
-                throw new IllegalArgumentException(String.format("Unsupported suffix field operator:[%s], allow: LIKE,NOT LIKE,IN,NOT IN,IS NULL,IS NOT NULL,>,<,>=,<=,!=,<>,&,!&", sqlOperator));
+                throw new IllegalArgumentException(String.format("Unsupported suffix field operator:[%s]", sqlOperator));
         }
         return this;
     }

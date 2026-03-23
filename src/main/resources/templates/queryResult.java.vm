@@ -15,14 +15,14 @@ import ${pkg};
 /**
  * $!{table.comment}-查询返回对象
  *
- * @author ${docAuthor}
-#if(${docLink})
+ * @author ${author}
+#if(${javadocWithSeeTags})
  * @see ${entity.classCanonicalName}
  * @see ${mapper.classCanonicalName}
  * @see ${serviceImpl.classCanonicalName}
 #end
-#if(${docDate})
- * @since ${docDate}    
+#if(${date})
+ * @since ${date}    
 #end
  */
 #if(${lombok})

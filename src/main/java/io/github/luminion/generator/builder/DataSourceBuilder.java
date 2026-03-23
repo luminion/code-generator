@@ -1,8 +1,8 @@
 package io.github.luminion.generator.builder;
 
-import io.github.luminion.generator.common.DatabaseKeywordsHandler;
-import io.github.luminion.generator.common.FieldTypeConverter;
-import io.github.luminion.generator.common.NamingConverter;
+import io.github.luminion.generator.datasource.DatabaseKeywordsHandler;
+import io.github.luminion.generator.datasource.FieldTypeConverter;
+import io.github.luminion.generator.naming.NamingConverter;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.enums.DateType;
 import lombok.RequiredArgsConstructor;

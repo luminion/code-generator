@@ -10,7 +10,7 @@ import io.github.luminion.generator.util.InitializeUtils;
  * @since 1.0.0
  */
 @SuppressWarnings("unused")
-public class GeneratorHelper {
+public abstract class GeneratorHelper {
 
     /**
      * 创建一个MyBatis-Plus代码生成器。
@@ -38,7 +38,7 @@ public class GeneratorHelper {
      * @param password 数据库密码
      * @return SQL-Booster代码生成器实例
      */
-    public static LambdaGenerator mpBooster(String url, String username, String password) {
+    public static LambdaGenerator mybatisPlusSqlBooster(String url, String username, String password) {
         Configurer configurer = new Configurer(url, username, password);
         InitializeUtils.initJdbcTypeConverter(configurer);
         InitializeUtils.initializeMapperOrderColumn(configurer);
@@ -48,13 +48,5 @@ public class GeneratorHelper {
         return new LambdaGenerator(configurer);
     }
 
-
-    public static void main(String[] args) {
-        GeneratorHelper.mpBooster("", "", "")
-                .global(g->g.docAuthor("aaa"))
-                .dataSource(d->d.includeTables("a"))
-                .template(t->t.controller(c->c.getClass()))
-        ;
-    }
 
 }
