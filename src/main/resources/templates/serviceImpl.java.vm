@@ -41,8 +41,6 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
         super.save(entity);
         #if(${table.idField})
         return entity.get${table.idField.capitalName}();
-        #else
-        return null;
         #end
     }
 #end

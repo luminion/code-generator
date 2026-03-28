@@ -27,10 +27,13 @@ public class TemplateClassFile extends TemplateFile {
 
     public TemplateClassFile(TemplateFile templateFile) {
         super(templateFile.getKey(),
-                templateFile.getNameFormat(), 
+                templateFile.getNameFormat(),
                 templateFile.getSubPackage(),
                 templateFile.getTemplatePath(),
                 templateFile.getOutputFileSuffix());
+        this.setGenerate(templateFile.isGenerate());
+        this.setFileOverride(templateFile.isFileOverride());
+        this.setFileOutputDir(templateFile.getFileOutputDir());
     }
 
     @Override

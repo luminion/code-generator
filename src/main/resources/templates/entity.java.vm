@@ -34,9 +34,6 @@ import ${pkg};
 #if(${lombok} && ${toString})
 @ToString
 #end
-#if(${lombok} && ${toString})
-@ToString
-#end
 #if(${springDoc})
 @Schema(description = "$!{table.comment}")
 #elseif(${swagger})

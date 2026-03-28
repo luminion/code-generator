@@ -103,10 +103,10 @@ public class Configurer {
         }
 
         // 逻辑处理
-        if (globalConfig.isGenerateCreate()) {
+        if (!globalConfig.isGenerateCreate()) {
             templateConfig.getCreateParam().setGenerate(false);
         }
-        if (globalConfig.isGenerateUpdate()) {
+        if (!globalConfig.isGenerateUpdate()) {
             templateConfig.getUpdateParam().setGenerate(false);
         }
         boolean generateQuery = globalConfig.isGenerateQueryById()

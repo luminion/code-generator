@@ -48,7 +48,7 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
     #end
     private static final long serialVersionUID = 1L;
 #end
-#if(!${queryParamSuperClass} && !${queryParamPageFields})
+#if(!${queryParamSuperClass} && ${queryParamPageFields})
 
     #if(${springDoc})
     @Schema(description = "当前页码")
@@ -106,7 +106,7 @@ public class ${queryParam.classSimpleName} #if(${queryParamSuperClass})extends $
     #end
     private ${field.propertyType} ${field.propertyName};
 #end
-#if(!${lombok} && !${queryParamSuperClass} && !${queryParamPageFields})
+#if(!${lombok} && !${queryParamSuperClass} && ${queryParamPageFields})
 
     public Long get${pageCapitalName}() {
         return this.${pageParamName};

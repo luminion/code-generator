@@ -122,14 +122,15 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
                 tableInfo.setHavePrimaryKey(true);
                 tableInfo.setIdField(tableField);
             }
-            String columnName = columnInfo.getName();
-            tableField.setName(columnName);
-            tableField.setColumnName(columnName);
+            String rawColumnName = columnInfo.getName();
+            String columnName = rawColumnName;
+            tableField.setName(rawColumnName);
+            tableField.setColumnName(rawColumnName);
             // 数据库列关键字转化
             DatabaseKeywordsHandler keyWordsHandler = dataSourceConfig.getKeyWordsHandler();
-            if (keyWordsHandler != null && keyWordsHandler.isKeyWords(columnName)) {
+            if (keyWordsHandler != null && keyWordsHandler.isKeyWords(rawColumnName)) {
                 tableField.setKeyWords(true);
-                columnName = keyWordsHandler.formatColumn(columnName);
+                columnName = keyWordsHandler.formatColumn(rawColumnName);
                 tableField.setColumnName(columnName);
             }
             // 设置字段的元数据信息
@@ -164,7 +165,7 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
             }
             Set<String> columnPrefixes = dataSourceConfig.getColumnPrefixes();
             Set<String> columnSuffixes = dataSourceConfig.getColumnSuffixes();
-            String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(columnName, columnPrefixes, columnSuffixes);
+            String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(rawColumnName, columnPrefixes, columnSuffixes);
             String propertyName = dataSourceConfig.getNamingConverter().convertFieldName(removePrefixAndSuffix);
             tableField.setPropertyName(propertyName);
 

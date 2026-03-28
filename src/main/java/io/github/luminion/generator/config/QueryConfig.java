@@ -66,6 +66,7 @@ public class QueryConfig implements TemplateRender {
     /**
      * 查询参数-分页字段
      */
+    @RenderField
     private boolean queryParamPageFields = true;
 
     /**

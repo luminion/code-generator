@@ -259,6 +259,7 @@ public class ServiceConfig implements TemplateRender {
         // excel导出
         if (globalConfig.isGenerateExcelExport()) {
             importPackages.add(templateFileMap.get(TemplateEnum.QUERY_PARAM.getKey()).getClassCanonicalName());
+            importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getClassCanonicalName());
             importPackages.add(templateFileMap.get(TemplateEnum.EXCEL_EXPORT_PARAM.getKey()).getClassCanonicalName());
             importPackages.add(excelClass);
             importPackages.add(longestMatchColumnWidthStyleStrategyClass);

@@ -53,9 +53,17 @@ public class MapperBuilder {
         return this;
     }
 
-    public MapperBuilder mapperXmlSubPackage(Class<?> clazz) {
+    public MapperBuilder mapperCacheClass(Class<?> clazz) {
         configurer.getMapperConfig().setMapperCacheClass(clazz.getCanonicalName());
         return this;
+    }
+
+    /**
+     * @deprecated use {@link #mapperCacheClass(Class)} instead.
+     */
+    @Deprecated
+    public MapperBuilder mapperXmlSubPackage(Class<?> clazz) {
+        return mapperCacheClass(clazz);
     }
 
     public MapperBuilder appendOrderColumn(String column, boolean isDesc) {

@@ -78,15 +78,15 @@ public class ${controller.classSimpleName} {
     @ResponseBody
     #end
     #if(${table.idField})
-    public ${returnType.toTypeString("${table.idField.propertyType}")} create($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} param) {
+    public ${returnType.toTypeString("${table.idField.propertyType}")} ${createMethodName}($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} param) {
     #else
-    public ${returnType.toTypeString("?")} ${createMethodName}($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} param) {     
+    public ${returnType.toTypeString("Object")} ${createMethodName}($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} param) {
     #end
     #if(${table.idField})
         return ${returnType.toInvokeString("baseService.${createMethodName}(param)")};
-        #else
-        baseService.${createMethodName}(param)
-        return ${returnType.toInvokeString("")};        
+    #else
+        baseService.${createMethodName}(param);
+        return ${returnType.toInvokeString("null")};
     #end
     }
 #end
