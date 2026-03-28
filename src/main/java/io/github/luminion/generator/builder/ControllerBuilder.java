@@ -1,8 +1,8 @@
 package io.github.luminion.generator.builder;
 
-import io.github.luminion.generator.metadata.MethodReference;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.metadata.InvokeInfo;
+import io.github.luminion.generator.metadata.MethodReference;
 import io.github.luminion.generator.util.LambdaUtils;
 import lombok.RequiredArgsConstructor;
 
@@ -19,22 +19,20 @@ public class ControllerBuilder {
     /**
      * controller父类
      *
-     * @param classCanonicalName 父类规范名称
      * @return Controller配置构建器
      */
-    public ControllerBuilder superClass(String classCanonicalName) {
-        configurer.getControllerConfig().setControllerSuperClass(classCanonicalName);
+    public ControllerBuilder superClass(String fullyQualifiedClassName) {
+        configurer.getControllerConfig().setControllerSuperClass(fullyQualifiedClassName);
         return this;
     }
 
     /**
      * controller父类
      *
-     * @param clazz 父类
      * @return Controller配置构建器
      */
-    public ControllerBuilder superClass(Class<?> clazz) {
-        configurer.getControllerConfig().setControllerSuperClass(clazz.getCanonicalName());
+    public ControllerBuilder superClass(Class<?> superClassType) {
+        configurer.getControllerConfig().setControllerSuperClass(superClassType.getCanonicalName());
         return this;
     }
 
@@ -61,7 +59,6 @@ public class ControllerBuilder {
     /**
      * controller请求前缀
      *
-     * @param url url
      * @return Controller配置构建器
      */
     public ControllerBuilder baseUrl(String url) {
@@ -122,7 +119,6 @@ public class ControllerBuilder {
     /**
      * 返回值包装方法
      *
-     * @param methodReference 方法引用
      * @return Controller配置构建器
      */
     public <R> ControllerBuilder returnMethod(MethodReference<Object, R> methodReference) {
@@ -134,25 +130,20 @@ public class ControllerBuilder {
     /**
      * 返回值包装方法
      *
-     * @param classCanonicalName    类规范名称
-     * @param declarationTypeFormat 声明类型格式
-     * @param methodInvokeFormat    方法调用格式
      * @return Controller配置构建器
      */
-    public <R> ControllerBuilder returnMethod(String classCanonicalName, String declarationTypeFormat, String methodInvokeFormat) {
-        configurer.getControllerConfig().setReturnType(new InvokeInfo(classCanonicalName, declarationTypeFormat, methodInvokeFormat));
+    public <R> ControllerBuilder returnMethod(String fullyQualifiedClassName, String declarationTypeFormat, String methodInvokeFormat) {
+        configurer.getControllerConfig().setReturnType(new InvokeInfo(fullyQualifiedClassName, declarationTypeFormat, methodInvokeFormat));
         return this;
     }
 
     /**
      * 分页包装方法
      *
-     * @param methodReference 方法引用
-     * @param pageClass       方法参考
      * @return Controller配置构建器
      */
-    public <T, R> ControllerBuilder pageMethod(MethodReference<T, R> methodReference, Class<T> pageClass) {
-        InvokeInfo invokeInfo = LambdaUtils.resolveInvokeInfo(methodReference, pageClass);
+    public <T, R> ControllerBuilder pageMethod(MethodReference<T, R> methodReference, Class<T> pageType) {
+        InvokeInfo invokeInfo = LambdaUtils.resolveInvokeInfo(methodReference, pageType);
         configurer.getControllerConfig().setPageType(invokeInfo);
         return this;
     }
@@ -160,14 +151,10 @@ public class ControllerBuilder {
     /**
      * 分页包装方法
      *
-     * @param classCanonicalName    类规范名称
-     * @param declarationTypeFormat 声明类型格式
-     * @param methodInvokeFormat    方法调用格式
      * @return Controller配置构建器
      */
-    public ControllerBuilder pageMethod(String classCanonicalName, String declarationTypeFormat, String methodInvokeFormat) {
-        configurer.getControllerConfig().setPageType(new InvokeInfo(classCanonicalName, declarationTypeFormat, methodInvokeFormat));
+    public ControllerBuilder pageMethod(String fullyQualifiedClassName, String declarationTypeFormat, String methodInvokeFormat) {
+        configurer.getControllerConfig().setPageType(new InvokeInfo(fullyQualifiedClassName, declarationTypeFormat, methodInvokeFormat));
         return this;
     }
-
 }

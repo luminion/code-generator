@@ -1,11 +1,9 @@
 package io.github.luminion.generator.config;
 
-import io.github.luminion.generator.annotation.RenderField;
+import io.github.luminion.generator.internal.render.RenderContext;
+import io.github.luminion.generator.internal.render.RenderDataCollector;
 import io.github.luminion.generator.metadata.TableInfo;
-import lombok.SneakyThrows;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,6 +12,10 @@ import java.util.Map;
  */
 public interface TemplateRender {
 
+    default Map<String, Object> renderData(RenderContext context) {
+        return renderData(context.getTableInfo());
+    }
+
     /**
      * 渲染数据
      *
@@ -21,17 +23,7 @@ public interface TemplateRender {
      * @return map
      * @since 1.0.0
      */
-    @SneakyThrows
     default Map<String, Object> renderData(TableInfo tableInfo) {
-        HashMap<String, Object> data = new HashMap<>();
-        for (Field declaredField : getClass().getDeclaredFields()) {
-            RenderField annotation = declaredField.getAnnotation(RenderField.class);
-            if (annotation != null) {
-                declaredField.setAccessible(true);
-                data.put(declaredField.getName(), declaredField.get(this));
-            }
-        }
-        return data;
+        return RenderDataCollector.collect(this);
     }
-
 }

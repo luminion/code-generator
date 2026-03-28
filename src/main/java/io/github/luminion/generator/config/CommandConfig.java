@@ -2,13 +2,15 @@ package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.annotation.RenderField;
 import io.github.luminion.generator.enums.RuntimeClass;
+import io.github.luminion.generator.internal.render.ImportPackageSupport;
+import io.github.luminion.generator.internal.render.RenderContext;
 import io.github.luminion.generator.metadata.TableField;
-import io.github.luminion.generator.metadata.TableInfo;
-import io.github.luminion.generator.metadata.TemplateClassFile;
 import lombok.Data;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * @author luminion
@@ -18,94 +20,52 @@ import java.util.stream.Collectors;
 public class CommandConfig implements TemplateRender {
     private final Configurer configurer;
 
-    /**
-     * 生成参数校验相关注解
-     */
     @RenderField
     private boolean valid = true;
-    
-    /**
-     * 新增方法及配套类方法名
-     */
+
     @RenderField
     private String createMethodName = "create";
 
-    /**
-     * 更新方法及配套类方法名
-     */
     @RenderField
     private String updateMethodName = "update";
 
-    
-    /**
-     * 删除方法及配套类方法名
-     */
     @RenderField
     private String deleteMethodName = "delete";
 
-    /**
-     * 新增和修改需要需要排除的字段
-     */
     @RenderField
     private Set<String> commandExcludeColumns = new HashSet<>();
 
     @Override
-    public Map<String, Object> renderData(TableInfo tableInfo) {
-        Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
-
-        // 导包
-        data.putAll(resolveCreateDtoImports(tableInfo));
-        data.putAll(resolveUpdateDtoImports(tableInfo));
-
+    public Map<String, Object> renderData(RenderContext context) {
+        Map<String, Object> data = TemplateRender.super.renderData(context);
+        data.putAll(resolveCreateDtoImports(context));
+        data.putAll(resolveUpdateDtoImports(context));
         return data;
     }
 
-
-    private Map<String, Object> resolveCreateDtoImports(TableInfo tableInfo) {
+    private Map<String, Object> resolveCreateDtoImports(RenderContext context) {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        TemplateConfig templateConfig = configurer.getTemplateConfig();
-        CommandConfig commandConfig = configurer.getCommandConfig();
-        QueryConfig queryConfig = configurer.getQueryConfig();
-        ExcelConfig excelConfig = configurer.getExcelConfig();
-        Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
-        TableField idField = tableInfo.getIdField();
-        String idFieldPropertyPkg = idField != null ? idField.getPropertyPkg() : null;
         Set<String> importPackages = new TreeSet<>();
-
         String size = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_SIZE.getCanonicalName();
         String notBlank = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_NOT_BLANK.getCanonicalName();
         String notNull = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_NOT_NULL.getCanonicalName();
 
-        for (TableField field : tableInfo.getFields()) {
-            if (field.isKeyFlag()) {
+        for (TableField field : context.getTableInfo().getFields()) {
+            if (field.isPrimaryKey() || field.isVersionField() || field.isLogicDeleteField()) {
                 continue;
             }
-            if (field.isVersionField()) {
-                continue;
-            }
-            if (field.isLogicDeleteField()) {
-                continue;
-            }
-            if (field.getFill() != null &&
-                    ("INSERT".equals(field.getFill()) || "INSERT_UPDATE".equals(field.getFill()))
-            ) {
+            if (field.getFill() != null && ("INSERT".equals(field.getFill()) || "INSERT_UPDATE".equals(field.getFill()))) {
                 continue;
             }
             if (commandExcludeColumns.contains(field.getColumnName())) {
                 continue;
             }
-            Optional.ofNullable(field.getPropertyPkg()).ifPresent(importPackages::add);
-            TableField.MetaInfo metaInfo = field.getMetaInfo();
+            ImportPackageSupport.addIfPresent(importPackages, field.getJavaTypeCanonicalName());
             boolean isString = "String".equals(field.getPropertyType());
-            //boolean notnullFlag = !metaInfo.isNullable() && metaInfo.getDefaultValue() == null;
-            boolean notnullFlag = !metaInfo.isNullable();
+            boolean notNullField = !field.getMetaInfo().isNullable();
             if (valid) {
-                if (notnullFlag) {
-                    if (isString) {
-                        importPackages.add(notBlank);
-                    } else {
-                        importPackages.add(notNull);
-                    }
+                if (notNullField) {
+                    importPackages.add(isString ? notBlank : notNull);
                 }
                 if (isString) {
                     importPackages.add(size);
@@ -113,70 +73,39 @@ public class CommandConfig implements TemplateRender {
             }
         }
 
-        // 全局包
         importPackages.addAll(globalConfig.getModelDocImportPackages());
         importPackages.addAll(globalConfig.getModelImportPackages());
-
-
-        // 导包数据
-        Map<String, Object> data = new HashMap<>();
-        Collection<String> frameworkPackages = importPackages.stream()
-                .filter(pkg -> !pkg.startsWith("java"))
-                .collect(Collectors.toCollection(TreeSet::new));
-        Collection<String> javaPackages = importPackages.stream()
-                .filter(pkg -> pkg.startsWith("java"))
-                .collect(Collectors.toCollection(TreeSet::new));
-        data.put("createParamFramePkg", frameworkPackages);
-        data.put("createParamJavaPkg", javaPackages);
-        return data;
+        return ImportPackageSupport.splitImportPackages(importPackages, "createParamFramePkg", "createParamJavaPkg");
     }
 
-
-    private Map<String, Object> resolveUpdateDtoImports(TableInfo tableInfo) {
+    private Map<String, Object> resolveUpdateDtoImports(RenderContext context) {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        TemplateConfig templateConfig = configurer.getTemplateConfig();
-        CommandConfig commandConfig = configurer.getCommandConfig();
-        QueryConfig queryConfig = configurer.getQueryConfig();
-        ExcelConfig excelConfig = configurer.getExcelConfig();
-        Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
-        TableField idField = tableInfo.getIdField();
-        String idFieldPropertyPkg = idField != null ? idField.getPropertyPkg() : null;
-
         Set<String> importPackages = new TreeSet<>();
-
         String size = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_SIZE.getCanonicalName();
         String notBlank = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_NOT_BLANK.getCanonicalName();
         String notNull = globalConfig.getJavaEEApi().getPackagePrefix() + RuntimeClass.PREFIX_JAKARTA_VALIDATION_NOT_NULL.getCanonicalName();
 
-        // 属性过滤
-        for (TableField field : tableInfo.getFields()) {
+        for (TableField field : context.getTableInfo().getFields()) {
             if (field.isLogicDeleteField()) {
                 continue;
             }
             boolean isInsertFill = "INSERT".equals(field.getFill()) || "INSERT_UPDATE".equals(field.getFill());
             boolean isUpdateFill = "UPDATE".equals(field.getFill());
-            boolean isFill = isInsertFill || isUpdateFill;
-            if (field.getFill() != null && isFill) {
+            if (field.getFill() != null && (isInsertFill || isUpdateFill)) {
                 continue;
             }
             if (commandExcludeColumns.contains(field.getColumnName())) {
                 continue;
             }
-            Optional.ofNullable(field.getPropertyPkg()).ifPresent(importPackages::add);
-
-            boolean notnullFlag = field.isKeyFlag() || field.isVersionField();
+            ImportPackageSupport.addIfPresent(importPackages, field.getJavaTypeCanonicalName());
+            boolean notNullField = field.isPrimaryKey() || field.isVersionField();
             boolean isString = "String".equals(field.getPropertyType());
-
             if (valid) {
-                if (field.isKeyFlag()) {
+                if (field.isPrimaryKey()) {
                     importPackages.add(notNull);
                 }
-                if (notnullFlag) {
-                    if (isString) {
-                        importPackages.add(notBlank);
-                    } else {
-                        importPackages.add(notNull);
-                    }
+                if (notNullField) {
+                    importPackages.add(isString ? notBlank : notNull);
                 }
                 if (isString) {
                     importPackages.add(size);
@@ -184,21 +113,8 @@ public class CommandConfig implements TemplateRender {
             }
         }
 
-        // 全局包
         importPackages.addAll(globalConfig.getModelDocImportPackages());
         importPackages.addAll(globalConfig.getModelImportPackages());
-
-        // 导包数据
-        HashMap<String, Object> data = new HashMap<>();
-        Collection<String> frameworkPackages = importPackages.stream()
-                .filter(pkg -> !pkg.startsWith("java"))
-                .collect(Collectors.toCollection(TreeSet::new));
-        Collection<String> javaPackages = importPackages.stream()
-                .filter(pkg -> pkg.startsWith("java"))
-                .collect(Collectors.toCollection(TreeSet::new));
-        data.put("updateParamFramePkg", frameworkPackages);
-        data.put("updateParamJavaPkg", javaPackages);
-        return data;
+        return ImportPackageSupport.splitImportPackages(importPackages, "updateParamFramePkg", "updateParamJavaPkg");
     }
-
 }

@@ -80,14 +80,9 @@ public class ${controller.classSimpleName} {
     #if(${table.idField})
     public ${returnType.toTypeString("${table.idField.propertyType}")} ${createMethodName}($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} param) {
     #else
-    public ${returnType.toTypeString("Object")} ${createMethodName}($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} param) {
+    public ${returnType.toTypeString("Boolean")} ${createMethodName}($!{requiredBodyStr}$!{validStr}${createParam.classSimpleName} param) {
     #end
-    #if(${table.idField})
         return ${returnType.toInvokeString("baseService.${createMethodName}(param)")};
-    #else
-        baseService.${createMethodName}(param);
-        return ${returnType.toInvokeString("null")};
-    #end
     }
 #end
 #if(${generateUpdate})

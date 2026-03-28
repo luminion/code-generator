@@ -34,13 +34,15 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     #if(${table.idField})
     public ${table.idField.propertyType} ${createMethodName}(${createParam.classSimpleName} param) {
     #else
-    public void ${createMethodName}(${createParam.classSimpleName} param) {
+    public boolean ${createMethodName}(${createParam.classSimpleName} param) {
     #end
         ${entity.classSimpleName} entity = new ${entity.classSimpleName}();
         BeanUtils.copyProperties(param, entity);
-        super.save(entity);
+        boolean saved = super.save(entity);
         #if(${table.idField})
         return entity.get${table.idField.capitalName}();
+        #else
+        return saved;
         #end
     }
 #end

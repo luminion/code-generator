@@ -1,6 +1,15 @@
 package io.github.luminion.generator;
 
-import io.github.luminion.generator.builder.*;
+import io.github.luminion.generator.builder.CommandBuilder;
+import io.github.luminion.generator.builder.ControllerBuilder;
+import io.github.luminion.generator.builder.DataSourceBuilder;
+import io.github.luminion.generator.builder.EntityBuilder;
+import io.github.luminion.generator.builder.ExcelBuilder;
+import io.github.luminion.generator.builder.GlobalBuilder;
+import io.github.luminion.generator.builder.MapperBuilder;
+import io.github.luminion.generator.builder.QueryBuilder;
+import io.github.luminion.generator.builder.ServiceBuilder;
+import io.github.luminion.generator.builder.TemplateBuilder;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
 import lombok.RequiredArgsConstructor;
@@ -24,48 +33,47 @@ public class LambdaGenerator {
         global.accept(new GlobalBuilder(configurer));
         return this;
     }
-    
 
     public LambdaGenerator dataSource(Consumer<DataSourceBuilder> dataSource) {
         dataSource.accept(new DataSourceBuilder(configurer));
         return this;
     }
-    
+
     public LambdaGenerator template(Consumer<TemplateBuilder> template) {
         template.accept(new TemplateBuilder(configurer));
         return this;
     }
-    
+
     public LambdaGenerator controller(Consumer<ControllerBuilder> controller) {
         controller.accept(new ControllerBuilder(configurer));
         return this;
     }
-    
+
     public LambdaGenerator service(Consumer<ServiceBuilder> service) {
         service.accept(new ServiceBuilder(configurer));
         return this;
     }
-    
+
     public LambdaGenerator mapper(Consumer<MapperBuilder> mapper) {
         mapper.accept(new MapperBuilder(configurer));
         return this;
     }
-    
+
     public LambdaGenerator entity(Consumer<EntityBuilder> entity) {
         entity.accept(new EntityBuilder(configurer));
         return this;
     }
-    
+
     public LambdaGenerator command(Consumer<CommandBuilder> command) {
         command.accept(new CommandBuilder(configurer));
         return this;
     }
-    
+
     public LambdaGenerator query(Consumer<QueryBuilder> query) {
         query.accept(new QueryBuilder(configurer));
         return this;
     }
-    
+
     public LambdaGenerator excel(Consumer<ExcelBuilder> excel) {
         excel.accept(new ExcelBuilder(configurer));
         return this;
@@ -74,12 +82,15 @@ public class LambdaGenerator {
     public void execute(String... tableNames) {
         if (tableNames.length > 0) {
             configurer.getDataSourceConfig().getIncludeTables().addAll(Arrays.asList(tableNames));
+            log.info("Restrict generation to tables: {}", Arrays.toString(tableNames));
+        } else {
+            log.info("No explicit table filter provided. All matched tables will be generated.");
         }
-        log.debug("========================== ready to generate...==========================");
+        File outputDir = new File(configurer.getTemplateConfig().getOutputDir());
+        log.info("Start code generation. Output directory: {}", outputDir.getAbsolutePath());
         VelocityTemplateEngine templateEngine = new VelocityTemplateEngine(configurer);
-        // 模板引擎初始化执行文件输出
         templateEngine.batchOutput().open();
-        log.debug("========================== generate success！！！==========================");
+        log.info("Code generation completed. Output directory: {}", outputDir.getAbsolutePath());
         String banner =
                 "  _________                                        \n" +
                         " /   _____/__ __   ____  ____  ____   ______ ______\n" +
@@ -90,8 +101,6 @@ public class LambdaGenerator {
                         "\n(ﾉ>ω<)ﾉ  Code generation complete! Let's start coding ~\n";
         System.out.println(banner);
         System.out.println("generated file output dir:");
-        String path = configurer.getTemplateConfig().getOutputDir();
-        System.out.println(new File(path).getAbsolutePath());
+        System.out.println(outputDir.getAbsolutePath());
     }
-
 }

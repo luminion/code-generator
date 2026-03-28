@@ -26,7 +26,7 @@ public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entit
     #if(${table.idField})
     ${table.idField.propertyType} ${createMethodName}(${createParam.classSimpleName} param);
     #else
-    void ${createMethodName}(${createParam.classSimpleName} param);
+    Boolean ${createMethodName}(${createParam.classSimpleName} param);
     #end
 #end
 #if(${generateUpdate} && ${table.idField})
@@ -60,4 +60,3 @@ public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entit
     void ${excelExportMethodName}(${queryParam.classSimpleName} param, OutputStream os);
 #end
 }
-

@@ -15,88 +15,88 @@ import java.util.function.Consumer;
 public class TemplateBuilder {
     private final Configurer configurer;
 
-    public TemplateBuilder outputDir(String outPutDir){
-        configurer.getTemplateConfig().setOutputDir(outPutDir);
+    public TemplateBuilder outputDir(String outputDir) {
+        configurer.getTemplateConfig().setOutputDir(outputDir);
         return this;
     }
-    
-    public TemplateBuilder enableOpenOutputDir(){
+
+    public TemplateBuilder enableOpenOutputDir() {
         configurer.getTemplateConfig().setOpenOutputDir(true);
         return this;
     }
-    
-    public TemplateBuilder enableFileOverride(){
+
+    public TemplateBuilder enableFileOverride() {
         configurer.getTemplateConfig().setFileOverride(true);
         return this;
     }
-    
-    public TemplateBuilder parentPackage(String parentPackage){
+
+    public TemplateBuilder parentPackage(String parentPackage) {
         configurer.getTemplateConfig().setParentPackage(parentPackage);
         return this;
     }
 
-    public TemplateBuilder parentModule(String parentModule){
+    public TemplateBuilder parentModule(String parentModule) {
         configurer.getTemplateConfig().setParentModule(parentModule);
         return this;
     }
-    
-    public TemplateBuilder controller(Consumer<TemplateFileBuilder> func){
-        func.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getController()));
-        return this;
-    }
-    
-    public TemplateBuilder service(Consumer<TemplateFileBuilder> func){
-        func.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getService()));
-        return this;
-    }
-    
-    public TemplateBuilder serviceImpl(Consumer<TemplateFileBuilder> func){
-        func.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getServiceImpl()));
-        return this;
-    }
-    
-    public TemplateBuilder mapper(Consumer<TemplateFileBuilder> func){
-        func.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getMapper()));
-        return this;
-    }
-    
-    public TemplateBuilder mapperXml(Consumer<TemplateFileBuilder> func){
-        func.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getMapperXml()));
-        return this;
-    }
-    
-    public TemplateBuilder entity(Consumer<TemplateFileBuilder> func){
-        func.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getEntity()));
-        return this;
-    }
-    
-    public TemplateBuilder queryParam(Consumer<TemplateFileBuilder> func){
-        func.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getQueryParam()));
+
+    public TemplateBuilder controller(Consumer<TemplateFileBuilder> customizer) {
+        customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getController()));
         return this;
     }
 
-    public TemplateBuilder queryResult(Consumer<TemplateFileBuilder> func){
-        func.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getQueryResult()));
+    public TemplateBuilder service(Consumer<TemplateFileBuilder> customizer) {
+        customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getService()));
         return this;
     }
-    
-    public TemplateBuilder createParam(Consumer<TemplateFileBuilder> func){
-        func.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getCreateParam()));
+
+    public TemplateBuilder serviceImpl(Consumer<TemplateFileBuilder> customizer) {
+        customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getServiceImpl()));
         return this;
     }
-    
-    public TemplateBuilder updateParam(Consumer<TemplateFileBuilder> func){
-        func.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getUpdateParam()));
+
+    public TemplateBuilder mapper(Consumer<TemplateFileBuilder> customizer) {
+        customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getMapper()));
         return this;
     }
-    
-    public TemplateBuilder excelExportParam(Consumer<TemplateFileBuilder> func){
-        func.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getExcelExportParam()));
+
+    public TemplateBuilder mapperXml(Consumer<TemplateFileBuilder> customizer) {
+        customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getMapperXml()));
         return this;
     }
-    
-    public TemplateBuilder excelImportParam(Consumer<TemplateFileBuilder> func){
-        func.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getExcelImportParam()));
+
+    public TemplateBuilder entity(Consumer<TemplateFileBuilder> customizer) {
+        customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getEntity()));
+        return this;
+    }
+
+    public TemplateBuilder queryParam(Consumer<TemplateFileBuilder> customizer) {
+        customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getQueryParam()));
+        return this;
+    }
+
+    public TemplateBuilder queryResult(Consumer<TemplateFileBuilder> customizer) {
+        customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getQueryResult()));
+        return this;
+    }
+
+    public TemplateBuilder createParam(Consumer<TemplateFileBuilder> customizer) {
+        customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getCreateParam()));
+        return this;
+    }
+
+    public TemplateBuilder updateParam(Consumer<TemplateFileBuilder> customizer) {
+        customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getUpdateParam()));
+        return this;
+    }
+
+    public TemplateBuilder excelExportParam(Consumer<TemplateFileBuilder> customizer) {
+        customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getExcelExportParam()));
+        return this;
+    }
+
+    public TemplateBuilder excelImportParam(Consumer<TemplateFileBuilder> customizer) {
+        customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getExcelImportParam()));
         return this;
     }
 }

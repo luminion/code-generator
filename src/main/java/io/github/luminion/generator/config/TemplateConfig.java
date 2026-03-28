@@ -1,17 +1,15 @@
 package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.enums.TemplateEnum;
+import io.github.luminion.generator.internal.template.TemplateFileResolver;
 import io.github.luminion.generator.metadata.TableInfo;
-import io.github.luminion.generator.metadata.TemplateFile;
 import io.github.luminion.generator.metadata.TemplateClassFile;
-import io.github.luminion.generator.util.StringUtils;
+import io.github.luminion.generator.metadata.TemplateFile;
 import lombok.Data;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author luminion
@@ -20,6 +18,7 @@ import java.util.stream.Collectors;
 @Data
 public class TemplateConfig {
     private final Configurer configurer;
+    private final TemplateFileResolver templateFileResolver = new TemplateFileResolver(this);
 
     /**
      * 生成文件的输出目录
@@ -45,7 +44,6 @@ public class TemplateConfig {
      * 父包模块名,会拼接在父包名之后
      */
     private String parentModule = "";
-
 
     private TemplateFile controller = new TemplateFile(
             TemplateEnum.CONTROLLER.getKey(),
@@ -95,7 +93,6 @@ public class TemplateConfig {
             ".java"
     );
 
-
     private TemplateFile queryParam = new TemplateFile(
             TemplateEnum.QUERY_PARAM.getKey(),
             "%sQueryDTO",
@@ -103,7 +100,6 @@ public class TemplateConfig {
             "/templates/queryParam.java",
             ".java"
     );
-
 
     private TemplateFile queryResult = new TemplateFile(
             TemplateEnum.QUERY_RESULT.getKey(),
@@ -145,72 +141,29 @@ public class TemplateConfig {
             ".java"
     );
 
-    private List<TemplateFile> templateFiles = new ArrayList<>();
+    private final List<TemplateFile> templateFiles = new ArrayList<>();
 
     {
-        // 添加模板文件
         templateFiles.add(controller);
         templateFiles.add(service);
         templateFiles.add(serviceImpl);
         templateFiles.add(mapper);
         templateFiles.add(mapperXml);
         templateFiles.add(entity);
-
         templateFiles.add(queryParam);
         templateFiles.add(queryResult);
-
         templateFiles.add(createParam);
         templateFiles.add(updateParam);
-
         templateFiles.add(excelExportParam);
         templateFiles.add(excelImportParam);
     }
 
     public void setFileOverride(boolean fileOverride) {
         this.fileOverride = fileOverride;
-        templateFiles.forEach(e -> e.setFileOverride(fileOverride));
-    }
-
-    private String getParentPackage() {
-        if (StringUtils.isNotBlank(parentModule)) {
-            return parentPackage + "." + parentModule;
-        }
-        return parentPackage;
-    }
-
-    private String joinPackage(String subPackage) {
-        String parent = getParentPackage();
-        return StringUtils.isBlank(parent) ? subPackage : (parent + "." + subPackage);
-    }
-
-    private String joinPath(String parentDir, String packageName) {
-        if (StringUtils.isBlank(parentDir)) {
-            parentDir = System.getProperty("java.io.tmpdir");
-        }
-        if (!StringUtils.endsWith(parentDir, File.separator)) {
-            parentDir += File.separator;
-        }
-        packageName = packageName.replaceAll("\\.", "\\" + File.separator);
-        return parentDir + packageName;
+        templateFiles.forEach(templateFile -> templateFile.setFileOverride(fileOverride));
     }
 
     public Map<String, TemplateClassFile> resolveTemplateFileMap(TableInfo tableInfo) {
-        return templateFiles.stream().collect(Collectors.toMap(
-                e -> e.getKey(), e -> {
-                    e.validate();
-                    String fileOutputDir = e.getFileOutputDir();
-                    String joinPackage = this.joinPackage(e.getSubPackage());
-                    if (fileOutputDir == null) {
-                        fileOutputDir = joinPath(this.outputDir, joinPackage);
-                        e.setFileOutputDir(fileOutputDir);
-                    }
-                    TemplateClassFile templateClassFile = new TemplateClassFile(e);
-                    templateClassFile.setPackageName(joinPackage);
-                    String classSimpleName = e.convertFormatName(tableInfo.getEntityName());
-                    templateClassFile.setClassSimpleName(classSimpleName);
-                    templateClassFile.setClassCanonicalName(joinPackage + "." + classSimpleName);
-                    return templateClassFile;
-                }));
+        return templateFileResolver.resolve(tableInfo, templateFiles);
     }
-
 }

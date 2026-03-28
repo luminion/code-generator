@@ -59,7 +59,7 @@ public class TableField {
      * java属性类型(简类名)
      */
     private String propertyType;
-    
+
     /**
      * java属性类型(全类名)
      */
@@ -69,7 +69,7 @@ public class TableField {
      * 字段注释
      */
     private String comment;
-    
+
     /**
      * 是否做注解转换
      */
@@ -118,6 +118,102 @@ public class TableField {
             return Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
         }
         return propertyName;
+    }
+
+    public String getRawColumnName() {
+        return name;
+    }
+
+    public void setRawColumnName(String rawColumnName) {
+        this.name = rawColumnName;
+    }
+
+    public boolean isKeywordColumn() {
+        return keyWords;
+    }
+
+    public void setKeywordColumn(boolean keywordColumn) {
+        this.keyWords = keywordColumn;
+    }
+
+    public String getJavaTypeSimpleName() {
+        return propertyType;
+    }
+
+    public void setJavaTypeSimpleName(String javaTypeSimpleName) {
+        this.propertyType = javaTypeSimpleName;
+    }
+
+    public String getJavaTypeCanonicalName() {
+        return propertyPkg;
+    }
+
+    public void setJavaTypeCanonicalName(String javaTypeCanonicalName) {
+        this.propertyPkg = javaTypeCanonicalName;
+    }
+
+    public boolean isPrimaryKey() {
+        return keyFlag;
+    }
+
+    public void setPrimaryKey(boolean primaryKey) {
+        this.keyFlag = primaryKey;
+    }
+
+    public boolean isAutoIncrementPrimaryKey() {
+        return keyIdentityFlag;
+    }
+
+    public void setAutoIncrementPrimaryKey(boolean autoIncrementPrimaryKey) {
+        this.keyIdentityFlag = autoIncrementPrimaryKey;
+    }
+
+    public boolean requiresColumnAnnotation() {
+        return convert;
+    }
+
+    public void setRequiresColumnAnnotation(boolean requiresColumnAnnotation) {
+        this.convert = requiresColumnAnnotation;
+    }
+
+    @Deprecated
+    public String getPropertyPkg() {
+        return propertyPkg;
+    }
+
+    @Deprecated
+    public void setPropertyPkg(String propertyPkg) {
+        this.propertyPkg = propertyPkg;
+    }
+
+    @Deprecated
+    public boolean isKeyFlag() {
+        return keyFlag;
+    }
+
+    @Deprecated
+    public void setKeyFlag(boolean keyFlag) {
+        this.keyFlag = keyFlag;
+    }
+
+    @Deprecated
+    public boolean isKeyIdentityFlag() {
+        return keyIdentityFlag;
+    }
+
+    @Deprecated
+    public void setKeyIdentityFlag(boolean keyIdentityFlag) {
+        this.keyIdentityFlag = keyIdentityFlag;
+    }
+
+    @Deprecated
+    public boolean isConvert() {
+        return convert;
+    }
+
+    @Deprecated
+    public void setConvert(boolean convert) {
+        this.convert = convert;
     }
 
     /**

@@ -46,16 +46,18 @@ public class TableInfo {
     /**
      * 是否有主键
      */
-    private boolean havePrimaryKey;
+    private boolean hasPrimaryKey;
 
     /**
      * 主键字段
      */
-    private TableField idField;
-    
-
+    private TableField primaryKeyField;
 
     public String getEntityPath() {
+        return getEntityVariableName();
+    }
+
+    public String getEntityVariableName() {
         return entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
     }
 
@@ -67,5 +69,25 @@ public class TableInfo {
         return this.fields.stream()
                 .map(TableField::getColumnName)
                 .collect(Collectors.joining(", "));
+    }
+
+    @Deprecated
+    public boolean isHavePrimaryKey() {
+        return hasPrimaryKey;
+    }
+
+    @Deprecated
+    public void setHavePrimaryKey(boolean havePrimaryKey) {
+        this.hasPrimaryKey = havePrimaryKey;
+    }
+
+    @Deprecated
+    public TableField getIdField() {
+        return primaryKeyField;
+    }
+
+    @Deprecated
+    public void setIdField(TableField idField) {
+        this.primaryKeyField = idField;
     }
 }

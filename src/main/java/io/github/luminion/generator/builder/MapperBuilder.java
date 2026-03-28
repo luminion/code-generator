@@ -19,23 +19,35 @@ public class MapperBuilder {
     /**
      * 自定义继承的Mapper类全称，带包名
      *
-     * @param superClass 父类
      * @return this
      */
-    public MapperBuilder superClass(String superClass) {
-        configurer.getMapperConfig().setMapperSuperClass(superClass);
+    public MapperBuilder superClass(String fullyQualifiedClassName) {
+        configurer.getMapperConfig().setMapperSuperClass(fullyQualifiedClassName);
         return this;
+    }
+
+    /**
+     * 自定义继承的Mapper类
+     */
+    public MapperBuilder superClass(Class<?> superClassType) {
+        return superClass(superClassType.getCanonicalName());
     }
 
     /**
      * Mapper标记注解
      *
-     * @param mapperAnnotationClass 注解类
      * @return this
      */
-    public MapperBuilder mapperAnnotationClass(String mapperAnnotationClass) {
-        configurer.getMapperConfig().setMapperAnnotationClass(mapperAnnotationClass);
+    public MapperBuilder mapperAnnotationClass(String fullyQualifiedAnnotationClassName) {
+        configurer.getMapperConfig().setMapperAnnotationClass(fullyQualifiedAnnotationClassName);
         return this;
+    }
+
+    /**
+     * Mapper标记注解
+     */
+    public MapperBuilder mapperAnnotationClass(Class<?> annotationClass) {
+        return mapperAnnotationClass(annotationClass.getCanonicalName());
     }
 
     public MapperBuilder enableBaseColumnList() {
@@ -53,8 +65,8 @@ public class MapperBuilder {
         return this;
     }
 
-    public MapperBuilder mapperCacheClass(Class<?> clazz) {
-        configurer.getMapperConfig().setMapperCacheClass(clazz.getCanonicalName());
+    public MapperBuilder mapperCacheClass(Class<?> mapperCacheType) {
+        configurer.getMapperConfig().setMapperCacheClass(mapperCacheType.getCanonicalName());
         return this;
     }
 
@@ -66,13 +78,13 @@ public class MapperBuilder {
         return mapperCacheClass(clazz);
     }
 
-    public MapperBuilder appendOrderColumn(String column, boolean isDesc) {
-        configurer.getMapperConfig().getXmlOrderColumnMap().put(column, isDesc);
+    public MapperBuilder appendOrderColumn(String columnName, boolean descending) {
+        configurer.getMapperConfig().getXmlOrderColumnMap().put(columnName, descending);
         return this;
     }
 
-    public MapperBuilder orderColumnMap(Map<String, Boolean> orderColumMap) {
-        configurer.getMapperConfig().setXmlOrderColumnMap(new LinkedHashMap<>(orderColumMap));
+    public MapperBuilder orderColumnMap(Map<String, Boolean> orderColumnMap) {
+        configurer.getMapperConfig().setXmlOrderColumnMap(new LinkedHashMap<>(orderColumnMap));
         return this;
     }
 }

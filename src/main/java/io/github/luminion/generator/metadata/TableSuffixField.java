@@ -43,11 +43,11 @@ public class TableSuffixField {
     private String sqlOperatorXml;
 
     /**
-     * 重构
+     * 规范化后缀字段配置
      *
-     * @return {@link TableSuffixField }
+     * @return 当前字段
      */
-    public TableSuffixField refactor() {
+    public TableSuffixField normalize() {
         switch (sqlOperator.toUpperCase()) {
             case "LIKE":
                  this.comment += "(包含字符)";
@@ -128,4 +128,8 @@ public class TableSuffixField {
         return this;
     }
 
+    @Deprecated
+    public TableSuffixField refactor() {
+        return normalize();
+    }
 }

@@ -15,21 +15,19 @@
  */
 package io.github.luminion.generator.datasource.support;
 
-import io.github.luminion.generator.naming.DefaultNamingConverter;
-import io.github.luminion.generator.enums.ColumnFillStrategy;
-import io.github.luminion.generator.util.FieldTypeConvertUtils;
-import io.github.luminion.generator.datasource.DatabaseKeywordsHandler;
-import io.github.luminion.generator.datasource.FieldTypeConverter;
-import io.github.luminion.generator.datasource.FieldTypeProvider;
-import io.github.luminion.generator.datasource.TableInfoProvider;
 import io.github.luminion.generator.config.DataSourceConfig;
+import io.github.luminion.generator.datasource.TableInfoProvider;
 import io.github.luminion.generator.enums.NameConvertType;
-import io.github.luminion.generator.metadata.TableField;
+import io.github.luminion.generator.internal.schema.JdbcTableFieldMapper;
 import io.github.luminion.generator.metadata.TableInfo;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -52,194 +50,86 @@ import java.util.stream.Collectors;
 public class JdbcTableInfoProvider implements TableInfoProvider {
     protected final DataSourceConfig dataSourceConfig;
     protected final JdbcDatabaseMetaDataWrapper databaseMetaDataWrapper;
+    protected final JdbcTableFieldMapper tableFieldMapper;
 
     public JdbcTableInfoProvider(DataSourceConfig dataSourceConfig) {
         this.dataSourceConfig = dataSourceConfig;
         this.databaseMetaDataWrapper = new JdbcDatabaseMetaDataWrapper(dataSourceConfig.createConnection(), dataSourceConfig.getSchema());
+        this.tableFieldMapper = new JdbcTableFieldMapper(dataSourceConfig);
     }
 
     @Override
     public List<TableInfo> queryTables() {
         try {
-            boolean isInclude = !dataSourceConfig.getIncludeTables().isEmpty();
-            boolean isExclude = !dataSourceConfig.getExcludeTables().isEmpty();
+            boolean hasIncludeTables = !dataSourceConfig.getIncludeTables().isEmpty();
+            boolean hasExcludeTables = !dataSourceConfig.getExcludeTables().isEmpty();
             List<TableInfo> tableList = new ArrayList<>();
             List<JdbcDatabaseMetaDataWrapper.Table> tables = this.getTables();
-            //需要反向生成或排除的表信息
             List<TableInfo> includeTableList = new ArrayList<>();
             List<TableInfo> excludeTableList = new ArrayList<>();
             tables.forEach(table -> {
                 String tableName = table.getName();
-                if (StringUtils.isNotBlank(tableName)) {
-                    TableInfo tableInfo = new TableInfo();
-                    tableInfo.setTableName(tableName);
-                    String remarks = table.getRemarks();
-                    if (remarks != null) {
-                        String replaced = remarks.replaceAll("[\r\n]", "");
-                        tableInfo.setComment(replaced);
-                    }
-                    Set<String> tablePrefix = dataSourceConfig.getTablePrefixes();
-                    Set<String> tableSuffix = dataSourceConfig.getTableSuffixes();
-                    String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(tableName, tablePrefix, tableSuffix);
-                    String entityName = dataSourceConfig.getNamingConverter().convertEntityName(removePrefixAndSuffix);
-                    tableInfo.setEntityName(entityName);
-                    if (isInclude && dataSourceConfig.matchIncludeTable(tableName)) {
-                        includeTableList.add(tableInfo);
-                    } else if (isExclude && dataSourceConfig.matchExcludeTable(tableName)) {
-                        excludeTableList.add(tableInfo);
-                    }
-                    tableList.add(tableInfo);
+                if (StringUtils.isBlank(tableName)) {
+                    return;
                 }
+                TableInfo tableInfo = new TableInfo();
+                tableInfo.setTableName(tableName);
+                String remarks = table.getRemarks();
+                if (remarks != null) {
+                    tableInfo.setComment(remarks.replaceAll("[\r\n]", ""));
+                }
+                String normalizedTableName = NameConvertType.removePrefixAndSuffix(tableName,
+                        dataSourceConfig.getTablePrefixes(),
+                        dataSourceConfig.getTableSuffixes());
+                tableInfo.setEntityName(dataSourceConfig.getNamingConverter().convertEntityName(normalizedTableName));
+                if (hasIncludeTables && dataSourceConfig.matchIncludeTable(tableName)) {
+                    includeTableList.add(tableInfo);
+                } else if (hasExcludeTables && dataSourceConfig.matchExcludeTable(tableName)) {
+                    excludeTableList.add(tableInfo);
+                }
+                tableList.add(tableInfo);
             });
-            // 过滤表
             filter(tableList, includeTableList, excludeTableList);
-            // 转换表信息
             tableList.forEach(this::convertTableFields);
             return tableList;
         } finally {
-            // 数据库操作完成,释放连接对象
             databaseMetaDataWrapper.closeConnection();
         }
     }
 
     protected List<JdbcDatabaseMetaDataWrapper.Table> getTables() {
-        // 是否跳过视图
         boolean skipView = dataSourceConfig.isSkipView();
-        // 获取表过滤
         String tableNamePattern = dataSourceConfig.getTableNamePattern();
         return databaseMetaDataWrapper.getTables(tableNamePattern, skipView ? new String[]{"TABLE"} : new String[]{"TABLE", "VIEW"});
     }
 
     protected void convertTableFields(TableInfo tableInfo) {
-        String tableName = tableInfo.getTableName();
-        Map<String, ColumnFillStrategy> columnFillMap = dataSourceConfig.getColumnFillMap();
-        Map<String, JdbcDatabaseMetaDataWrapper.Column> columnsInfoMap = getColumnsInfo(tableName);
-        columnsInfoMap.forEach((k, columnInfo) -> {
-            TableField tableField = new TableField();
-            if (columnInfo.isPrimaryKey()) {
-                tableField.setKeyFlag(true);
-                tableField.setKeyIdentityFlag(columnInfo.isAutoIncrement());
-                tableInfo.setHavePrimaryKey(true);
-                tableInfo.setIdField(tableField);
-            }
-            String rawColumnName = columnInfo.getName();
-            String columnName = rawColumnName;
-            tableField.setName(rawColumnName);
-            tableField.setColumnName(rawColumnName);
-            // 数据库列关键字转化
-            DatabaseKeywordsHandler keyWordsHandler = dataSourceConfig.getKeyWordsHandler();
-            if (keyWordsHandler != null && keyWordsHandler.isKeyWords(rawColumnName)) {
-                tableField.setKeyWords(true);
-                columnName = keyWordsHandler.formatColumn(rawColumnName);
-                tableField.setColumnName(columnName);
-            }
-            // 设置字段的元数据信息
-            TableField.MetaInfo metaInfo = new TableField.MetaInfo();
-            metaInfo.setTableName(tableInfo.getTableName());
-            metaInfo.setColumnName(columnInfo.getName());
-            metaInfo.setLength(columnInfo.getLength());
-            metaInfo.setNullable(columnInfo.isNullable());
-            metaInfo.setRemarks(columnInfo.getRemarks());
-            metaInfo.setDefaultValue(columnInfo.getDefaultValue());
-            metaInfo.setScale(columnInfo.getScale());
-            metaInfo.setJdbcType(columnInfo.getJdbcType());
-            metaInfo.setTypeName(columnInfo.getTypeName());
-            tableField.setMetaInfo(metaInfo);
-
-
-            FieldTypeProvider fieldTypeProvider = null;
-            FieldTypeConverter fieldTypeConverter = dataSourceConfig.getFieldTypeConverter();
-            if (fieldTypeConverter != null) {
-                fieldTypeProvider = fieldTypeConverter.convert(metaInfo);
-            }
-            if (fieldTypeProvider == null){
-                fieldTypeProvider = FieldTypeConvertUtils.getJavaFieldType(metaInfo, dataSourceConfig.getDateType());
-            }
-            tableField.setPropertyType(fieldTypeProvider.getClassSimpleName());
-            tableField.setPropertyPkg(fieldTypeProvider.getClassCanonicalName());
-
-            // 注释双引号替换为单引号
-            if (columnInfo.getRemarks() != null) {
-                String comment = columnInfo.getRemarks().replace("\"", "'");
-                tableField.setComment(comment);
-            }
-            Set<String> columnPrefixes = dataSourceConfig.getColumnPrefixes();
-            Set<String> columnSuffixes = dataSourceConfig.getColumnSuffixes();
-            String removePrefixAndSuffix = NameConvertType.removePrefixAndSuffix(rawColumnName, columnPrefixes, columnSuffixes);
-            String propertyName = dataSourceConfig.getNamingConverter().convertFieldName(removePrefixAndSuffix);
-            tableField.setPropertyName(propertyName);
-
-            boolean removeIsPrefix = dataSourceConfig.isBooleanColumnRemoveIsPrefix();
-            boolean isBoolean = "boolean".equalsIgnoreCase(tableField.getPropertyType());
-            boolean startsWithIs = propertyName.startsWith("is");
-            if (removeIsPrefix && isBoolean && startsWithIs) {
-                tableField.setConvert(true);
-                propertyName = StringUtils.removePrefixAfterPrefixToLower(propertyName, 2);
-                tableField.setPropertyName(propertyName);
-            }
-            if (DefaultNamingConverter.class.equals(dataSourceConfig.getNamingConverter().getClass())) {
-                // 下划线转驼峰策略
-                boolean b = !propertyName.equalsIgnoreCase(NameConvertType.underlineToCamel(tableField.getColumnName()));
-                tableField.setConvert(b);
-            } else {
-                boolean b = !propertyName.equalsIgnoreCase(tableField.getColumnName());
-                tableField.setConvert(b);
-            }
-            if (tableField.isKeyFlag()) {
-                boolean b = !"id".equals(propertyName);
-                tableField.setConvert(b);
-            }
-            if (dataSourceConfig.matchIgnoreColumns(tableField.getColumnName())) {
-                return;
-            }
-            if (dataSourceConfig.matchCommonColumns(tableField.getColumnName())) {
-                tableInfo.getCommonFields().add(tableField);
-            } else {
-                tableInfo.getFields().add(tableField);
-            }
-            // 字段填充
-            ColumnFillStrategy columnFillStrategy = columnFillMap.get(tableField.getColumnName());
-            if (columnFillStrategy != null) {
-                tableField.setFill(columnFillStrategy.name());
-            }
-            String logicDeleteColumnName = dataSourceConfig.getLogicDeleteColumnName();
-            if (tableField.getColumnName().equals(logicDeleteColumnName)) {
-                tableField.setLogicDeleteField(true);
-            }
-            String versionColumnName = dataSourceConfig.getVersionColumnName();
-            if (tableField.getColumnName().equals(versionColumnName)) {
-                tableField.setVersionField(true);
-            }
-        });
+        tableFieldMapper.mapTableFields(tableInfo, getColumnsInfo(tableInfo.getTableName()));
     }
 
     protected Map<String, JdbcDatabaseMetaDataWrapper.Column> getColumnsInfo(String tableName) {
         return databaseMetaDataWrapper.getColumnsInfo(tableName, true);
     }
 
-
     protected void filter(List<TableInfo> tableList, List<TableInfo> includeTableList, List<TableInfo> excludeTableList) {
-        boolean isInclude = !dataSourceConfig.getIncludeTables().isEmpty();
-        boolean isExclude = !dataSourceConfig.getExcludeTables().isEmpty();
-        if (isExclude || isInclude) {
+        boolean hasIncludeTables = !dataSourceConfig.getIncludeTables().isEmpty();
+        boolean hasExcludeTables = !dataSourceConfig.getExcludeTables().isEmpty();
+        if (hasExcludeTables || hasIncludeTables) {
             Pattern pattern = Pattern.compile("[~!/@#$%^&*()+\\\\\\[\\]|{};:'\",<.>?]+");
-            Map<String, String> notExistTables = new HashSet<>(isExclude ? dataSourceConfig.getExcludeTables() : dataSourceConfig.getIncludeTables())
-                    .stream()
-                    .filter(s -> !pattern.matcher(s).find())
-                    .collect(Collectors.toMap(String::toLowerCase, s -> s, (o, n) -> n));
-            // 将已经存在的表移除，获取配置中数据库不存在的表
-            for (TableInfo tabInfo : tableList) {
+            Set<String> configuredTables = hasExcludeTables ? dataSourceConfig.getExcludeTables() : dataSourceConfig.getIncludeTables();
+            Map<String, String> notExistTables = new HashSet<>(configuredTables).stream()
+                    .filter(tableName -> !pattern.matcher(tableName).find())
+                    .collect(Collectors.toMap(String::toLowerCase, tableName -> tableName, (oldValue, newValue) -> newValue));
+            for (TableInfo tableInfo : tableList) {
                 if (notExistTables.isEmpty()) {
                     break;
                 }
-                //解决可能大小写不敏感的情况导致无法移除掉
-                notExistTables.remove(tabInfo.getTableName().toLowerCase());
+                notExistTables.remove(tableInfo.getTableName().toLowerCase());
             }
             if (!notExistTables.isEmpty()) {
                 log.warn("表[{}]在数据库中不存在！！！", String.join(",", notExistTables.values()));
             }
-            // 需要反向生成的表信息
-            if (isExclude) {
+            if (hasExcludeTables) {
                 tableList.removeAll(excludeTableList);
             } else {
                 tableList.clear();
@@ -247,5 +137,4 @@ public class JdbcTableInfoProvider implements TableInfoProvider {
             }
         }
     }
-
 }

@@ -1,18 +1,17 @@
 package io.github.luminion.generator.config;
 
-import io.github.luminion.generator.enums.RuntimeEnv;
-import io.github.luminion.generator.naming.ExtraFieldStrategy;
 import io.github.luminion.generator.datasource.support.JdbcTableInfoProvider;
-import io.github.luminion.generator.metadata.*;
+import io.github.luminion.generator.internal.render.RenderContext;
+import io.github.luminion.generator.internal.render.TemplateGenerationPlanner;
+import io.github.luminion.generator.metadata.TableInfo;
+import io.github.luminion.generator.metadata.TemplateClassFile;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 /**
  * @author luminion
@@ -35,6 +34,7 @@ public class Configurer {
     private final QueryConfig queryConfig;
     private final ExcelConfig excelConfig;
 
+    private final TemplateGenerationPlanner templateGenerationPlanner;
 
     public Configurer(String url, String username, String password) {
         this.dataSourceConfig = new DataSourceConfig(url, username, password);
@@ -50,13 +50,14 @@ public class Configurer {
         this.commandConfig = new CommandConfig(this);
         this.queryConfig = new QueryConfig(this);
         this.excelConfig = new ExcelConfig(this);
-    }
 
+        this.templateGenerationPlanner = new TemplateGenerationPlanner(this);
+    }
 
     public List<TableInfo> queryTableInfos() {
         try {
-            JdbcTableInfoProvider defaultQuery = new JdbcTableInfoProvider(this.dataSourceConfig);
-            List<TableInfo> tableInfos = defaultQuery.queryTables();
+            JdbcTableInfoProvider tableInfoProvider = new JdbcTableInfoProvider(this.dataSourceConfig);
+            List<TableInfo> tableInfos = tableInfoProvider.queryTables();
             if (tableInfos.isEmpty()) {
                 log.warn("No matching tables found");
             }
@@ -66,97 +67,49 @@ public class Configurer {
         }
     }
 
+    public RenderContext createRenderContext(TableInfo tableInfo) {
+        return templateGenerationPlanner.plan(tableInfo);
+    }
+
+    public Map<String, TemplateClassFile> resolveTemplateFiles(TableInfo tableInfo) {
+        return createRenderContext(tableInfo).getTemplateFiles();
+    }
 
     public Map<String, Object> renderMap(TableInfo tableInfo) {
+        return renderMap(createRenderContext(tableInfo));
+    }
+
+    public Map<String, Object> renderMap(RenderContext context) {
+        HashMap<String, Object> result = collectRenderData(context);
+        result.put("table", context.getTableInfo());
+        result.putAll(context.getTemplateFiles());
+        applyCustomRenderData(context.getTableInfo(), result);
+        return result;
+    }
+
+    public Map<String, Object> renderMap(TableInfo tableInfo, Map<String, TemplateClassFile> templateFileMap) {
+        return renderMap(new RenderContext(tableInfo, templateFileMap));
+    }
+
+    private HashMap<String, Object> collectRenderData(RenderContext context) {
         HashMap<String, Object> result = new HashMap<>();
+        result.putAll(this.globalConfig.renderData(context));
+        result.putAll(this.controllerConfig.renderData(context));
+        result.putAll(this.serviceConfig.renderData(context));
+        result.putAll(this.mapperConfig.renderData(context));
+        result.putAll(this.entityConfig.renderData(context));
+        result.putAll(this.commandConfig.renderData(context));
+        result.putAll(this.queryConfig.renderData(context));
+        result.putAll(this.excelConfig.renderData(context));
+        return result;
+    }
 
-        // 处理后缀
-        Set<String> existPropertyNames = tableInfo.getFields().stream()
-                .map(e -> e.getPropertyName())
-                .collect(Collectors.toSet());
-        List<TableSuffixField> extraFields = tableInfo.getExtraFields();
-        for (TableField field : tableInfo.getFields()) {
-            if (field.isLogicDeleteField()) {
-                continue;
-            }
-            for (Map.Entry<String, String> entry : this.queryConfig.getExtraFieldSuffixMap().entrySet()) {
-                String suffix = entry.getKey();
-                String sqlOperator = entry.getValue();
-                ExtraFieldStrategy extraFieldStrategy = this.queryConfig.getExtraFieldStrategy();
-
-                if (extraFieldStrategy.generateExtraField(sqlOperator, field)) {
-                    String suffixPropertyName = field.getPropertyName() + suffix;
-                    if (existPropertyNames.contains(suffixPropertyName)) {
-                        continue;
-                    }
-                    existPropertyNames.add(suffixPropertyName);
-                    TableSuffixField extraField = new TableSuffixField();
-                    extraField.setSqlOperator(sqlOperator);
-                    extraField.setPropertyType(field.getPropertyType());
-                    extraField.setPropertyName(field.getPropertyName() + suffix);
-                    extraField.setCapitalName(field.getCapitalName() + suffix);
-                    extraField.setColumnName(field.getColumnName());
-                    extraField.setComment(field.getComment());
-                    extraFields.add(extraField.refactor());
-                }
-            }
-        }
-
-        // 逻辑处理
-        if (!globalConfig.isGenerateCreate()) {
-            templateConfig.getCreateParam().setGenerate(false);
-        }
-        if (!globalConfig.isGenerateUpdate()) {
-            templateConfig.getUpdateParam().setGenerate(false);
-        }
-        boolean generateQuery = globalConfig.isGenerateQueryById()
-                || globalConfig.isGenerateQueryList()
-                || globalConfig.isGenerateQueryPage()
-                || globalConfig.isGenerateExcelExport();
-        if (!generateQuery) {
-            templateConfig.getQueryParam().setGenerate(false);
-            if (!RuntimeEnv.MP_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
-                templateConfig.getQueryResult().setGenerate(false);
-            }
-        }
-        if (!globalConfig.isGenerateExcelImport()) {
-            templateConfig.getExcelImportParam().setGenerate(false);
-        }
-        if (!globalConfig.isGenerateExcelExport()) {
-            templateConfig.getExcelExportParam().setGenerate(false);
-        }
-
-
-        // 渲染模板数据
-        result.putAll(this.globalConfig.renderData(tableInfo));
-
-        result.putAll(this.controllerConfig.renderData(tableInfo));
-        result.putAll(this.serviceConfig.renderData(tableInfo));
-        result.putAll(this.mapperConfig.renderData(tableInfo));
-        result.putAll(this.entityConfig.renderData(tableInfo));
-
-        result.putAll(this.commandConfig.renderData(tableInfo));
-        result.putAll(this.queryConfig.renderData(tableInfo));
-        result.putAll(this.excelConfig.renderData(tableInfo));
-
-
-        // 表信息
-        result.put("table", tableInfo);
-        // 模板信息
-        Map<String, TemplateClassFile> templateFileMap = templateConfig.resolveTemplateFileMap(tableInfo);
-        result.putAll(templateFileMap);
-
-
-        // 自定义扩展数据
+    private void applyCustomRenderData(TableInfo tableInfo, Map<String, Object> result) {
         Map<String, Object> customRenderData = this.globalConfig.getCustomRenderData();
         result.putAll(customRenderData);
         BiConsumer<TableInfo, Map<String, Object>> beforeGenerate = this.globalConfig.getCustomRenderLogic();
         if (beforeGenerate != null) {
             beforeGenerate.accept(tableInfo, result);
         }
-
-        return result;
     }
-
-
 }

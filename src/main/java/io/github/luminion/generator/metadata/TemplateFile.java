@@ -2,6 +2,8 @@ package io.github.luminion.generator.metadata;
 
 import lombok.Data;
 
+import java.io.File;
+
 /**
  * 对应的某个输出文件
  * @author luminion
@@ -41,10 +43,13 @@ public class TemplateFile {
      * 输出文件路径
      */
     protected String fileOutputDir;
+    /**
+     * 跳过生成的原因
+     */
+    protected String skipReason;
 
     /**
-     * 
-
+     *
      * <pre>
      * TemplateFile templateFile = new TemplateFile(
      *             TemplateEnum.CREATE_DTO.getKey(),
@@ -72,6 +77,30 @@ public class TemplateFile {
         return String.format(nameFormat, entityName);
     }
 
+    public String resolveFileName(String entityName) {
+        return convertFormatName(entityName) + outputFileSuffix;
+    }
+
+    public File resolveOutputFile(String entityName) {
+        return new File(fileOutputDir, resolveFileName(entityName));
+    }
+
+    public String getFileNamePattern() {
+        return nameFormat;
+    }
+
+    public void setFileNamePattern(String fileNamePattern) {
+        this.nameFormat = fileNamePattern;
+    }
+
+    public String getOutputDirectory() {
+        return fileOutputDir;
+    }
+
+    public void setOutputDirectory(String outputDirectory) {
+        this.fileOutputDir = outputDirectory;
+    }
+
     /**
      * 模板引擎输出之前, 验证输出文件信息
      */
@@ -86,5 +115,4 @@ public class TemplateFile {
             throw new IllegalArgumentException("File name suffix cannot be empty");
         }
     }
-    
 }

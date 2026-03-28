@@ -24,11 +24,17 @@ public class EntityBuilder {
 
     /**
      * 自定义继承的Entity类全称，带包名
-     *
      */
-    public EntityBuilder superClass(String classCanonicalName) {
-        configurer.getEntityConfig().setEntitySuperClass(classCanonicalName);
+    public EntityBuilder superClass(String fullyQualifiedClassName) {
+        configurer.getEntityConfig().setEntitySuperClass(fullyQualifiedClassName);
         return this;
+    }
+
+    /**
+     * 自定义继承的Entity类
+     */
+    public EntityBuilder superClass(Class<?> superClassType) {
+        return superClass(superClassType.getCanonicalName());
     }
 
     /**
@@ -86,6 +92,4 @@ public class EntityBuilder {
         configurer.getDataSourceConfig().setColumnFillMap(new LinkedHashMap<>(columnFillMap));
         return this;
     }
-
-
 }

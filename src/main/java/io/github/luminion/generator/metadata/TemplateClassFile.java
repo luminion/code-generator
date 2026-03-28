@@ -34,10 +34,27 @@ public class TemplateClassFile extends TemplateFile {
         this.setGenerate(templateFile.isGenerate());
         this.setFileOverride(templateFile.isFileOverride());
         this.setFileOutputDir(templateFile.getFileOutputDir());
+        this.setSkipReason(templateFile.getSkipReason());
     }
 
     @Override
     public String toString() {
         return classSimpleName;
+    }
+
+    public String getSimpleClassName() {
+        return classSimpleName;
+    }
+
+    public void setSimpleClassName(String simpleClassName) {
+        this.classSimpleName = simpleClassName;
+    }
+
+    public String getFullyQualifiedClassName() {
+        return classCanonicalName;
+    }
+
+    public void setFullyQualifiedClassName(String fullyQualifiedClassName) {
+        this.classCanonicalName = fullyQualifiedClassName;
     }
 }

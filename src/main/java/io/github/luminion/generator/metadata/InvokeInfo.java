@@ -30,7 +30,6 @@ public class InvokeInfo {
         String methodName = method.getName();
         boolean isStatic = Modifier.isStatic(method.getModifiers());
 
-        // typeFormatter
         if (genericTypeCount == 0) {
             this.typeFormatter = genericTypeString -> classSimpleName;
         } else if (genericTypeCount == 1) {
@@ -39,7 +38,6 @@ public class InvokeInfo {
             this.typeFormatter = genericTypeString -> String.format("%s<%s>", classSimpleName, "?");
         }
 
-        // invokeFormatter
         if (isStatic) {
             this.invokeFormatter = params -> String.format("%s.%s(%s)", classSimpleName, methodName, params);
         } else {
@@ -54,7 +52,6 @@ public class InvokeInfo {
         this.classCanonicalName = declaringClass.getName();
         int genericTypeCount = declaringClass.getTypeParameters().length;
 
-        // typeFormatter
         if (genericTypeCount == 0) {
             this.typeFormatter = genericTypeString -> classSimpleName;
         } else if (genericTypeCount == 1) {
@@ -62,7 +59,7 @@ public class InvokeInfo {
         } else {
             this.typeFormatter = genericTypeString -> String.format("%s<%s>", classSimpleName, "?");
         }
-        // typeFormatter
+
         String generic = genericTypeCount == 1 ? "<>" : "";
         this.invokeFormatter = params -> String.format("new %s%s(%s)", classSimpleName, generic, params);
     }
@@ -106,4 +103,11 @@ public class InvokeInfo {
         return invokeFormatter.apply(params);
     }
 
+    public String getSimpleClassName() {
+        return classSimpleName;
+    }
+
+    public String getFullyQualifiedClassName() {
+        return classCanonicalName;
+    }
 }

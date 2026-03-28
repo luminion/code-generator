@@ -16,6 +16,7 @@
 package io.github.luminion.generator.engine;
 
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.internal.render.RenderContext;
 import io.github.luminion.generator.metadata.TableInfo;
 import io.github.luminion.generator.metadata.TemplateFile;
 import io.github.luminion.generator.util.FileUtils;
@@ -30,7 +31,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * 模板引擎抽象类
  *
@@ -42,27 +42,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public abstract class AbstractTemplateEngine {
 
-    /**
-     * 配置信息
-     */
     @Getter
     protected final Configurer configurer;
 
-    /**
-     * 输出文件
-     *
-     * @param file         文件
-     * @param objectMap    渲染信息
-     * @param templatePath 模板路径
-     * @param fileOverride 是否覆盖已有文件
-     * @since 3.5.2
-     */
     protected void outputFile(File file, Map<String, Object> objectMap, String templatePath, boolean fileOverride) {
         if (isCreate(file, fileOverride)) {
             try {
-                // 全局判断【默认】
-                boolean exist = file.exists();
-                if (!exist) {
+                if (!file.exists()) {
                     File parentFile = file.getParentFile();
                     FileUtils.forceMkdir(parentFile);
                 }
@@ -73,24 +59,20 @@ public abstract class AbstractTemplateEngine {
         }
     }
 
-    /**
-     * 批量输出 java xml 文件
-     */
     public AbstractTemplateEngine batchOutput() {
         try {
             List<TableInfo> tableInfoList = configurer.queryTableInfos();
             tableInfoList.forEach(tableInfo -> {
-                Map<String, Object> objectMap = configurer.renderMap(tableInfo);
-                List<TemplateFile> templateFiles = configurer.getTemplateConfig().getTemplateFiles();
-                for (TemplateFile file : templateFiles) {
-                    if (!file.isGenerate()) {
+                RenderContext renderContext = configurer.createRenderContext(tableInfo);
+                Map<String, Object> objectMap = configurer.renderMap(renderContext);
+                for (TemplateFile templateFile : renderContext.getTemplateFiles().values()) {
+                    if (!templateFile.isGenerate()) {
+                        log.info("Skip generating [{}] for table [{}]: {}", templateFile.getKey(), tableInfo.getTableName(), templateFile.getSkipReason());
                         continue;
                     }
-                    file.validate();
-                    String outputDir = file.getFileOutputDir();
-                    String format = String.format(file.getNameFormat(), tableInfo.getEntityName());
-                    String fileName = outputDir + File.separator + format + file.getOutputFileSuffix();
-                    outputFile(new File(fileName), objectMap, file.getTemplatePath(), file.isFileOverride());
+                    templateFile.validate();
+                    File outputFile = templateFile.resolveOutputFile(tableInfo.getEntityName());
+                    outputFile(outputFile, objectMap, templateFile.getTemplatePath(), templateFile.isFileOverride());
                 }
             });
         } catch (Exception e) {
@@ -99,32 +81,11 @@ public abstract class AbstractTemplateEngine {
         return this;
     }
 
-
-    /**
-     * 将模板转化成为字符串
-     *
-     * @param objectMap      渲染对象 MAP 信息
-     * @param templateName   模板名称
-     * @param templateString 模板字符串
-     * @since 3.5.0
-     */
     @SuppressWarnings("unused")
     public abstract String writer(Map<String, Object> objectMap, String templateName, String templateString) throws Exception;
 
-    /**
-     * 将模板转化成为文件
-     *
-     * @param objectMap    渲染对象 MAP 信息
-     * @param templatePath 模板文件
-     * @param outputFile   文件生成的目录
-     * @throws Exception 异常
-     * @since 3.5.0
-     */
     public abstract void writer(Map<String, Object> objectMap, String templatePath, File outputFile) throws Exception;
 
-    /**
-     * 打开输出目录
-     */
     public void open() {
         String outDir = configurer.getTemplateConfig().getOutputDir();
         if (StringUtils.isBlank(outDir) || !new File(outDir).exists()) {
@@ -138,23 +99,8 @@ public abstract class AbstractTemplateEngine {
         }
     }
 
-
-    /**
-     * 模板真实文件路径
-     *
-     * @param filePath 文件路径
-     * @return ignore
-     */
     public abstract String templateFilePath(String filePath);
 
-    /**
-     * 检查文件是否创建文件
-     *
-     * @param file         文件
-     * @param fileOverride 是否覆盖已有文件
-     * @return 是否创建文件
-     * @since 3.5.2
-     */
     protected boolean isCreate(File file, boolean fileOverride) {
         if (file.exists() && !fileOverride) {
             log.warn("文件[{}]已存在，且未开启文件覆盖配置，需要开启配置可到策略配置中设置！！！", file.getName());
