@@ -81,7 +81,7 @@ public class LambdaGenerator {
 
     public void execute(String... tableNames) {
         if (tableNames.length > 0) {
-            configurer.getDataSourceConfig().getIncludeTables().addAll(Arrays.asList(tableNames));
+            replaceIncludeTables(tableNames);
             log.info("Restrict generation to tables: {}", Arrays.toString(tableNames));
         } else {
             log.info("No explicit table filter provided. All matched tables will be generated.");
@@ -102,5 +102,14 @@ public class LambdaGenerator {
         System.out.println(banner);
         System.out.println("generated file output dir:");
         System.out.println(outputDir.getAbsolutePath());
+    }
+
+    void replaceIncludeTables(String... tableNames) {
+        configurer.getDataSourceConfig().getIncludeTables().clear();
+        configurer.getDataSourceConfig().getIncludeTables().addAll(Arrays.asList(tableNames));
+        if (!configurer.getDataSourceConfig().getExcludeTables().isEmpty()) {
+            log.info("Explicit table filter provided. Clear configured exclude tables: {}", configurer.getDataSourceConfig().getExcludeTables());
+            configurer.getDataSourceConfig().getExcludeTables().clear();
+        }
     }
 }

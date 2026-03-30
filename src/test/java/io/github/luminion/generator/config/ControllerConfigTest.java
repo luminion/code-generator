@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ControllerConfigTest {
@@ -53,7 +54,7 @@ class ControllerConfigTest {
     }
 
     @Test
-    void servicePageParameterNamesStayIndependentFromQueryDtoFieldNames() {
+    void queryDtoPageParameterNamesAreTheOnlyPagingContract() {
         Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
         configurer.getQueryConfig().setPageParamName("current");
         configurer.getQueryConfig().setSizeParamName("size");
@@ -64,8 +65,8 @@ class ControllerConfigTest {
 
         Map<String, Object> data = configurer.renderMap(configurer.createRenderContext(tableInfo));
 
-        assertEquals("pageNo", data.get("servicePageParamName"));
-        assertEquals("pageSize", data.get("serviceSizeParamName"));
+        assertNull(data.get("servicePageParamName"));
+        assertNull(data.get("serviceSizeParamName"));
         assertEquals("current", data.get("pageParamName"));
         assertEquals("size", data.get("sizeParamName"));
     }
