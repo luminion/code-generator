@@ -140,8 +140,9 @@ public abstract class InitializeUtils {
         configurer.getServiceConfig().setServiceImplSuperClass(RuntimeClass.MYBATIS_PLUS_SERVICE_IMPL.getCanonicalName());
         configurer.getMapperConfig().setMapperSuperClass(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getCanonicalName());
         configurer.getMapperConfig().setMapperAnnotationClass(RuntimeClass.MYBATIS_MAPPER_ANNOTATION.getCanonicalName());
-        InvokeInfo invokeInfo = new InvokeInfo(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName(), "IPage<%s>", "%s");
-        configurer.getControllerConfig().setPageType(invokeInfo);
+        InvokeInfo pageDataType = new InvokeInfo(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName(), "IPage<%s>", "%s");
+        configurer.getControllerConfig().setPageDataType(pageDataType);
+        configurer.getControllerConfig().setPageType(pageDataType);
     }
 
 
@@ -151,8 +152,9 @@ public abstract class InitializeUtils {
         configurer.getServiceConfig().setServiceSuperClass(RuntimeClass.SQL_BOOSTER_MP_SERVICE.getCanonicalName());
         configurer.getServiceConfig().setServiceImplSuperClass(RuntimeClass.SQL_BOOSTER_MP_SERVICE_IMPL.getCanonicalName());
         configurer.getMapperConfig().setMapperSuperClass(RuntimeClass.SQL_BOOSTER_MP_MAPPER.getCanonicalName());
-        InvokeInfo invokeInfo = new InvokeInfo(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getCanonicalName(), "BPage<%s>", "%s");
-        configurer.getControllerConfig().setPageType(invokeInfo);
+        InvokeInfo pageDataType = new InvokeInfo(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getCanonicalName(), "BPage<%s>", "%s");
+        configurer.getControllerConfig().setPageDataType(pageDataType);
+        configurer.getControllerConfig().setPageType(pageDataType);
     }
 
 

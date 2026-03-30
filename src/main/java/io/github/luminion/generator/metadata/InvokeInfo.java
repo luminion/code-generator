@@ -80,7 +80,8 @@ public class InvokeInfo {
             this.classCanonicalName = null;
         }
         this.typeFormatter = genericTypeString -> String.format(declarationTypeFormat, genericTypeString);
-        this.invokeFormatter = params -> String.format(methodInvokeFormat, params);
+        String normalizedInvokeFormat = normalizeInvokeFormat(methodInvokeFormat);
+        this.invokeFormatter = params -> String.format(normalizedInvokeFormat, params);
     }
 
     /**
@@ -109,5 +110,23 @@ public class InvokeInfo {
 
     public String getFullyQualifiedClassName() {
         return classCanonicalName;
+    }
+
+    private String normalizeInvokeFormat(String methodInvokeFormat) {
+        if (methodInvokeFormat == null || methodInvokeFormat.isEmpty()) {
+            return "%s";
+        }
+        if (methodInvokeFormat.contains("%s")) {
+            return methodInvokeFormat;
+        }
+        int separatorIndex = methodInvokeFormat.indexOf("::");
+        if (separatorIndex > 0) {
+            String owner = methodInvokeFormat.substring(0, separatorIndex);
+            String method = methodInvokeFormat.substring(separatorIndex + 2);
+            if (!method.isEmpty()) {
+                return owner + "." + method + "(%s)";
+            }
+        }
+        return methodInvokeFormat;
     }
 }

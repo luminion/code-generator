@@ -47,7 +47,7 @@ public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entit
 #end
 #if(${generateQueryPage} && !${sqlBooster})
 
-    ${pageType.classCanonicalName}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} param, long current, long size);
+    ${pageDataType.classCanonicalName}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} param, long current, long size);
 #end
 #if(${generateExcelImport})
 

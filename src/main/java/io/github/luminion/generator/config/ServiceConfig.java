@@ -74,9 +74,9 @@ public class ServiceConfig implements TemplateRender {
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_PARAM.getKey()).getFullyQualifiedClassName());
                 importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName());
-                InvokeInfo pageType = configurer.getControllerConfig().getPageType();
-                if (pageType != null) {
-                    ImportPackageSupport.addIfPresent(importPackages, pageType.getFullyQualifiedClassName());
+                InvokeInfo pageDataType = configurer.getControllerConfig().getPageDataType();
+                if (pageDataType != null) {
+                    ImportPackageSupport.addIfPresent(importPackages, pageDataType.getFullyQualifiedClassName());
                 }
             }
         }
@@ -142,9 +142,9 @@ public class ServiceConfig implements TemplateRender {
                 importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName());
                 importPackages.add(RuntimeClass.MYBATIS_PLUS_PAGE.getCanonicalName());
                 importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getCanonicalName());
-                InvokeInfo pageType = configurer.getControllerConfig().getPageType();
-                if (pageType != null) {
-                    ImportPackageSupport.addIfPresent(importPackages, pageType.getFullyQualifiedClassName());
+                InvokeInfo pageDataType = configurer.getControllerConfig().getPageDataType();
+                if (pageDataType != null) {
+                    ImportPackageSupport.addIfPresent(importPackages, pageDataType.getFullyQualifiedClassName());
                 }
             }
         }

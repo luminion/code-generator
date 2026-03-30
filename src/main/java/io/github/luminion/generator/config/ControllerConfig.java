@@ -55,6 +55,8 @@ public class ControllerConfig implements TemplateRender {
     @RenderField
     private InvokeInfo returnType = new InvokeInfo("", "%s", "%s");
 
+    private InvokeInfo pageDataType = new InvokeInfo(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName(), "IPage<%s>", "%s");
+
     @RenderField
     private InvokeInfo pageType = new InvokeInfo(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName(), "IPage<%s>", "%s");
 
@@ -70,14 +72,9 @@ public class ControllerConfig implements TemplateRender {
         data.put("controllerSuperClass", ClassUtils.getSimpleName(controllerSuperClass));
         String entityVariableName = tableInfo.getEntityVariableName();
         String entityUrl = hyphenStyle ? StringUtils.camelToHyphen(entityVariableName) : entityVariableName;
-        String requestBaseUrl = Stream.of(baseUrl, templateConfig.getParentModule(), entityUrl)
-                .filter(StringUtils::isNotBlank)
-                .collect(Collectors.joining("/"));
-        if (!requestBaseUrl.startsWith("/")) {
-            requestBaseUrl = "/" + requestBaseUrl;
-        }
-        data.put("requestBaseUrl", requestBaseUrl);
+        data.put("requestBaseUrl", normalizeRequestBaseUrl(baseUrl, templateConfig.getParentModule(), entityUrl));
         data.put("restful", restful);
+        data.put("pageDataType", pageDataType);
 
         TemplateClassFile baseService = templateFileMap.get(TemplateEnum.SERVICE.getKey());
         if (!baseService.isGenerate()) {
@@ -186,5 +183,27 @@ public class ControllerConfig implements TemplateRender {
         }
 
         return ImportPackageSupport.splitImportPackages(importPackages, "controllerFramePkg", "controllerJavaPkg");
+    }
+
+    private String normalizeRequestBaseUrl(String... segments) {
+        String joinedPath = Stream.of(segments)
+                .filter(StringUtils::isNotBlank)
+                .map(this::trimSlashes)
+                .filter(StringUtils::isNotBlank)
+                .collect(Collectors.joining("/"));
+        return joinedPath.isEmpty() ? "/" : "/" + joinedPath;
+    }
+
+    private String trimSlashes(String path) {
+        String normalized = path.trim();
+        int start = 0;
+        int end = normalized.length();
+        while (start < end && normalized.charAt(start) == '/') {
+            start++;
+        }
+        while (end > start && normalized.charAt(end - 1) == '/') {
+            end--;
+        }
+        return normalized.substring(start, end);
     }
 }

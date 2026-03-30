@@ -109,6 +109,12 @@ public class TemplateGenerationPlanner {
         if (templateFile == null) {
             return;
         }
+        if (!templateFile.isGenerate()) {
+            if (templateFile.getSkipReason() == null) {
+                templateFile.setSkipReason("Skipped because template generation is disabled");
+            }
+            return;
+        }
         templateFile.setGenerate(shouldGenerate);
         templateFile.setSkipReason(shouldGenerate ? null : skipReason);
     }

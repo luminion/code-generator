@@ -37,20 +37,34 @@ public class TemplateFileResolver {
         templateClassFile.setPackageName(joinedPackage);
         String simpleClassName = templateFile.convertFormatName(tableInfo.getEntityName());
         templateClassFile.setSimpleClassName(simpleClassName);
-        templateClassFile.setFullyQualifiedClassName(joinedPackage + "." + simpleClassName);
+        templateClassFile.setFullyQualifiedClassName(
+                StringUtils.isBlank(joinedPackage) ? simpleClassName : joinedPackage + "." + simpleClassName
+        );
         return templateClassFile;
     }
 
     private String joinPackage(String subPackage) {
         String parentPackage = resolveParentPackage();
-        return StringUtils.isBlank(parentPackage) ? subPackage : parentPackage + "." + subPackage;
+        String normalizedSubPackage = normalizePackageSegment(subPackage);
+        if (StringUtils.isBlank(parentPackage)) {
+            return normalizedSubPackage;
+        }
+        if (StringUtils.isBlank(normalizedSubPackage)) {
+            return parentPackage;
+        }
+        return parentPackage + "." + normalizedSubPackage;
     }
 
     private String resolveParentPackage() {
-        if (StringUtils.isNotBlank(templateConfig.getParentModule())) {
-            return templateConfig.getParentPackage() + "." + templateConfig.getParentModule();
+        String parentPackage = normalizePackageSegment(templateConfig.getParentPackage());
+        String parentModule = normalizePackageSegment(templateConfig.getParentModule());
+        if (StringUtils.isBlank(parentPackage)) {
+            return parentModule;
         }
-        return templateConfig.getParentPackage();
+        if (StringUtils.isBlank(parentModule)) {
+            return parentPackage;
+        }
+        return parentPackage + "." + parentModule;
     }
 
     private String joinPath(String parentDir, String packageName) {
@@ -60,7 +74,24 @@ public class TemplateFileResolver {
         if (!StringUtils.endsWith(parentDir, File.separator)) {
             parentDir += File.separator;
         }
+        if (StringUtils.isBlank(packageName)) {
+            return parentDir.substring(0, parentDir.length() - File.separator.length());
+        }
         packageName = packageName.replaceAll("\\.", "\\" + File.separator);
         return parentDir + packageName;
+    }
+
+    private String normalizePackageSegment(String packageName) {
+        if (StringUtils.isBlank(packageName)) {
+            return "";
+        }
+        String normalized = packageName.trim();
+        while (normalized.startsWith(".")) {
+            normalized = normalized.substring(1);
+        }
+        while (normalized.endsWith(".")) {
+            normalized = normalized.substring(0, normalized.length() - 1);
+        }
+        return normalized;
     }
 }

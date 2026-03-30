@@ -60,4 +60,31 @@ class TemplateGenerationPlannerTest {
         assertTrue(context.getTemplateFile(TemplateEnum.QUERY_PARAM.getKey()).isGenerate());
         assertTrue(context.getTemplateFile(TemplateEnum.QUERY_RESULT.getKey()).isGenerate());
     }
+
+    @Test
+    void userDisabledTemplateRemainsDisabledWhenFeatureWouldNormallyGenerateIt() {
+        Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
+        configurer.getTemplateConfig().getQueryParam().setGenerate(false);
+
+        TableInfo tableInfo = new TableInfo();
+        tableInfo.setTableName("sys_user");
+        tableInfo.setEntityName("SysUser");
+
+        TableField idField = new TableField();
+        idField.setRawColumnName("id");
+        idField.setColumnName("id");
+        idField.setPropertyName("id");
+        idField.setPropertyType("Long");
+        idField.setJavaTypeCanonicalName("java.lang.Long");
+        idField.setPrimaryKey(true);
+        tableInfo.setPrimaryKeyField(idField);
+        tableInfo.setHasPrimaryKey(true);
+        tableInfo.getFields().add(idField);
+
+        RenderContext context = configurer.createRenderContext(tableInfo);
+
+        assertFalse(context.getTemplateFile(TemplateEnum.QUERY_PARAM.getKey()).isGenerate());
+        assertEquals("Skipped because template generation is disabled",
+                context.getTemplateFile(TemplateEnum.QUERY_PARAM.getKey()).getSkipReason());
+    }
 }
