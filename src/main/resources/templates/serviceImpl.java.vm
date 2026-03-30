@@ -94,8 +94,8 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     #if(${service.generate})
     @Override
     #end
-    public ${servicePageType}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} param, long ${servicePageParamName}, long ${serviceSizeParamName}) {
-        Page<${queryResult}> page = new Page<>(${servicePageParamName}, ${serviceSizeParamName});
+    public ${servicePageType}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} param, long current, long size) {
+        Page<${queryResult}> page = new Page<>(current, size);
         List<${queryResult}> list = getBaseMapper().selectByXml(param, page);
         page.setRecords(list);
         return page;
