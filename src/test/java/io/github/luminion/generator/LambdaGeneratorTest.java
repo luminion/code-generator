@@ -16,11 +16,9 @@ class LambdaGeneratorTest {
         LambdaGenerator generator = new LambdaGenerator(configurer);
         configurer.getDataSourceConfig().getIncludeTables().add("legacy_table");
 
-        generator.applyExecuteTableFilter("sys_user", "sys_role");
         assertEquals(new LinkedHashSet<>(Arrays.asList("sys_user", "sys_role")),
                 configurer.getDataSourceConfig().getIncludeTables());
 
-        generator.applyExecuteTableFilter("audit_log");
         assertEquals(new LinkedHashSet<>(Arrays.asList("audit_log")),
                 configurer.getDataSourceConfig().getIncludeTables());
     }

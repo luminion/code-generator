@@ -73,24 +73,4 @@ public class ServiceBuilder {
         return this;
     }
 
-    /**
-     * service分页方法页码参数名
-     *
-     * @return this
-     */
-    public ServiceBuilder pageParamName(String pageParamName) {
-        configurer.getServiceConfig().setPageParamName(pageParamName);
-        return this;
-    }
-
-    /**
-     * service分页方法每页条数参数名
-     *
-     * @return this
-     */
-    public ServiceBuilder sizeParamName(String sizeParamName) {
-        configurer.getServiceConfig().setSizeParamName(sizeParamName);
-        return this;
-    }
-
 }

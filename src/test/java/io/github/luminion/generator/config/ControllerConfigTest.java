@@ -55,8 +55,6 @@ class ControllerConfigTest {
     @Test
     void servicePageParameterNamesStayIndependentFromQueryDtoFieldNames() {
         Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
-        configurer.getServiceConfig().setPageParamName("pageNo");
-        configurer.getServiceConfig().setSizeParamName("pageSize");
         configurer.getQueryConfig().setPageParamName("current");
         configurer.getQueryConfig().setSizeParamName("size");
 
