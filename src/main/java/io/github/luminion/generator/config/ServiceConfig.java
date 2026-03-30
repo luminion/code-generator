@@ -127,7 +127,7 @@ public class ServiceConfig implements TemplateRender {
             importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
         }
         if (RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
-            importPackages.add(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getCanonicalName());
+//            importPackages.add(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getCanonicalName());
             if (globalConfig.isGenerateQueryById() && idField != null) {
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_PARAM.getKey()).getFullyQualifiedClassName());
