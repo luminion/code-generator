@@ -1,5 +1,6 @@
 package io.github.luminion.generator.config;
 
+import io.github.luminion.generator.builder.ControllerBuilder;
 import io.github.luminion.generator.metadata.InvokeInfo;
 import io.github.luminion.generator.metadata.TableInfo;
 import org.junit.jupiter.api.Test;
@@ -43,12 +44,45 @@ class ControllerConfigTest {
         Map<String, Object> data = configurer.renderMap(configurer.createRenderContext(tableInfo));
 
         InvokeInfo pageType = (InvokeInfo) data.get("pageType");
-        InvokeInfo pageDataType = (InvokeInfo) data.get("pageDataType");
         @SuppressWarnings("unchecked")
         Set<String> serviceFramePkg = (Set<String>) data.get("serviceFramePkg");
 
         assertEquals("com.example.common.PageResult", pageType.getFullyQualifiedClassName());
-        assertEquals("com.baomidou.mybatisplus.core.metadata.IPage", pageDataType.getFullyQualifiedClassName());
+        assertEquals("IPage", data.get("servicePageType"));
         assertTrue(serviceFramePkg.contains("com.baomidou.mybatisplus.core.metadata.IPage"));
+    }
+
+    @Test
+    void servicePageParameterNamesStayIndependentFromQueryDtoFieldNames() {
+        Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
+        configurer.getServiceConfig().setPageParamName("pageNo");
+        configurer.getServiceConfig().setSizeParamName("pageSize");
+        configurer.getQueryConfig().setPageParamName("current");
+        configurer.getQueryConfig().setSizeParamName("size");
+
+        TableInfo tableInfo = new TableInfo();
+        tableInfo.setTableName("sys_user");
+        tableInfo.setEntityName("SysUser");
+
+        Map<String, Object> data = configurer.renderMap(configurer.createRenderContext(tableInfo));
+
+        assertEquals("pageNo", data.get("servicePageParamName"));
+        assertEquals("pageSize", data.get("serviceSizeParamName"));
+        assertEquals("current", data.get("pageParamName"));
+        assertEquals("size", data.get("sizeParamName"));
+    }
+
+    @Test
+    void stringWrapperShortcutsBuildExpectedInvokeInfo() {
+        Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
+        ControllerBuilder builder = new ControllerBuilder(configurer);
+
+        builder.returnMethod("com.example.common.Result", "success");
+        builder.pageMethod("com.example.common.PageResult", "success");
+
+        assertEquals("Result<String>", configurer.getControllerConfig().getReturnType().toTypeString("String"));
+        assertEquals("Result.success(data)", configurer.getControllerConfig().getReturnType().toInvokeString("data"));
+        assertEquals("PageResult<String>", configurer.getControllerConfig().getPageType().toTypeString("String"));
+        assertEquals("PageResult.success(data)", configurer.getControllerConfig().getPageType().toInvokeString("data"));
     }
 }

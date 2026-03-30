@@ -138,11 +138,11 @@ public abstract class InitializeUtils {
         configurer.getDataSourceConfig().setLogicDeleteColumnName("deleted");
         configurer.getServiceConfig().setServiceSuperClass(RuntimeClass.MYBATIS_PLUS_I_SERVICE.getCanonicalName());
         configurer.getServiceConfig().setServiceImplSuperClass(RuntimeClass.MYBATIS_PLUS_SERVICE_IMPL.getCanonicalName());
+        configurer.getServiceConfig().setPageType(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName());
         configurer.getMapperConfig().setMapperSuperClass(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getCanonicalName());
         configurer.getMapperConfig().setMapperAnnotationClass(RuntimeClass.MYBATIS_MAPPER_ANNOTATION.getCanonicalName());
-        InvokeInfo pageDataType = new InvokeInfo(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName(), "IPage<%s>", "%s");
-        configurer.getControllerConfig().setPageDataType(pageDataType);
-        configurer.getControllerConfig().setPageType(pageDataType);
+        InvokeInfo pageType = new InvokeInfo(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName(), "IPage<%s>", "%s");
+        configurer.getControllerConfig().setPageType(pageType);
     }
 
 
@@ -151,10 +151,10 @@ public abstract class InitializeUtils {
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MP_BOOSTER);
         configurer.getServiceConfig().setServiceSuperClass(RuntimeClass.SQL_BOOSTER_MP_SERVICE.getCanonicalName());
         configurer.getServiceConfig().setServiceImplSuperClass(RuntimeClass.SQL_BOOSTER_MP_SERVICE_IMPL.getCanonicalName());
+        configurer.getServiceConfig().setPageType(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getCanonicalName());
         configurer.getMapperConfig().setMapperSuperClass(RuntimeClass.SQL_BOOSTER_MP_MAPPER.getCanonicalName());
-        InvokeInfo pageDataType = new InvokeInfo(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getCanonicalName(), "BPage<%s>", "%s");
-        configurer.getControllerConfig().setPageDataType(pageDataType);
-        configurer.getControllerConfig().setPageType(pageDataType);
+        InvokeInfo pageType = new InvokeInfo(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getCanonicalName(), "BPage<%s>", "%s");
+        configurer.getControllerConfig().setPageType(pageType);
     }
 
 

@@ -55,8 +55,6 @@ public class ControllerConfig implements TemplateRender {
     @RenderField
     private InvokeInfo returnType = new InvokeInfo("", "%s", "%s");
 
-    private InvokeInfo pageDataType = new InvokeInfo(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName(), "IPage<%s>", "%s");
-
     @RenderField
     private InvokeInfo pageType = new InvokeInfo(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName(), "IPage<%s>", "%s");
 
@@ -74,7 +72,6 @@ public class ControllerConfig implements TemplateRender {
         String entityUrl = hyphenStyle ? StringUtils.camelToHyphen(entityVariableName) : entityVariableName;
         data.put("requestBaseUrl", normalizeRequestBaseUrl(baseUrl, templateConfig.getParentModule(), entityUrl));
         data.put("restful", restful);
-        data.put("pageDataType", pageDataType);
 
         TemplateClassFile baseService = templateFileMap.get(TemplateEnum.SERVICE.getKey());
         if (!baseService.isGenerate()) {

@@ -3,6 +3,7 @@ package io.github.luminion.generator.builder;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.metadata.InvokeInfo;
 import io.github.luminion.generator.metadata.MethodReference;
+import io.github.luminion.generator.util.ClassUtils;
 import io.github.luminion.generator.util.LambdaUtils;
 import lombok.RequiredArgsConstructor;
 
@@ -138,6 +139,16 @@ public class ControllerBuilder {
     }
 
     /**
+     * 返回值包装方法
+     *
+     * @return Controller配置构建器
+     */
+    public ControllerBuilder returnMethod(String fullyQualifiedClassName, String methodName) {
+        String classSimpleName = ClassUtils.getSimpleName(fullyQualifiedClassName);
+        return returnMethod(fullyQualifiedClassName, classSimpleName + "<%s>", classSimpleName + "." + methodName + "(%s)");
+    }
+
+    /**
      * 分页包装方法
      *
      * @return Controller配置构建器
@@ -156,5 +167,15 @@ public class ControllerBuilder {
     public ControllerBuilder pageMethod(String fullyQualifiedClassName, String declarationTypeFormat, String methodInvokeFormat) {
         configurer.getControllerConfig().setPageType(new InvokeInfo(fullyQualifiedClassName, declarationTypeFormat, methodInvokeFormat));
         return this;
+    }
+
+    /**
+     * 分页包装方法
+     *
+     * @return Controller配置构建器
+     */
+    public ControllerBuilder pageMethod(String fullyQualifiedClassName, String methodName) {
+        String classSimpleName = ClassUtils.getSimpleName(fullyQualifiedClassName);
+        return pageMethod(fullyQualifiedClassName, classSimpleName + "<%s>", classSimpleName + "." + methodName + "(%s)");
     }
 }

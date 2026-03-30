@@ -6,7 +6,6 @@ import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.enums.TemplateEnum;
 import io.github.luminion.generator.internal.render.ImportPackageSupport;
 import io.github.luminion.generator.internal.render.RenderContext;
-import io.github.luminion.generator.metadata.InvokeInfo;
 import io.github.luminion.generator.metadata.TableField;
 import io.github.luminion.generator.metadata.TableInfo;
 import io.github.luminion.generator.metadata.TemplateClassFile;
@@ -31,6 +30,8 @@ public class ServiceConfig implements TemplateRender {
     @RenderField
     protected String serviceImplSuperClass;
 
+    private String pageType = RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName();
+
     @Override
     public Map<String, Object> renderData(RenderContext context) {
         Map<String, Object> data = TemplateRender.super.renderData(context);
@@ -39,6 +40,10 @@ public class ServiceConfig implements TemplateRender {
         }
         if (serviceImplSuperClass != null) {
             data.put("serviceImplSuperClass", ClassUtils.getSimpleName(serviceImplSuperClass));
+        }
+        if (pageType != null) {
+            data.put("servicePageType", ClassUtils.getSimpleName(pageType));
+            data.put("servicePageTypeCanonicalName", pageType);
         }
         data.putAll(resolveServiceImports(context));
         data.putAll(resolveServiceImplImports(context));
@@ -74,10 +79,7 @@ public class ServiceConfig implements TemplateRender {
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_PARAM.getKey()).getFullyQualifiedClassName());
                 importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName());
-                InvokeInfo pageDataType = configurer.getControllerConfig().getPageDataType();
-                if (pageDataType != null) {
-                    ImportPackageSupport.addIfPresent(importPackages, pageDataType.getFullyQualifiedClassName());
-                }
+                ImportPackageSupport.addIfPresent(importPackages, pageType);
             }
         }
         if (globalConfig.isGenerateCreate()) {
@@ -142,10 +144,7 @@ public class ServiceConfig implements TemplateRender {
                 importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName());
                 importPackages.add(RuntimeClass.MYBATIS_PLUS_PAGE.getCanonicalName());
                 importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getCanonicalName());
-                InvokeInfo pageDataType = configurer.getControllerConfig().getPageDataType();
-                if (pageDataType != null) {
-                    ImportPackageSupport.addIfPresent(importPackages, pageDataType.getFullyQualifiedClassName());
-                }
+                ImportPackageSupport.addIfPresent(importPackages, pageType);
             }
         }
         if (globalConfig.isGenerateCreate()) {
