@@ -48,6 +48,9 @@ public class TemplateFile {
      */
     protected String skipReason;
 
+    public TemplateFile() {
+    }
+
     /**
      *
      * <pre>

@@ -5,9 +5,11 @@ import io.github.luminion.generator.internal.template.TemplateFileResolver;
 import io.github.luminion.generator.metadata.TableInfo;
 import io.github.luminion.generator.metadata.TemplateClassFile;
 import io.github.luminion.generator.metadata.TemplateFile;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -161,6 +163,31 @@ public class TemplateConfig {
     public void setFileOverride(boolean fileOverride) {
         this.fileOverride = fileOverride;
         templateFiles.forEach(templateFile -> templateFile.setFileOverride(fileOverride));
+    }
+
+    public void addTemplateFile(TemplateFile templateFile) {
+        addTemplateFile(Collections.singletonList(templateFile));
+    }
+
+    public void addTemplateFile(List<TemplateFile> templateFiles) {
+        for (TemplateFile templateFile : templateFiles) {
+            registerTemplateFile(templateFile);
+        }
+    }
+
+    private void registerTemplateFile(TemplateFile templateFile) {
+        if (StringUtils.isBlank(templateFile.getKey())) {
+            throw new IllegalArgumentException("Template key cannot be empty");
+        }
+        boolean duplicated = this.templateFiles.stream().anyMatch(exist -> exist.getKey().equals(templateFile.getKey()));
+        if (duplicated) {
+            throw new IllegalArgumentException("Template key already exists: " + templateFile.getKey());
+        }
+        templateFile.validate();
+        if (fileOverride) {
+            templateFile.setFileOverride(true);
+        }
+        this.templateFiles.add(templateFile);
     }
 
     public Map<String, TemplateClassFile> resolveTemplateFileMap(TableInfo tableInfo) {

@@ -99,4 +99,12 @@ public class TemplateBuilder {
         customizer.accept(new TemplateFileBuilder(configurer.getTemplateConfig().getExcelImportParam()));
         return this;
     }
+
+    public TemplateBuilder addTemplateFile(Consumer<TemplateFileBuilder> customizer) {
+        TemplateFileBuilder builder = new TemplateFileBuilder();
+        customizer.accept(builder);
+        configurer.getTemplateConfig().addTemplateFile(builder.build());
+        return this;
+    }
+    
 }

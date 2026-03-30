@@ -1,6 +1,7 @@
 package io.github.luminion.generator.builder;
 
 import io.github.luminion.generator.metadata.TemplateFile;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -10,6 +11,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TemplateFileBuilder {
     private final TemplateFile templateFile;
+
+    public TemplateFileBuilder() {
+        this(new TemplateFile());
+    }
+
+    public TemplateFileBuilder key(String key) {
+        templateFile.setKey(key);
+        return this;
+    }
     
     public TemplateFileBuilder disable() {
         templateFile.setGenerate(false);
@@ -43,5 +53,13 @@ public class TemplateFileBuilder {
     public TemplateFileBuilder fileOutputDir(String fileOutputDir) {
         templateFile.setFileOutputDir(fileOutputDir);
         return this;
+    }
+
+    public TemplateFile build() {
+        if (StringUtils.isBlank(templateFile.getKey())) {
+            throw new IllegalArgumentException("Template key cannot be empty");
+        }
+        templateFile.validate();
+        return templateFile;
     }
 }
