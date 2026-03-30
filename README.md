@@ -13,11 +13,11 @@
 - `Controller`
 - `CreateDTO` / `UpdateDTO`
 - `QueryDTO` / `VO`
-- Excel 导入 / 导出 DTO
+- `ExcelImportDTO` / `ExcelExportDTO`
 
 ## 功能特性
 
-- Lambda 链式配置风格，易于使用
+- Lambda 链式调用
 - 同时支持 `MyBatis-Plus` 与 `SQL-Booster` 两种运行模式
 - 不只生成基础三层代码，同时生成 `CreateDTO`、`UpdateDTO`、`QueryDTO`、`QueryVO`、`Excel导入DTO`、`Excel导出DTO`
 - 支持统一返回体包装与分页返回包装，支持字符串方式和方法引用方式配置
@@ -29,7 +29,8 @@
 - 支持单模板文件粒度覆盖：名称格式、子包、模板路径、输出目录、是否覆盖、是否禁用
 - 支持新增模板文件入口，可扩展生成自定义 DTO / VO / 其他衍生文件
 - 支持自定义渲染参数和自定义渲染逻辑，便于对接业务模板
-- 支持扩展，扩展点集中在 `builder/*Builder` 与模板配置
+- 支持扩展渲染参数
+- 支持添加自定义模板文件
 
 旧版地址：<https://github.com/bootystar/mybatis-plus-generator>
 
