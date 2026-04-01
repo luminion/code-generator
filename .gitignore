@@ -1,4 +1,5 @@
 target/
+target/test-generated/
 */target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -31,5 +32,10 @@ build/
 
 ### VS Code ###
 .vscode/
-
 src/test/java/com/example/test
+
+
+.claude
+.codex
+AGENTS.md
+CLAUDE.md

@@ -85,7 +85,7 @@ public class ${controller.classSimpleName} {
         return ${returnType.toInvokeString("baseService.${createMethodName}(param)")};
     }
 #end
-#if(${generateUpdate})
+#if(${generateUpdate} && ${table.idField})
 
     #if(${springDoc})
     @Operation(summary = "$!{table.comment}-修改")

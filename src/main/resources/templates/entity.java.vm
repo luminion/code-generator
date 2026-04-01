@@ -39,7 +39,7 @@ import ${pkg};
 #elseif(${swagger})
 @ApiModel(description = "$!{table.comment}")
 #end
-#if(${table.convert})
+#if(${tableNameAnnotation})
 @TableName("$!{schemaPrefix}${table.tableName}")
 #end
 #if(${entitySuperClass})

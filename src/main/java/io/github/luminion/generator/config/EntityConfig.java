@@ -7,6 +7,7 @@ import io.github.luminion.generator.internal.render.ImportPackageSupport;
 import io.github.luminion.generator.internal.render.RenderContext;
 import io.github.luminion.generator.metadata.TableInfo;
 import io.github.luminion.generator.util.ClassUtils;
+import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
 import java.util.Map;
@@ -37,6 +38,7 @@ public class EntityConfig implements TemplateRender {
         TableInfo tableInfo = context.getTableInfo();
         Map<String, Object> data = TemplateRender.super.renderData(context);
         data.put("entitySuperClass", ClassUtils.getSimpleName(entitySuperClass));
+        data.put("tableNameAnnotation", requiresTableNameAnnotation(tableInfo));
         data.putAll(resolveEntityImports(tableInfo));
         return data;
     }
@@ -44,12 +46,13 @@ public class EntityConfig implements TemplateRender {
     private Map<String, Object> resolveEntityImports(TableInfo tableInfo) {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         Set<String> importPackages = new TreeSet<>();
+        boolean tableNameAnnotation = requiresTableNameAnnotation(tableInfo);
 
         ImportPackageSupport.addIfPresent(importPackages, entitySuperClass);
         if (tableFieldAnnotation) {
             importPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_FIELD.getCanonicalName());
         }
-        if (tableInfo.isConvert()) {
+        if (tableNameAnnotation) {
             importPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_NAME.getCanonicalName());
         }
         if (activeRecord) {
@@ -79,5 +82,18 @@ public class EntityConfig implements TemplateRender {
         importPackages.addAll(globalConfig.getModelImportPackages());
 
         return ImportPackageSupport.splitImportPackages(importPackages, "entityFramePkg", "entityJavaPkg");
+    }
+
+    private boolean requiresTableNameAnnotation(TableInfo tableInfo) {
+        String schemaName = configurer.getGlobalConfig().getSchemaName();
+        if (StringUtils.isNotBlank(schemaName)) {
+            return true;
+        }
+        String tableName = tableInfo.getTableName();
+        String entityName = tableInfo.getEntityName();
+        if (StringUtils.isBlank(tableName) || StringUtils.isBlank(entityName)) {
+            return false;
+        }
+        return !tableName.equalsIgnoreCase(StringUtils.camelToUnderline(entityName));
     }
 }
