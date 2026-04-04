@@ -1,6 +1,8 @@
 package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.annotation.RenderField;
+import io.github.luminion.generator.enums.ExcelExportMode;
+import io.github.luminion.generator.enums.ExcelImportMode;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.enums.TemplateEnum;
@@ -160,7 +162,19 @@ public class ServiceConfig implements TemplateRender {
         }
 
         String excelClass = excelConfig.getExcelApi().getPackagePrefix() + excelConfig.getExcelApi().getMainEntrance();
+        boolean excelImportBatchMode = configurer.getGlobalConfig().isGenerateExcelImport()
+                && ExcelImportMode.BATCH.equals(excelConfig.getExcelImportMode());
+        boolean excelExportPagedMode = configurer.getGlobalConfig().isGenerateExcelExport()
+                && ExcelExportMode.PAGED.equals(excelConfig.getExcelExportMode());
+        String analysisContextClass = excelConfig.getExcelApi().getPackagePrefix()
+                + RuntimeClass.PREFIX_EXCEL_ANALYSIS_CONTEXT.getCanonicalName();
+        String analysisEventListenerClass = excelConfig.getExcelApi().getPackagePrefix()
+                + RuntimeClass.PREFIX_EXCEL_ANALYSIS_EVENT_LISTENER.getCanonicalName();
+        String excelWriterClass = excelConfig.getExcelApi().getPackagePrefix()
+                + RuntimeClass.PREFIX_EXCEL_EXCEL_WRITER.getCanonicalName();
         String longestMatchColumnWidthStyleStrategyClass = excelConfig.getExcelApi().getPackagePrefix() + RuntimeClass.PREFIX_EXCEL_LONGEST_MATCH_COLUMN_WIDTH_STYLE_STRATEGY.getCanonicalName();
+        String writeSheetClass = excelConfig.getExcelApi().getPackagePrefix()
+                + RuntimeClass.PREFIX_EXCEL_WRITE_SHEET.getCanonicalName();
         if (globalConfig.isGenerateExcelImport()) {
             importPackages.add(templateFileMap.get(TemplateEnum.EXCEL_IMPORT_PARAM.getKey()).getFullyQualifiedClassName());
             importPackages.add(excelClass);
@@ -168,9 +182,16 @@ public class ServiceConfig implements TemplateRender {
             importPackages.add(RuntimeClass.JAVA_IO_INPUT_STREAM.getCanonicalName());
             importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getCanonicalName());
             importPackages.add(RuntimeClass.JAVA_UTIL_COLLECTIONS.getCanonicalName());
-            importPackages.add(RuntimeClass.JAVA_STREAM_COLLECTORS.getCanonicalName());
             importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getCanonicalName());
             importPackages.add(RuntimeClass.SPRING_BOOT_BEAN_UTILS.getCanonicalName());
+            if (excelImportBatchMode) {
+                importPackages.add(analysisContextClass);
+                importPackages.add(analysisEventListenerClass);
+                importPackages.add(RuntimeClass.JAVA_UTIL_ARRAY_LIST.getCanonicalName());
+                importPackages.add(RuntimeClass.JAVA_UTIL_CONCURRENT_ATOMIC_INTEGER.getCanonicalName());
+            } else {
+                importPackages.add(RuntimeClass.JAVA_STREAM_COLLECTORS.getCanonicalName());
+            }
         }
         if (globalConfig.isGenerateExcelExport()) {
             importPackages.add(templateFileMap.get(TemplateEnum.QUERY_PARAM.getKey()).getFullyQualifiedClassName());
@@ -180,6 +201,13 @@ public class ServiceConfig implements TemplateRender {
             importPackages.add(longestMatchColumnWidthStyleStrategyClass);
             importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getCanonicalName());
             importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getCanonicalName());
+            if (excelExportPagedMode) {
+                importPackages.add(excelWriterClass);
+                importPackages.add(writeSheetClass);
+                if (RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
+                    importPackages.add(RuntimeClass.MYBATIS_PLUS_PAGE.getCanonicalName());
+                }
+            }
         }
         return ImportPackageSupport.splitImportPackages(importPackages, "serviceImplFramePkg", "serviceImplJavaPkg");
     }

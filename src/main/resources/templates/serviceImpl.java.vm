@@ -117,6 +117,27 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     @Override
     #end
     public int ${excelImportMethodName}(InputStream is) {
+        #if(${excelImportBatchMode})
+        AtomicInteger importCount = new AtomicInteger();
+        List<${entity.classSimpleName}> entityList = new ArrayList<>(${excelImportBatchSize});
+        ${excelApiClass}.read(is, ${excelImportParam.classSimpleName}.class, new AnalysisEventListener<${excelImportParam.classSimpleName}>() {
+            @Override
+            public void invoke(${excelImportParam.classSimpleName} importDto, AnalysisContext context) {
+                ${entity.classSimpleName} entity = new ${entity.classSimpleName}();
+                BeanUtils.copyProperties(importDto, entity);
+                entityList.add(entity);
+                if (entityList.size() >= ${excelImportBatchSize}) {
+                    importCount.addAndGet(flushExcelImportBatch(entityList));
+                }
+            }
+
+            @Override
+            public void doAfterAllAnalysed(AnalysisContext context) {
+                importCount.addAndGet(flushExcelImportBatch(entityList));
+            }
+        }).sheet().doRead();
+        return importCount.get();
+        #else
         List<${excelImportParam.classSimpleName}> dataList = ${excelApiClass}.read(is)
             .head(${excelImportParam.classSimpleName}.class).sheet().doReadSync();
         List<${entity.classSimpleName}> entityList = dataList.stream().map(importDto -> {
@@ -126,7 +147,20 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
         }).collect(Collectors.toList());
         super.saveBatch(entityList);
         return entityList.size();
+        #end
     }
+
+    #if(${excelImportBatchMode})
+    private int flushExcelImportBatch(List<${entity.classSimpleName}> entityList) {
+        if (entityList.isEmpty()) {
+            return 0;
+        }
+        super.saveBatch(entityList);
+        int savedCount = entityList.size();
+        entityList.clear();
+        return savedCount;
+    }
+    #end
 #end
 #if(${generateExcelExport})
 
@@ -134,6 +168,28 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     @Override
     #end
     public void ${excelExportMethodName}(${queryParam.classSimpleName} param, OutputStream os) {
+        #if(${excelExportPagedMode})
+        ExcelWriter excelWriter = ${excelApiClass}.write(os, ${excelExportParam.classSimpleName}.class).build();
+        try {
+            WriteSheet writeSheet = ${excelApiClass}.writerSheet()
+                    .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
+                    .build();
+            long current = 1L;
+            while (true) {
+                List<${queryResult}> records = queryExcelExportPage(param, current, ${excelExportPageSize}L);
+                if (records == null || records.isEmpty()) {
+                    break;
+                }
+                excelWriter.write(records, writeSheet);
+                if (records.size() < ${excelExportPageSize}) {
+                    break;
+                }
+                current++;
+            }
+        } finally {
+            excelWriter.finish();
+        }
+        #else
         #if(${sqlBooster})
         List<${queryResult}> records = ${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(param).list();
         #else
@@ -143,6 +199,18 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
                 .sheet()
                 .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                 .doWrite(records);
+        #end
     }
+
+    #if(${excelExportPagedMode})
+    private List<${queryResult}> queryExcelExportPage(${queryParam.classSimpleName} param, long current, long size) {
+        #if(${sqlBooster})
+        return ${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(param).page(current, size).getRecords();
+        #else
+        Page<${queryResult}> page = new Page<>(current, size);
+        return getBaseMapper().selectByXml(param, page);
+        #end
+    }
+    #end
 #end
 }

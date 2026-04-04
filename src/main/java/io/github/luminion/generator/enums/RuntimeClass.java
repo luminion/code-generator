@@ -14,8 +14,10 @@ public enum RuntimeClass {
     JAVA_IO_IOEXCEPTION("java.io.IOException"),
     JAVA_IO_INPUT_STREAM("java.io.InputStream"),
     JAVA_IO_OUTPUT_STREAM("java.io.OutputStream"),
+    JAVA_UTIL_ARRAY_LIST("java.util.ArrayList"),
     JAVA_UTIL_LIST("java.util.List"),
     JAVA_UTIL_COLLECTIONS("java.util.Collections"),
+    JAVA_UTIL_CONCURRENT_ATOMIC_INTEGER("java.util.concurrent.atomic.AtomicInteger"),
     JAVA_STREAM_COLLECTORS("java.util.stream.Collectors"),
     
     
@@ -78,7 +80,11 @@ public enum RuntimeClass {
     
     PREFIX_EXCEL_EXCEL_IGNORE_UNANNOTATED("annotation.ExcelIgnoreUnannotated"),
     PREFIX_EXCEL_EXCEL_PROPERTY("annotation.ExcelProperty"),
+    PREFIX_EXCEL_ANALYSIS_CONTEXT("context.AnalysisContext"),
+    PREFIX_EXCEL_ANALYSIS_EVENT_LISTENER("event.AnalysisEventListener"),
+    PREFIX_EXCEL_EXCEL_WRITER("ExcelWriter"),
     PREFIX_EXCEL_LONGEST_MATCH_COLUMN_WIDTH_STYLE_STRATEGY("write.style.column.LongestMatchColumnWidthStyleStrategy"),
+    PREFIX_EXCEL_WRITE_SHEET("write.metadata.WriteSheet"),
     
     ;
     @Getter

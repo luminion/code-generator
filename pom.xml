@@ -32,7 +32,7 @@
 
     <scm>
         <connection>scm:git:git://github.com/luminion/code-generator.git</connection>
-        <developerConnection>scm:git:ssh://github.com:luminion/code-generator.git</developerConnection>
+        <developerConnection>scm:git:ssh://git@github.com/luminion/code-generator.git</developerConnection>
         <url>https://github.com/luminion/code-generator/tree/master</url>
     </scm>
 

@@ -169,6 +169,8 @@ import io.github.luminion.generator.enums.ColumnFillStrategy;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.DocType;
 import io.github.luminion.generator.enums.ExcelApi;
+import io.github.luminion.generator.enums.ExcelExportMode;
+import io.github.luminion.generator.enums.ExcelImportMode;
 import io.github.luminion.generator.enums.IdType;
 import io.github.luminion.generator.enums.JavaEEApi;
 import io.github.luminion.generator.naming.NamingConverter;
@@ -265,6 +267,10 @@ public class CodegenApp {
                 )
                 .excel(ex -> ex
                         .api(ExcelApi.EASY_EXCEL)
+                        .importMode(ExcelImportMode.BATCH)
+                        .excelImportBatchSize(1000)
+                        .exportMode(ExcelExportMode.PAGED)
+                        .excelExportPageSize(2000)
                         .excelImportTemplateMethodName("downloadTemplate")
                         .excelImportMethodName("importExcel")
                         .excelExportMethodName("exportExcel")
@@ -446,9 +452,20 @@ public class CodegenApp {
 | 方法 | 说明 | 示例 |
 | --- | --- | --- |
 | `api(ExcelApi)` | Excel 实现 | `api(ExcelApi.EASY_EXCEL)` |
+| `importMode(ExcelImportMode)` | Excel 导入策略，`SIMPLE` / `BATCH` | `importMode(ExcelImportMode.BATCH)` |
+| `excelImportBatchSize(int)` | `BATCH` 模式下导入分批大小 | `excelImportBatchSize(1000)` |
 | `excelImportMethodName(String)` | Excel 导入方法名 | `excelImportMethodName("importExcel")` |
 | `excelImportTemplateMethodName(String)` | Excel 模板下载方法名 | `excelImportTemplateMethodName("downloadTemplate")` |
+| `exportMode(ExcelExportMode)` | Excel 导出策略，`SIMPLE` / `PAGED` | `exportMode(ExcelExportMode.PAGED)` |
+| `excelExportPageSize(int)` | `PAGED` 模式下导出分页大小 | `excelExportPageSize(2000)` |
 | `excelExportMethodName(String)` | Excel 导出方法名 | `excelExportMethodName("exportExcel")` |
+
+默认情况下，导入导出都使用 `SIMPLE` 模式，生成结果保持简洁。
+
+- `ExcelImportMode.SIMPLE`：同步读成 `List` 后统一入库，适合中小数据量
+- `ExcelImportMode.BATCH`：使用 listener 分批消费，适合大数据量导入
+- `ExcelExportMode.SIMPLE`：一次性查询后写出，适合中小数据量
+- `ExcelExportMode.PAGED`：分页查询并分批写出，适合大数据量导出
 
 ## 特殊情况说明
 

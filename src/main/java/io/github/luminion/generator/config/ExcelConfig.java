@@ -2,6 +2,8 @@ package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.annotation.RenderField;
 import io.github.luminion.generator.enums.ExcelApi;
+import io.github.luminion.generator.enums.ExcelExportMode;
+import io.github.luminion.generator.enums.ExcelImportMode;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.internal.render.ImportPackageSupport;
 import io.github.luminion.generator.internal.render.RenderContext;
@@ -23,6 +25,18 @@ public class ExcelConfig implements TemplateRender {
     private ExcelApi excelApi = ExcelApi.EASY_EXCEL;
 
     @RenderField
+    private ExcelImportMode excelImportMode = ExcelImportMode.SIMPLE;
+
+    @RenderField
+    private int excelImportBatchSize = 1000;
+
+    @RenderField
+    private ExcelExportMode excelExportMode = ExcelExportMode.SIMPLE;
+
+    @RenderField
+    private int excelExportPageSize = 2000;
+
+    @RenderField
     private String excelImportMethodName = "excelImport";
 
     @RenderField
@@ -36,6 +50,8 @@ public class ExcelConfig implements TemplateRender {
         Map<String, Object> data = TemplateRender.super.renderData(context);
         data.put("excelApiPackagePrefix", excelApi.getPackagePrefix());
         data.put("excelApiClass", excelApi.getMainEntrance());
+        data.put("excelImportBatchMode", ExcelImportMode.BATCH.equals(excelImportMode));
+        data.put("excelExportPagedMode", ExcelExportMode.PAGED.equals(excelExportMode));
         data.putAll(resolveExcelImportDtoImports(context));
         data.putAll(resolveExcelExportDtoImports(context));
         return data;
