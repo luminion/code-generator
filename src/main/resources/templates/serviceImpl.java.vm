@@ -169,8 +169,7 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     #end
     public void ${excelExportMethodName}(${queryParam.classSimpleName} param, OutputStream os) {
         #if(${excelExportPagedMode})
-        ExcelWriter excelWriter = ${excelApiClass}.write(os, ${excelExportParam.classSimpleName}.class).build();
-        try {
+        try (ExcelWriter excelWriter = ${excelApiClass}.write(os, ${excelExportParam.classSimpleName}.class).build()) {
             WriteSheet writeSheet = ${excelApiClass}.writerSheet()
                     .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                     .build();
@@ -186,8 +185,6 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
                 }
                 current++;
             }
-        } finally {
-            excelWriter.finish();
         }
         #else
         #if(${sqlBooster})

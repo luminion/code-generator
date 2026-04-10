@@ -406,7 +406,8 @@ public class CodegenApp {
 | --- | --- | --- |
 | `superClass(String / Class<?>)` | Controller 父类 | `superClass(BaseController.class)` |
 | `disableRestController()` | 使用 `@Controller` 替代 `@RestController` | `disableRestController()` |
-| `disableHyphenStyle()` | 禁用驼峰转连字符路由 | `disableHyphenStyle()` |
+| `baseUrlStyle(BaseUrlStyle)` | 设置实体路由风格，支持 `CAMEL_CASE` / `HYPHEN_CASE` / `UNDERLINE_CASE` / `SLASH_CASE` | `baseUrlStyle(BaseUrlStyle.SLASH_CASE)` |
+| `disableHyphenStyle()` | 兼容旧写法，等价于 `baseUrlStyle(BaseUrlStyle.CAMEL_CASE)` | `disableHyphenStyle()` |
 | `baseUrl(String)` | 路由前缀 | `baseUrl("/api/admin")` |
 | `enableCrossOrigin()` | 添加 `@CrossOrigin` | `enableCrossOrigin()` |
 | `enableRestful()` | 使用 RESTful 路由风格 | `enableRestful()` |

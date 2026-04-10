@@ -1,6 +1,7 @@
 package io.github.luminion.generator.builder;
 
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.enums.BaseUrlStyle;
 import io.github.luminion.generator.metadata.InvokeInfo;
 import io.github.luminion.generator.metadata.MethodReference;
 import io.github.luminion.generator.util.ClassUtils;
@@ -48,12 +49,23 @@ public class ControllerBuilder {
     }
 
     /**
-     * 禁用驼峰转连字符
+     * 设置 controller baseUrl 中实体路径部分的命名风格
      *
      * @return Controller配置构建器
      */
+    public ControllerBuilder baseUrlStyle(BaseUrlStyle baseUrlStyle) {
+        configurer.getControllerConfig().setBaseUrlStyle(baseUrlStyle);
+        return this;
+    }
+
+    /**
+     * 禁用驼峰转连字符，兼容旧写法
+     *
+     * @return Controller配置构建器
+     */
+    @Deprecated
     public ControllerBuilder disableHyphenStyle() {
-        configurer.getControllerConfig().setHyphenStyle(false);
+        configurer.getControllerConfig().setBaseUrlStyle(BaseUrlStyle.CAMEL_CASE);
         return this;
     }
 

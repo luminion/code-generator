@@ -8,6 +8,7 @@ import io.github.luminion.generator.metadata.TemplateFile;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +26,7 @@ public class TemplateConfig {
     /**
      * 生成文件的输出目录
      */
-    private String outputDir = System.getProperty("user.dir") + "/src/main/java";
+    private String outputDir = new File(System.getProperty("user.dir"), "src/main/java").getPath();
 
     /**
      * 是否打开输出目录
@@ -163,6 +164,14 @@ public class TemplateConfig {
     public void setFileOverride(boolean fileOverride) {
         this.fileOverride = fileOverride;
         templateFiles.forEach(templateFile -> templateFile.setFileOverride(fileOverride));
+    }
+
+    public void setOutputDir(String outputDir) {
+        if (StringUtils.isBlank(outputDir)) {
+            this.outputDir = outputDir;
+            return;
+        }
+        this.outputDir = new File(outputDir).getPath();
     }
 
     public void addTemplateFile(TemplateFile templateFile) {

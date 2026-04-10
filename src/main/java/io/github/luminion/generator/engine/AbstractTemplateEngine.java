@@ -17,6 +17,7 @@ package io.github.luminion.generator.engine;
 
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.internal.render.RenderContext;
+import io.github.luminion.generator.metadata.GenerationSummary;
 import io.github.luminion.generator.metadata.TableInfo;
 import io.github.luminion.generator.metadata.TemplateFile;
 import io.github.luminion.generator.util.FileUtils;
@@ -44,8 +45,10 @@ public abstract class AbstractTemplateEngine {
 
     @Getter
     protected final Configurer configurer;
+    @Getter
+    private GenerationSummary lastGenerationSummary = new GenerationSummary();
 
-    protected void outputFile(File file, Map<String, Object> objectMap, String templatePath, boolean fileOverride) {
+    protected boolean outputFile(File file, Map<String, Object> objectMap, String templatePath, boolean fileOverride) {
         if (isCreate(file, fileOverride)) {
             try {
                 if (!file.exists()) {
@@ -53,16 +56,20 @@ public abstract class AbstractTemplateEngine {
                     FileUtils.forceMkdir(parentFile);
                 }
                 writer(objectMap, templatePath, file);
+                return true;
             } catch (Exception exception) {
                 throw new RuntimeException(exception);
             }
         }
+        return false;
     }
 
     public AbstractTemplateEngine batchOutput() {
+        GenerationSummary generationSummary = new GenerationSummary();
         try {
             List<TableInfo> tableInfoList = configurer.queryTableInfos();
             tableInfoList.forEach(tableInfo -> {
+                generationSummary.recordMatchedTable(tableInfo);
                 RenderContext renderContext = configurer.createRenderContext(tableInfo);
                 Map<String, Object> objectMap = configurer.renderMap(renderContext);
                 for (TemplateFile templateFile : renderContext.getTemplateFiles().values()) {
@@ -72,13 +79,20 @@ public abstract class AbstractTemplateEngine {
                     }
                     templateFile.validate();
                     File outputFile = templateFile.resolveOutputFile(tableInfo.getEntityName());
-                    outputFile(outputFile, objectMap, templateFile.getTemplatePath(), templateFile.isFileOverride());
+                    if (outputFile(outputFile, objectMap, templateFile.getTemplatePath(), templateFile.isFileOverride())) {
+                        generationSummary.recordGeneratedFile(tableInfo, templateFile);
+                    }
                 }
             });
         } catch (Exception e) {
             throw new RuntimeException("Unable to create file, please check configuration information", e);
         }
+        this.lastGenerationSummary = generationSummary;
         return this;
+    }
+
+    protected void setLastGenerationSummary(GenerationSummary generationSummary) {
+        this.lastGenerationSummary = generationSummary;
     }
 
     @SuppressWarnings("unused")
@@ -87,10 +101,13 @@ public abstract class AbstractTemplateEngine {
     public abstract void writer(Map<String, Object> objectMap, String templatePath, File outputFile) throws Exception;
 
     public void open() {
+        if (!configurer.getTemplateConfig().isOpenOutputDir()) {
+            return;
+        }
         String outDir = configurer.getTemplateConfig().getOutputDir();
         if (StringUtils.isBlank(outDir) || !new File(outDir).exists()) {
             System.err.println("Output directory not found：" + outDir);
-        } else if (configurer.getTemplateConfig().isOpenOutputDir()) {
+        } else {
             try {
                 RuntimeUtils.openDir(outDir);
             } catch (IOException e) {

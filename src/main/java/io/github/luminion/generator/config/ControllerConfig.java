@@ -1,6 +1,7 @@
 package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.annotation.RenderField;
+import io.github.luminion.generator.enums.BaseUrlStyle;
 import io.github.luminion.generator.enums.RuntimeClass;
 import io.github.luminion.generator.enums.TemplateEnum;
 import io.github.luminion.generator.internal.render.ImportPackageSupport;
@@ -33,7 +34,7 @@ public class ControllerConfig implements TemplateRender {
     @RenderField
     private boolean restController = true;
 
-    private boolean hyphenStyle = true;
+    private BaseUrlStyle baseUrlStyle = BaseUrlStyle.HYPHEN_CASE;
 
     private String baseUrl;
 
@@ -69,7 +70,8 @@ public class ControllerConfig implements TemplateRender {
 
         data.put("controllerSuperClass", ClassUtils.getSimpleName(controllerSuperClass));
         String entityVariableName = tableInfo.getEntityVariableName();
-        String entityUrl = hyphenStyle ? StringUtils.camelToHyphen(entityVariableName) : entityVariableName;
+        BaseUrlStyle resolvedBaseUrlStyle = baseUrlStyle == null ? BaseUrlStyle.HYPHEN_CASE : baseUrlStyle;
+        String entityUrl = resolvedBaseUrlStyle.convert(entityVariableName);
         data.put("requestBaseUrl", normalizeRequestBaseUrl(baseUrl, templateConfig.getParentModule(), entityUrl));
         data.put("restful", restful);
 

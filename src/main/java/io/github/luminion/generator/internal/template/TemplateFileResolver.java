@@ -68,17 +68,11 @@ public class TemplateFileResolver {
     }
 
     private String joinPath(String parentDir, String packageName) {
-        if (StringUtils.isBlank(parentDir)) {
-            parentDir = System.getProperty("java.io.tmpdir");
-        }
-        if (!StringUtils.endsWith(parentDir, File.separator)) {
-            parentDir += File.separator;
-        }
+        String baseDir = StringUtils.isBlank(parentDir) ? System.getProperty("java.io.tmpdir") : parentDir;
         if (StringUtils.isBlank(packageName)) {
-            return parentDir.substring(0, parentDir.length() - File.separator.length());
+            return new File(baseDir).getPath();
         }
-        packageName = packageName.replaceAll("\\.", "\\" + File.separator);
-        return parentDir + packageName;
+        return new File(baseDir, packageName.replace('.', File.separatorChar)).getPath();
     }
 
     private String normalizePackageSegment(String packageName) {

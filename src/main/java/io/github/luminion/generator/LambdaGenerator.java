@@ -10,8 +10,10 @@ import io.github.luminion.generator.builder.MapperBuilder;
 import io.github.luminion.generator.builder.QueryBuilder;
 import io.github.luminion.generator.builder.ServiceBuilder;
 import io.github.luminion.generator.builder.TemplateBuilder;
+import io.github.luminion.generator.engine.AbstractTemplateEngine;
 import io.github.luminion.generator.config.Configurer;
 import io.github.luminion.generator.engine.VelocityTemplateEngine;
+import io.github.luminion.generator.metadata.GenerationSummary;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -88,20 +90,14 @@ public class LambdaGenerator {
         }
         File outputDir = new File(configurer.getTemplateConfig().getOutputDir());
         log.info("Start code generation. Output directory: {}", outputDir.getAbsolutePath());
-        VelocityTemplateEngine templateEngine = new VelocityTemplateEngine(configurer);
-        templateEngine.batchOutput().open();
+        AbstractTemplateEngine templateEngine = createTemplateEngine();
+        templateEngine.batchOutput();
+        GenerationSummary generationSummary = templateEngine.getLastGenerationSummary();
+        if (generationSummary.getGeneratedFileCount() > 0) {
+            templateEngine.open();
+        }
         log.info("Code generation completed. Output directory: {}", outputDir.getAbsolutePath());
-        String banner =
-                "  _________                                        \n" +
-                        " /   _____/__ __   ____  ____  ____   ______ ______\n" +
-                        " \\_____  \\|  |  \\_/ ___\\/ ___\\/ __ \\ /  ___//  ___/\n" +
-                        " /        \\  |  /\\  \\__\\  \\__\\  ___/ \\___ \\ \\___ \\ \n" +
-                        "/_______  /____/  \\___  >___  >___  >____  >____  >\n" +
-                        "        \\/            \\/    \\/    \\/     \\/     \\/ " +
-                        "\n(ﾉ>ω<)ﾉ  Code generation complete! Let's start coding ~\n";
-        System.out.println(banner);
-        System.out.println("generated file output dir:");
-        System.out.println(outputDir.getAbsolutePath());
+        System.out.print(buildGenerationSummaryMessage(generationSummary, outputDir));
     }
 
     void replaceIncludeTables(String... tableNames) {
@@ -111,5 +107,56 @@ public class LambdaGenerator {
             log.info("Explicit table filter provided. Clear configured exclude tables: {}", configurer.getDataSourceConfig().getExcludeTables());
             configurer.getDataSourceConfig().getExcludeTables().clear();
         }
+    }
+
+    AbstractTemplateEngine createTemplateEngine() {
+        return new VelocityTemplateEngine(configurer);
+    }
+
+    String buildGenerationSummaryMessage(GenerationSummary generationSummary, File outputDir) {
+        StringBuilder message = new StringBuilder();
+        if (generationSummary.getMatchedTableCount() == 0) {
+            message.append("\n[WARNING] No tables matched for code generation.\n")
+                    .append("Please check the database connection, schema configuration, and table filters")
+                    .append(" (includeTables/excludeTables/tablePrefixes/tableSuffixes).\n")
+                    .append("configured output dir:\n")
+                    .append(outputDir.getAbsolutePath())
+                    .append('\n');
+            return message.toString();
+        }
+
+        message.append("  _________                                        \n")
+                .append(" /   _____/__ __   ____  ____  ____   ______ ______\n")
+                .append(" \\_____  \\|  |  \\_/ ___\\/ ___\\/ __ \\ /  ___//  ___/\n")
+                .append(" /        \\  |  /\\  \\__\\  \\__\\  ___/ \\___ \\ \\___ \\ \n")
+                .append("/_______  /____/  \\___  >___  >___  >____  >____  >\n")
+                .append("        \\/            \\/    \\/    \\/     \\/     \\/ ")
+                .append("\n(ﾉ>ω<)ﾉ  Code generation complete! Let's start coding ~\n")
+                .append("matched tables: ")
+                .append(generationSummary.getMatchedTableCount())
+                .append('\n')
+                .append("generated files: ")
+                .append(generationSummary.getGeneratedFileCount())
+                .append('\n')
+                .append("generation details:\n");
+
+        for (GenerationSummary.TableGeneration tableGeneration : generationSummary.getTableGenerations()) {
+            message.append("- ")
+                    .append(tableGeneration.getTableName())
+                    .append(" (")
+                    .append(tableGeneration.getEntityName())
+                    .append("): ");
+            if (tableGeneration.getGeneratedTemplateKeys().isEmpty()) {
+                message.append("no files generated");
+            } else {
+                message.append(String.join(", ", tableGeneration.getGeneratedTemplateKeys()));
+            }
+            message.append('\n');
+        }
+
+        message.append("generated file output dir:\n")
+                .append(outputDir.getAbsolutePath())
+                .append('\n');
+        return message.toString();
     }
 }

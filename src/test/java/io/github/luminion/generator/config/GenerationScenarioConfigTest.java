@@ -4,6 +4,7 @@ import io.github.luminion.generator.builder.ControllerBuilder;
 import io.github.luminion.generator.builder.ExcelBuilder;
 import io.github.luminion.generator.builder.QueryBuilder;
 import io.github.luminion.generator.builder.TemplateBuilder;
+import io.github.luminion.generator.enums.BaseUrlStyle;
 import io.github.luminion.generator.enums.DateType;
 import io.github.luminion.generator.enums.ExcelApi;
 import io.github.luminion.generator.enums.JavaEEApi;
@@ -84,6 +85,21 @@ class GenerationScenarioConfigTest {
         assertEquals("com.common.P4MpPage", pageType.getFullyQualifiedClassName());
         assertEquals(DateType.TIME_PACK, configurer.getDataSourceConfig().getDateType());
         assertEquals(ExcelApi.APACHE_FESOD, configurer.getExcelConfig().getExcelApi());
+    }
+
+    @Test
+    void exampleScenarioSupportsSlashBaseUrlStyle() {
+        Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
+        new TemplateBuilder(configurer)
+                .parentPackage("com.example.codegen.mysql")
+                .parentModule("system");
+        new ControllerBuilder(configurer)
+                .baseUrl("admin")
+                .baseUrlStyle(BaseUrlStyle.SLASH_CASE);
+
+        Map<String, Object> data = configurer.renderMap(configurer.createRenderContext(sampleTableInfo()));
+
+        assertEquals("/admin/system/sys/user", data.get("requestBaseUrl"));
     }
 
     private static String testOutputDir(String scenario) {

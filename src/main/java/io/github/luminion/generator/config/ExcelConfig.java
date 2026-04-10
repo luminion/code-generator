@@ -25,13 +25,13 @@ public class ExcelConfig implements TemplateRender {
     private ExcelApi excelApi = ExcelApi.EASY_EXCEL;
 
     @RenderField
-    private ExcelImportMode excelImportMode = ExcelImportMode.SIMPLE;
+    private ExcelImportMode excelImportMode = ExcelImportMode.BATCH;
 
     @RenderField
     private int excelImportBatchSize = 1000;
 
     @RenderField
-    private ExcelExportMode excelExportMode = ExcelExportMode.SIMPLE;
+    private ExcelExportMode excelExportMode = ExcelExportMode.PAGED;
 
     @RenderField
     private int excelExportPageSize = 2000;

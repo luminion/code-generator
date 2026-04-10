@@ -157,6 +157,11 @@ public class ServiceConfig implements TemplateRender {
             importPackages.add(templateFileMap.get(TemplateEnum.UPDATE_PARAM.getKey()).getFullyQualifiedClassName());
             ImportPackageSupport.addIfPresent(importPackages, idFieldPropertyPkg);
         }
+        if (globalConfig.isGenerateCreate()
+                || (globalConfig.isGenerateUpdate() && idField != null)
+                || globalConfig.isGenerateExcelImport()) {
+            importPackages.add(RuntimeClass.SPRING_BOOT_BEAN_UTILS.getCanonicalName());
+        }
         if (globalConfig.isGenerateDelete() && idField != null) {
             ImportPackageSupport.addIfPresent(importPackages, idFieldPropertyPkg);
         }
@@ -183,7 +188,6 @@ public class ServiceConfig implements TemplateRender {
             importPackages.add(RuntimeClass.JAVA_IO_OUTPUT_STREAM.getCanonicalName());
             importPackages.add(RuntimeClass.JAVA_UTIL_COLLECTIONS.getCanonicalName());
             importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getCanonicalName());
-            importPackages.add(RuntimeClass.SPRING_BOOT_BEAN_UTILS.getCanonicalName());
             if (excelImportBatchMode) {
                 importPackages.add(analysisContextClass);
                 importPackages.add(analysisEventListenerClass);

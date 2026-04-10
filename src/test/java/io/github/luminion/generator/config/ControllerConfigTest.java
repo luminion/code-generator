@@ -1,6 +1,7 @@
 package io.github.luminion.generator.config;
 
 import io.github.luminion.generator.builder.ControllerBuilder;
+import io.github.luminion.generator.enums.BaseUrlStyle;
 import io.github.luminion.generator.metadata.InvokeInfo;
 import io.github.luminion.generator.metadata.TableInfo;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,46 @@ class ControllerConfigTest {
         Map<String, Object> data = configurer.getControllerConfig().renderData(configurer.createRenderContext(tableInfo));
 
         assertEquals("/api/system/sys-user", data.get("requestBaseUrl"));
+    }
+
+    @Test
+    void requestBaseUrlSupportsAllCommonEntityPathStyles() {
+        Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
+        configurer.getTemplateConfig().setParentModule("/system/");
+        configurer.getControllerConfig().setBaseUrl("/api/");
+
+        TableInfo tableInfo = new TableInfo();
+        tableInfo.setTableName("sys_user");
+        tableInfo.setEntityName("SysUser");
+
+        configurer.getControllerConfig().setBaseUrlStyle(BaseUrlStyle.CAMEL_CASE);
+        assertEquals("/api/system/sysUser", configurer.getControllerConfig().renderData(configurer.createRenderContext(tableInfo)).get("requestBaseUrl"));
+
+        configurer.getControllerConfig().setBaseUrlStyle(BaseUrlStyle.HYPHEN_CASE);
+        assertEquals("/api/system/sys-user", configurer.getControllerConfig().renderData(configurer.createRenderContext(tableInfo)).get("requestBaseUrl"));
+
+        configurer.getControllerConfig().setBaseUrlStyle(BaseUrlStyle.UNDERLINE_CASE);
+        assertEquals("/api/system/sys_user", configurer.getControllerConfig().renderData(configurer.createRenderContext(tableInfo)).get("requestBaseUrl"));
+
+        configurer.getControllerConfig().setBaseUrlStyle(BaseUrlStyle.SLASH_CASE);
+        assertEquals("/api/system/sys/user", configurer.getControllerConfig().renderData(configurer.createRenderContext(tableInfo)).get("requestBaseUrl"));
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void disableHyphenStyleRemainsCompatibleWithCamelCaseShortcut() {
+        Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
+        ControllerBuilder builder = new ControllerBuilder(configurer);
+        configurer.getTemplateConfig().setParentModule("system");
+        configurer.getControllerConfig().setBaseUrl("api");
+
+        TableInfo tableInfo = new TableInfo();
+        tableInfo.setTableName("sys_user");
+        tableInfo.setEntityName("SysUser");
+
+        builder.disableHyphenStyle();
+
+        assertEquals("/api/system/sysUser", configurer.getControllerConfig().renderData(configurer.createRenderContext(tableInfo)).get("requestBaseUrl"));
     }
 
     @Test

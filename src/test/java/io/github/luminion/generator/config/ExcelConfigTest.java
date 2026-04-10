@@ -80,6 +80,19 @@ class ExcelConfigTest {
     }
 
     @Test
+    void serviceImplTemplateImportsBeanUtilsWithoutExcelImport() throws Exception {
+        Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
+        InitializeUtils.initializeMybatisPlus(configurer);
+        configurer.getGlobalConfig().setGenerateExcelImport(false);
+        configurer.getGlobalConfig().setGenerateExcelExport(false);
+
+        String rendered = renderServiceImpl(configurer, sampleTableInfo());
+
+        assertTrue(rendered.contains("import org.springframework.beans.BeanUtils;"));
+        assertTrue(rendered.contains("BeanUtils.copyProperties(param, entity);"));
+    }
+
+    @Test
     void serviceImplTemplateRendersBatchImportAndPagedExportBranches() throws Exception {
         Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
         InitializeUtils.initializeMybatisPlus(configurer);
