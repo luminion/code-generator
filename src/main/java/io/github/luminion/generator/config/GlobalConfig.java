@@ -41,7 +41,7 @@ public class GlobalConfig implements TemplateRender {
      * 文档注释添加相关类链接
      */
     @RenderField
-    private boolean seeTags = true;
+    private boolean seeTags = false;
     /**
      * 作者
      */

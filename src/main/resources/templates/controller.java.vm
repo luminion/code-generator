@@ -13,7 +13,7 @@ import ${pkg};
 #end
 
 /**
- * $!{table.comment}-前端控制器
+ * $!{table.comment}
  *
  * @author ${author}
 #if(${seeTags})
@@ -26,7 +26,7 @@ import ${pkg};
 #end
  */
 #if(${springDoc})
-@Tag(name= "$!{table.comment}-前端控制器", description = "$!{table.comment}-前端控制器")
+@Tag(name= "$!{table.comment}", description = "$!{table.comment}")
 #elseif(${swagger})
 @Api(tags = "$!{table.comment}")
 #end

@@ -58,8 +58,8 @@ public class GlobalBuilder {
      *
      * @return this
      */
-    public GlobalBuilder disableSeeTags() {
-        configurer.getGlobalConfig().setSeeTags(false);
+    public GlobalBuilder enableSeeTags() {
+        configurer.getGlobalConfig().setSeeTags(true);
         return this;
     }
 
