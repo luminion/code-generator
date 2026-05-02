@@ -103,13 +103,13 @@ public class GlobalConfig implements TemplateRender {
      * sql-booster链式lambda方法名称
      */
     @RenderField
-    private String sqlBoosterLambdaMethodName = "sqlBuilder";
+    private String sqlBoosterLambdaMethodName = "lambdaBooster";// 1.2.0
 
     /**
      * sql-booster链式bean条件方法名称
      */
     @RenderField
-    private String sqlBoosterFromBeanMethodName = "appendEqByBean";
+    private String sqlBoosterFromBeanMethodName = "fromBean"; //1.2.0
 
     /**
      * 生成新增方法及配套类

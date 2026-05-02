@@ -229,4 +229,36 @@ public class GlobalBuilder {
         configurer.getGlobalConfig().setGenerateExcelExport(false);
         return this;
     }
+    /**
+     * 设置数据库schema名
+     *
+     * @param schemaName schema名
+     * @return builder
+     */
+    public GlobalBuilder schemaName(String schemaName) {
+        configurer.getGlobalConfig().setSchemaName(schemaName);
+        return this;
+    }
+
+    /**
+     * 设置sql-booster链式lambda方法名称
+     *
+     * @param sqlBoosterLambdaMethodName 方法名称
+     * @return builder
+     */
+    public GlobalBuilder sqlBoosterLambdaMethodName(String sqlBoosterLambdaMethodName) {
+        configurer.getGlobalConfig().setSqlBoosterLambdaMethodName(sqlBoosterLambdaMethodName);
+        return this;
+    }
+
+    /**
+     * 设置sql-booster链式bean条件方法名称
+     *
+     * @param sqlBoosterFromBeanMethodName 方法名称
+     * @return builder
+     */
+    public GlobalBuilder sqlBoosterFromBeanMethodName(String sqlBoosterFromBeanMethodName) {
+        configurer.getGlobalConfig().setSqlBoosterFromBeanMethodName(sqlBoosterFromBeanMethodName);
+        return this;
+    }
 }
