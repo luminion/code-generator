@@ -117,10 +117,28 @@ class ExcelConfigTest {
         assertFalse(rendered.contains(".doWrite(records);"));
     }
 
+    @Test
+    void controllerTemplateUsesScenarioBasedExcelFileNames() throws Exception {
+        Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
+        InitializeUtils.initializeMybatisPlus(configurer);
+
+        String rendered = renderController(configurer, sampleTableInfo());
+
+        assertTrue(rendered.contains("attachment;filename=SysUserImportTemplate.xlsx"));
+        assertTrue(rendered.contains("attachment;filename=SysUserExport.xlsx"));
+        assertFalse(rendered.contains("System.currentTimeMillis() + \".xlsx\""));
+    }
+
     private static String renderServiceImpl(Configurer configurer, TableInfo tableInfo) throws Exception {
         VelocityTemplateEngine engine = new VelocityTemplateEngine(configurer);
         Map<String, Object> renderData = configurer.renderMap(configurer.createRenderContext(tableInfo));
         return engine.writer(renderData, "serviceImpl", readResource("templates/serviceImpl.java.vm"));
+    }
+
+    private static String renderController(Configurer configurer, TableInfo tableInfo) throws Exception {
+        VelocityTemplateEngine engine = new VelocityTemplateEngine(configurer);
+        Map<String, Object> renderData = configurer.renderMap(configurer.createRenderContext(tableInfo));
+        return engine.writer(renderData, "controller", readResource("templates/controller.java.vm"));
     }
 
     private static String readResource(String path) throws IOException {
