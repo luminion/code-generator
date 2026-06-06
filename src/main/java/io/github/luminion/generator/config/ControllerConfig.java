@@ -11,6 +11,7 @@ import io.github.luminion.generator.metadata.TableField;
 import io.github.luminion.generator.metadata.TableInfo;
 import io.github.luminion.generator.metadata.TemplateClassFile;
 import io.github.luminion.generator.util.ClassUtils;
+import io.github.luminion.generator.util.JavaStringUtils;
 import io.github.luminion.generator.util.StringUtils;
 import lombok.Data;
 
@@ -94,6 +95,10 @@ public class ControllerConfig implements TemplateRender {
 
         data.put("queryBodyStr", queryViaPost ? requestBodyStr : null);
         data.put("queryRequestMapping", queryViaPost ? "@PostMapping" : "@GetMapping");
+        String fileNamePrefix = StringUtils.isNotBlank(tableInfo.getComment())
+                ? tableInfo.getComment()
+                : templateFileMap.get(TemplateEnum.ENTITY.getKey()).getSimpleClassName();
+        data.put("excelFileNamePrefix", JavaStringUtils.escapeLiteral(fileNamePrefix));
         data.putAll(resolveControllerImports(context));
         return data;
     }
@@ -172,12 +177,18 @@ public class ControllerConfig implements TemplateRender {
         if (globalConfig.isGenerateExcelImport()) {
             importPackages.add(responseClass);
             importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getCanonicalName());
+            importPackages.add(RuntimeClass.JAVA_NET_URLEncoder.getCanonicalName());
+            importPackages.add(RuntimeClass.JAVA_NIO_STANDARD_CHARSETS.getCanonicalName());
             importPackages.add(RuntimeClass.SPRING_BOOT_MULTIPART_FILE.getCanonicalName());
         }
         if (globalConfig.isGenerateExcelExport()) {
             importPackages.add(responseClass);
             importPackages.add(templateFileMap.get(TemplateEnum.QUERY_PARAM.getKey()).getFullyQualifiedClassName());
             importPackages.add(RuntimeClass.JAVA_IO_IOEXCEPTION.getCanonicalName());
+            importPackages.add(RuntimeClass.JAVA_NET_URLEncoder.getCanonicalName());
+            importPackages.add(RuntimeClass.JAVA_NIO_STANDARD_CHARSETS.getCanonicalName());
+            importPackages.add(RuntimeClass.JAVA_TIME_LOCAL_DATE_TIME.getCanonicalName());
+            importPackages.add(RuntimeClass.JAVA_TIME_FORMAT_DATE_TIME_FORMATTER.getCanonicalName());
             importPackages.add(RuntimeClass.SPRING_BOOT_MULTIPART_FILE.getCanonicalName());
         }
 

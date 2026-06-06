@@ -73,4 +73,14 @@ public class ServiceBuilder {
         return this;
     }
 
+    /**
+     * 启用无状态service生成，不继承运行时service父类，改为显式注入mapper。
+     *
+     * @return this
+     */
+    public ServiceBuilder enableStateless() {
+        configurer.getServiceConfig().setStateless(true);
+        return this;
+    }
+
 }

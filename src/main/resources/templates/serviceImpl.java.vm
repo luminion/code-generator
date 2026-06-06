@@ -22,9 +22,25 @@ import ${pkg};
  */
 @Service
 #if(${service.generate})
+#if(${stateless})
+public class ${serviceImpl.classSimpleName} implements ${service.classSimpleName} {
+#else
 public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${sqlBooster}), ${queryResult.classSimpleName}#end> implements ${service.classSimpleName} {
+#end
+#else
+#if(${stateless})
+public class ${serviceImpl.classSimpleName} {
 #else
 public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${sqlBooster}), ${queryResult.classSimpleName}#end> {
+#end
+#end
+#if(${stateless})
+
+    private final ${mapper.classSimpleName} baseMapper;
+
+    public ${serviceImpl.classSimpleName}(${mapper.classSimpleName} baseMapper) {
+        this.baseMapper = baseMapper;
+    }
 #end
 #if(${generateCreate})
 
@@ -38,11 +54,19 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     #end
         ${entity.classSimpleName} entity = new ${entity.classSimpleName}();
         BeanUtils.copyProperties(param, entity);
+        #if(${stateless})
+        int saved = baseMapper.insert(entity);
+        #else
         boolean saved = super.save(entity);
+        #end
         #if(${table.idField})
         return entity.get${table.idField.capitalName}();
         #else
+        #if(${stateless})
+        return saved > 0;
+        #else
         return saved;
+        #end
         #end
     }
 #end
@@ -54,14 +78,22 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     public boolean ${updateMethodName}(${updateParam.classSimpleName} param) {
         ${entity.classSimpleName} entity = new ${entity.classSimpleName}();
         BeanUtils.copyProperties(param, entity);
+        #if(${stateless})
+        return baseMapper.updateById(entity) > 0;
+        #else
         return super.updateById(entity);
+        #end
     }
 #end
 #if(${generateDelete} && ${table.idField})
 
     @Override
     public boolean ${deleteMethodName}(${table.idField.propertyType} id) {
+        #if(${stateless})
+        return baseMapper.deleteById(id) > 0;
+        #else
         return super.removeById(id);
+        #end
     }
 #end
 #if(${generateQueryById} && ${table.idField} && !${sqlBooster})
@@ -72,7 +104,11 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     public ${queryResult} ${queryByIdMethodName}(${table.idField.propertyType} id) {
         ${queryParam.classSimpleName} param = new ${queryParam.classSimpleName}();
         param.set${table.idField.capitalName}(id);
+        #if(${stateless})
+        ${queryResult} one = baseMapper.selectByXml(param, null)
+        #else
         ${queryResult} one = getBaseMapper().selectByXml(param, null)
+        #end
                 .stream()
                 .findFirst()
                 .orElse(null);
@@ -85,7 +121,11 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     @Override
     #end
     public List<${queryResult}> ${queryListMethodName}(${queryParam.classSimpleName} dto) {
+        #if(${stateless})
+        List<${queryResult}> list = baseMapper.selectByXml(dto, null);
+        #else
         List<${queryResult}> list = getBaseMapper().selectByXml(dto, null);
+        #end
         return list;
     }
 #end
@@ -96,7 +136,11 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     #end
     public ${servicePageType}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} param, long current, long size) {
         Page<${queryResult}> page = new Page<>(current, size);
+        #if(${stateless})
+        List<${queryResult}> list = baseMapper.selectByXml(param, page);
+        #else
         List<${queryResult}> list = getBaseMapper().selectByXml(param, page);
+        #end
         page.setRecords(list);
         return page;
     }
@@ -145,7 +189,13 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
             BeanUtils.copyProperties(importDto, entity);
             return entity;
         }).collect(Collectors.toList());
+        #if(${stateless})
+        for (${entity.classSimpleName} entity : entityList) {
+            baseMapper.insert(entity);
+        }
+        #else
         super.saveBatch(entityList);
+        #end
         return entityList.size();
         #end
     }
@@ -155,7 +205,13 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
         if (entityList.isEmpty()) {
             return 0;
         }
+        #if(${stateless})
+        for (${entity.classSimpleName} entity : entityList) {
+            baseMapper.insert(entity);
+        }
+        #else
         super.saveBatch(entityList);
+        #end
         int savedCount = entityList.size();
         entityList.clear();
         return savedCount;
@@ -190,7 +246,11 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
         #if(${sqlBooster})
         List<${queryResult}> records = ${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(param).list();
         #else
+        #if(${stateless})
+        List<${queryResult}> records = baseMapper.selectByXml(param, null);
+        #else
         List<${queryResult}> records = getBaseMapper().selectByXml(param, null);
+        #end
         #end
         ${excelApiClass}.write(os, ${excelExportParam.classSimpleName}.class)
                 .sheet()
@@ -205,7 +265,11 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
         return ${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(param).page(current, size).getRecords();
         #else
         Page<${queryResult}> page = new Page<>(current, size);
+        #if(${stateless})
+        return baseMapper.selectByXml(param, page);
+        #else
         return getBaseMapper().selectByXml(param, page);
+        #end
         #end
     }
     #end
