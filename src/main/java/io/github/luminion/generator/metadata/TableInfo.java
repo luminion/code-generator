@@ -71,6 +71,20 @@ public class TableInfo {
                 .collect(Collectors.joining(", "));
     }
 
+    public List<TableField> getAllFields() {
+        List<TableField> allFields = new ArrayList<>(commonFields.size() + fields.size());
+        allFields.addAll(commonFields);
+        allFields.addAll(fields);
+        return allFields;
+    }
+
+    public TableField getLogicDeleteField() {
+        return getAllFields().stream()
+                .filter(TableField::isLogicDeleteField)
+                .findFirst()
+                .orElse(null);
+    }
+
     @Deprecated
     public boolean isHavePrimaryKey() {
         return hasPrimaryKey;

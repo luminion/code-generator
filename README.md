@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.luminion/code-generator)](https://mvnrepository.com/artifact/io.github.luminion/code-generator)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
-面向 MyBatis-Plus / SQL-Booster 场景的后端代码生成器。
+面向 MyBatis / MyBatis-Plus / SQL-Booster 场景的后端代码生成器。
 
 支持生成：
 
@@ -18,7 +18,7 @@
 ## 功能特性
 
 - Lambda 链式调用
-- 同时支持 `MyBatis-Plus` 与 `SQL-Booster` 两种运行模式
+- 支持 `MyBatis`、`MyBatis-Plus`、SQL-Booster 增强封装、SQL-Booster 解耦查询多种生成模式
 - 不只生成基础三层代码，同时生成 `CreateDTO`、`UpdateDTO`、`QueryDTO`、`QueryVO`、`Excel导入DTO`、`Excel导出DTO`
 - 支持统一返回体包装与分页返回包装，支持字符串方式和方法引用方式配置
 - 支持查询扩展字段自动生成，例如 `Like`、`In`、`Lt`、`Gt`、`Lte`、`Gte`
@@ -69,12 +69,33 @@
 
 | API | 说明 |
 | --- | --- |
+| `GeneratorHelper.mybatis(url, username, password)` | 纯 MyBatis 模式 |
+| `GeneratorHelper.mybatisPageHelper(url, username, password)` | MyBatis + PageHelper 模式，分页返回 `PageInfo<VO>` |
 | `GeneratorHelper.mybatisPlus(url, username, password)` | MyBatis-Plus 模式 |
-| `GeneratorHelper.mybatisPlusSqlBooster(url, username, password)` | SQL-Booster 模式 |
+| `GeneratorHelper.mybatisSqlBooster(url, username, password)` | MyBatis + SQL-Booster 增强封装模式，Mapper 继承 `PhMapper`，Service 暴露 SQL-Booster 链式查询能力 |
+| `GeneratorHelper.mybatisPlusSqlBooster(url, username, password)` | MyBatis-Plus + SQL-Booster 增强封装模式，保持旧版 SQL-Booster 入口语义 |
+| `GeneratorHelper.mybatisSqlBoosterContext(url, username, password)` | MyBatis + SQL-Booster 解耦模式，Controller/Service 仍使用生成的 QueryDTO，ServiceImpl 内部转换为 `SqlContext` |
+| `GeneratorHelper.mybatisPageHelperSqlBoosterContext(url, username, password)` | MyBatis + PageHelper + SQL-Booster 解耦模式，分页返回 `PageInfo<VO>` |
+| `GeneratorHelper.mybatisPlusSqlBoosterContext(url, username, password)` | MyBatis-Plus + SQL-Booster 解耦模式，普通 BaseMapper/IService，ServiceImpl 内部转换为 `SqlContext` |
+| `GeneratorHelper.create(url, username, password, GenerationMode.Xxx)` | 使用枚举选择一键生成模式 |
 | `.execute("sys_user", "sys_role")` | 只生成指定表 |
 | `.execute()` | 生成当前过滤条件下的全部表 |
 
 默认输出目录：`src/main/java`
+
+SQL-Booster 增强封装模式会对外暴露 `lambdaBooster().fromBean(...)` 等链式查询能力；SQL-Booster 解耦模式不会把 `SqlContext` 或链式 API 暴露到 Controller/Service 接口，只在 Mapper XML 和 ServiceImpl 内部使用。
+
+如果你希望代码里少记长方法名，也可以使用枚举入口：
+
+```java
+GeneratorHelper.create(
+                "jdbc:mysql://localhost:3306/demo",
+                "root",
+                "123456",
+                GenerationMode.MYBATIS_PLUS_SQL_BOOSTER_CONTEXT
+        )
+        .execute("sys_user");
+```
 
 ## 示例 1：快速开始
 
@@ -93,10 +114,21 @@ public class CodegenApp {
 }
 ```
 
-SQL-Booster：
+SQL-Booster 增强封装：
 
 ```java
 GeneratorHelper.mybatisPlusSqlBooster(
+                "jdbc:mysql://localhost:3306/demo",
+                "root",
+                "123456"
+        )
+        .execute("sys_user");
+```
+
+SQL-Booster 解耦：
+
+```java
+GeneratorHelper.mybatisPlusSqlBoosterContext(
                 "jdbc:mysql://localhost:3306/demo",
                 "root",
                 "123456"

@@ -157,7 +157,7 @@ public class JdbcDatabaseMetaDataWrapper {
     }
 
     public String formatComment(String comment) {
-        return StringUtils.isBlank(comment) ? "" : comment.replaceAll("\r\n", "\t");
+        return StringUtils.isBlank(comment) ? "" : comment.replaceAll("[\\r\\n]+", " ").trim();
     }
 
     public Table getTableInfo(String tableName) {

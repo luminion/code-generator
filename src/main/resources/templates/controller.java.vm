@@ -182,7 +182,7 @@ public class ${controller.classSimpleName} {
     @ResponseBody
     #end
     public ${returnType.toTypeString("List<${queryResult.classSimpleName}>")} ${queryListMethodName}($!{queryBodyStr}${queryParam.classSimpleName} param) {
-        #if($sqlBooster)
+        #if($sqlBoosterPublicApi)
         return ${returnType.toInvokeString("baseService.${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(param).list()")};    
         #else
         return ${returnType.toInvokeString("baseService.${queryListMethodName}(param)")};
@@ -208,7 +208,7 @@ public class ${controller.classSimpleName} {
     @ResponseBody
     #end
     public ${returnType.toTypeString(${pageType.toTypeString(${queryResult.classSimpleName})})} ${queryPageMethodName}($!{queryBodyStr}${queryParam.classSimpleName} param) {
-        #if($sqlBooster)
+        #if($sqlBoosterPublicApi)
         return ${returnType.toInvokeString(${pageType.toInvokeString("baseService.${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(param).page(param.get${pageCapitalName}(), param.get${sizeCapitalName}())")})};
         #else
         return ${returnType.toInvokeString(${pageType.toInvokeString("baseService.${queryPageMethodName}(param, param.get${pageCapitalName}(), param.get${sizeCapitalName}())")})};

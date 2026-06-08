@@ -166,7 +166,7 @@ public class DataSourceConfig {
             return "current schema";
         } else if (DbType.ORACLE == dbType) {
             //oracle 默认 schema=username
-            return this.username.toUpperCase();
+            return this.username == null ? null : this.username.toUpperCase();
         }
         return null;
     }

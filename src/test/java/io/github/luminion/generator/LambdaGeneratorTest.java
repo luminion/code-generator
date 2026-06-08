@@ -1,6 +1,8 @@
 package io.github.luminion.generator;
 
 import io.github.luminion.generator.config.Configurer;
+import io.github.luminion.generator.enums.GenerationMode;
+import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.metadata.GenerationSummary;
 import io.github.luminion.generator.metadata.TableInfo;
 import io.github.luminion.generator.metadata.TemplateFile;
@@ -71,5 +73,30 @@ class LambdaGeneratorTest {
         assertTrue(message.contains("[WARNING] No tables matched for code generation."));
         assertTrue(message.contains("database connection"));
         assertTrue(message.contains("configured output dir:"));
+    }
+
+    @Test
+    void generatorHelperCreateAppliesGenerationModePreset() {
+        LambdaGenerator generator = GeneratorHelper.create("jdbc:h2:mem:test", "sa", "",
+                GenerationMode.MYBATIS_PAGE_HELPER_SQL_BOOSTER_CONTEXT);
+
+        Configurer configurer = generator.getConfigurer();
+
+        assertEquals(RuntimeEnv.MYBATIS_PAGE_HELPER_SQL_BOOSTER, configurer.getGlobalConfig().getRuntimeEnv());
+        assertEquals("com.github.pagehelper.PageInfo", configurer.getServiceConfig().getPageType());
+    }
+
+    @Test
+    void buildGenerationSummaryMessageIncludesGenerationModeDigest() {
+        Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
+        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MP_SQL_BOOSTER);
+        LambdaGenerator generator = new LambdaGenerator(configurer);
+
+        String message = generator.buildGenerationSummaryMessage(new GenerationSummary(),
+                new File("target/test-generated/demo/src/main/java"));
+
+        assertTrue(message.contains("mode: MP_SQL_BOOSTER"));
+        assertTrue(message.contains("query: QueryDTO -> SqlContext inside ServiceImpl"));
+        assertTrue(message.contains("controller exposes sqlbooster: false"));
     }
 }

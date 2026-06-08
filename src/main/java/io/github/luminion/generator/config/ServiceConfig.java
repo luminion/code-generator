@@ -40,42 +40,72 @@ public class ServiceConfig implements TemplateRender {
     @Override
     public Map<String, Object> renderData(RenderContext context) {
         Map<String, Object> data = TemplateRender.super.renderData(context);
-        boolean stateless = this.stateless && RuntimeEnv.MYBATIS_PLUS.equals(configurer.getGlobalConfig().getRuntimeEnv());
-        if (!stateless && serviceSuperClass != null) {
+        RuntimeEnv runtimeEnv = configurer.getGlobalConfig().getRuntimeEnv();
+        boolean mapperInjection = mapperInjection(runtimeEnv);
+        boolean serviceInheritsSuperClass = serviceSuperClass != null && (!mapperInjection || runtimeEnv.isBoosterIntegrated());
+        if (serviceInheritsSuperClass) {
             data.put("serviceSuperClass", ClassUtils.getSimpleName(serviceSuperClass));
         }
-        if (!stateless && serviceImplSuperClass != null) {
+        if (!mapperInjection && serviceImplSuperClass != null) {
             data.put("serviceImplSuperClass", ClassUtils.getSimpleName(serviceImplSuperClass));
         }
         if (pageType != null) {
             data.put("servicePageType", ClassUtils.getSimpleName(pageType));
             data.put("servicePageTypeCanonicalName", pageType);
+        } else if (runtimeEnv.isPlainMybatisBased() && !runtimeEnv.isBoosterIntegrated()) {
+            data.put("servicePageType", "List");
+            data.put("servicePageTypeCanonicalName", RuntimeClass.JAVA_UTIL_LIST.getCanonicalName());
         }
-        data.put("stateless", stateless);
+        data.put("stateless", mapperInjection);
+        data.put("mapperInjection", mapperInjection);
+        data.put("serviceInheritsSuperClass", serviceInheritsSuperClass);
+        data.put("mybatisPlusRuntime", runtimeEnv.isMybatisPlusBased());
+        data.put("plainMybatisRuntime", runtimeEnv.isPlainMybatisBased());
+        data.put("pageHelperRuntime", runtimeEnv.isPageHelperBased());
+        data.put("rowBoundsRuntime", runtimeEnv.isRowBoundsBased());
+        data.put("sqlBooster", runtimeEnv.isSqlBooster());
+        data.put("sqlBoosterPublicApi", runtimeEnv.isBoosterIntegrated());
+        data.put("queryViaSqlContext", runtimeEnv.isSqlBooster());
         data.putAll(resolveServiceImports(context));
         data.putAll(resolveServiceImplImports(context));
         return data;
     }
 
+    private boolean mapperInjection(RuntimeEnv runtimeEnv) {
+        if (runtimeEnv.isPlainMybatisBased()) {
+            return true;
+        }
+        return this.stateless && runtimeEnv.isMybatisPlusBased() && !runtimeEnv.isBoosterIntegrated();
+    }
+
     private Map<String, Object> resolveServiceImports(RenderContext context) {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
+        RuntimeEnv runtimeEnv = globalConfig.getRuntimeEnv();
         TableInfo tableInfo = context.getTableInfo();
         Map<String, TemplateClassFile> templateFileMap = context.getTemplateFiles();
         TableField idField = tableInfo.getPrimaryKeyField();
         String idFieldPropertyPkg = idField != null ? idField.getJavaTypeCanonicalName() : null;
-        boolean stateless = this.stateless && RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv());
+        boolean mapperInjection = mapperInjection(runtimeEnv);
+        boolean serviceInheritsSuperClass = serviceSuperClass != null && (!mapperInjection || runtimeEnv.isBoosterIntegrated());
+        boolean queryMethodsGenerated = !runtimeEnv.isBoosterIntegrated();
 
         Set<String> importPackages = new TreeSet<>();
-        if (!stateless) {
+        if (serviceInheritsSuperClass) {
             ImportPackageSupport.addIfPresent(importPackages, serviceSuperClass);
         }
         importPackages.add(templateFileMap.get(TemplateEnum.ENTITY.getKey()).getFullyQualifiedClassName());
 
-        if (RuntimeEnv.MP_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
+        if (runtimeEnv.isBoosterIntegrated()) {
             importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
-            importPackages.add(RuntimeClass.SQL_BOOSTER_MP_SERVICE.getCanonicalName());
+            if (runtimeEnv.isPlainMybatisBased()) {
+                importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getCanonicalName());
+                importPackages.add(RuntimeClass.JAVA_UTIL_COLLECTIONS.getCanonicalName());
+                importPackages.add(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getCanonicalName());
+                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_BUILDER.getCanonicalName());
+                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getCanonicalName());
+            }
         }
-        if (RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
+        if (queryMethodsGenerated) {
             if (globalConfig.isGenerateQueryById() && idField != null) {
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
                 ImportPackageSupport.addIfPresent(importPackages, idFieldPropertyPkg);
@@ -88,8 +118,15 @@ public class ServiceConfig implements TemplateRender {
             if (globalConfig.isGenerateQueryPage()) {
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_PARAM.getKey()).getFullyQualifiedClassName());
-                importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName());
-                ImportPackageSupport.addIfPresent(importPackages, pageType);
+                if (runtimeEnv.isMybatisPlusBased()) {
+                    ImportPackageSupport.addIfPresent(importPackages, pageType);
+                }
+                if (runtimeEnv.isPageHelperBased()) {
+                    importPackages.add(RuntimeClass.PAGE_HELPER_PAGE_INFO.getCanonicalName());
+                }
+                if (runtimeEnv.isPlainMybatisBased()) {
+                    importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getCanonicalName());
+                }
             }
         }
         if (globalConfig.isGenerateCreate()) {
@@ -116,15 +153,17 @@ public class ServiceConfig implements TemplateRender {
 
     private Map<String, Object> resolveServiceImplImports(RenderContext context) {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
+        RuntimeEnv runtimeEnv = globalConfig.getRuntimeEnv();
         ExcelConfig excelConfig = configurer.getExcelConfig();
         TableInfo tableInfo = context.getTableInfo();
         Map<String, TemplateClassFile> templateFileMap = context.getTemplateFiles();
         TableField idField = tableInfo.getPrimaryKeyField();
         String idFieldPropertyPkg = idField != null ? idField.getJavaTypeCanonicalName() : null;
-        boolean stateless = this.stateless && RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv());
+        boolean mapperInjection = mapperInjection(runtimeEnv);
+        boolean queryMethodsGenerated = !runtimeEnv.isBoosterIntegrated();
 
         Set<String> importPackages = new TreeSet<>();
-        if (!stateless) {
+        if (!mapperInjection) {
             ImportPackageSupport.addIfPresent(importPackages, serviceImplSuperClass);
         }
         importPackages.add(templateFileMap.get(TemplateEnum.ENTITY.getKey()).getFullyQualifiedClassName());
@@ -136,11 +175,10 @@ public class ServiceConfig implements TemplateRender {
         }
         importPackages.add(RuntimeClass.SPRING_BOOT_SERVICE.getCanonicalName());
 
-        if (RuntimeEnv.MP_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
+        if (runtimeEnv.isBoosterIntegrated()) {
             importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
         }
-        if (RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
-//            importPackages.add(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getCanonicalName());
+        if (queryMethodsGenerated) {
             if (globalConfig.isGenerateQueryById() && idField != null) {
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_PARAM.getKey()).getFullyQualifiedClassName());
@@ -154,11 +192,26 @@ public class ServiceConfig implements TemplateRender {
             if (globalConfig.isGenerateQueryPage()) {
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_PARAM.getKey()).getFullyQualifiedClassName());
-                importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName());
-                importPackages.add(RuntimeClass.MYBATIS_PLUS_PAGE.getCanonicalName());
                 importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getCanonicalName());
-                ImportPackageSupport.addIfPresent(importPackages, pageType);
+                if (runtimeEnv.isMybatisPlusBased()) {
+                    importPackages.add(RuntimeClass.MYBATIS_PLUS_PAGE.getCanonicalName());
+                    ImportPackageSupport.addIfPresent(importPackages, pageType);
+                }
+                if (runtimeEnv.isPageHelperBased()) {
+                    importPackages.add(RuntimeClass.PAGE_HELPER.getCanonicalName());
+                    importPackages.add(RuntimeClass.PAGE_HELPER_PAGE_INFO.getCanonicalName());
+                }
+                if (runtimeEnv.isRowBoundsBased()) {
+                    importPackages.add(RuntimeClass.MYBATIS_ROW_BOUNDS.getCanonicalName());
+                }
             }
+        }
+        if (runtimeEnv.isSqlBoosterContext()) {
+            importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_BUILDER.getCanonicalName());
+            importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getCanonicalName());
+        }
+        if (runtimeEnv.isSqlBooster() && globalConfig.isGenerateExcelExport()) {
+            importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getCanonicalName());
         }
         if (globalConfig.isGenerateCreate()) {
             importPackages.add(templateFileMap.get(TemplateEnum.CREATE_PARAM.getKey()).getFullyQualifiedClassName());
@@ -219,8 +272,15 @@ public class ServiceConfig implements TemplateRender {
             if (excelExportPagedMode) {
                 importPackages.add(excelWriterClass);
                 importPackages.add(writeSheetClass);
-                if (RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
+                if (runtimeEnv.isMybatisPlusBased() && !runtimeEnv.isBoosterIntegrated()) {
                     importPackages.add(RuntimeClass.MYBATIS_PLUS_PAGE.getCanonicalName());
+                }
+                if (runtimeEnv.isPageHelperBased() && !runtimeEnv.isBoosterIntegrated()) {
+                    importPackages.add(RuntimeClass.PAGE_HELPER.getCanonicalName());
+                    importPackages.add(RuntimeClass.PAGE_HELPER_PAGE_INFO.getCanonicalName());
+                }
+                if (runtimeEnv.isRowBoundsBased() && !runtimeEnv.isBoosterIntegrated()) {
+                    importPackages.add(RuntimeClass.MYBATIS_ROW_BOUNDS.getCanonicalName());
                 }
             }
         }

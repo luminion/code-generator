@@ -63,7 +63,7 @@ public class Configurer {
             }
             return tableInfos;
         } catch (Exception exception) {
-            throw new RuntimeException("创建IDatabaseQuery实例出现错误:", exception);
+            throw new RuntimeException("查询数据库表信息失败", exception);
         }
     }
 

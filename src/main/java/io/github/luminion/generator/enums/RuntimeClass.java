@@ -26,6 +26,10 @@ public enum RuntimeClass {
     
     
     MYBATIS_MAPPER_ANNOTATION("org.apache.ibatis.annotations.Mapper"),
+    MYBATIS_PARAM_ANNOTATION("org.apache.ibatis.annotations.Param"),
+    MYBATIS_ROW_BOUNDS("org.apache.ibatis.session.RowBounds"),
+    PAGE_HELPER("com.github.pagehelper.PageHelper"),
+    PAGE_HELPER_PAGE_INFO("com.github.pagehelper.PageInfo"),
     
     MYBATIS_PLUS_I_SERVICE("com.baomidou.mybatisplus.extension.service.IService"),
     MYBATIS_PLUS_SERVICE_IMPL("com.baomidou.mybatisplus.extension.service.impl.ServiceImpl"),
@@ -72,6 +76,8 @@ public enum RuntimeClass {
     SQL_BOOSTER_SQL_CONTEXT("io.github.luminion.sqlbooster.model.SqlContext"),
     SQL_BOOSTER_SQL_BUILDER("io.github.luminion.sqlbooster.builder.SqlBuilder"),
     SQL_BOOSTER_BOOSTER_PAGE("io.github.luminion.sqlbooster.model.BPage"),
+    SQL_BOOSTER_SERVICE("io.github.luminion.sqlbooster.core.BoosterService"),
+    SQL_BOOSTER_PH_MAPPER("io.github.luminion.sqlbooster.extension.pagehelper.PhMapper"),
     SQL_BOOSTER_MP_MAPPER("io.github.luminion.sqlbooster.extension.mybatisplus.MpMapper"),
     SQL_BOOSTER_MP_SERVICE_IMPL("io.github.luminion.sqlbooster.extension.mybatisplus.MpServiceImpl"),
     SQL_BOOSTER_MP_SERVICE("io.github.luminion.sqlbooster.extension.mybatisplus.MpService"),

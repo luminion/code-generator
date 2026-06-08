@@ -37,7 +37,9 @@ public class EntityConfig implements TemplateRender {
     public Map<String, Object> renderData(RenderContext context) {
         TableInfo tableInfo = context.getTableInfo();
         Map<String, Object> data = TemplateRender.super.renderData(context);
+        boolean mybatisPlusRuntime = configurer.getGlobalConfig().getRuntimeEnv().isMybatisPlusBased();
         data.put("entitySuperClass", ClassUtils.getSimpleName(entitySuperClass));
+        data.put("activeRecord", activeRecord && mybatisPlusRuntime);
         data.put("tableNameAnnotation", requiresTableNameAnnotation(tableInfo));
         data.putAll(resolveEntityImports(tableInfo));
         return data;
@@ -46,21 +48,25 @@ public class EntityConfig implements TemplateRender {
     private Map<String, Object> resolveEntityImports(TableInfo tableInfo) {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
         Set<String> importPackages = new TreeSet<>();
+        boolean mybatisPlusRuntime = globalConfig.getRuntimeEnv().isMybatisPlusBased();
         boolean tableNameAnnotation = requiresTableNameAnnotation(tableInfo);
 
         ImportPackageSupport.addIfPresent(importPackages, entitySuperClass);
-        if (tableFieldAnnotation) {
+        if (mybatisPlusRuntime && tableFieldAnnotation) {
             importPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_FIELD.getCanonicalName());
         }
-        if (tableNameAnnotation) {
+        if (mybatisPlusRuntime && tableNameAnnotation) {
             importPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_NAME.getCanonicalName());
         }
-        if (activeRecord) {
+        if (mybatisPlusRuntime && activeRecord) {
             importPackages.add(RuntimeClass.MYBATIS_PLUS_ACTIVE_RECORD_MODEL.getCanonicalName());
             importPackages.add(RuntimeClass.JAVA_IO_SERIALIZABLE.getCanonicalName());
         }
         tableInfo.getFields().forEach(field -> {
             ImportPackageSupport.addIfPresent(importPackages, field.getJavaTypeCanonicalName());
+            if (!mybatisPlusRuntime) {
+                return;
+            }
             if (field.isPrimaryKey()) {
                 importPackages.add(RuntimeClass.MYBATIS_PLUS_TABLE_ID.getCanonicalName());
                 importPackages.add(RuntimeClass.MYBATIS_PLUS_ID_TYPE.getCanonicalName());
@@ -85,6 +91,9 @@ public class EntityConfig implements TemplateRender {
     }
 
     private boolean requiresTableNameAnnotation(TableInfo tableInfo) {
+        if (!configurer.getGlobalConfig().getRuntimeEnv().isMybatisPlusBased()) {
+            return false;
+        }
         String schemaName = configurer.getGlobalConfig().getSchemaName();
         if (StringUtils.isNotBlank(schemaName)) {
             return true;

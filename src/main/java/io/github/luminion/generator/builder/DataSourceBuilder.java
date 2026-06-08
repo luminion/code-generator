@@ -76,14 +76,6 @@ public class DataSourceBuilder {
     }
 
     /**
-     * @deprecated use {@link #enableSkipView()} instead.
-     */
-    @Deprecated
-    public DataSourceBuilder enableSKipView() {
-        return enableSkipView();
-    }
-
-    /**
      * 启用布尔字段去除 is 前缀
      * 比如：数据库字段名称为 `is_xxx`、类型为 `tinyint` 时，映射实体属性会转换为 `xxx`
      */

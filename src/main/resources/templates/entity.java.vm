@@ -73,7 +73,7 @@ public class ${entity.classSimpleName}#if(${serializable}) implements Serializab
      */
         #end
     #end
-    #if(${field.keyFlag})
+    #if(${mybatisPlusRuntime} && ${field.keyFlag})
         #if(${field.keyIdentityFlag})
     @TableId(value = "${field.columnName}", type = IdType.AUTO)
         #elseif(!$null.isNull(${idType}) && "$!idType" != "")
@@ -81,20 +81,24 @@ public class ${entity.classSimpleName}#if(${serializable}) implements Serializab
         #elseif(${field.convert} || ${tableFieldAnnotation})
     @TableId("${field.columnName}")
         #end
-    #elseif(${field.fill})
+    #elseif(${mybatisPlusRuntime} && ${field.fill})
         #if(${field.convert} || ${tableFieldAnnotation})
     @TableField(value = "${field.columnName}", fill = FieldFill.${field.fill})
         #else
     @TableField(fill = FieldFill.${field.fill})
         #end
-    #elseif(${field.convert} || ${tableFieldAnnotation})
+    #elseif(${mybatisPlusRuntime} && (${field.convert} || ${tableFieldAnnotation}))
     @TableField("${field.columnName}")
     #end
-    #if(${field.versionField})
+    #if(${mybatisPlusRuntime} && ${field.versionField})
     @Version
     #end
-    #if(${field.logicDeleteField})
+    #if(${mybatisPlusRuntime} && ${field.logicDeleteField})
+        #if(${field.logicDeleteValueResolved})
+    @TableLogic(value = "${field.logicNotDeleteValue}", delval = "${field.logicDeleteValue}")
+        #else
     @TableLogic
+        #end
     #end
     private ${field.propertyType} ${field.propertyName};
 #end

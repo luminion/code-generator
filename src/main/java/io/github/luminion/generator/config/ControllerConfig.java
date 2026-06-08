@@ -3,6 +3,7 @@ package io.github.luminion.generator.config;
 import io.github.luminion.generator.annotation.RenderField;
 import io.github.luminion.generator.enums.BaseUrlStyle;
 import io.github.luminion.generator.enums.RuntimeClass;
+import io.github.luminion.generator.enums.RuntimeEnv;
 import io.github.luminion.generator.enums.TemplateEnum;
 import io.github.luminion.generator.internal.render.ImportPackageSupport;
 import io.github.luminion.generator.internal.render.RenderContext;
@@ -67,6 +68,7 @@ public class ControllerConfig implements TemplateRender {
 
         TemplateConfig templateConfig = configurer.getTemplateConfig();
         CommandConfig commandConfig = configurer.getCommandConfig();
+        RuntimeEnv runtimeEnv = configurer.getGlobalConfig().getRuntimeEnv();
         Map<String, TemplateClassFile> templateFileMap = context.getTemplateFiles();
 
         data.put("controllerSuperClass", ClassUtils.getSimpleName(controllerSuperClass));
@@ -82,6 +84,7 @@ public class ControllerConfig implements TemplateRender {
         }
         data.put("baseService", baseService.getSimpleClassName());
         data.put("queryViaPost", queryViaPost);
+        data.put("sqlBoosterPublicApi", runtimeEnv.isBoosterIntegrated());
         if (pathVariable) {
             data.put("idPathParam", "/{id}");
             data.put("idMethodParam", "@PathVariable(\"id\") ");

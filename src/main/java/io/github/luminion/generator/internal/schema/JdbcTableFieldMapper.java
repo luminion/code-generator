@@ -137,11 +137,11 @@ public class JdbcTableFieldMapper {
             tableField.setFill(columnFillStrategy.name());
         }
         String logicDeleteColumnName = dataSourceConfig.getLogicDeleteColumnName();
-        if (rawColumnName.equals(logicDeleteColumnName)) {
+        if (logicDeleteColumnName != null && rawColumnName.equalsIgnoreCase(logicDeleteColumnName)) {
             tableField.setLogicDeleteField(true);
         }
         String versionColumnName = dataSourceConfig.getVersionColumnName();
-        if (rawColumnName.equals(versionColumnName)) {
+        if (versionColumnName != null && rawColumnName.equalsIgnoreCase(versionColumnName)) {
             tableField.setVersionField(true);
         }
     }

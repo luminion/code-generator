@@ -113,8 +113,13 @@ public class LambdaGenerator {
         return new VelocityTemplateEngine(configurer);
     }
 
+    Configurer getConfigurer() {
+        return configurer;
+    }
+
     String buildGenerationSummaryMessage(GenerationSummary generationSummary, File outputDir) {
         StringBuilder message = new StringBuilder();
+        message.append(buildGenerationModeDigest());
         if (generationSummary.getMatchedTableCount() == 0) {
             message.append("\n[WARNING] No tables matched for code generation.\n")
                     .append("Please check the database connection, schema configuration, and table filters")
@@ -158,5 +163,52 @@ public class LambdaGenerator {
                 .append(outputDir.getAbsolutePath())
                 .append('\n');
         return message.toString();
+    }
+
+    String buildGenerationModeDigest() {
+        return "generation config:\n"
+                + "mode: " + configurer.getGlobalConfig().getRuntimeEnv() + '\n'
+                + "mapper: " + resolveMapperDigest() + '\n'
+                + "service: " + resolveServiceDigest() + '\n'
+                + "query: " + resolveQueryDigest() + '\n'
+                + "controller exposes sqlbooster: " + configurer.getGlobalConfig().getRuntimeEnv().isBoosterIntegrated() + '\n'
+                + "page type: " + resolvePageTypeDigest() + "\n";
+    }
+
+    private String resolveMapperDigest() {
+        String mapperSuperClass = configurer.getMapperConfig().getMapperSuperClass();
+        if (mapperSuperClass == null) {
+            return "plain mapper";
+        }
+        return mapperSuperClass.substring(mapperSuperClass.lastIndexOf('.') + 1);
+    }
+
+    private String resolveServiceDigest() {
+        String serviceSuperClass = configurer.getServiceConfig().getServiceSuperClass();
+        String serviceImplSuperClass = configurer.getServiceConfig().getServiceImplSuperClass();
+        if (serviceSuperClass == null && serviceImplSuperClass == null) {
+            return "mapper injection";
+        }
+        String serviceName = serviceSuperClass == null ? "none" : serviceSuperClass.substring(serviceSuperClass.lastIndexOf('.') + 1);
+        String implName = serviceImplSuperClass == null ? "mapper injection" : serviceImplSuperClass.substring(serviceImplSuperClass.lastIndexOf('.') + 1);
+        return serviceName + "/" + implName;
+    }
+
+    private String resolveQueryDigest() {
+        if (configurer.getGlobalConfig().getRuntimeEnv().isBoosterIntegrated()) {
+            return "SQL-Booster public API";
+        }
+        if (configurer.getGlobalConfig().getRuntimeEnv().isSqlBoosterContext()) {
+            return "QueryDTO -> SqlContext inside ServiceImpl";
+        }
+        return "QueryDTO -> Mapper XML";
+    }
+
+    private String resolvePageTypeDigest() {
+        String pageType = configurer.getServiceConfig().getPageType();
+        if (pageType == null) {
+            return configurer.getGlobalConfig().getRuntimeEnv().isRowBoundsBased() ? "List via RowBounds" : "List";
+        }
+        return pageType.substring(pageType.lastIndexOf('.') + 1);
     }
 }
