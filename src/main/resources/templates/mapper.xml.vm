@@ -52,7 +52,7 @@
     #foreach($field in ${table.commonFields})
         ${field.columnName},
     #end
-        ${table.fieldNames}
+        ${table.baseResultColumns}
     </sql>
 #end
 #if(${plainMybatisRuntime})
@@ -85,7 +85,9 @@
         <set>
     #foreach($field in ${table.fields})
         #if(!${field.keyFlag})
+            <if test="${field.propertyName} != null">
             ${field.columnName} = #{${field.propertyName}},
+            </if>
         #end
     #end
         </set>
@@ -218,6 +220,31 @@
     #end
         </if>
     </sql>
+#end
+#if(${generateExcelImport} && ${plainMybatisRuntime})
+
+    <insert id="batchInsert">
+        INSERT INTO $!{schemaPrefix}${table.tableName}
+        (<trim suffixOverrides=",">
+    #foreach($field in ${table.fields})
+        #if(${field.keyFlag} && ${field.keyIdentityFlag})
+        #else
+            ${field.columnName},
+        #end
+    #end
+        </trim>)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+        (<trim suffixOverrides=",">
+    #foreach($field in ${table.fields})
+        #if(${field.keyFlag} && ${field.keyIdentityFlag})
+        #else
+            #{item.${field.propertyName}},
+        #end
+    #end
+        </trim>)
+        </foreach>
+    </insert>
 #end
 
 </mapper>

@@ -107,7 +107,10 @@ public class MapperConfig implements TemplateRender {
                 importPackages.add(RuntimeClass.MYBATIS_ROW_BOUNDS.getCanonicalName());
             }
         }
-        if (plainMybatisRuntime && globalConfig.isGenerateDelete()) {
+        if (plainMybatisRuntime && globalConfig.isGenerateExcelImport()) {
+            importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getCanonicalName());
+        }
+        if (plainMybatisRuntime && (globalConfig.isGenerateDelete() || globalConfig.isGenerateExcelImport())) {
             importPackages.add(RuntimeClass.MYBATIS_PARAM_ANNOTATION.getCanonicalName());
         }
 

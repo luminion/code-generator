@@ -62,6 +62,18 @@ public abstract class GeneratorHelper {
     }
 
     /**
+     * 创建一个MyBatis-SqlBooster增强封装代码生成器(同mybatisSqlBooster)。
+     *
+     * @param url      数据库连接URL
+     * @param username 数据库用户名
+     * @param password 数据库密码
+     * @return SQL-Booster代码生成器实例
+     */
+    public static LambdaGenerator mybatisBooster(String url, String username, String password) {
+        return create(url, username, password, GenerationMode.MYBATIS_BOOSTER);
+    }
+
+    /**
      * 创建一个MyBatis-SqlBooster解耦代码生成器。
      *
      * @param url      数据库连接URL
@@ -83,6 +95,18 @@ public abstract class GeneratorHelper {
      */
     public static LambdaGenerator mybatisPageHelperSqlBoosterContext(String url, String username, String password) {
         return create(url, username, password, GenerationMode.MYBATIS_PAGE_HELPER_SQL_BOOSTER_CONTEXT);
+    }
+
+    /**
+     * 创建一个MyBatis-PageHelper-SqlBooster增强封装代码生成器。
+     *
+     * @param url      数据库连接URL
+     * @param username 数据库用户名
+     * @param password 数据库密码
+     * @return SQL-Booster代码生成器实例
+     */
+    public static LambdaGenerator mybatisPageHelperSqlBooster(String url, String username, String password) {
+        return create(url, username, password, GenerationMode.MYBATIS_PAGE_HELPER_SQL_BOOSTER);
     }
 
     /**

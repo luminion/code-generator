@@ -22,6 +22,7 @@
 - 不只生成基础三层代码，同时生成 `CreateDTO`、`UpdateDTO`、`QueryDTO`、`QueryVO`、`Excel导入DTO`、`Excel导出DTO`
 - 支持统一返回体包装与分页返回包装，支持字符串方式和方法引用方式配置
 - 支持查询扩展字段自动生成，例如 `Like`、`In`、`Lt`、`Gt`、`Lte`、`Gte`
+- 支持 `dryRun()` 预览模式，只输出文件路径不写入磁盘，便于调试配置
 - 支持无主键表降级生成：保留 `create`，自动跳过依赖主键的更新、删除、按 ID 查询
 - 模板按需生成，未启用能力对应的文件会自动跳过，并输出明确的 `skip reason`
 - 支持 `SpringDoc` / `Swagger`、`jakarta` / `javax`/ `Lombok` / `非 Lombok` 多种代码风格
@@ -72,14 +73,17 @@
 | `GeneratorHelper.mybatis(url, username, password)` | 纯 MyBatis 模式 |
 | `GeneratorHelper.mybatisPageHelper(url, username, password)` | MyBatis + PageHelper 模式，分页返回 `PageInfo<VO>` |
 | `GeneratorHelper.mybatisPlus(url, username, password)` | MyBatis-Plus 模式 |
+| `GeneratorHelper.mybatisBooster(url, username, password)` | MyBatis + SQL-Booster 增强封装模式（同 `mybatisSqlBooster`） |
 | `GeneratorHelper.mybatisSqlBooster(url, username, password)` | MyBatis + SQL-Booster 增强封装模式，Mapper 继承 `PhMapper`，Service 暴露 SQL-Booster 链式查询能力 |
 | `GeneratorHelper.mybatisPlusSqlBooster(url, username, password)` | MyBatis-Plus + SQL-Booster 增强封装模式，保持旧版 SQL-Booster 入口语义 |
 | `GeneratorHelper.mybatisSqlBoosterContext(url, username, password)` | MyBatis + SQL-Booster 解耦模式，Controller/Service 仍使用生成的 QueryDTO，ServiceImpl 内部转换为 `SqlContext` |
+| `GeneratorHelper.mybatisPageHelperSqlBooster(url, username, password)` | MyBatis + PageHelper + SQL-Booster 增强封装模式 |
 | `GeneratorHelper.mybatisPageHelperSqlBoosterContext(url, username, password)` | MyBatis + PageHelper + SQL-Booster 解耦模式，分页返回 `PageInfo<VO>` |
 | `GeneratorHelper.mybatisPlusSqlBoosterContext(url, username, password)` | MyBatis-Plus + SQL-Booster 解耦模式，普通 BaseMapper/IService，ServiceImpl 内部转换为 `SqlContext` |
 | `GeneratorHelper.create(url, username, password, GenerationMode.Xxx)` | 使用枚举选择一键生成模式 |
 | `.execute("sys_user", "sys_role")` | 只生成指定表 |
 | `.execute()` | 生成当前过滤条件下的全部表 |
+| `.dryRun("sys_user")` | 预览模式，只输出路径不写入文件 |
 
 默认输出目录：`src/main/java`
 
@@ -97,46 +101,119 @@ GeneratorHelper.create(
         .execute("sys_user");
 ```
 
-## 示例 1：快速开始
+## QuickStart
+
+### 1. 准备数据表
+
+```sql
+CREATE TABLE `sys_user` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `username` varchar(64) NOT NULL COMMENT '用户名',
+  `nickname` varchar(64) DEFAULT NULL COMMENT '昵称',
+  `email` varchar(128) DEFAULT NULL COMMENT '邮箱',
+  `status` tinyint NOT NULL DEFAULT 1 COMMENT '状态',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统用户';
+```
+
+### 2. 添加依赖
+
+在 `pom.xml` 中添加（建议 `test` 作用域）：
+
+```xml
+<dependency>
+    <groupId>io.github.luminion</groupId>
+    <artifactId>code-generator</artifactId>
+    <version>1.0.0</version>
+    <scope>test</scope>
+</dependency>
+```
+
+### 3. 编写测试类
+
+在 `src/test/java` 下创建测试类：
 
 ```java
 import io.github.luminion.generator.GeneratorHelper;
+import org.junit.jupiter.api.Test;
 
-public class CodegenApp {
-    public static void main(String[] args) {
+class CodeGeneratorTest {
+
+    @Test
+    void generateCode() {
         GeneratorHelper.mybatisPlus(
                         "jdbc:mysql://localhost:3306/demo",
                         "root",
                         "123456"
+                )
+                .global(g -> g
+                        .author("dev")
+                        .docType(DocType.SPRING_DOC)
+                        .javaEEApi(JavaEEApi.JAKARTA)
+                )
+                .dataSource(d -> d
+                        .tablePrefixes("sys_")
+                        .commonColumns("create_time", "update_time")
+                )
+                .template(t -> t
+                        .outputDir("D:/workspace/demo/src/main/java")
+                        .parentPackage("com.example.demo")
+                        .parentModule("system")
                 )
                 .execute("sys_user");
     }
 }
 ```
 
-SQL-Booster 增强封装：
+### 4. 运行并查看结果
 
-```java
-GeneratorHelper.mybatisPlusSqlBooster(
-                "jdbc:mysql://localhost:3306/demo",
-                "root",
-                "123456"
-        )
-        .execute("sys_user");
+运行测试后，将在输出目录下生成以下文件：
+
+```
+com/example/demo/system/
+├── controller/
+│   └── UserController.java          // RESTful CRUD + 分页 + Excel 导入导出
+├── service/
+│   ├── UserService.java
+│   └── impl/
+│       └── UserServiceImpl.java
+├── mapper/
+│   └── UserMapper.java
+├── model/
+│   ├── entity/
+│   │   └── User.java
+│   ├── param/
+│   │   ├── UserCreateParam.java
+│   │   ├── UserUpdateParam.java
+│   │   └── UserQueryParam.java
+│   ├── vo/
+│   │   └── UserQueryResult.java
+│   └── excel/
+│       ├── UserExcelImportParam.java
+│       └── UserExcelExportParam.java
+└── mapper/xml/
+    └── UserMapper.xml
 ```
 
-SQL-Booster 解耦：
+### 5. 预览模式（Dry-Run）
+
+如果只想预览将要生成的文件，不实际写入磁盘，使用 `dryRun()`：
 
 ```java
-GeneratorHelper.mybatisPlusSqlBoosterContext(
-                "jdbc:mysql://localhost:3306/demo",
-                "root",
-                "123456"
+GeneratorHelper.mybatisPlus(url, username, password)
+        .global(g -> g.author("dev"))
+        .template(t -> t
+                .outputDir("D:/workspace/demo/src/main/java")
+                .parentPackage("com.example.demo")
         )
-        .execute("sys_user");
+        .dryRun("sys_user");
 ```
 
-## 示例 2：常用配置
+控制台会输出每个文件的生成路径和状态，但不会写入任何文件，方便调试配置。
+
+## 示例 1：常用配置
 
 ```java
 import io.github.luminion.generator.GeneratorHelper;
@@ -193,7 +270,7 @@ public class CodegenApp {
 }
 ```
 
-## 示例 3：完整配置
+## 示例 2：完整配置
 
 ```java
 import io.github.luminion.generator.GeneratorHelper;

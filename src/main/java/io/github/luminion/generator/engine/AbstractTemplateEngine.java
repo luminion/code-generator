@@ -48,8 +48,18 @@ public abstract class AbstractTemplateEngine {
     @Getter
     private GenerationSummary lastGenerationSummary = new GenerationSummary();
 
+    /**
+     * 试运行模式，跳过文件写入
+     */
+    @Getter
+    protected boolean dryRun;
+
     protected boolean outputFile(File file, Map<String, Object> objectMap, String templatePath, boolean fileOverride) {
         if (isCreate(file, fileOverride)) {
+            if (dryRun) {
+                log.info("[DryRun] Would generate: {}", file.getPath());
+                return true;
+            }
             try {
                 if (!file.exists()) {
                     File parentFile = file.getParentFile();
@@ -65,6 +75,11 @@ public abstract class AbstractTemplateEngine {
     }
 
     public AbstractTemplateEngine batchOutput() {
+        return batchOutput(false);
+    }
+
+    public AbstractTemplateEngine batchOutput(boolean dryRun) {
+        this.dryRun = dryRun;
         GenerationSummary generationSummary = new GenerationSummary();
         try {
             List<TableInfo> tableInfoList = configurer.queryTableInfos();

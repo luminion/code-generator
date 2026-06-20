@@ -58,6 +58,9 @@ public class TableInfo {
     }
 
     public String getEntityVariableName() {
+        if (entityName == null || entityName.isEmpty()) {
+            return entityName;
+        }
         return entityName.substring(0, 1).toLowerCase() + entityName.substring(1);
     }
 

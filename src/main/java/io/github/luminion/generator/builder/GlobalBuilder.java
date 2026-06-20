@@ -6,8 +6,8 @@ import io.github.luminion.generator.enums.JavaEEApi;
 import io.github.luminion.generator.metadata.TableInfo;
 import lombok.RequiredArgsConstructor;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -81,7 +81,7 @@ public class GlobalBuilder {
      * @return this
      */
     public GlobalBuilder date(String pattern) {
-        String format = new SimpleDateFormat(pattern).format(new Date());
+        String format = LocalDate.now().format(DateTimeFormatter.ofPattern(pattern));
         configurer.getGlobalConfig().setDate(format);
         return this;
     }
