@@ -37,10 +37,6 @@ public interface ${mapper.classSimpleName}#if(${mapperSuperClass}) extends ${map
 
     int deleteById(@Param("id") ${table.idField.propertyType} id);
     #end
-    #if(${generateExcelImport})
-
-    void batchInsert(@Param("list") List<${entity.classSimpleName}> list);
-    #end
 #end
 #if(!${sqlBoosterPublicApi})
     #if(${generateQueryById} || ${generateQueryList} || ${generateQueryPage} || ${generateExcelExport})

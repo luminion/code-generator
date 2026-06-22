@@ -278,9 +278,8 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
             return entity;
         }).collect(Collectors.toList());
         #if(${mapperInjection})
-        int batchSize = 200;
-        for (int i = 0; i < entityList.size(); i += batchSize) {
-            baseMapper.batchInsert(entityList.subList(i, Math.min(i + batchSize, entityList.size())));
+        for (${entity.classSimpleName} entity : entityList) {
+            baseMapper.insert(entity);
         }
         #else
         super.saveBatch(entityList);
@@ -295,9 +294,8 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
             return 0;
         }
         #if(${mapperInjection})
-        int batchSize = 200;
-        for (int i = 0; i < entityList.size(); i += batchSize) {
-            baseMapper.batchInsert(entityList.subList(i, Math.min(i + batchSize, entityList.size())));
+        for (${entity.classSimpleName} entity : entityList) {
+            baseMapper.insert(entity);
         }
         #else
         super.saveBatch(entityList);

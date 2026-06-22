@@ -174,17 +174,6 @@ public abstract class InitializeUtils {
         configurer.getControllerConfig().setPageType(pageType);
     }
 
-    public static void initializeMybatisPageHelperSqlBooster(Configurer configurer) {
-        initializeMybatisPageHelper(configurer);
-        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PAGE_HELPER_SQL_BOOSTER);
-        configurer.getServiceConfig().setServiceSuperClass(RuntimeClass.SQL_BOOSTER_SERVICE.getCanonicalName());
-        configurer.getServiceConfig().setServiceImplSuperClass(null);
-        configurer.getServiceConfig().setPageType(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getCanonicalName());
-        configurer.getMapperConfig().setMapperSuperClass(RuntimeClass.SQL_BOOSTER_PH_MAPPER.getCanonicalName());
-        InvokeInfo pageType = new InvokeInfo(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getCanonicalName(), "BPage<%s>", "%s");
-        configurer.getControllerConfig().setPageType(pageType);
-    }
-
     public static void initializeMybatisSqlBoosterContext(Configurer configurer) {
         initializeMybatis(configurer);
         configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_SQL_BOOSTER);

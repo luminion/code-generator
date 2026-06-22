@@ -97,26 +97,7 @@ public class LambdaGenerator {
             templateEngine.open();
         }
         log.info("Code generation completed. Output directory: {}", outputDir.getAbsolutePath());
-        System.out.println(buildGenerationSummaryMessage(generationSummary, outputDir));
-    }
-
-    /**
-     * 试运行：只规划生成方案，不实际写入文件。
-     * 返回生成摘要，可用于预览将要生成的文件和表信息。
-     *
-     * @param tableNames 可选的表名过滤
-     * @return 生成摘要
-     */
-    public GenerationSummary dryRun(String... tableNames) {
-        if (tableNames.length > 0) {
-            replaceIncludeTables(tableNames);
-        }
-        AbstractTemplateEngine templateEngine = createTemplateEngine();
-        templateEngine.batchOutput(true);
-        GenerationSummary generationSummary = templateEngine.getLastGenerationSummary();
-        File outputDir = new File(configurer.getTemplateConfig().getOutputDir());
-        System.out.println(buildGenerationSummaryMessage(generationSummary, outputDir));
-        return generationSummary;
+        System.out.print(buildGenerationSummaryMessage(generationSummary, outputDir));
     }
 
     void replaceIncludeTables(String... tableNames) {

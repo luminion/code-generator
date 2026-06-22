@@ -38,13 +38,6 @@ public enum GenerationMode {
             InitializeUtils.initializeMybatisSqlBooster(configurer);
         }
     },
-    MYBATIS_BOOSTER {
-        @Override
-        public void initialize(Configurer configurer) {
-            InitializeUtils.initializeSupportedExtraFieldSuffix(configurer);
-            InitializeUtils.initializeMybatisSqlBooster(configurer);
-        }
-    },
     MYBATIS_PLUS_SQL_BOOSTER {
         @Override
         public void initialize(Configurer configurer) {
@@ -62,13 +55,6 @@ public enum GenerationMode {
         @Override
         public void initialize(Configurer configurer) {
             InitializeUtils.initializeMybatisPageHelperSqlBoosterContext(configurer);
-        }
-    },
-    MYBATIS_PAGE_HELPER_SQL_BOOSTER {
-        @Override
-        public void initialize(Configurer configurer) {
-            InitializeUtils.initializeSupportedExtraFieldSuffix(configurer);
-            InitializeUtils.initializeMybatisPageHelperSqlBooster(configurer);
         }
     },
     MYBATIS_PLUS_SQL_BOOSTER_CONTEXT {

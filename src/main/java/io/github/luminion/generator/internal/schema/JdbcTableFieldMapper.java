@@ -116,9 +116,9 @@ public class JdbcTableFieldMapper {
         if (removeIsPrefix && isBoolean && propertyName.startsWith("is")) {
             propertyName = StringUtils.removePrefixAfterPrefixToLower(propertyName, 2);
             tableField.setPropertyName(propertyName);
+            tableField.setRequiresColumnAnnotation(true);
         }
-        tableField.setRequiresColumnAnnotation(
-                tableField.requiresColumnAnnotation() || requiresColumnAnnotation(tableField, propertyName));
+        tableField.setRequiresColumnAnnotation(requiresColumnAnnotation(tableField, propertyName));
         if (tableField.isPrimaryKey()) {
             tableField.setRequiresColumnAnnotation(!"id".equals(propertyName));
         }
