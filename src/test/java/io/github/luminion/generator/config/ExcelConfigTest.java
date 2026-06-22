@@ -70,14 +70,11 @@ class ExcelConfigTest {
     void serviceImplTemplateKeepsSimpleExcelBranchesByDefault() throws Exception {
         Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
         InitializeUtils.initializeMybatisPlus(configurer);
-        new ExcelBuilder(configurer)
-                .importMode(ExcelImportMode.SIMPLE)
-                .exportMode(ExcelExportMode.SIMPLE);
 
         String rendered = renderServiceImpl(configurer, sampleTableInfo());
 
-        assertTrue(rendered.contains(".head(SysUserExcelImportDTO.class).sheet().doReadSync();"), rendered);
-        assertTrue(rendered.contains(".doWrite(records);"), rendered);
+        assertTrue(rendered.contains(".head(SysUserExcelImportDTO.class).sheet().doReadSync();"));
+        assertTrue(rendered.contains(".doWrite(records);"));
         assertFalse(rendered.contains("AnalysisEventListener<SysUserExcelImportDTO>"));
         assertFalse(rendered.contains("queryExcelExportPage(param, current"));
     }
@@ -111,10 +108,10 @@ class ExcelConfigTest {
         assertTrue(rendered.contains("new AnalysisEventListener<SysUserExcelImportDTO>()"));
         assertTrue(rendered.contains("flushExcelImportBatch(entityList)"));
         assertTrue(rendered.contains("private int flushExcelImportBatch(List<SysUser> entityList)"));
-        assertTrue(rendered.contains("ExcelWriter excelWriter = EasyExcel.write(os, SysUserExcelExportDTO.class).build())"), rendered);
+        assertTrue(rendered.contains("ExcelWriter excelWriter = EasyExcel.write(os, SysUserExcelExportDTO.class).build();"));
         assertTrue(rendered.contains("WriteSheet writeSheet = EasyExcel.writerSheet()"));
         assertTrue(rendered.contains("queryExcelExportPage(param, current, 1024L)"));
-        assertTrue(rendered.contains("private List<SysUserVO> queryExcelExportPage(SysUserQueryDTO param, long current, long size)"), rendered);
+        assertTrue(rendered.contains("private List<SysUserVO> queryExcelExportPage(SysUserQueryDTO param, long current, long size)"));
         assertTrue(rendered.contains("Page<SysUserVO> page = new Page<>(current, size);"));
         assertFalse(rendered.contains(".doReadSync();"));
         assertFalse(rendered.contains(".doWrite(records);"));
@@ -127,25 +124,9 @@ class ExcelConfigTest {
 
         String rendered = renderController(configurer, sampleTableInfo());
 
-        assertTrue(rendered.contains("String fileName = \"系统用户导入模板.xlsx\";"));
-        assertTrue(rendered.contains("String fileName = \"系统用户\" + LocalDateTime.now().format(DateTimeFormatter.ofPattern(\"yyyy-MM-dd_HH-mm-ss\")) + \".xlsx\";"));
-        assertTrue(rendered.contains("filename*=UTF-8''\" + encodedFileName"), rendered);
-        assertTrue(rendered.contains("filename=\\\"SysUserImportTemplate.xlsx\\\""), rendered);
-        assertTrue(rendered.contains("filename=\\\"SysUserExport.xlsx\\\""));
+        assertTrue(rendered.contains("attachment;filename=SysUserImportTemplate.xlsx"));
+        assertTrue(rendered.contains("attachment;filename=SysUserExport.xlsx"));
         assertFalse(rendered.contains("System.currentTimeMillis() + \".xlsx\""));
-    }
-
-    @Test
-    void controllerTemplateFallsBackToEntityNameForExcelFileNamesWithoutTableComment() throws Exception {
-        Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
-        InitializeUtils.initializeMybatisPlus(configurer);
-        TableInfo tableInfo = sampleTableInfo();
-        tableInfo.setComment(null);
-
-        String rendered = renderController(configurer, tableInfo);
-
-        assertTrue(rendered.contains("String fileName = \"SysUser导入模板.xlsx\";"));
-        assertTrue(rendered.contains("String fileName = \"SysUser\" + LocalDateTime.now().format(DateTimeFormatter.ofPattern(\"yyyy-MM-dd_HH-mm-ss\")) + \".xlsx\";"));
     }
 
     private static String renderServiceImpl(Configurer configurer, TableInfo tableInfo) throws Exception {

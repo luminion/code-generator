@@ -32,26 +32,21 @@ public class ServiceConfig implements TemplateRender {
     @RenderField
     protected String serviceImplSuperClass;
 
-    @RenderField
-    private boolean stateless;
-
     private String pageType = RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName();
 
     @Override
     public Map<String, Object> renderData(RenderContext context) {
         Map<String, Object> data = TemplateRender.super.renderData(context);
-        boolean stateless = this.stateless && RuntimeEnv.MYBATIS_PLUS.equals(configurer.getGlobalConfig().getRuntimeEnv());
-        if (!stateless && serviceSuperClass != null) {
+        if (serviceSuperClass != null) {
             data.put("serviceSuperClass", ClassUtils.getSimpleName(serviceSuperClass));
         }
-        if (!stateless && serviceImplSuperClass != null) {
+        if (serviceImplSuperClass != null) {
             data.put("serviceImplSuperClass", ClassUtils.getSimpleName(serviceImplSuperClass));
         }
         if (pageType != null) {
             data.put("servicePageType", ClassUtils.getSimpleName(pageType));
             data.put("servicePageTypeCanonicalName", pageType);
         }
-        data.put("stateless", stateless);
         data.putAll(resolveServiceImports(context));
         data.putAll(resolveServiceImplImports(context));
         return data;
@@ -63,12 +58,9 @@ public class ServiceConfig implements TemplateRender {
         Map<String, TemplateClassFile> templateFileMap = context.getTemplateFiles();
         TableField idField = tableInfo.getPrimaryKeyField();
         String idFieldPropertyPkg = idField != null ? idField.getJavaTypeCanonicalName() : null;
-        boolean stateless = this.stateless && RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv());
 
         Set<String> importPackages = new TreeSet<>();
-        if (!stateless) {
-            ImportPackageSupport.addIfPresent(importPackages, serviceSuperClass);
-        }
+        ImportPackageSupport.addIfPresent(importPackages, serviceSuperClass);
         importPackages.add(templateFileMap.get(TemplateEnum.ENTITY.getKey()).getFullyQualifiedClassName());
 
         if (RuntimeEnv.MP_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
@@ -121,12 +113,9 @@ public class ServiceConfig implements TemplateRender {
         Map<String, TemplateClassFile> templateFileMap = context.getTemplateFiles();
         TableField idField = tableInfo.getPrimaryKeyField();
         String idFieldPropertyPkg = idField != null ? idField.getJavaTypeCanonicalName() : null;
-        boolean stateless = this.stateless && RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv());
 
         Set<String> importPackages = new TreeSet<>();
-        if (!stateless) {
-            ImportPackageSupport.addIfPresent(importPackages, serviceImplSuperClass);
-        }
+        ImportPackageSupport.addIfPresent(importPackages, serviceImplSuperClass);
         importPackages.add(templateFileMap.get(TemplateEnum.ENTITY.getKey()).getFullyQualifiedClassName());
         importPackages.add(templateFileMap.get(TemplateEnum.MAPPER.getKey()).getFullyQualifiedClassName());
 

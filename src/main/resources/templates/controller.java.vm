@@ -230,9 +230,7 @@ public class ${controller.classSimpleName} {
     public void ${excelImportTemplateMethodName}(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
 ##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-        String fileName = "${excelFileNamePrefix}导入模板.xlsx";
-        String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.name()).replace("+", "%20");
-        response.setHeader("Content-Disposition", "attachment; filename=\"${entity.classSimpleName}ImportTemplate.xlsx\"; filename*=UTF-8''" + encodedFileName);
+        response.setHeader("Content-Disposition", "attachment;filename=${entity.classSimpleName}ImportTemplate.xlsx");
         baseService.${excelImportTemplateMethodName}(response.getOutputStream());
     }
 
@@ -274,9 +272,7 @@ public class ${controller.classSimpleName} {
     public void ${excelExportMethodName}($!{queryBodyStr}${queryParam.classSimpleName} param, HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
 ##        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
-        String fileName = "${excelFileNamePrefix}" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + ".xlsx";
-        String encodedFileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.name()).replace("+", "%20");
-        response.setHeader("Content-Disposition", "attachment; filename=\"${entity.classSimpleName}Export.xlsx\"; filename*=UTF-8''" + encodedFileName);
+        response.setHeader("Content-Disposition", "attachment;filename=${entity.classSimpleName}Export.xlsx");
         baseService.${excelExportMethodName}(param, response.getOutputStream());
     }
 #end

@@ -15,7 +15,7 @@ class TemplateFileResolverTest {
     @Test
     void blankSubPackageFallsBackToParentPackageWithoutTrailingDot() {
         Configurer configurer = new Configurer("jdbc:h2:mem:test", "sa", "");
-        configurer.getTemplateConfig().setOutputDir(new File("target/codegen").getPath());
+        configurer.getTemplateConfig().setOutputDir("/tmp/codegen");
         configurer.getTemplateConfig().setParentPackage("com.example");
         configurer.getTemplateConfig().setParentModule("admin");
         configurer.getTemplateConfig().getEntity().setSubPackage("");
@@ -27,7 +27,7 @@ class TemplateFileResolverTest {
 
         assertEquals("com.example.admin", entityFile.getPackageName());
         assertEquals("com.example.admin.SysUser", entityFile.getFullyQualifiedClassName());
-        assertEquals("target" + File.separator + "codegen" + File.separator + "com" + File.separator + "example" + File.separator + "admin",
+        assertEquals("/tmp/codegen" + File.separator + "com" + File.separator + "example" + File.separator + "admin",
                 entityFile.getFileOutputDir());
     }
 }
