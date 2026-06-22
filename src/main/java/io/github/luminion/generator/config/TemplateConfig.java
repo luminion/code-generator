@@ -11,10 +11,8 @@ import lombok.Data;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author luminion
@@ -170,6 +168,7 @@ public class TemplateConfig {
 
     public void setOutputDir(String outputDir) {
         if (StringUtils.isBlank(outputDir)) {
+            this.outputDir = outputDir;
             return;
         }
         this.outputDir = new File(outputDir).getPath();
@@ -201,20 +200,6 @@ public class TemplateConfig {
     }
 
     public Map<String, TemplateClassFile> resolveTemplateFileMap(TableInfo tableInfo) {
-        validateTemplateFileKeys();
         return templateFileResolver.resolve(tableInfo, templateFiles);
-    }
-
-    private void validateTemplateFileKeys() {
-        Set<String> keys = new HashSet<>();
-        for (TemplateFile templateFile : templateFiles) {
-            String key = templateFile.getKey();
-            if (StringUtils.isBlank(key)) {
-                throw new IllegalArgumentException("Template key cannot be empty");
-            }
-            if (!keys.add(key)) {
-                throw new IllegalArgumentException("Duplicate template key found: " + key);
-            }
-        }
     }
 }

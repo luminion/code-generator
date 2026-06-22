@@ -91,8 +91,7 @@ public class TemplateGenerationPlanner {
                 requiresQueryParam,
                 "Skipped because no query/list/page/export feature requires it");
 
-        RuntimeEnv runtimeEnv = configurer.getGlobalConfig().getRuntimeEnv();
-        boolean requiresQueryResult = requiresQueryParam || (runtimeEnv != null && runtimeEnv.isBoosterIntegrated());
+        boolean requiresQueryResult = requiresQueryParam || RuntimeEnv.MP_BOOSTER.equals(configurer.getGlobalConfig().getRuntimeEnv());
         setTemplateGeneration(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()),
                 requiresQueryResult,
                 "Skipped because no query/list/page/export feature requires it");

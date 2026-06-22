@@ -55,59 +55,6 @@
         ${table.fieldNames}
     </sql>
 #end
-#if(${plainMybatisRuntime})
-#if(${generateCreate})
-
-    <insert id="insert" parameterType="${entity.classCanonicalName}"#if(${table.idField} && ${table.idField.keyIdentityFlag}) useGeneratedKeys="true" keyProperty="${table.idField.propertyName}"#end>
-        INSERT INTO $!{schemaPrefix}${table.tableName}
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-    #foreach($field in ${table.fields})
-        #if(${field.keyFlag} && ${field.keyIdentityFlag})
-        #else
-            ${field.columnName},
-        #end
-    #end
-        </trim>
-        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
-    #foreach($field in ${table.fields})
-        #if(${field.keyFlag} && ${field.keyIdentityFlag})
-        #else
-            #{${field.propertyName}},
-        #end
-    #end
-        </trim>
-    </insert>
-#end
-#if(${generateUpdate} && ${table.idField})
-
-    <update id="updateById" parameterType="${entity.classCanonicalName}">
-        UPDATE $!{schemaPrefix}${table.tableName}
-        <set>
-    #foreach($field in ${table.fields})
-        #if(!${field.keyFlag})
-            ${field.columnName} = #{${field.propertyName}},
-        #end
-    #end
-        </set>
-        WHERE ${table.idField.columnName} = #{${table.idField.propertyName}}
-    </update>
-#end
-#if(${generateDelete} && ${table.idField})
-
-    #if(${table.logicDeleteField} && ${table.logicDeleteField.logicDeleteValueResolved})
-    <update id="deleteById">
-        UPDATE $!{schemaPrefix}${table.tableName}
-        SET ${table.logicDeleteField.columnName} = ${table.logicDeleteField.logicDeleteValueSql}
-        WHERE ${table.idField.columnName} = #{id}
-    </update>
-    #else
-    <delete id="deleteById">
-        DELETE FROM $!{schemaPrefix}${table.tableName}
-        WHERE ${table.idField.columnName} = #{id}
-    </delete>
-    #end
-#end
-#end
 #if(${sqlBooster})
 
     #if(${mapperBaseResultMap})
@@ -123,8 +70,8 @@
             <include refid="sqlbooster.conditions"/>
             #foreach($field in ${table.fields})
                 #if(${field.logicDeleteField})
-                    #if(${field.logicDeleteValueResolved})
-            AND a.${field.columnName} = ${field.logicNotDeleteValueSql}
+                    #if(${field.metaInfo.defaultValue})
+            AND a.${field.columnName} = ${field.metaInfo.defaultValue}
                     #else
             AND a.${field.columnName} IS NULL
                     #end
@@ -154,8 +101,8 @@
             <include refid="conditions"/>
             #foreach($field in ${table.fields})
                 #if(${field.logicDeleteField})
-                    #if(${field.logicDeleteValueResolved})
-            AND a.${field.columnName} = ${field.logicNotDeleteValueSql}
+                    #if(${field.metaInfo.defaultValue})
+            AND a.${field.columnName} = ${field.metaInfo.defaultValue}
                     #else
             AND a.${field.columnName} IS NULL
                     #end

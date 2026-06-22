@@ -145,52 +145,6 @@ public abstract class InitializeUtils {
         configurer.getControllerConfig().setPageType(pageType);
     }
 
-    public static void initializeMybatis(Configurer configurer) {
-        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS);
-        configurer.getMapperConfig().setMapperAnnotationClass(RuntimeClass.MYBATIS_MAPPER_ANNOTATION.getCanonicalName());
-        configurer.getServiceConfig().setServiceSuperClass(null);
-        configurer.getServiceConfig().setServiceImplSuperClass(null);
-        configurer.getServiceConfig().setPageType(null);
-        InvokeInfo pageType = new InvokeInfo(RuntimeClass.JAVA_UTIL_LIST.getCanonicalName(), "List<%s>", "%s");
-        configurer.getControllerConfig().setPageType(pageType);
-    }
-
-    public static void initializeMybatisPageHelper(Configurer configurer) {
-        initializeMybatis(configurer);
-        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PAGE_HELPER);
-        configurer.getServiceConfig().setPageType(RuntimeClass.PAGE_HELPER_PAGE_INFO.getCanonicalName());
-        InvokeInfo pageType = new InvokeInfo(RuntimeClass.PAGE_HELPER_PAGE_INFO.getCanonicalName(), "PageInfo<%s>", "%s");
-        configurer.getControllerConfig().setPageType(pageType);
-    }
-
-    public static void initializeMybatisSqlBooster(Configurer configurer) {
-        initializeMybatis(configurer);
-        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_BOOSTER);
-        configurer.getServiceConfig().setServiceSuperClass(RuntimeClass.SQL_BOOSTER_SERVICE.getCanonicalName());
-        configurer.getServiceConfig().setServiceImplSuperClass(null);
-        configurer.getServiceConfig().setPageType(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getCanonicalName());
-        configurer.getMapperConfig().setMapperSuperClass(RuntimeClass.SQL_BOOSTER_PH_MAPPER.getCanonicalName());
-        InvokeInfo pageType = new InvokeInfo(RuntimeClass.SQL_BOOSTER_BOOSTER_PAGE.getCanonicalName(), "BPage<%s>", "%s");
-        configurer.getControllerConfig().setPageType(pageType);
-    }
-
-    public static void initializeMybatisSqlBoosterContext(Configurer configurer) {
-        initializeMybatis(configurer);
-        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_SQL_BOOSTER);
-        initializeSupportedExtraFieldSuffix(configurer);
-    }
-
-    public static void initializeMybatisPageHelperSqlBoosterContext(Configurer configurer) {
-        initializeMybatisPageHelper(configurer);
-        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MYBATIS_PAGE_HELPER_SQL_BOOSTER);
-        initializeSupportedExtraFieldSuffix(configurer);
-    }
-
-    public static void initializeMybatisPlusSqlBoosterContext(Configurer configurer) {
-        initializeMybatisPlus(configurer);
-        configurer.getGlobalConfig().setRuntimeEnv(RuntimeEnv.MP_SQL_BOOSTER);
-        initializeSupportedExtraFieldSuffix(configurer);
-    }
 
     public static void initializeMpBooster(Configurer configurer) {
         initializeMybatisPlus(configurer);

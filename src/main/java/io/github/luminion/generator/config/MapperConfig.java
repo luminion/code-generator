@@ -47,14 +47,6 @@ public class MapperConfig implements TemplateRender {
         Map<String, Object> data = TemplateRender.super.renderData(context);
         data.put("mapperSuperClass", ClassUtils.getSimpleName(mapperSuperClass));
         data.put("mapperAnnotationClass", ClassUtils.getSimpleName(mapperAnnotationClass));
-        RuntimeEnv runtimeEnv = configurer.getGlobalConfig().getRuntimeEnv();
-        data.put("mybatisPlusRuntime", runtimeEnv.isMybatisPlusBased());
-        data.put("plainMybatisRuntime", runtimeEnv.isPlainMybatisBased());
-        data.put("pageHelperRuntime", runtimeEnv.isPageHelperBased());
-        data.put("rowBoundsRuntime", runtimeEnv.isRowBoundsBased());
-        data.put("sqlBooster", runtimeEnv.isSqlBooster());
-        data.put("sqlBoosterPublicApi", runtimeEnv.isBoosterIntegrated());
-        data.put("queryViaSqlContext", runtimeEnv.isSqlBooster());
 
         List<TableField> fields = tableInfo.getFields();
         List<String> existColumnNames = fields.stream().map(TableField::getColumnName).collect(Collectors.toList());
@@ -71,7 +63,6 @@ public class MapperConfig implements TemplateRender {
 
     private Map<String, Object> resolveMapperImports(RenderContext context) {
         GlobalConfig globalConfig = configurer.getGlobalConfig();
-        RuntimeEnv runtimeEnv = globalConfig.getRuntimeEnv();
         Map<String, TemplateClassFile> templateFileMap = context.getTemplateFiles();
         Set<String> importPackages = new TreeSet<>();
 
@@ -79,36 +70,18 @@ public class MapperConfig implements TemplateRender {
         ImportPackageSupport.addIfPresent(importPackages, mapperAnnotationClass);
         importPackages.add(templateFileMap.get(TemplateEnum.ENTITY.getKey()).getFullyQualifiedClassName());
 
-        boolean queryRequired = globalConfig.isGenerateQueryById()
-                || globalConfig.isGenerateQueryList()
-                || globalConfig.isGenerateQueryPage()
-                || globalConfig.isGenerateExcelExport();
-        boolean mybatisPlusRuntime = runtimeEnv != null && runtimeEnv.isMybatisPlusBased();
-        boolean plainMybatisRuntime = runtimeEnv != null && runtimeEnv.isPlainMybatisBased();
-        boolean sqlBooster = runtimeEnv != null && runtimeEnv.isSqlBooster();
-        boolean sqlBoosterPublicApi = runtimeEnv != null && runtimeEnv.isBoosterIntegrated();
-
-        if (sqlBoosterPublicApi) {
+        if (RuntimeEnv.MP_BOOSTER.equals(globalConfig.getRuntimeEnv())) {
+            importPackages.add(RuntimeClass.SQL_BOOSTER_MP_MAPPER.getCanonicalName());
             importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
         }
-
-        if (queryRequired && !sqlBoosterPublicApi) {
-            if (sqlBooster) {
-                importPackages.add(RuntimeClass.SQL_BOOSTER_SQL_CONTEXT.getCanonicalName());
-            } else {
+        if (RuntimeEnv.MYBATIS_PLUS.equals(globalConfig.getRuntimeEnv())) {
+            importPackages.add(RuntimeClass.MYBATIS_PLUS_BASE_MAPPER.getCanonicalName());
+            if (globalConfig.isGenerateQueryById() || globalConfig.isGenerateQueryList() || globalConfig.isGenerateQueryPage() || globalConfig.isGenerateExcelExport()) {
                 importPackages.add(templateFileMap.get(TemplateEnum.QUERY_PARAM.getKey()).getFullyQualifiedClassName());
-            }
-            importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
-            importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getCanonicalName());
-            if (mybatisPlusRuntime) {
+                importPackages.add(templateFileMap.get(TemplateEnum.QUERY_RESULT.getKey()).getFullyQualifiedClassName());
                 importPackages.add(RuntimeClass.MYBATIS_PLUS_I_PAGE.getCanonicalName());
+                importPackages.add(RuntimeClass.JAVA_UTIL_LIST.getCanonicalName());
             }
-            if (runtimeEnv.isRowBoundsBased()) {
-                importPackages.add(RuntimeClass.MYBATIS_ROW_BOUNDS.getCanonicalName());
-            }
-        }
-        if (plainMybatisRuntime && globalConfig.isGenerateDelete()) {
-            importPackages.add(RuntimeClass.MYBATIS_PARAM_ANNOTATION.getCanonicalName());
         }
 
         return ImportPackageSupport.splitImportPackages(importPackages, "mapperFramePkg", "mapperJavaPkg");

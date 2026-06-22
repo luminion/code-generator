@@ -20,10 +20,10 @@ import ${pkg};
  * @since ${date}    
 #end
  */
-#if(!${serviceInheritsSuperClass})
+#if(${stateless})
 public interface ${service.classSimpleName} {
 #else
-public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entity.classSimpleName}#if(${sqlBoosterPublicApi}), ${queryResult.classSimpleName}#end> {
+public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entity.classSimpleName}#if(${sqlBooster}), ${queryResult.classSimpleName}#end> {
 #end
 #if(${generateCreate})
 
@@ -41,15 +41,15 @@ public interface ${service.classSimpleName} extends ${serviceSuperClass}<${entit
 
     boolean ${deleteMethodName}(${table.idField.propertyType} id);
 #end
-#if(${generateQueryById} && ${table.idField} && !${sqlBoosterPublicApi})
+#if(${generateQueryById} && ${table.idField} && !${sqlBooster})
 
     ${queryResult} ${queryByIdMethodName}(${table.idField.propertyType} id);
 #end
-#if(${generateQueryList} && !${sqlBoosterPublicApi})
+#if(${generateQueryList} && !${sqlBooster})
 
     List<${queryResult}> ${queryListMethodName}(${queryParam.classSimpleName} param);
 #end
-#if(${generateQueryPage} && !${sqlBoosterPublicApi})
+#if(${generateQueryPage} && !${sqlBooster})
 
     ${servicePageType}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} param, long current, long size);
 #end

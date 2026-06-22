@@ -23,37 +23,11 @@ import ${pkg};
 #if(${mapperAnnotationClass})
 @${mapperAnnotationClass}
 #end
-public interface ${mapper.classSimpleName}#if(${mapperSuperClass}) extends ${mapperSuperClass}<${entity.classSimpleName}#if(${sqlBoosterPublicApi}), ${queryResult.classSimpleName}#end>#end {
-#if(${plainMybatisRuntime})
-    #if(${generateCreate})
-
-    int insert(${entity.classSimpleName} entity);
-    #end
-    #if(${generateUpdate} && ${table.idField})
-
-    int updateById(${entity.classSimpleName} entity);
-    #end
-    #if(${generateDelete} && ${table.idField})
-
-    int deleteById(@Param("id") ${table.idField.propertyType} id);
-    #end
-#end
-#if(!${sqlBoosterPublicApi})
+public interface ${mapper.classSimpleName} extends ${mapperSuperClass}<${entity.classSimpleName}#if(${sqlBooster}), ${queryResult.classSimpleName}#end> {
+#if(!${sqlBooster})
     #if(${generateQueryById} || ${generateQueryList} || ${generateQueryPage} || ${generateExcelExport})
 
-        #if(${queryViaSqlContext} && ${mybatisPlusRuntime})
-    List<${queryResult}> selectByXml(SqlContext<${entity.classSimpleName}> sqlContext, IPage<${queryResult}> page);
-        #elseif(${queryViaSqlContext} && ${pageHelperRuntime})
-    List<${queryResult}> selectByXml(SqlContext<${entity.classSimpleName}> sqlContext);
-        #elseif(${queryViaSqlContext})
-    List<${queryResult}> selectByXml(SqlContext<${entity.classSimpleName}> sqlContext, RowBounds rowBounds);
-        #elseif(${mybatisPlusRuntime})
     List<${queryResult}> selectByXml(${queryParam.classSimpleName} param, IPage<${queryResult}> page);
-        #elseif(${pageHelperRuntime})
-    List<${queryResult}> selectByXml(${queryParam.classSimpleName} param);
-        #else
-    List<${queryResult}> selectByXml(${queryParam.classSimpleName} param, RowBounds rowBounds);
-        #end
     #end
 #end
 }

@@ -22,19 +22,19 @@ import ${pkg};
  */
 @Service
 #if(${service.generate})
-#if(${mapperInjection})
+#if(${stateless})
 public class ${serviceImpl.classSimpleName} implements ${service.classSimpleName} {
 #else
-public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${sqlBoosterPublicApi}), ${queryResult.classSimpleName}#end> implements ${service.classSimpleName} {
+public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${sqlBooster}), ${queryResult.classSimpleName}#end> implements ${service.classSimpleName} {
 #end
 #else
-#if(${mapperInjection})
+#if(${stateless})
 public class ${serviceImpl.classSimpleName} {
 #else
-public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${sqlBoosterPublicApi}), ${queryResult.classSimpleName}#end> {
+public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${mapper.classSimpleName}, ${entity.classSimpleName}#if(${sqlBooster}), ${queryResult.classSimpleName}#end> {
 #end
 #end
-#if(${mapperInjection})
+#if(${stateless})
 
     private final ${mapper.classSimpleName} baseMapper;
 
@@ -54,7 +54,7 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     #end
         ${entity.classSimpleName} entity = new ${entity.classSimpleName}();
         BeanUtils.copyProperties(param, entity);
-        #if(${mapperInjection})
+        #if(${stateless})
         int saved = baseMapper.insert(entity);
         #else
         boolean saved = super.save(entity);
@@ -78,7 +78,7 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     public boolean ${updateMethodName}(${updateParam.classSimpleName} param) {
         ${entity.classSimpleName} entity = new ${entity.classSimpleName}();
         BeanUtils.copyProperties(param, entity);
-        #if(${mapperInjection})
+        #if(${stateless})
         return baseMapper.updateById(entity) > 0;
         #else
         return super.updateById(entity);
@@ -89,36 +89,14 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
 
     @Override
     public boolean ${deleteMethodName}(${table.idField.propertyType} id) {
-        #if(${mapperInjection})
+        #if(${stateless})
         return baseMapper.deleteById(id) > 0;
         #else
         return super.removeById(id);
         #end
     }
 #end
-#if(${sqlBoosterPublicApi} && ${plainMybatisRuntime})
-
-    #if(${table.idField})
-    @Override
-    public ${queryResult} ${queryByIdMethodName}(java.io.Serializable id) {
-        SqlContext<${entity.classSimpleName}> sqlContext = SqlBuilder.of(${entity.classSimpleName}.class)
-                .fromMap(Collections.singletonMap("${table.idField.propertyName}", id))
-                .toSqlContext();
-        return baseMapper.doFetch(sqlContext, null).stream().findFirst().orElse(null);
-    }
-    #end
-
-    @Override
-    public List<${queryResult}> ${queryListMethodName}(SqlContext<${entity.classSimpleName}> sqlContext) {
-        return baseMapper.doFetch(sqlContext, null);
-    }
-
-    @Override
-    public BPage<${queryResult}> ${queryPageMethodName}(SqlContext<${entity.classSimpleName}> sqlContext, long current, long size) {
-        return baseMapper.voPage(sqlContext, current, size);
-    }
-#end
-#if(${generateQueryById} && ${table.idField} && !${sqlBoosterPublicApi})
+#if(${generateQueryById} && ${table.idField} && !${sqlBooster})
 
     #if(${service.generate})
     @Override
@@ -126,29 +104,10 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
     public ${queryResult} ${queryByIdMethodName}(${table.idField.propertyType} id) {
         ${queryParam.classSimpleName} param = new ${queryParam.classSimpleName}();
         param.set${table.idField.capitalName}(id);
-        #if(${queryViaSqlContext})
-        SqlContext<${entity.classSimpleName}> sqlContext = SqlBuilder.of(${entity.classSimpleName}.class).fromBean(param).toSqlContext();
-        #end
-        #if(${mapperInjection})
-            #if(${queryViaSqlContext})
-                #if(${pageHelperRuntime})
-        ${queryResult} one = baseMapper.selectByXml(sqlContext)
-                #else
-        ${queryResult} one = baseMapper.selectByXml(sqlContext, null)
-                #end
-            #else
-                #if(${pageHelperRuntime})
-        ${queryResult} one = baseMapper.selectByXml(param)
-                #else
+        #if(${stateless})
         ${queryResult} one = baseMapper.selectByXml(param, null)
-                #end
-            #end
         #else
-            #if(${queryViaSqlContext})
-        ${queryResult} one = getBaseMapper().selectByXml(sqlContext, null)
-            #else
         ${queryResult} one = getBaseMapper().selectByXml(param, null)
-            #end
         #end
                 .stream()
                 .findFirst()
@@ -156,81 +115,34 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
         return one;
     }
 #end
-#if(${generateQueryList} && !${sqlBoosterPublicApi})
+#if(${generateQueryList} && !${sqlBooster})
 
     #if(${service.generate})
     @Override
     #end
     public List<${queryResult}> ${queryListMethodName}(${queryParam.classSimpleName} dto) {
-        #if(${queryViaSqlContext})
-        SqlContext<${entity.classSimpleName}> sqlContext = SqlBuilder.of(${entity.classSimpleName}.class).fromBean(dto).toSqlContext();
-        #end
-        #if(${mapperInjection})
-            #if(${queryViaSqlContext})
-                #if(${pageHelperRuntime})
-        List<${queryResult}> list = baseMapper.selectByXml(sqlContext);
-                #else
-        List<${queryResult}> list = baseMapper.selectByXml(sqlContext, null);
-                #end
-            #else
-                #if(${pageHelperRuntime})
-        List<${queryResult}> list = baseMapper.selectByXml(dto);
-                #else
+        #if(${stateless})
         List<${queryResult}> list = baseMapper.selectByXml(dto, null);
-                #end
-            #end
         #else
-            #if(${queryViaSqlContext})
-        List<${queryResult}> list = getBaseMapper().selectByXml(sqlContext, null);
-            #else
         List<${queryResult}> list = getBaseMapper().selectByXml(dto, null);
-            #end
         #end
         return list;
     }
 #end
-#if(${generateQueryPage} && !${sqlBoosterPublicApi})
+#if(${generateQueryPage} && !${sqlBooster})
 
     #if(${service.generate})
     @Override
     #end
-    public #if(${mybatisPlusRuntime} || ${pageHelperRuntime})${servicePageType}<${queryResult}>#else List<${queryResult}>#end ${queryPageMethodName}(${queryParam.classSimpleName} param, long current, long size) {
-        #if(${queryViaSqlContext})
-        SqlContext<${entity.classSimpleName}> sqlContext = SqlBuilder.of(${entity.classSimpleName}.class).fromBean(param).toSqlContext();
-        #end
-        #if(${mybatisPlusRuntime})
+    public ${servicePageType}<${queryResult}> ${queryPageMethodName}(${queryParam.classSimpleName} param, long current, long size) {
         Page<${queryResult}> page = new Page<>(current, size);
-        #if(${mapperInjection})
-            #if(${queryViaSqlContext})
-        List<${queryResult}> list = baseMapper.selectByXml(sqlContext, page);
-            #else
+        #if(${stateless})
         List<${queryResult}> list = baseMapper.selectByXml(param, page);
-            #end
         #else
-            #if(${queryViaSqlContext})
-        List<${queryResult}> list = getBaseMapper().selectByXml(sqlContext, page);
-            #else
         List<${queryResult}> list = getBaseMapper().selectByXml(param, page);
-            #end
         #end
         page.setRecords(list);
         return page;
-        #elseif(${pageHelperRuntime})
-        PageHelper.startPage((int) current, (int) size);
-            #if(${queryViaSqlContext})
-        List<${queryResult}> list = baseMapper.selectByXml(sqlContext);
-            #else
-        List<${queryResult}> list = baseMapper.selectByXml(param);
-            #end
-        return new PageInfo<>(list);
-        #else
-        RowBounds rowBounds = new RowBounds((int) ((current - 1) * size), (int) size);
-            #if(${queryViaSqlContext})
-        return baseMapper.selectByXml(sqlContext, rowBounds);
-            #else
-        return baseMapper.selectByXml(param, rowBounds);
-            #end
-        #end
     }
 #end
 #if(${generateExcelImport})
@@ -277,7 +189,7 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
             BeanUtils.copyProperties(importDto, entity);
             return entity;
         }).collect(Collectors.toList());
-        #if(${mapperInjection})
+        #if(${stateless})
         for (${entity.classSimpleName} entity : entityList) {
             baseMapper.insert(entity);
         }
@@ -293,7 +205,7 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
         if (entityList.isEmpty()) {
             return 0;
         }
-        #if(${mapperInjection})
+        #if(${stateless})
         for (${entity.classSimpleName} entity : entityList) {
             baseMapper.insert(entity);
         }
@@ -331,32 +243,13 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
             }
         }
         #else
-        #if(${sqlBoosterPublicApi})
+        #if(${sqlBooster})
         List<${queryResult}> records = ${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(param).list();
         #else
-            #if(${queryViaSqlContext})
-        SqlContext<${entity.classSimpleName}> sqlContext = SqlBuilder.of(${entity.classSimpleName}.class).fromBean(param).toSqlContext();
-            #end
-        #if(${mapperInjection})
-            #if(${queryViaSqlContext})
-                #if(${pageHelperRuntime})
-        List<${queryResult}> records = baseMapper.selectByXml(sqlContext);
-                #else
-        List<${queryResult}> records = baseMapper.selectByXml(sqlContext, null);
-                #end
-            #else
-                #if(${pageHelperRuntime})
-        List<${queryResult}> records = baseMapper.selectByXml(param);
-                #else
+        #if(${stateless})
         List<${queryResult}> records = baseMapper.selectByXml(param, null);
-                #end
-            #end
         #else
-            #if(${queryViaSqlContext})
-        List<${queryResult}> records = getBaseMapper().selectByXml(sqlContext, null);
-            #else
         List<${queryResult}> records = getBaseMapper().selectByXml(param, null);
-            #end
         #end
         #end
         ${excelApiClass}.write(os, ${excelExportParam.classSimpleName}.class)
@@ -368,44 +261,15 @@ public class ${serviceImpl.classSimpleName} extends ${serviceImplSuperClass}<${m
 
     #if(${excelExportPagedMode})
     private List<${queryResult}> queryExcelExportPage(${queryParam.classSimpleName} param, long current, long size) {
-        #if(${sqlBoosterPublicApi})
+        #if(${sqlBooster})
         return ${sqlBoosterLambdaMethodName}().${sqlBoosterFromBeanMethodName}(param).page(current, size).getRecords();
         #else
-            #if(${queryViaSqlContext})
-        SqlContext<${entity.classSimpleName}> sqlContext = SqlBuilder.of(${entity.classSimpleName}.class).fromBean(param).toSqlContext();
-            #end
-            #if(${mybatisPlusRuntime})
         Page<${queryResult}> page = new Page<>(current, size);
-                #if(${mapperInjection})
-                    #if(${queryViaSqlContext})
-        return baseMapper.selectByXml(sqlContext, page);
-                    #else
+        #if(${stateless})
         return baseMapper.selectByXml(param, page);
-                    #end
-                #else
-                    #if(${queryViaSqlContext})
-        return getBaseMapper().selectByXml(sqlContext, page);
-                    #else
+        #else
         return getBaseMapper().selectByXml(param, page);
-                    #end
-                #end
-            #elseif(${pageHelperRuntime})
-        PageHelper.startPage((int) current, (int) size);
-                #if(${queryViaSqlContext})
-        List<${queryResult}> list = baseMapper.selectByXml(sqlContext);
-                #else
-        List<${queryResult}> list = baseMapper.selectByXml(param);
-                #end
-        PageInfo<${queryResult}> page = new PageInfo<>(list);
-        return page.getRecords();
-            #else
-        RowBounds rowBounds = new RowBounds((int) ((current - 1) * size), (int) size);
-                #if(${queryViaSqlContext})
-        return baseMapper.selectByXml(sqlContext, rowBounds);
-                #else
-        return baseMapper.selectByXml(param, rowBounds);
-                #end
-            #end
+        #end
         #end
     }
     #end

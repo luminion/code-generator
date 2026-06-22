@@ -164,13 +164,9 @@ public class GlobalConfig implements TemplateRender {
     public Map<String, Object> renderData(TableInfo tableInfo) {
         Map<String, Object> data = TemplateRender.super.renderData(tableInfo);
         data.put("javaApiPackagePrefix", javaEEApi.getPackagePrefix());
-        data.put("mybatisPlusRuntime", runtimeEnv.isMybatisPlusBased());
-        data.put("plainMybatisRuntime", runtimeEnv.isPlainMybatisBased());
-        data.put("pageHelperRuntime", runtimeEnv.isPageHelperBased());
-        data.put("rowBoundsRuntime", runtimeEnv.isRowBoundsBased());
-        data.put("sqlBooster", runtimeEnv.isSqlBooster());
-        data.put("sqlBoosterPublicApi", runtimeEnv.isBoosterIntegrated());
-        data.put("queryViaSqlContext", runtimeEnv.isSqlBooster());
+        if (RuntimeEnv.MP_BOOSTER.equals(runtimeEnv)) {
+            data.put("sqlBooster", true);
+        }
         if (DocType.SPRING_DOC.equals(docType)) {
             data.put("springDoc", true);
         }
